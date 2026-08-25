@@ -20,16 +20,24 @@ def find_one(folder: Path, patterns: list[str]) -> Path:
 
 
 def discover_inputs(folder: Path) -> dict[str, Path]:
+    data_folder = folder / "data"
+
+    if not data_folder.exists():
+        raise FileNotFoundError(
+            f"Data folder not found: {data_folder}\n"
+            "Create a 'data' folder in the project root and place the datasets inside it."
+        )
+
     return {
-        "nodes": find_one(folder, [
+        "nodes": find_one(data_folder, [
             "LNG_multilayer_nodes_v1.csv",
             "LNG_multilayer_nodes_v1*.csv",
         ]),
-        "edges": find_one(folder, [
+        "edges": find_one(data_folder, [
             "LNG_multilayer_edges_monthly_v1.csv",
             "LNG_multilayer_edges_monthly_v1*.csv",
         ]),
-        "routes": find_one(folder, [
+        "routes": find_one(data_folder, [
             "LNG_1037_routes_with_final_chokepoints_v1.geojson",
             "LNG_1037_routes_with_final_chokepoints_v1*.geojson",
         ]),
@@ -316,7 +324,7 @@ def build_dashboard(folder: Path, output: Path, default_month: str | None = None
     paths = discover_inputs(folder)
     print("Files:")
     for key, path in paths.items():
-        print(f"  {key:12s}: {path.name}")
+        print(f"  {key:12s}: {path.relative_to(folder)}")
 
     nodes_df = pd.read_csv(paths["nodes"])
     edges_df = pd.read_csv(paths["edges"], dtype={"period_month": str})

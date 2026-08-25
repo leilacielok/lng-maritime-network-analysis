@@ -1,17 +1,9 @@
 # ==========================================
-# DATA FILES
+# DATA
 # ==========================================
 
-# CSV datasets
-*.csv
-
-# Excel datasets
-*.xlsx
-*.xls
-
-# Geographic datasets
-*.geojson
-*.json
+data/*
+!data/README.md
 
 # ==========================================
 # GENERATED OUTPUTS
