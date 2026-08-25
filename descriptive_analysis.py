@@ -401,9 +401,9 @@ def analyze_temporal_network(edges, monthly_qa):
         errors="coerce"
     )
 
-    # --------------------------------------------------------
-    # Network-level monthly measures from the edge table
-    # --------------------------------------------------------
+    # ========================================================
+    # 1. BASIC MONTHLY NETWORK MEASURES
+    # ========================================================
 
     monthly_edges = (
         edges.groupby("period_month")
@@ -417,28 +417,19 @@ def analyze_temporal_network(edges, monthly_qa):
             voyage_edge_traversals=(
                 "voyage_count",
                 "sum"
-            ) if "voyage_count" in edges.columns
-            else ("from_node_id", "count"),
-
-            route_edge_traversals=(
-                "route_count",
-                "sum"
-            ) if "route_count" in edges.columns
-            else ("from_node_id", "count"),
+            ),
 
             total_edge_flow_exposure=(
                 "lng_flow_cmb",
                 "sum"
-            ) if "lng_flow_cmb" in edges.columns
-            else ("from_node_id", "count"),
+            ),
         )
         .reset_index()
     )
 
-    # --------------------------------------------------------
-    # True monthly LNG trade measures from the QA table
-    # Each export voyage is counted once here.
-    # --------------------------------------------------------
+    # ========================================================
+    # 2. ORIGINAL MONTHLY LNG TRADE
+    # ========================================================
 
     monthly_trade = (
         monthly_qa[
@@ -457,9 +448,123 @@ def analyze_temporal_network(edges, monthly_qa):
         )
     )
 
-    # --------------------------------------------------------
-    # Merge edge-based and voyage-based measures
-    # --------------------------------------------------------
+    # ========================================================
+    # 3. EDGE-FLOW CONCENTRATION BY MONTH
+    # ========================================================
+
+    concentration_rows = []
+
+    for period_month, group in edges.groupby("period_month"):
+
+        flow = group["lng_flow_cmb"].fillna(0)
+
+        total_flow = flow.sum()
+
+        if total_flow > 0:
+
+            shares = flow / total_flow
+
+            # Herfindahl-Hirschman Index.
+            # Higher values = traffic concentrated on fewer edges.
+            edge_flow_hhi = (shares ** 2).sum()
+
+            # Effective number of equally important edges.
+            effective_edges = 1 / edge_flow_hhi
+
+            # Top edge share
+            sorted_shares = shares.sort_values(
+                ascending=False
+            )
+
+            top_1_edge_share = (
+                sorted_shares.iloc[:1].sum()
+            )
+
+            top_5_edge_share = (
+                sorted_shares.iloc[:5].sum()
+            )
+
+            top_10_edge_share = (
+                sorted_shares.iloc[:10].sum()
+            )
+
+        else:
+            edge_flow_hhi = np.nan
+            effective_edges = np.nan
+            top_1_edge_share = np.nan
+            top_5_edge_share = np.nan
+            top_10_edge_share = np.nan
+
+        concentration_rows.append(
+            {
+                "period_month": period_month,
+                "edge_flow_hhi": edge_flow_hhi,
+                "effective_flow_edges": effective_edges,
+                "top_1_edge_flow_share": top_1_edge_share,
+                "top_5_edge_flow_share": top_5_edge_share,
+                "top_10_edge_flow_share": top_10_edge_share,
+            }
+        )
+
+    monthly_concentration = pd.DataFrame(
+        concentration_rows
+    )
+
+    # ========================================================
+    # 4. CHOKEPOINT FLOW CONCENTRATION
+    # ========================================================
+
+    chokepoint_rows = []
+
+    if "edge_type" in edges.columns:
+
+        # Edges touching chokepoints.
+        chokepoint_edges = edges[
+            edges["edge_type"]
+            .astype(str)
+            .str.contains(
+                "chokepoint",
+                case=False,
+                na=False
+            )
+        ].copy()
+
+        if len(chokepoint_edges) > 0:
+
+            for period_month, group in (
+                chokepoint_edges.groupby("period_month")
+            ):
+
+                flow = group["lng_flow_cmb"].fillna(0)
+
+                total_flow = flow.sum()
+
+                if total_flow > 0:
+
+                    shares = flow / total_flow
+
+                    chokepoint_flow_hhi = (
+                        shares ** 2
+                    ).sum()
+
+                else:
+                    chokepoint_flow_hhi = np.nan
+
+                chokepoint_rows.append(
+                    {
+                        "period_month": period_month,
+                        "chokepoint_flow_hhi":
+                            chokepoint_flow_hhi,
+                    }
+                )
+
+    monthly_chokepoints = pd.DataFrame(
+        chokepoint_rows
+    )
+
+    # ========================================================
+    # 5. MERGE MONTHLY MEASURES
+    # ========================================================
 
     monthly = (
         monthly_edges
@@ -468,82 +573,54 @@ def analyze_temporal_network(edges, monthly_qa):
             on="period_month",
             how="left"
         )
+        .merge(
+            monthly_concentration,
+            on="period_month",
+            how="left"
+        )
+    )
+
+    if not monthly_chokepoints.empty:
+
+        monthly = monthly.merge(
+            monthly_chokepoints,
+            on="period_month",
+            how="left"
+        )
+
+    monthly = (
+        monthly
         .sort_values("period_month")
         .reset_index(drop=True)
     )
 
-    # Useful diagnostic ratios.
-    # These quantify how much network representation expands
-    # the original voyage-level observations.
+    # ========================================================
+    # 6. ROUTE-STRUCTURE INDICATOR
+    # ========================================================
+
     monthly["mean_edge_traversals_per_voyage"] = (
         monthly["voyage_edge_traversals"]
         / monthly["unique_export_voyages"]
     )
 
-    monthly["edge_flow_exposure_multiplier"] = (
-        monthly["total_edge_flow_exposure"]
-        / monthly["global_export_lng_volume"]
-    )
+    # ========================================================
+    # SAVE MONTHLY DATA
+    # ========================================================
 
-    print("\nMonthly network and LNG trade statistics:")
-    print(monthly)
+    print("\nMonthly structural network statistics:")
+    print(monthly.to_string(index=False))
 
     monthly.to_csv(
         OUTPUT_DIR / "monthly_network_statistics.csv",
         index=False
     )
 
-    # --------------------------------------------------------
-    # Active edges over time
-    # --------------------------------------------------------
+    # ========================================================
+    # PLOT 1 — GLOBAL LNG MARKET SIZE
+    # ========================================================
 
     plt.figure(figsize=(10, 5))
-    plt.plot(
-        monthly["period_month"],
-        monthly["active_edges"],
-        marker="o",
-        markersize=3
-    )
 
-    plt.title("Active edges over time")
-    plt.xlabel("Month")
-    plt.ylabel("Number of active edges")
-    plt.tight_layout()
-
-    plt.savefig(
-        OUTPUT_DIR / "active_edges_over_time.png",
-        dpi=300
-    )
-    plt.close()
-
-    # --------------------------------------------------------
-    # True export voyages over time
-    # --------------------------------------------------------
-
-    plt.figure(figsize=(10, 5))
-    plt.plot(
-        monthly["period_month"],
-        monthly["unique_export_voyages"],
-        marker="o",
-        markersize=3
-    )
-
-    plt.title("LNG export voyages over time")
-    plt.xlabel("Month")
-    plt.ylabel("Number of export voyages")
-    plt.tight_layout()
-
-    plt.savefig(
-        OUTPUT_DIR / "lng_export_voyages_over_time.png",
-        dpi=300
-    )
-    plt.close()
-
-    # --------------------------------------------------------
-    # True global LNG export volume over time
-    # --------------------------------------------------------
-
-    plt.figure(figsize=(10, 5))
     plt.plot(
         monthly["period_month"],
         monthly["global_export_lng_volume"],
@@ -557,64 +634,45 @@ def analyze_temporal_network(edges, monthly_qa):
     plt.tight_layout()
 
     plt.savefig(
-        OUTPUT_DIR / "global_lng_export_volume_over_time.png",
+        OUTPUT_DIR /
+        "global_lng_export_volume_over_time.png",
         dpi=300
     )
+
     plt.close()
 
-    # --------------------------------------------------------
-    # Voyage edge traversals over time
-    # --------------------------------------------------------
-
-    if "voyage_count" in edges.columns:
-        plt.figure(figsize=(10, 5))
-        plt.plot(
-            monthly["period_month"],
-            monthly["voyage_edge_traversals"],
-            marker="o",
-            markersize=3
-        )
-
-        plt.title("Voyage edge traversals over time")
-        plt.xlabel("Month")
-        plt.ylabel("Voyage-edge traversals")
-        plt.tight_layout()
-
-        plt.savefig(
-            OUTPUT_DIR / "voyage_edge_traversals_over_time.png",
-            dpi=300
-        )
-        plt.close()
-
-    # --------------------------------------------------------
-    # LNG edge-flow exposure over time
-    # --------------------------------------------------------
-
-    if "lng_flow_cmb" in edges.columns:
-        plt.figure(figsize=(10, 5))
-        plt.plot(
-            monthly["period_month"],
-            monthly["total_edge_flow_exposure"],
-            marker="o",
-            markersize=3
-        )
-
-        plt.title("Total LNG edge-flow exposure over time")
-        plt.xlabel("Month")
-        plt.ylabel("Cumulative LNG flow across network edges")
-        plt.tight_layout()
-
-        plt.savefig(
-            OUTPUT_DIR / "edge_flow_exposure_over_time.png",
-            dpi=300
-        )
-        plt.close()
-
-    # --------------------------------------------------------
-    # Mean edge traversals per voyage
-    # --------------------------------------------------------
+    # ========================================================
+    # PLOT 2 — ACTIVE NETWORK EDGES
+    # ========================================================
 
     plt.figure(figsize=(10, 5))
+
+    plt.plot(
+        monthly["period_month"],
+        monthly["active_edges"],
+        marker="o",
+        markersize=3
+    )
+
+    plt.title("Active network edges over time")
+    plt.xlabel("Month")
+    plt.ylabel("Number of active edges")
+    plt.tight_layout()
+
+    plt.savefig(
+        OUTPUT_DIR /
+        "active_edges_over_time.png",
+        dpi=300
+    )
+
+    plt.close()
+
+    # ========================================================
+    # PLOT 3 — MEAN ROUTE REPRESENTATION LENGTH
+    # ========================================================
+
+    plt.figure(figsize=(10, 5))
+
     plt.plot(
         monthly["period_month"],
         monthly["mean_edge_traversals_per_voyage"],
@@ -622,39 +680,131 @@ def analyze_temporal_network(edges, monthly_qa):
         markersize=3
     )
 
-    plt.title("Mean network edge traversals per LNG voyage")
+    plt.title(
+        "Mean network edge traversals per LNG voyage"
+    )
+
     plt.xlabel("Month")
     plt.ylabel("Edge traversals per voyage")
     plt.tight_layout()
 
     plt.savefig(
-        OUTPUT_DIR / "mean_edge_traversals_per_voyage.png",
+        OUTPUT_DIR /
+        "mean_edge_traversals_per_voyage.png",
         dpi=300
     )
+
     plt.close()
 
-    # --------------------------------------------------------
-    # Edge-flow exposure multiplier
-    # --------------------------------------------------------
+    # ========================================================
+    # PLOT 4 — EDGE-FLOW CONCENTRATION
+    # ========================================================
 
     plt.figure(figsize=(10, 5))
+
     plt.plot(
         monthly["period_month"],
-        monthly["edge_flow_exposure_multiplier"],
+        monthly["edge_flow_hhi"],
         marker="o",
         markersize=3
     )
 
-    plt.title("LNG edge-flow exposure multiplier")
+    plt.title("Monthly concentration of LNG flow across edges")
     plt.xlabel("Month")
-    plt.ylabel("Edge-flow exposure / global LNG volume")
+    plt.ylabel("Edge-flow HHI")
     plt.tight_layout()
 
     plt.savefig(
-        OUTPUT_DIR / "edge_flow_exposure_multiplier.png",
+        OUTPUT_DIR /
+        "edge_flow_hhi_over_time.png",
         dpi=300
     )
+
     plt.close()
+
+    # ========================================================
+    # PLOT 5 — TOP-10 EDGE SHARE
+    # ========================================================
+
+    plt.figure(figsize=(10, 5))
+
+    plt.plot(
+        monthly["period_month"],
+        monthly["top_10_edge_flow_share"],
+        marker="o",
+        markersize=3
+    )
+
+    plt.title("Share of LNG edge-flow carried by top 10 edges")
+    plt.xlabel("Month")
+    plt.ylabel("Share of monthly edge-flow")
+    plt.tight_layout()
+
+    plt.savefig(
+        OUTPUT_DIR /
+        "top_10_edge_flow_share_over_time.png",
+        dpi=300
+    )
+
+    plt.close()
+
+    # ========================================================
+    # PLOT 6 — EFFECTIVE NUMBER OF FLOW-CARRYING EDGES
+    # ========================================================
+
+    plt.figure(figsize=(10, 5))
+
+    plt.plot(
+        monthly["period_month"],
+        monthly["effective_flow_edges"],
+        marker="o",
+        markersize=3
+    )
+
+    plt.title("Effective number of LNG flow-carrying edges")
+    plt.xlabel("Month")
+    plt.ylabel("Effective number of edges")
+    plt.tight_layout()
+
+    plt.savefig(
+        OUTPUT_DIR /
+        "effective_flow_edges_over_time.png",
+        dpi=300
+    )
+
+    plt.close()
+
+    # ========================================================
+    # OPTIONAL PLOT — CHOKEPOINT CONCENTRATION
+    # ========================================================
+
+    if "chokepoint_flow_hhi" in monthly.columns:
+
+        plt.figure(figsize=(10, 5))
+
+        plt.plot(
+            monthly["period_month"],
+            monthly["chokepoint_flow_hhi"],
+            marker="o",
+            markersize=3
+        )
+
+        plt.title(
+            "Monthly concentration of LNG flow "
+            "across chokepoint edges"
+        )
+
+        plt.xlabel("Month")
+        plt.ylabel("Chokepoint-flow HHI")
+        plt.tight_layout()
+
+        plt.savefig(
+            OUTPUT_DIR /
+            "chokepoint_flow_hhi_over_time.png",
+            dpi=300
+        )
+
+        plt.close()
 
 
 # ============================================================
