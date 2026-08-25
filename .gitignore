@@ -1,0 +1,43 @@
+# ==========================================
+# DATA FILES
+# ==========================================
+
+# CSV datasets
+*.csv
+
+# Excel datasets
+*.xlsx
+*.xls
+
+# Geographic datasets
+*.geojson
+*.json
+
+# ==========================================
+# GENERATED OUTPUTS
+# ==========================================
+
+# Generated HTML visualizations / dashboards
+*.html
+
+# ==========================================
+# PYTHON
+# ==========================================
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# ==========================================
+# SYSTEM / EDITOR FILES
+# ==========================================
+
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
