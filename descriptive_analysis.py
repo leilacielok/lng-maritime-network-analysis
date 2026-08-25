@@ -22,6 +22,7 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 
 NODES_FILE = DATA_DIR / "LNG_multilayer_nodes_v1.csv"
 EDGES_FILE = DATA_DIR / "LNG_multilayer_edges_monthly_v1.csv"
+MONTHLY_QA_FILE = DATA_DIR / "LNG_multilayer_monthly_QA_v1.csv"
 
 # Add other files here later if needed.
 # ROUTES_FILE = DATA_DIR / "LNG_1037_routes_with_final_chokepoints_v1.geojson"
@@ -38,6 +39,7 @@ def load_data():
 
     nodes = pd.read_csv(NODES_FILE)
     edges = pd.read_csv(EDGES_FILE)
+    monthly_qa = pd.read_csv(MONTHLY_QA_FILE)
 
     print(f"Nodes file: {NODES_FILE.name}")
     print(f"Rows: {len(nodes):,}")
@@ -49,7 +51,13 @@ def load_data():
     print(f"Rows: {len(edges):,}")
     print(f"Columns: {len(edges.columns)}")
 
-    return nodes, edges
+    print()
+
+    print(f"Monthly QA file: {MONTHLY_QA_FILE.name}")
+    print(f"Rows: {len(monthly_qa):,}")
+    print(f"Columns: {len(monthly_qa.columns)}")
+
+    return nodes, edges, monthly_qa
 
 
 # ============================================================
@@ -357,9 +365,23 @@ def analyze_edges(edges):
 # TEMPORAL ANALYSIS
 # ============================================================
 
-def analyze_temporal_network(edges):
+def analyze_temporal_network(edges, monthly_qa):
     if "period_month" not in edges.columns:
         print("\nNo period_month column found. Temporal analysis skipped.")
+        return
+
+    required_qa = {
+        "period_month",
+        "export_voyages",
+        "total_export_lng_cmb",
+    }
+
+    if not required_qa.issubset(monthly_qa.columns):
+        missing = required_qa.difference(monthly_qa.columns)
+        print(
+            "\nMonthly QA file is missing required columns: "
+            + ", ".join(sorted(missing))
+        )
         return
 
     print("\n" + "=" * 70)
@@ -367,13 +389,23 @@ def analyze_temporal_network(edges):
     print("=" * 70)
 
     edges = edges.copy()
+    monthly_qa = monthly_qa.copy()
 
     edges["period_month"] = pd.to_datetime(
         edges["period_month"],
         errors="coerce"
     )
 
-    monthly = (
+    monthly_qa["period_month"] = pd.to_datetime(
+        monthly_qa["period_month"],
+        errors="coerce"
+    )
+
+    # --------------------------------------------------------
+    # Network-level monthly measures from the edge table
+    # --------------------------------------------------------
+
+    monthly_edges = (
         edges.groupby("period_month")
         .agg(
             active_edges=(
@@ -401,10 +433,59 @@ def analyze_temporal_network(edges):
             else ("from_node_id", "count"),
         )
         .reset_index()
-        .sort_values("period_month")
     )
 
-    print("\nMonthly network statistics:")
+    # --------------------------------------------------------
+    # True monthly LNG trade measures from the QA table
+    # Each export voyage is counted once here.
+    # --------------------------------------------------------
+
+    monthly_trade = (
+        monthly_qa[
+            [
+                "period_month",
+                "export_voyages",
+                "total_export_lng_cmb",
+            ]
+        ]
+        .drop_duplicates("period_month")
+        .rename(
+            columns={
+                "export_voyages": "unique_export_voyages",
+                "total_export_lng_cmb": "global_export_lng_volume",
+            }
+        )
+    )
+
+    # --------------------------------------------------------
+    # Merge edge-based and voyage-based measures
+    # --------------------------------------------------------
+
+    monthly = (
+        monthly_edges
+        .merge(
+            monthly_trade,
+            on="period_month",
+            how="left"
+        )
+        .sort_values("period_month")
+        .reset_index(drop=True)
+    )
+
+    # Useful diagnostic ratios.
+    # These quantify how much network representation expands
+    # the original voyage-level observations.
+    monthly["mean_edge_traversals_per_voyage"] = (
+        monthly["voyage_edge_traversals"]
+        / monthly["unique_export_voyages"]
+    )
+
+    monthly["edge_flow_exposure_multiplier"] = (
+        monthly["total_edge_flow_exposure"]
+        / monthly["global_export_lng_volume"]
+    )
+
+    print("\nMonthly network and LNG trade statistics:")
     print(monthly)
 
     monthly.to_csv(
@@ -436,7 +517,77 @@ def analyze_temporal_network(edges):
     plt.close()
 
     # --------------------------------------------------------
-    # LNG flow over time
+    # True export voyages over time
+    # --------------------------------------------------------
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(
+        monthly["period_month"],
+        monthly["unique_export_voyages"],
+        marker="o",
+        markersize=3
+    )
+
+    plt.title("LNG export voyages over time")
+    plt.xlabel("Month")
+    plt.ylabel("Number of export voyages")
+    plt.tight_layout()
+
+    plt.savefig(
+        OUTPUT_DIR / "lng_export_voyages_over_time.png",
+        dpi=300
+    )
+    plt.close()
+
+    # --------------------------------------------------------
+    # True global LNG export volume over time
+    # --------------------------------------------------------
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(
+        monthly["period_month"],
+        monthly["global_export_lng_volume"],
+        marker="o",
+        markersize=3
+    )
+
+    plt.title("Global LNG export volume over time")
+    plt.xlabel("Month")
+    plt.ylabel("Exported LNG volume (cmb)")
+    plt.tight_layout()
+
+    plt.savefig(
+        OUTPUT_DIR / "global_lng_export_volume_over_time.png",
+        dpi=300
+    )
+    plt.close()
+
+    # --------------------------------------------------------
+    # Voyage edge traversals over time
+    # --------------------------------------------------------
+
+    if "voyage_count" in edges.columns:
+        plt.figure(figsize=(10, 5))
+        plt.plot(
+            monthly["period_month"],
+            monthly["voyage_edge_traversals"],
+            marker="o",
+            markersize=3
+        )
+
+        plt.title("Voyage edge traversals over time")
+        plt.xlabel("Month")
+        plt.ylabel("Voyage-edge traversals")
+        plt.tight_layout()
+
+        plt.savefig(
+            OUTPUT_DIR / "voyage_edge_traversals_over_time.png",
+            dpi=300
+        )
+        plt.close()
+
+    # --------------------------------------------------------
+    # LNG edge-flow exposure over time
     # --------------------------------------------------------
 
     if "lng_flow_cmb" in edges.columns:
@@ -460,28 +611,50 @@ def analyze_temporal_network(edges):
         plt.close()
 
     # --------------------------------------------------------
-    # Voyages over time
+    # Mean edge traversals per voyage
     # --------------------------------------------------------
 
-    if "voyage_count" in edges.columns:
-        plt.figure(figsize=(10, 5))
-        plt.plot(
-            monthly["period_month"],
-            monthly["voyage_edge_traversals"],
-            marker="o",
-            markersize=3
-        )
+    plt.figure(figsize=(10, 5))
+    plt.plot(
+        monthly["period_month"],
+        monthly["mean_edge_traversals_per_voyage"],
+        marker="o",
+        markersize=3
+    )
 
-        plt.title("Voyage edge traversals over time")
-        plt.xlabel("Month")
-        plt.ylabel("Voyage-edge traversals")
-        plt.tight_layout()
+    plt.title("Mean network edge traversals per LNG voyage")
+    plt.xlabel("Month")
+    plt.ylabel("Edge traversals per voyage")
+    plt.tight_layout()
 
-        plt.savefig(
-            OUTPUT_DIR / "voyage_edge_traversals_over_time.png",
-            dpi=300
-        )
-        plt.close()
+    plt.savefig(
+        OUTPUT_DIR / "mean_edge_traversals_per_voyage.png",
+        dpi=300
+    )
+    plt.close()
+
+    # --------------------------------------------------------
+    # Edge-flow exposure multiplier
+    # --------------------------------------------------------
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(
+        monthly["period_month"],
+        monthly["edge_flow_exposure_multiplier"],
+        marker="o",
+        markersize=3
+    )
+
+    plt.title("LNG edge-flow exposure multiplier")
+    plt.xlabel("Month")
+    plt.ylabel("Edge-flow exposure / global LNG volume")
+    plt.tight_layout()
+
+    plt.savefig(
+        OUTPUT_DIR / "edge_flow_exposure_multiplier.png",
+        dpi=300
+    )
+    plt.close()
 
 
 # ============================================================
@@ -1026,7 +1199,7 @@ def analyze_correlations(edges):
 # ============================================================
 
 def main():
-    nodes, edges = load_data()
+    nodes, edges, monthly_qa = load_data()
 
     dataset_overview(nodes, "nodes")
     dataset_overview(edges, "edges")
@@ -1034,7 +1207,7 @@ def main():
     analyze_nodes(nodes)
     analyze_edges(edges)
 
-    analyze_temporal_network(edges)
+    analyze_temporal_network(edges, monthly_qa)
 
     analyze_flow_distribution(edges)
 
