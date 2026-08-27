@@ -753,14 +753,16 @@ def analyze_temporal_network(edges, monthly_qa):
     )
 
     # ========================================================
-    # 8. TEMPORAL COVERAGE QA
+    # 8. TEMPORAL ACTIVITY QA
     # ========================================================
 
     #
-    # These indicators do NOT determine whether a month is
-    # incomplete. They simply compare each month with the
-    # historical median and flag unusually low observations
-    # for manual inspection.
+    # These indicators do NOT determine whether a month has
+    # incomplete data coverage.
+    #
+    # They compare each month with the historical median and
+    # flag unusually low observed network activity for manual
+    # inspection.
     #
 
     median_voyages = (
@@ -793,7 +795,7 @@ def analyze_temporal_network(edges, monthly_qa):
         / median_active_edges
     )
 
-    # Flag months with 2 indicators below 70% of their historical median.
+    # Flag individual low-activity indicators.
     monthly["qa_low_voyages"] = (
         monthly["voyages_vs_median"] < 0.70
     )
@@ -806,7 +808,12 @@ def analyze_temporal_network(edges, monthly_qa):
         monthly["active_edges_vs_median"] < 0.70
     )
 
-    monthly["qa_low_coverage_watch"] = (
+    # Flag months in which at least two of the three activity
+    # indicators fall below 70% of their historical median.
+    #
+    # This is an activity flag, not evidence of incomplete
+    # temporal data coverage.
+    monthly["qa_low_activity_watch"] = (
         monthly[
             [
                 "qa_low_voyages",
@@ -817,8 +824,8 @@ def analyze_temporal_network(edges, monthly_qa):
         .sum(axis=1)
         >= 2
     )
-    
-    coverage_detail = (
+
+    activity_detail = (
         monthly[
             [
                 "period_month",
@@ -828,17 +835,17 @@ def analyze_temporal_network(edges, monthly_qa):
                 "voyages_vs_median",
                 "volume_vs_median",
                 "active_edges_vs_median",
-                "qa_low_coverage_watch",
+                "qa_low_activity_watch",
             ]
         ]
         .sort_values("period_month")
     )
 
-    coverage_detail.to_csv(
+    activity_detail.to_csv(
         OUTPUT_DIR / "temporal_activity_detail.csv",
         index=False
     )
-
+    
     # ========================================================
     # 9. SAVE MONTHLY OUTPUT
     # ========================================================
@@ -860,10 +867,10 @@ def analyze_temporal_network(edges, monthly_qa):
     )
 
     # --------------------------------------------------------
-    # Print months requiring coverage inspection
+    # Print months requiring low-activity inspection
     # --------------------------------------------------------
 
-    coverage_watch = (
+    activity_watch = (
         monthly[
             monthly["qa_low_activity_watch"]
         ][
@@ -880,25 +887,24 @@ def analyze_temporal_network(edges, monthly_qa):
     )
 
     print(
-        "\nMonths flagged for temporal coverage review:"
+        "\nMonths flagged for low temporal activity review:"
     )
 
-    if coverage_watch.empty:
+    if activity_watch.empty:
         print("None")
 
     else:
         print(
-            coverage_watch.to_string(
+            activity_watch.to_string(
                 index=False
             )
         )
 
-    coverage_watch.to_csv(
-        OUTPUT_DIR /
-        "temporal_activity_watch.csv",
+    activity_watch.to_csv(
+        OUTPUT_DIR / "temporal_activity_watch.csv",
         index=False
     )
-
+    
     # ========================================================
     # PLOT 1 — GLOBAL LNG EXPORT VOLUME
     # ========================================================
