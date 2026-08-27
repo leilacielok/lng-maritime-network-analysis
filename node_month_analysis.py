@@ -96,17 +96,30 @@ def safe_cv(series):
         return np.nan
     return series.std(ddof=1) / mean
 
-
 def lag1_autocorrelation(series):
     series = series.astype(float)
 
-    if series.notna().sum() < 3:
+    paired = pd.concat(
+        [
+            series.shift(1).rename("previous"),
+            series.rename("current"),
+        ],
+        axis=1,
+    ).dropna()
+
+    if len(paired) < 3:
         return np.nan
 
-    if series.nunique(dropna=True) <= 1:
+    if paired["previous"].nunique() <= 1:
         return np.nan
 
-    return series.autocorr(lag=1)
+    if paired["current"].nunique() <= 1:
+        return np.nan
+
+    return paired["previous"].corr(
+        paired["current"],
+        method="pearson"
+    )
 
 
 def safe_spearman(x, y):
