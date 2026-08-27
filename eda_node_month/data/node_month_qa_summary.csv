@@ -1,0 +1,8 @@
+check,value
+node_month_rows,11220.0
+unique_nodes,187.0
+unique_months,60.0
+active_node_months,5676.0
+inactive_node_months,5544.0
+duplicate_node_month_keys,0.0
+max_abs_strength_minus_incident_flow,0.0
