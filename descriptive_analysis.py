@@ -793,14 +793,50 @@ def analyze_temporal_network(edges, monthly_qa):
         / median_active_edges
     )
 
-    # Flag months where all three activity indicators
-    # are below 60% of their historical median.
+    # Flag months with 2 indicators below 70% of their historical median.
+    monthly["qa_low_voyages"] = (
+        monthly["voyages_vs_median"] < 0.70
+    )
+
+    monthly["qa_low_volume"] = (
+        monthly["volume_vs_median"] < 0.70
+    )
+
+    monthly["qa_low_active_edges"] = (
+        monthly["active_edges_vs_median"] < 0.70
+    )
+
     monthly["qa_low_coverage_watch"] = (
-        (monthly["voyages_vs_median"] < 0.60)
-        &
-        (monthly["volume_vs_median"] < 0.60)
-        &
-        (monthly["active_edges_vs_median"] < 0.60)
+        monthly[
+            [
+                "qa_low_voyages",
+                "qa_low_volume",
+                "qa_low_active_edges",
+            ]
+        ]
+        .sum(axis=1)
+        >= 2
+    )
+    
+    coverage_detail = (
+        monthly[
+            [
+                "period_month",
+                "unique_export_voyages",
+                "global_export_lng_volume",
+                "active_edges",
+                "voyages_vs_median",
+                "volume_vs_median",
+                "active_edges_vs_median",
+                "qa_low_coverage_watch",
+            ]
+        ]
+        .sort_values("period_month")
+    )
+
+    coverage_detail.to_csv(
+        OUTPUT_DIR / "temporal_activity_detail.csv",
+        index=False
     )
 
     # ========================================================
@@ -829,7 +865,7 @@ def analyze_temporal_network(edges, monthly_qa):
 
     coverage_watch = (
         monthly[
-            monthly["qa_low_coverage_watch"]
+            monthly["qa_low_activity_watch"]
         ][
             [
                 "period_month",
@@ -859,7 +895,7 @@ def analyze_temporal_network(edges, monthly_qa):
 
     coverage_watch.to_csv(
         OUTPUT_DIR /
-        "temporal_coverage_watch.csv",
+        "temporal_activity_watch.csv",
         index=False
     )
 
