@@ -273,6 +273,105 @@ def calculate_basic_activity(voyages):
     return outgoing, incoming
 
 
+def build_country_role_tables(voyages):
+    """Classify countries from their own incoming and outgoing LNG flows.
+
+    The monthly table preserves time variation. The full-period table provides
+    one structural classification based on all observed voyages.
+    """
+    country_values = pd.concat(
+        [voyages["from_country"], voyages["to_country"]], ignore_index=True
+    ).dropna()
+    countries = sorted(country_values.astype(str).str.strip().unique())
+    months = pd.date_range(
+        voyages["period_month"].min(), voyages["period_month"].max(), freq="MS"
+    )
+    panel = pd.MultiIndex.from_product(
+        [countries, months], names=["country", "period_month"]
+    ).to_frame(index=False)
+
+    outgoing = (
+        voyages.loc[voyages["from_country"].notna()]
+        .assign(from_country=lambda x: x["from_country"].astype(str).str.strip())
+        .groupby(["period_month", "from_country"], as_index=False)
+        .agg(
+            outgoing_flow=("amount_cmb", "sum"),
+            outgoing_voyages=("amount_cmb", "size"),
+            active_export_terminals=("from_node_id", "nunique"),
+            destination_countries=("to_country", "nunique"),
+        )
+        .rename(columns={"from_country": "country"})
+    )
+    incoming = (
+        voyages.loc[voyages["to_country"].notna()]
+        .assign(to_country=lambda x: x["to_country"].astype(str).str.strip())
+        .groupby(["period_month", "to_country"], as_index=False)
+        .agg(
+            incoming_flow=("amount_cmb", "sum"),
+            incoming_voyages=("amount_cmb", "size"),
+            active_import_terminals=("to_node_id", "nunique"),
+            origin_countries=("from_country", "nunique"),
+        )
+        .rename(columns={"to_country": "country"})
+    )
+    panel = panel.merge(
+        outgoing, on=["country", "period_month"], how="left"
+    ).merge(incoming, on=["country", "period_month"], how="left")
+
+    count_columns = [
+        "outgoing_voyages",
+        "incoming_voyages",
+        "active_export_terminals",
+        "active_import_terminals",
+        "destination_countries",
+        "origin_countries",
+    ]
+    flow_columns = ["outgoing_flow", "incoming_flow"]
+    panel[flow_columns + count_columns] = panel[flow_columns + count_columns].fillna(0)
+    panel["throughput"] = panel["outgoing_flow"] + panel["incoming_flow"]
+    panel["voyage_count"] = panel["outgoing_voyages"] + panel["incoming_voyages"]
+    panel["export_share"] = safe_divide(panel["outgoing_flow"], panel["throughput"])
+    panel["country_role"] = [
+        role_from_share(export_share, throughput)
+        for export_share, throughput in zip(
+            panel["export_share"].fillna(0), panel["throughput"]
+        )
+    ]
+    panel["active"] = panel["throughput"].gt(0).astype(int)
+    panel["year"] = panel["period_month"].dt.year
+    panel["month"] = panel["period_month"].dt.month
+
+    full_period = (
+        panel.groupby("country", as_index=False)
+        .agg(
+            outgoing_flow=("outgoing_flow", "sum"),
+            incoming_flow=("incoming_flow", "sum"),
+            outgoing_voyages=("outgoing_voyages", "sum"),
+            incoming_voyages=("incoming_voyages", "sum"),
+            active_months=("active", "sum"),
+        )
+    )
+    full_period["throughput"] = (
+        full_period["outgoing_flow"] + full_period["incoming_flow"]
+    )
+    full_period["voyage_count"] = (
+        full_period["outgoing_voyages"] + full_period["incoming_voyages"]
+    )
+    full_period["export_share"] = safe_divide(
+        full_period["outgoing_flow"], full_period["throughput"]
+    )
+    full_period["country_role"] = [
+        role_from_share(export_share, throughput)
+        for export_share, throughput in zip(
+            full_period["export_share"].fillna(0), full_period["throughput"]
+        )
+    ]
+    return (
+        panel.sort_values(["period_month", "country"]).reset_index(drop=True),
+        full_period.sort_values(["country"]).reset_index(drop=True),
+    )
+
+
 def calculate_concentration(voyages):
     """Calculate role-aware counterparty HHI at terminal and country levels."""
     out_terminal = (
@@ -621,6 +720,7 @@ def print_diagnostics(panel):
 def main():
     voyages, nodes = load_data()
     panel = assemble_metrics(voyages, nodes)
+    country_month, country_full_period = build_country_role_tables(voyages)
 
     output_columns = [
         "terminal_id", "node_name", "country", "region", "period_month", "year", "month",
@@ -636,6 +736,21 @@ def main():
     ]
     output_columns = [column for column in output_columns if column in panel.columns]
     write_csv(panel[output_columns], DATA_OUTPUT_DIR / "terminal_month_metrics.csv")
+    write_csv(country_month, DATA_OUTPUT_DIR / "country_month_roles.csv")
+    write_csv(country_full_period, DATA_OUTPUT_DIR / "country_roles_full_period.csv")
+
+    country_role_summary = (
+        country_month.loc[country_month["active"].eq(1)]
+        .groupby(["period_month", "country_role"], as_index=False)
+        .agg(
+            countries=("country", "nunique"),
+            total_throughput=("throughput", "sum"),
+        )
+    )
+    write_csv(
+        country_role_summary,
+        DATA_OUTPUT_DIR / "monthly_country_role_summary.csv",
+    )
 
     make_summary(panel)
     make_correlations(panel)
@@ -644,8 +759,25 @@ def main():
     make_plots(panel)
     print_diagnostics(panel)
 
+    print("\n" + "=" * 72)
+    print("COUNTRY CLASSIFICATION")
+    print("=" * 72)
+    print("Active country-month roles:")
+    print(
+        country_month.loc[country_month["active"].eq(1), "country_role"]
+        .value_counts()
+        .to_string()
+    )
+    print("\nFull-period country roles:")
+    print(country_full_period["country_role"].value_counts().to_string())
+
     print("\nAnalysis complete.")
     print(f"Main output: {DATA_OUTPUT_DIR / 'terminal_month_metrics.csv'}")
+    print(f"Country-month output: {DATA_OUTPUT_DIR / 'country_month_roles.csv'}")
+    print(
+        "Full-period country output: "
+        f"{DATA_OUTPUT_DIR / 'country_roles_full_period.csv'}"
+    )
 
 
 if __name__ == "__main__":

@@ -4825,8 +4825,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2022-02-01,exporter,role_specific_pagerank,7,LNGN0124,Freeport LNG Terminal,United States,0.033965755567
 2022-02-01,exporter,role_specific_pagerank,8,LNGN0452,Yamal LNG Terminal,Russia,0.0331150905672
 2022-02-01,exporter,role_specific_pagerank,9,LNGN0297,Pluto LNG Terminal,Australia,0.0309440532921
-2022-02-01,exporter,role_specific_pagerank,10,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,0.0250466852407
-2022-02-01,exporter,role_specific_pagerank,11,LNGN0435,Vysotsk LNG Terminal,Russia,0.0250466852407
+2022-02-01,exporter,role_specific_pagerank,10,LNGN0435,Vysotsk LNG Terminal,Russia,0.0250466852407
+2022-02-01,exporter,role_specific_pagerank,11,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,0.0250466852407
 2022-02-01,exporter,role_specific_pagerank,12,LNGN0441,Wheatstone LNG Terminal,Australia,0.0217391314366
 2022-02-01,exporter,role_specific_pagerank,13,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.0210250112984
 2022-02-01,exporter,role_specific_pagerank,14,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0171614769718
@@ -6425,8 +6425,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2022-10-01,exporter,role_specific_pagerank,14,LNGN0378,Skikda LNG Terminal,Algeria,0.0150182875802
 2022-10-01,exporter,role_specific_pagerank,15,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.0138094832839
 2022-10-01,exporter,role_specific_pagerank,16,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.0138060337259
-2022-10-01,exporter,role_specific_pagerank,17,LNGN0103,Elba Island LNG Terminal,United States,0.0138060337259
-2022-10-01,exporter,role_specific_pagerank,18,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,0.0138060337259
+2022-10-01,exporter,role_specific_pagerank,17,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,0.0138060337259
+2022-10-01,exporter,role_specific_pagerank,18,LNGN0103,Elba Island LNG Terminal,United States,0.0138060337259
 2022-10-01,exporter,role_specific_pagerank,19,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0128715798947
 2022-10-01,exporter,role_specific_pagerank,20,LNGN0274,Oman Qalhat LNG Terminal,Oman,0.0113998639822
 2022-10-01,exporter,role_specific_dependence,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
@@ -8026,8 +8026,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2023-06-01,exporter,role_specific_pagerank,15,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.0139818466309
 2023-06-01,exporter,role_specific_pagerank,16,LNGN0351,Sakhalin II LNG Terminal,Russia,0.0134948172086
 2023-06-01,exporter,role_specific_pagerank,17,LNGN0435,Vysotsk LNG Terminal,Russia,0.0131106536898
-2023-06-01,exporter,role_specific_pagerank,18,LNGN0308,Portovaya LNG Terminal,Russia,0.0127236198961
-2023-06-01,exporter,role_specific_pagerank,19,LNGN0288,Peru LNG Terminal,Peru,0.0127236198961
+2023-06-01,exporter,role_specific_pagerank,18,LNGN0288,Peru LNG Terminal,Peru,0.0127236198961
+2023-06-01,exporter,role_specific_pagerank,19,LNGN0308,Portovaya LNG Terminal,Russia,0.0127236198961
 2023-06-01,exporter,role_specific_pagerank,20,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0122088797324
 2023-06-01,exporter,role_specific_dependence,1,LNGN0288,Peru LNG Terminal,Peru,1
 2023-06-01,exporter,role_specific_dependence,2,LNGN0308,Portovaya LNG Terminal,Russia,1
