@@ -122,9 +122,6 @@ def write_csv(frame, path, index=False):
 # ============================================================
 
 def load_data():
-    print("\n" + "=" * 72)
-    print("LOADING TERMINAL-MONTH INPUT DATA")
-    print("=" * 72)
 
     if not MATCHED_VOYAGES_FILE.exists():
         raise FileNotFoundError(
@@ -218,12 +215,6 @@ def load_data():
     )
     write_csv(qa, DATA_OUTPUT_DIR / "input_qa_summary.csv")
 
-    print(f"Positive export voyages: {len(voyages):,}")
-    print(f"Observed terminals: {len(observed_ids):,}")
-    print(
-        f"Months: {voyages['period_month'].min():%Y-%m} to "
-        f"{voyages['period_month'].max():%Y-%m}"
-    )
     return voyages, nodes
 
 
@@ -234,7 +225,7 @@ def load_data():
 def build_complete_panel(voyages, nodes):
     months = pd.date_range(
         voyages["period_month"].min(), voyages["period_month"].max(), freq="MS"
-    )
+        )
     panel = pd.MultiIndex.from_product(
         [nodes["node_id"].sort_values(), months],
         names=["terminal_id", "period_month"],
