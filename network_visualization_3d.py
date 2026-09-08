@@ -8,41 +8,23 @@ from pathlib import Path
 
 import pandas as pd
 
+def discover_inputs(project_root: Path) -> dict[str, Path]:
+    data_folder = project_root / "data"
 
-def find_one(folder: Path, patterns: list[str]) -> Path:
-    for pattern in patterns:
-        matches = sorted(folder.glob(pattern))
-        if matches:
-            return matches[0]
-    raise FileNotFoundError(
-        "File not found. Searched patterns:\n  - " + "\n  - ".join(patterns)
-    )
-
-
-def discover_inputs(folder: Path) -> dict[str, Path]:
-    data_folder = folder / "data"
-
-    if not data_folder.exists():
-        raise FileNotFoundError(
-            f"Data folder not found: {data_folder}\n"
-            "Create a 'data' folder in the project root and place the datasets inside it."
-        )
-
-    return {
-        "nodes": find_one(data_folder, [
-            "LNG_multilayer_nodes.csv",
-            "LNG_multilayer_nodes*.csv",
-        ]),
-        "edges": find_one(data_folder, [
-            "LNG_multilayer_edges_monthly.csv",
-            "LNG_multilayer_edges_monthly*.csv",
-        ]),
-        "routes": find_one(data_folder, [
-            "LNG_1037_routes_with_final_chokepoints.geojson",
-            "LNG_1037_routes_with_final_chokepoints*.geojson",
-        ]),
+    files = {
+        "nodes": data_folder / "LNG_multilayer_nodes.csv",
+        "edges": data_folder / "LNG_multilayer_edges_monthly.csv",
+        "routes": data_folder / "LNG_1037_routes_with_final_chokepoints.geojson",
     }
 
+    missing = [path for path in files.values() if not path.is_file()]
+    if missing:
+        raise FileNotFoundError(
+            "Missing required data files:\n  - "
+            + "\n  - ".join(str(path) for path in missing)
+        )
+
+    return files
 
 def parse_route_ids(value) -> list[str]:
     if pd.isna(value):
