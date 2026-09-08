@@ -6513,9 +6513,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2022-10-01,importer,role_specific_pagerank,2,LNGN0381,Sodegaura LNG Terminal,Japan,0.0218604705826
 2022-10-01,importer,role_specific_pagerank,3,LNGN0121,Fos Tonkin LNG Terminal,France,0.0199889613832
 2022-10-01,importer,role_specific_pagerank,4,LNGN0463,Yung-An LNG Terminal,Taiwan,0.0180589520149
-2022-10-01,importer,role_specific_pagerank,5,LNGN0100,Eemshaven FSRU,Netherlands,0.0180402215085
-2022-10-01,importer,role_specific_pagerank,6,LNGN0272,Old Harbour FSRU,Jamaica,0.0180402215085
-2022-10-01,importer,role_specific_pagerank,7,LNGN0293,Pinghu LNG Terminal,China,0.0180402215085
+2022-10-01,importer,role_specific_pagerank,5,LNGN0272,Old Harbour FSRU,Jamaica,0.0180402215085
+2022-10-01,importer,role_specific_pagerank,6,LNGN0293,Pinghu LNG Terminal,China,0.0180402215085
+2022-10-01,importer,role_specific_pagerank,7,LNGN0100,Eemshaven FSRU,Netherlands,0.0180402215085
 2022-10-01,importer,role_specific_pagerank,8,LNGN0056,Cartagena LNG Terminal (Spain),Spain,0.0163019862783
 2022-10-01,importer,role_specific_pagerank,9,LNGN0208,Kochi LNG Terminal,India,0.0162622682328
 2022-10-01,importer,role_specific_pagerank,10,LNGN0464,Zeebrugge LNG Terminal,Belgium,0.0157947091982
@@ -8026,8 +8026,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2023-06-01,exporter,role_specific_pagerank,15,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.0139818466309
 2023-06-01,exporter,role_specific_pagerank,16,LNGN0351,Sakhalin II LNG Terminal,Russia,0.0134948172086
 2023-06-01,exporter,role_specific_pagerank,17,LNGN0435,Vysotsk LNG Terminal,Russia,0.0131106536898
-2023-06-01,exporter,role_specific_pagerank,18,LNGN0308,Portovaya LNG Terminal,Russia,0.0127236198961
-2023-06-01,exporter,role_specific_pagerank,19,LNGN0288,Peru LNG Terminal,Peru,0.0127236198961
+2023-06-01,exporter,role_specific_pagerank,18,LNGN0288,Peru LNG Terminal,Peru,0.0127236198961
+2023-06-01,exporter,role_specific_pagerank,19,LNGN0308,Portovaya LNG Terminal,Russia,0.0127236198961
 2023-06-01,exporter,role_specific_pagerank,20,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0122088797324
 2023-06-01,exporter,role_specific_dependence,1,LNGN0288,Peru LNG Terminal,Peru,1
 2023-06-01,exporter,role_specific_dependence,2,LNGN0308,Portovaya LNG Terminal,Russia,1
