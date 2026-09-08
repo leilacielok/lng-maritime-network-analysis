@@ -5,6 +5,7 @@
 data/*
 !data/README.md
 !data/PortWatch_28_geometry_registry.xlsx
+!data/PortWatch_28_chokepoints_geometry.geojson
 
 # ==========================================
 # GENERATED OUTPUTS
