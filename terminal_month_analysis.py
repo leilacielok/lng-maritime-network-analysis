@@ -139,6 +139,9 @@ def load_data():
 
     required_voyages = {
         DATE_COLUMN,
+        "start_date",
+        "end_date",
+        "IMO",
         "voyage",
         "amount_cmb",
         "from_node_id",
@@ -152,6 +155,7 @@ def load_data():
 
     missing_voyages = required_voyages.difference(voyages.columns)
     missing_nodes = required_nodes.difference(nodes.columns)
+    
     if missing_voyages:
         raise ValueError(
             "Matched Voyages is missing: " + ", ".join(sorted(missing_voyages))
@@ -160,8 +164,21 @@ def load_data():
         raise ValueError("Nodes file is missing: " + ", ".join(sorted(missing_nodes)))
 
     raw_rows = len(voyages)
-    voyages[DATE_COLUMN] = pd.to_datetime(voyages[DATE_COLUMN], errors="coerce")
-    voyages["amount_cmb"] = pd.to_numeric(voyages["amount_cmb"], errors="coerce")
+    
+    voyages["start_date"] = pd.to_datetime(
+        voyages["start_date"],
+        errors="coerce",
+    )
+
+    voyages["end_date"] = pd.to_datetime(
+        voyages["end_date"],
+        errors="coerce",
+    )
+
+    voyages["amount_cmb"] = pd.to_numeric(
+        voyages["amount_cmb"],
+        errors="coerce",
+    )
 
     # Return voyages contain zero cargo and must not enter the trade network.
     voyages = voyages.loc[
@@ -172,12 +189,39 @@ def load_data():
         & voyages["amount_cmb"].gt(0)
     ].copy()
 
+    # Identify and remove duplicated export-voyage observations.
+    duplicate_columns = [
+        "start_date",
+        "end_date",
+        "IMO",
+        "voyage",
+        "from_terminal",
+        "to_terminal",
+        "amount_cmb",
+    ]
+
+    duplicate_mask = voyages.duplicated(
+        subset=duplicate_columns,
+        keep=False,
+    )
+
+    possible_duplicate_rows = int(duplicate_mask.sum())
+    rows_before_deduplication = len(voyages)
+
+    voyages = voyages.drop_duplicates(
+        subset=duplicate_columns,
+        keep="first",
+    ).copy()
+
+    duplicates_removed = rows_before_deduplication - len(voyages)
+    
     voyages["from_node_id"] = voyages["from_node_id"].astype(str)
     voyages["to_node_id"] = voyages["to_node_id"].astype(str)
     voyages["period_month"] = voyages[DATE_COLUMN].dt.to_period("M").dt.to_timestamp()
 
     nodes = nodes.loc[nodes["node_type"].eq("terminal")].copy()
     nodes["node_id"] = nodes["node_id"].astype(str)
+    
     observed_ids = set(voyages["from_node_id"]) | set(voyages["to_node_id"])
     nodes = nodes.loc[nodes["node_id"].isin(observed_ids)].drop_duplicates("node_id")
 
@@ -188,27 +232,26 @@ def load_data():
             + ", ".join(sorted(missing_metadata)[:20])
         )
 
-    duplicate_key = voyages.duplicated(
-        [DATE_COLUMN, "from_node_id", "to_node_id", "amount_cmb", "IMO"],
-        keep=False,
-    ) if "IMO" in voyages.columns else pd.Series(False, index=voyages.index)
-
     qa = pd.DataFrame(
         {
             "check": [
                 "raw_workbook_rows",
+                "positive_export_rows_before_deduplication",
+                "possible_duplicate_export_rows",
+                "duplicate_export_rows_removed",
                 "positive_export_rows_used",
                 "observed_terminals",
                 "months",
-                "possible_duplicate_rows",
                 "total_lng_volume_cmb",
             ],
             "value": [
                 raw_rows,
+                rows_before_deduplication,
+                possible_duplicate_rows,
+                duplicates_removed,
                 len(voyages),
                 len(observed_ids),
                 voyages["period_month"].nunique(),
-                int(duplicate_key.sum()),
                 voyages["amount_cmb"].sum(),
             ],
         }

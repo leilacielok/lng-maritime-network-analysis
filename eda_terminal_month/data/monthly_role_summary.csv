@@ -119,8 +119,8 @@ period_month,terminal_role,terminal_months,terminals,total_throughput
 2023-04-01,exporter,25,25,33706754
 2023-04-01,importer,69,69,33706754
 2023-04-01,inactive,65,65,0
-2023-05-01,exporter,27,27,34903525
-2023-05-01,importer,69,69,34903525
+2023-05-01,exporter,27,27,34638525
+2023-05-01,importer,69,69,34638525
 2023-05-01,inactive,63,63,0
 2023-06-01,exporter,27,27,30845426
 2023-06-01,importer,64,64,30845426
@@ -146,8 +146,8 @@ period_month,terminal_role,terminal_months,terminals,total_throughput
 2024-01-01,exporter,29,29,35284545
 2024-01-01,importer,73,73,35284545
 2024-01-01,inactive,57,57,0
-2024-02-01,exporter,29,29,34566584
-2024-02-01,importer,69,69,34566584
+2024-02-01,exporter,29,29,34218584
+2024-02-01,importer,69,69,34218584
 2024-02-01,inactive,61,61,0
 2024-03-01,exporter,28,28,33211928
 2024-03-01,importer,68,68,33211928

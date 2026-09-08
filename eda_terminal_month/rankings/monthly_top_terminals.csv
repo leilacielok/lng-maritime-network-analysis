@@ -216,9 +216,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-02-01,exporter,throughput,15,LNGN0085,Das Island LNG Terminal,United Arab Emirates,137100
 2020-02-01,exporter,throughput,16,LNGN0334,Risavika LNG Terminal,Norway,18000
 2020-02-01,exporter,throughput,17,LNGN0435,Vysotsk LNG Terminal,Russia,18000
-2020-02-01,exporter,counterparty_hhi_terminal,1,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
-2020-02-01,exporter,counterparty_hhi_terminal,2,LNGN0334,Risavika LNG Terminal,Norway,1
-2020-02-01,exporter,counterparty_hhi_terminal,3,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-02-01,exporter,counterparty_hhi_terminal,1,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-02-01,exporter,counterparty_hhi_terminal,2,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
+2020-02-01,exporter,counterparty_hhi_terminal,3,LNGN0334,Risavika LNG Terminal,Norway,1
 2020-02-01,exporter,counterparty_hhi_terminal,4,LNGN0441,Wheatstone LNG Terminal,Australia,0.500033530657
 2020-02-01,exporter,counterparty_hhi_terminal,5,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.363423301018
 2020-02-01,exporter,counterparty_hhi_terminal,6,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.334954009419
@@ -233,9 +233,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-02-01,exporter,counterparty_hhi_terminal,15,LNGN0261,Nigeria LNG Terminal,Nigeria,0.135511694465
 2020-02-01,exporter,counterparty_hhi_terminal,16,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.0872339501748
 2020-02-01,exporter,counterparty_hhi_terminal,17,LNGN0345,Sabine Pass LNG Terminal,United States,0.0830917333974
-2020-02-01,exporter,weighted_dependence_generated,1,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
-2020-02-01,exporter,weighted_dependence_generated,2,LNGN0334,Risavika LNG Terminal,Norway,1
-2020-02-01,exporter,weighted_dependence_generated,3,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-02-01,exporter,weighted_dependence_generated,1,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-02-01,exporter,weighted_dependence_generated,2,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
+2020-02-01,exporter,weighted_dependence_generated,3,LNGN0334,Risavika LNG Terminal,Norway,1
 2020-02-01,exporter,weighted_dependence_generated,4,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.757628854048
 2020-02-01,exporter,weighted_dependence_generated,5,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.741170283318
 2020-02-01,exporter,weighted_dependence_generated,6,LNGN0441,Wheatstone LNG Terminal,Australia,0.738577884242
@@ -267,9 +267,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-02-01,exporter,role_specific_pagerank,15,LNGN0334,Risavika LNG Terminal,Norway,0.0174857476788
 2020-02-01,exporter,role_specific_pagerank,16,LNGN0435,Vysotsk LNG Terminal,Russia,0.0174857476788
 2020-02-01,exporter,role_specific_pagerank,17,LNGN0050,Calcasieu Pass LNG Terminal,United States,0.0165757827691
-2020-02-01,exporter,role_specific_dependence,1,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
-2020-02-01,exporter,role_specific_dependence,2,LNGN0334,Risavika LNG Terminal,Norway,1
-2020-02-01,exporter,role_specific_dependence,3,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-02-01,exporter,role_specific_dependence,1,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-02-01,exporter,role_specific_dependence,2,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
+2020-02-01,exporter,role_specific_dependence,3,LNGN0334,Risavika LNG Terminal,Norway,1
 2020-02-01,exporter,role_specific_dependence,4,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.757628854048
 2020-02-01,exporter,role_specific_dependence,5,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.741170283318
 2020-02-01,exporter,role_specific_dependence,6,LNGN0441,Wheatstone LNG Terminal,Australia,0.738577884242
@@ -402,11 +402,11 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-03-01,exporter,throughput,16,LNGN0085,Das Island LNG Terminal,United Arab Emirates,135000
 2020-03-01,exporter,throughput,17,LNGN0334,Risavika LNG Terminal,Norway,18000
 2020-03-01,exporter,throughput,18,LNGN0435,Vysotsk LNG Terminal,Russia,18000
-2020-03-01,exporter,counterparty_hhi_terminal,1,LNGN0070,Corpus Christi LNG Terminal,United States,1
-2020-03-01,exporter,counterparty_hhi_terminal,2,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
-2020-03-01,exporter,counterparty_hhi_terminal,3,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
-2020-03-01,exporter,counterparty_hhi_terminal,4,LNGN0334,Risavika LNG Terminal,Norway,1
-2020-03-01,exporter,counterparty_hhi_terminal,5,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-03-01,exporter,counterparty_hhi_terminal,1,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
+2020-03-01,exporter,counterparty_hhi_terminal,2,LNGN0070,Corpus Christi LNG Terminal,United States,1
+2020-03-01,exporter,counterparty_hhi_terminal,3,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
+2020-03-01,exporter,counterparty_hhi_terminal,4,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-03-01,exporter,counterparty_hhi_terminal,5,LNGN0334,Risavika LNG Terminal,Norway,1
 2020-03-01,exporter,counterparty_hhi_terminal,6,LNGN0142,Gorgon LNG Terminal,Australia,0.501012827373
 2020-03-01,exporter,counterparty_hhi_terminal,7,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.364746130155
 2020-03-01,exporter,counterparty_hhi_terminal,8,LNGN0441,Wheatstone LNG Terminal,Australia,0.334420713208
@@ -420,8 +420,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-03-01,exporter,counterparty_hhi_terminal,16,LNGN0297,Pluto LNG Terminal,Australia,0.184577045099
 2020-03-01,exporter,counterparty_hhi_terminal,17,LNGN0345,Sabine Pass LNG Terminal,United States,0.125561025033
 2020-03-01,exporter,counterparty_hhi_terminal,18,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.0823012246233
-2020-03-01,exporter,weighted_dependence_generated,1,LNGN0334,Risavika LNG Terminal,Norway,1
-2020-03-01,exporter,weighted_dependence_generated,2,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-03-01,exporter,weighted_dependence_generated,1,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-03-01,exporter,weighted_dependence_generated,2,LNGN0334,Risavika LNG Terminal,Norway,1
 2020-03-01,exporter,weighted_dependence_generated,3,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.865325077869
 2020-03-01,exporter,weighted_dependence_generated,4,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.794313799142
 2020-03-01,exporter,weighted_dependence_generated,5,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.763404383356
@@ -456,8 +456,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-03-01,exporter,role_specific_pagerank,16,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,0.0122296072955
 2020-03-01,exporter,role_specific_pagerank,17,LNGN0070,Corpus Christi LNG Terminal,United States,0.0114759350467
 2020-03-01,exporter,role_specific_pagerank,18,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0112865379713
-2020-03-01,exporter,role_specific_dependence,1,LNGN0334,Risavika LNG Terminal,Norway,1
-2020-03-01,exporter,role_specific_dependence,2,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-03-01,exporter,role_specific_dependence,1,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-03-01,exporter,role_specific_dependence,2,LNGN0334,Risavika LNG Terminal,Norway,1
 2020-03-01,exporter,role_specific_dependence,3,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.865325077869
 2020-03-01,exporter,role_specific_dependence,4,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.794313799142
 2020-03-01,exporter,role_specific_dependence,5,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.763404383356
@@ -767,9 +767,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-05-01,exporter,throughput,16,LNGN0052,Cameroon FLNG Terminal,Cameroon,164000
 2020-05-01,exporter,throughput,17,LNGN0351,Sakhalin II LNG Terminal,Russia,150000
 2020-05-01,exporter,throughput,18,LNGN0435,Vysotsk LNG Terminal,Russia,36000
-2020-05-01,exporter,counterparty_hhi_terminal,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
+2020-05-01,exporter,counterparty_hhi_terminal,1,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
 2020-05-01,exporter,counterparty_hhi_terminal,2,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
-2020-05-01,exporter,counterparty_hhi_terminal,3,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
+2020-05-01,exporter,counterparty_hhi_terminal,3,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
 2020-05-01,exporter,counterparty_hhi_terminal,4,LNGN0351,Sakhalin II LNG Terminal,Russia,1
 2020-05-01,exporter,counterparty_hhi_terminal,5,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.533631950054
 2020-05-01,exporter,counterparty_hhi_terminal,6,LNGN0142,Gorgon LNG Terminal,Australia,0.500838018229
@@ -1140,8 +1140,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-07-01,exporter,counterparty_hhi_terminal,6,LNGN0441,Wheatstone LNG Terminal,Australia,0.501505800119
 2020-07-01,exporter,counterparty_hhi_terminal,7,LNGN0261,Nigeria LNG Terminal,Nigeria,0.500105019954
 2020-07-01,exporter,counterparty_hhi_terminal,8,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.500001283358
-2020-07-01,exporter,counterparty_hhi_terminal,9,LNGN0351,Sakhalin II LNG Terminal,Russia,0.5
-2020-07-01,exporter,counterparty_hhi_terminal,10,LNGN0435,Vysotsk LNG Terminal,Russia,0.5
+2020-07-01,exporter,counterparty_hhi_terminal,9,LNGN0435,Vysotsk LNG Terminal,Russia,0.5
+2020-07-01,exporter,counterparty_hhi_terminal,10,LNGN0351,Sakhalin II LNG Terminal,Russia,0.5
 2020-07-01,exporter,counterparty_hhi_terminal,11,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.352742313798
 2020-07-01,exporter,counterparty_hhi_terminal,12,LNGN0050,Calcasieu Pass LNG Terminal,United States,0.334761759004
 2020-07-01,exporter,counterparty_hhi_terminal,13,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.333339345351
@@ -1324,14 +1324,14 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-08-01,exporter,throughput,18,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,138059
 2020-08-01,exporter,throughput,19,LNGN0435,Vysotsk LNG Terminal,Russia,36000
 2020-08-01,exporter,throughput,20,LNGN0334,Risavika LNG Terminal,Norway,18000
-2020-08-01,exporter,counterparty_hhi_terminal,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
+2020-08-01,exporter,counterparty_hhi_terminal,1,LNGN0378,Skikda LNG Terminal,Algeria,1
 2020-08-01,exporter,counterparty_hhi_terminal,2,LNGN0050,Calcasieu Pass LNG Terminal,United States,1
 2020-08-01,exporter,counterparty_hhi_terminal,3,LNGN0070,Corpus Christi LNG Terminal,United States,1
 2020-08-01,exporter,counterparty_hhi_terminal,4,LNGN0103,Elba Island LNG Terminal,United States,1
 2020-08-01,exporter,counterparty_hhi_terminal,5,LNGN0124,Freeport LNG Terminal,United States,1
-2020-08-01,exporter,counterparty_hhi_terminal,6,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
-2020-08-01,exporter,counterparty_hhi_terminal,7,LNGN0334,Risavika LNG Terminal,Norway,1
-2020-08-01,exporter,counterparty_hhi_terminal,8,LNGN0378,Skikda LNG Terminal,Algeria,1
+2020-08-01,exporter,counterparty_hhi_terminal,6,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
+2020-08-01,exporter,counterparty_hhi_terminal,7,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
+2020-08-01,exporter,counterparty_hhi_terminal,8,LNGN0334,Risavika LNG Terminal,Norway,1
 2020-08-01,exporter,counterparty_hhi_terminal,9,LNGN0261,Nigeria LNG Terminal,Nigeria,0.55669136384
 2020-08-01,exporter,counterparty_hhi_terminal,10,LNGN0441,Wheatstone LNG Terminal,Australia,0.501505800119
 2020-08-01,exporter,counterparty_hhi_terminal,11,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.500210696502
@@ -1345,10 +1345,10 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-08-01,exporter,counterparty_hhi_terminal,19,LNGN0452,Yamal LNG Terminal,Russia,0.183082848025
 2020-08-01,exporter,counterparty_hhi_terminal,20,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.0732306577743
 2020-08-01,exporter,weighted_dependence_generated,1,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,1
-2020-08-01,exporter,weighted_dependence_generated,2,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
-2020-08-01,exporter,weighted_dependence_generated,3,LNGN0070,Corpus Christi LNG Terminal,United States,1
-2020-08-01,exporter,weighted_dependence_generated,4,LNGN0124,Freeport LNG Terminal,United States,1
-2020-08-01,exporter,weighted_dependence_generated,5,LNGN0378,Skikda LNG Terminal,Algeria,1
+2020-08-01,exporter,weighted_dependence_generated,2,LNGN0124,Freeport LNG Terminal,United States,1
+2020-08-01,exporter,weighted_dependence_generated,3,LNGN0378,Skikda LNG Terminal,Algeria,1
+2020-08-01,exporter,weighted_dependence_generated,4,LNGN0070,Corpus Christi LNG Terminal,United States,1
+2020-08-01,exporter,weighted_dependence_generated,5,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
 2020-08-01,exporter,weighted_dependence_generated,6,LNGN0297,Pluto LNG Terminal,Australia,0.843458860929
 2020-08-01,exporter,weighted_dependence_generated,7,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.80320757402
 2020-08-01,exporter,weighted_dependence_generated,8,LNGN0441,Wheatstone LNG Terminal,Australia,0.788613668249
@@ -1375,20 +1375,20 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-08-01,exporter,role_specific_pagerank,9,LNGN0435,Vysotsk LNG Terminal,Russia,0.022034178473
 2020-08-01,exporter,role_specific_pagerank,10,LNGN0345,Sabine Pass LNG Terminal,United States,0.0211734774499
 2020-08-01,exporter,role_specific_pagerank,11,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.0203006534142
-2020-08-01,exporter,role_specific_pagerank,12,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.0179177822754
+2020-08-01,exporter,role_specific_pagerank,12,LNGN0378,Skikda LNG Terminal,Algeria,0.0179177822754
 2020-08-01,exporter,role_specific_pagerank,13,LNGN0070,Corpus Christi LNG Terminal,United States,0.0179177822754
-2020-08-01,exporter,role_specific_pagerank,14,LNGN0124,Freeport LNG Terminal,United States,0.0179177822754
-2020-08-01,exporter,role_specific_pagerank,15,LNGN0378,Skikda LNG Terminal,Algeria,0.0179177822754
+2020-08-01,exporter,role_specific_pagerank,14,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.0179177822754
+2020-08-01,exporter,role_specific_pagerank,15,LNGN0124,Freeport LNG Terminal,United States,0.0179177822754
 2020-08-01,exporter,role_specific_pagerank,16,LNGN0261,Nigeria LNG Terminal,Nigeria,0.0162401397834
 2020-08-01,exporter,role_specific_pagerank,17,LNGN0103,Elba Island LNG Terminal,United States,0.0138251802755
 2020-08-01,exporter,role_specific_pagerank,18,LNGN0334,Risavika LNG Terminal,Norway,0.0138013860779
 2020-08-01,exporter,role_specific_pagerank,19,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,0.0137775918802
 2020-08-01,exporter,role_specific_pagerank,20,LNGN0050,Calcasieu Pass LNG Terminal,United States,0.0118332630667
 2020-08-01,exporter,role_specific_dependence,1,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,1
-2020-08-01,exporter,role_specific_dependence,2,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
-2020-08-01,exporter,role_specific_dependence,3,LNGN0070,Corpus Christi LNG Terminal,United States,1
-2020-08-01,exporter,role_specific_dependence,4,LNGN0124,Freeport LNG Terminal,United States,1
-2020-08-01,exporter,role_specific_dependence,5,LNGN0378,Skikda LNG Terminal,Algeria,1
+2020-08-01,exporter,role_specific_dependence,2,LNGN0124,Freeport LNG Terminal,United States,1
+2020-08-01,exporter,role_specific_dependence,3,LNGN0378,Skikda LNG Terminal,Algeria,1
+2020-08-01,exporter,role_specific_dependence,4,LNGN0070,Corpus Christi LNG Terminal,United States,1
+2020-08-01,exporter,role_specific_dependence,5,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
 2020-08-01,exporter,role_specific_dependence,6,LNGN0297,Pluto LNG Terminal,Australia,0.843458860929
 2020-08-01,exporter,role_specific_dependence,7,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.80320757402
 2020-08-01,exporter,role_specific_dependence,8,LNGN0441,Wheatstone LNG Terminal,Australia,0.788613668249
@@ -1531,8 +1531,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-09-01,exporter,counterparty_hhi_terminal,7,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.500117705746
 2020-09-01,exporter,counterparty_hhi_terminal,8,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.500027032872
 2020-09-01,exporter,counterparty_hhi_terminal,9,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.5
-2020-09-01,exporter,counterparty_hhi_terminal,10,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.5
-2020-09-01,exporter,counterparty_hhi_terminal,11,LNGN0435,Vysotsk LNG Terminal,Russia,0.5
+2020-09-01,exporter,counterparty_hhi_terminal,10,LNGN0435,Vysotsk LNG Terminal,Russia,0.5
+2020-09-01,exporter,counterparty_hhi_terminal,11,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.5
 2020-09-01,exporter,counterparty_hhi_terminal,12,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.334358774326
 2020-09-01,exporter,counterparty_hhi_terminal,13,LNGN0345,Sabine Pass LNG Terminal,United States,0.185571210096
 2020-09-01,exporter,counterparty_hhi_terminal,14,LNGN0297,Pluto LNG Terminal,Australia,0.169630421525
@@ -1540,8 +1540,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-09-01,exporter,counterparty_hhi_terminal,16,LNGN0070,Corpus Christi LNG Terminal,United States,0.140891811714
 2020-09-01,exporter,counterparty_hhi_terminal,17,LNGN0452,Yamal LNG Terminal,Russia,0.111293528199
 2020-09-01,exporter,counterparty_hhi_terminal,18,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.0817991869877
-2020-09-01,exporter,weighted_dependence_generated,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
-2020-09-01,exporter,weighted_dependence_generated,2,LNGN0103,Elba Island LNG Terminal,United States,1
+2020-09-01,exporter,weighted_dependence_generated,1,LNGN0103,Elba Island LNG Terminal,United States,1
+2020-09-01,exporter,weighted_dependence_generated,2,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
 2020-09-01,exporter,weighted_dependence_generated,3,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.758086928273
 2020-09-01,exporter,weighted_dependence_generated,4,LNGN0435,Vysotsk LNG Terminal,Russia,0.75
 2020-09-01,exporter,weighted_dependence_generated,5,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.725432540294
@@ -1576,8 +1576,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-09-01,exporter,role_specific_pagerank,16,LNGN0142,Gorgon LNG Terminal,Australia,0.0144463740786
 2020-09-01,exporter,role_specific_pagerank,17,LNGN0334,Risavika LNG Terminal,Norway,0.0128959860846
 2020-09-01,exporter,role_specific_pagerank,18,LNGN0124,Freeport LNG Terminal,United States,0.0112775495148
-2020-09-01,exporter,role_specific_dependence,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
-2020-09-01,exporter,role_specific_dependence,2,LNGN0103,Elba Island LNG Terminal,United States,1
+2020-09-01,exporter,role_specific_dependence,1,LNGN0103,Elba Island LNG Terminal,United States,1
+2020-09-01,exporter,role_specific_dependence,2,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
 2020-09-01,exporter,role_specific_dependence,3,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.758086928273
 2020-09-01,exporter,role_specific_dependence,4,LNGN0435,Vysotsk LNG Terminal,Russia,0.75
 2020-09-01,exporter,role_specific_dependence,5,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.725432540294
@@ -1703,21 +1703,21 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-10-01,exporter,throughput,7,LNGN0441,Wheatstone LNG Terminal,Australia,642948
 2020-10-01,exporter,throughput,8,LNGN0297,Pluto LNG Terminal,Australia,551977
 2020-10-01,exporter,throughput,9,LNGN0142,Gorgon LNG Terminal,Australia,501615
-2020-10-01,exporter,throughput,10,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,340000
-2020-10-01,exporter,throughput,11,LNGN0050,Calcasieu Pass LNG Terminal,United States,340000
+2020-10-01,exporter,throughput,10,LNGN0050,Calcasieu Pass LNG Terminal,United States,340000
+2020-10-01,exporter,throughput,11,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,340000
 2020-10-01,exporter,throughput,12,LNGN0322,Queensland Curtis LNG Terminal,Australia,334000
 2020-10-01,exporter,throughput,13,LNGN0351,Sakhalin II LNG Terminal,Russia,300000
 2020-10-01,exporter,throughput,14,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,273059
 2020-10-01,exporter,throughput,15,LNGN0085,Das Island LNG Terminal,United Arab Emirates,137100
 2020-10-01,exporter,throughput,16,LNGN0435,Vysotsk LNG Terminal,Russia,76969
 2020-10-01,exporter,throughput,17,LNGN0378,Skikda LNG Terminal,Algeria,75500
-2020-10-01,exporter,counterparty_hhi_terminal,1,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
-2020-10-01,exporter,counterparty_hhi_terminal,2,LNGN0378,Skikda LNG Terminal,Algeria,1
+2020-10-01,exporter,counterparty_hhi_terminal,1,LNGN0378,Skikda LNG Terminal,Algeria,1
+2020-10-01,exporter,counterparty_hhi_terminal,2,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
 2020-10-01,exporter,counterparty_hhi_terminal,3,LNGN0050,Calcasieu Pass LNG Terminal,United States,0.501730103806
 2020-10-01,exporter,counterparty_hhi_terminal,4,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.500062750323
 2020-10-01,exporter,counterparty_hhi_terminal,5,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.5
-2020-10-01,exporter,counterparty_hhi_terminal,6,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.5
-2020-10-01,exporter,counterparty_hhi_terminal,7,LNGN0351,Sakhalin II LNG Terminal,Russia,0.5
+2020-10-01,exporter,counterparty_hhi_terminal,6,LNGN0351,Sakhalin II LNG Terminal,Russia,0.5
+2020-10-01,exporter,counterparty_hhi_terminal,7,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.5
 2020-10-01,exporter,counterparty_hhi_terminal,8,LNGN0297,Pluto LNG Terminal,Australia,0.401342682111
 2020-10-01,exporter,counterparty_hhi_terminal,9,LNGN0441,Wheatstone LNG Terminal,Australia,0.37047136615
 2020-10-01,exporter,counterparty_hhi_terminal,10,LNGN0435,Vysotsk LNG Terminal,Russia,0.362507205605
@@ -1729,8 +1729,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-10-01,exporter,counterparty_hhi_terminal,16,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.135893985177
 2020-10-01,exporter,counterparty_hhi_terminal,17,LNGN0452,Yamal LNG Terminal,Russia,0.130664143355
 2020-10-01,exporter,weighted_dependence_generated,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
-2020-10-01,exporter,weighted_dependence_generated,2,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2020-10-01,exporter,weighted_dependence_generated,3,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-10-01,exporter,weighted_dependence_generated,2,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-10-01,exporter,weighted_dependence_generated,3,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
 2020-10-01,exporter,weighted_dependence_generated,4,LNGN0345,Sabine Pass LNG Terminal,United States,0.830847652024
 2020-10-01,exporter,weighted_dependence_generated,5,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.7821280465
 2020-10-01,exporter,weighted_dependence_generated,6,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.761538461538
@@ -1763,8 +1763,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-10-01,exporter,role_specific_pagerank,16,LNGN0378,Skikda LNG Terminal,Algeria,0.0123237956233
 2020-10-01,exporter,role_specific_pagerank,17,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0111307823906
 2020-10-01,exporter,role_specific_dependence,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
-2020-10-01,exporter,role_specific_dependence,2,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2020-10-01,exporter,role_specific_dependence,3,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-10-01,exporter,role_specific_dependence,2,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-10-01,exporter,role_specific_dependence,3,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
 2020-10-01,exporter,role_specific_dependence,4,LNGN0345,Sabine Pass LNG Terminal,United States,0.830847652024
 2020-10-01,exporter,role_specific_dependence,5,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.7821280465
 2020-10-01,exporter,role_specific_dependence,6,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.761538461538
@@ -1913,8 +1913,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-11-01,exporter,counterparty_hhi_terminal,15,LNGN0345,Sabine Pass LNG Terminal,United States,0.163255901576
 2020-11-01,exporter,counterparty_hhi_terminal,16,LNGN0452,Yamal LNG Terminal,Russia,0.156487369946
 2020-11-01,exporter,counterparty_hhi_terminal,17,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.0854694859018
-2020-11-01,exporter,weighted_dependence_generated,1,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2020-11-01,exporter,weighted_dependence_generated,2,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-11-01,exporter,weighted_dependence_generated,1,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-11-01,exporter,weighted_dependence_generated,2,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
 2020-11-01,exporter,weighted_dependence_generated,3,LNGN0070,Corpus Christi LNG Terminal,United States,0.868007762209
 2020-11-01,exporter,weighted_dependence_generated,4,LNGN0050,Calcasieu Pass LNG Terminal,United States,0.76045053954
 2020-11-01,exporter,weighted_dependence_generated,5,LNGN0452,Yamal LNG Terminal,Russia,0.74515779177
@@ -1947,8 +1947,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-11-01,exporter,role_specific_pagerank,15,LNGN0103,Elba Island LNG Terminal,United States,0.0116004038146
 2020-11-01,exporter,role_specific_pagerank,16,LNGN0052,Cameroon FLNG Terminal,Cameroon,0.0114692055557
 2020-11-01,exporter,role_specific_pagerank,17,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0112329705837
-2020-11-01,exporter,role_specific_dependence,1,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2020-11-01,exporter,role_specific_dependence,2,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-11-01,exporter,role_specific_dependence,1,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2020-11-01,exporter,role_specific_dependence,2,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
 2020-11-01,exporter,role_specific_dependence,3,LNGN0070,Corpus Christi LNG Terminal,United States,0.868007762209
 2020-11-01,exporter,role_specific_dependence,4,LNGN0050,Calcasieu Pass LNG Terminal,United States,0.76045053954
 2020-11-01,exporter,role_specific_dependence,5,LNGN0452,Yamal LNG Terminal,Russia,0.74515779177
@@ -2085,8 +2085,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-12-01,exporter,counterparty_hhi_terminal,1,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,1
 2020-12-01,exporter,counterparty_hhi_terminal,2,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
 2020-12-01,exporter,counterparty_hhi_terminal,3,LNGN0103,Elba Island LNG Terminal,United States,1
-2020-12-01,exporter,counterparty_hhi_terminal,4,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
-2020-12-01,exporter,counterparty_hhi_terminal,5,LNGN0351,Sakhalin II LNG Terminal,Russia,1
+2020-12-01,exporter,counterparty_hhi_terminal,4,LNGN0351,Sakhalin II LNG Terminal,Russia,1
+2020-12-01,exporter,counterparty_hhi_terminal,5,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
 2020-12-01,exporter,counterparty_hhi_terminal,6,LNGN0435,Vysotsk LNG Terminal,Russia,0.539075030217
 2020-12-01,exporter,counterparty_hhi_terminal,7,LNGN0441,Wheatstone LNG Terminal,Australia,0.500032170933
 2020-12-01,exporter,counterparty_hhi_terminal,8,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.342664086545
@@ -2130,8 +2130,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2020-12-01,exporter,role_specific_pagerank,10,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.0248422244125
 2020-12-01,exporter,role_specific_pagerank,11,LNGN0441,Wheatstone LNG Terminal,Australia,0.0213851870561
 2020-12-01,exporter,role_specific_pagerank,12,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.0203780511685
-2020-12-01,exporter,role_specific_pagerank,13,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.0197122330108
-2020-12-01,exporter,role_specific_pagerank,14,LNGN0103,Elba Island LNG Terminal,United States,0.0197122330108
+2020-12-01,exporter,role_specific_pagerank,13,LNGN0103,Elba Island LNG Terminal,United States,0.0197122330108
+2020-12-01,exporter,role_specific_pagerank,14,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.0197122330108
 2020-12-01,exporter,role_specific_pagerank,15,LNGN0142,Gorgon LNG Terminal,Australia,0.0172740160685
 2020-12-01,exporter,role_specific_pagerank,16,LNGN0052,Cameroon FLNG Terminal,Cameroon,0.0151421611624
 2020-12-01,exporter,role_specific_pagerank,17,LNGN0351,Sakhalin II LNG Terminal,Russia,0.0140304510895
@@ -2272,9 +2272,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-01-01,exporter,throughput,16,LNGN0351,Sakhalin II LNG Terminal,Russia,150000
 2021-01-01,exporter,throughput,17,LNGN0435,Vysotsk LNG Terminal,Russia,18000
 2021-01-01,exporter,counterparty_hhi_terminal,1,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
-2021-01-01,exporter,counterparty_hhi_terminal,2,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
+2021-01-01,exporter,counterparty_hhi_terminal,2,LNGN0435,Vysotsk LNG Terminal,Russia,1
 2021-01-01,exporter,counterparty_hhi_terminal,3,LNGN0351,Sakhalin II LNG Terminal,Russia,1
-2021-01-01,exporter,counterparty_hhi_terminal,4,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-01-01,exporter,counterparty_hhi_terminal,4,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
 2021-01-01,exporter,counterparty_hhi_terminal,5,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.555555555556
 2021-01-01,exporter,counterparty_hhi_terminal,6,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.501670851922
 2021-01-01,exporter,counterparty_hhi_terminal,7,LNGN0142,Gorgon LNG Terminal,Australia,0.500807696889
@@ -2637,8 +2637,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-03-01,exporter,throughput,16,LNGN0085,Das Island LNG Terminal,United Arab Emirates,272490
 2021-03-01,exporter,throughput,17,LNGN0309,Prelude FLNG Terminal,Australia,172000
 2021-03-01,exporter,throughput,18,LNGN0435,Vysotsk LNG Terminal,Russia,145876
-2021-03-01,exporter,counterparty_hhi_terminal,1,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
-2021-03-01,exporter,counterparty_hhi_terminal,2,LNGN0309,Prelude FLNG Terminal,Australia,1
+2021-03-01,exporter,counterparty_hhi_terminal,1,LNGN0309,Prelude FLNG Terminal,Australia,1
+2021-03-01,exporter,counterparty_hhi_terminal,2,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
 2021-03-01,exporter,counterparty_hhi_terminal,3,LNGN0378,Skikda LNG Terminal,Algeria,0.625
 2021-03-01,exporter,counterparty_hhi_terminal,4,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.556898239581
 2021-03-01,exporter,counterparty_hhi_terminal,5,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.500904844661
@@ -3027,8 +3027,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-05-01,exporter,throughput,16,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,160000
 2021-05-01,exporter,throughput,17,LNGN0435,Vysotsk LNG Terminal,Russia,76969
 2021-05-01,exporter,throughput,18,LNGN0334,Risavika LNG Terminal,Norway,22969
-2021-05-01,exporter,counterparty_hhi_terminal,1,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,1
-2021-05-01,exporter,counterparty_hhi_terminal,2,LNGN0309,Prelude FLNG Terminal,Australia,1
+2021-05-01,exporter,counterparty_hhi_terminal,1,LNGN0309,Prelude FLNG Terminal,Australia,1
+2021-05-01,exporter,counterparty_hhi_terminal,2,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,1
 2021-05-01,exporter,counterparty_hhi_terminal,3,LNGN0334,Risavika LNG Terminal,Norway,1
 2021-05-01,exporter,counterparty_hhi_terminal,4,LNGN0378,Skikda LNG Terminal,Algeria,0.388888888889
 2021-05-01,exporter,counterparty_hhi_terminal,5,LNGN0142,Gorgon LNG Terminal,Australia,0.384946937742
@@ -3411,8 +3411,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-07-01,exporter,throughput,10,LNGN0142,Gorgon LNG Terminal,Australia,822348
 2021-07-01,exporter,throughput,11,LNGN0441,Wheatstone LNG Terminal,Australia,811097
 2021-07-01,exporter,throughput,12,LNGN0085,Das Island LNG Terminal,United Arab Emirates,701800
-2021-07-01,exporter,throughput,13,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,334000
-2021-07-01,exporter,throughput,14,LNGN0322,Queensland Curtis LNG Terminal,Australia,334000
+2021-07-01,exporter,throughput,13,LNGN0322,Queensland Curtis LNG Terminal,Australia,334000
+2021-07-01,exporter,throughput,14,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,334000
 2021-07-01,exporter,throughput,15,LNGN0103,Elba Island LNG Terminal,United States,174000
 2021-07-01,exporter,throughput,16,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,138517
 2021-07-01,exporter,throughput,17,LNGN0435,Vysotsk LNG Terminal,Russia,54000
@@ -3604,11 +3604,11 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-08-01,exporter,throughput,18,LNGN0103,Elba Island LNG Terminal,United States,167062
 2021-08-01,exporter,throughput,19,LNGN0322,Queensland Curtis LNG Terminal,Australia,167000
 2021-08-01,exporter,throughput,20,LNGN0435,Vysotsk LNG Terminal,Russia,86907
-2021-08-01,exporter,counterparty_hhi_terminal,1,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
-2021-08-01,exporter,counterparty_hhi_terminal,2,LNGN0103,Elba Island LNG Terminal,United States,1
-2021-08-01,exporter,counterparty_hhi_terminal,3,LNGN0274,Oman Qalhat LNG Terminal,Oman,1
-2021-08-01,exporter,counterparty_hhi_terminal,4,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
-2021-08-01,exporter,counterparty_hhi_terminal,5,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
+2021-08-01,exporter,counterparty_hhi_terminal,1,LNGN0274,Oman Qalhat LNG Terminal,Oman,1
+2021-08-01,exporter,counterparty_hhi_terminal,2,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
+2021-08-01,exporter,counterparty_hhi_terminal,3,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
+2021-08-01,exporter,counterparty_hhi_terminal,4,LNGN0103,Elba Island LNG Terminal,United States,1
+2021-08-01,exporter,counterparty_hhi_terminal,5,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
 2021-08-01,exporter,counterparty_hhi_terminal,6,LNGN0378,Skikda LNG Terminal,Algeria,0.625
 2021-08-01,exporter,counterparty_hhi_terminal,7,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.505375256825
 2021-08-01,exporter,counterparty_hhi_terminal,8,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.374961513428
@@ -3624,9 +3624,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-08-01,exporter,counterparty_hhi_terminal,18,LNGN0452,Yamal LNG Terminal,Russia,0.15674865256
 2021-08-01,exporter,counterparty_hhi_terminal,19,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.0928204576061
 2021-08-01,exporter,counterparty_hhi_terminal,20,LNGN0345,Sabine Pass LNG Terminal,United States,0.0838292284548
-2021-08-01,exporter,weighted_dependence_generated,1,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
-2021-08-01,exporter,weighted_dependence_generated,2,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
-2021-08-01,exporter,weighted_dependence_generated,3,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-08-01,exporter,weighted_dependence_generated,1,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-08-01,exporter,weighted_dependence_generated,2,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
+2021-08-01,exporter,weighted_dependence_generated,3,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
 2021-08-01,exporter,weighted_dependence_generated,4,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.794136175749
 2021-08-01,exporter,weighted_dependence_generated,5,LNGN0261,Nigeria LNG Terminal,Nigeria,0.678986059363
 2021-08-01,exporter,weighted_dependence_generated,6,LNGN0124,Freeport LNG Terminal,United States,0.660628429776
@@ -3656,17 +3656,17 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-08-01,exporter,role_specific_pagerank,10,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.0200593819349
 2021-08-01,exporter,role_specific_pagerank,11,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0184298439575
 2021-08-01,exporter,role_specific_pagerank,12,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.0177485539343
-2021-08-01,exporter,role_specific_pagerank,13,LNGN0052,Cameroon FLNG Terminal,Cameroon,0.015671403849
-2021-08-01,exporter,role_specific_pagerank,14,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,0.015671403849
+2021-08-01,exporter,role_specific_pagerank,13,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,0.015671403849
+2021-08-01,exporter,role_specific_pagerank,14,LNGN0052,Cameroon FLNG Terminal,Cameroon,0.015671403849
 2021-08-01,exporter,role_specific_pagerank,15,LNGN0050,Calcasieu Pass LNG Terminal,United States,0.0154479083046
 2021-08-01,exporter,role_specific_pagerank,16,LNGN0441,Wheatstone LNG Terminal,Australia,0.0150101805788
 2021-08-01,exporter,role_specific_pagerank,17,LNGN0378,Skikda LNG Terminal,Algeria,0.0130040259517
 2021-08-01,exporter,role_specific_pagerank,18,LNGN0274,Oman Qalhat LNG Terminal,Oman,0.0121443306047
 2021-08-01,exporter,role_specific_pagerank,19,LNGN0103,Elba Island LNG Terminal,United States,0.0119978530445
 2021-08-01,exporter,role_specific_pagerank,20,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.010906897455
-2021-08-01,exporter,role_specific_dependence,1,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
-2021-08-01,exporter,role_specific_dependence,2,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
-2021-08-01,exporter,role_specific_dependence,3,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-08-01,exporter,role_specific_dependence,1,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-08-01,exporter,role_specific_dependence,2,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
+2021-08-01,exporter,role_specific_dependence,3,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
 2021-08-01,exporter,role_specific_dependence,4,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.794136175749
 2021-08-01,exporter,role_specific_dependence,5,LNGN0261,Nigeria LNG Terminal,Nigeria,0.678986059363
 2021-08-01,exporter,role_specific_dependence,6,LNGN0124,Freeport LNG Terminal,United States,0.660628429776
@@ -3803,9 +3803,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-09-01,exporter,throughput,17,LNGN0435,Vysotsk LNG Terminal,Russia,81938
 2021-09-01,exporter,throughput,18,LNGN0334,Risavika LNG Terminal,Norway,22969
 2021-09-01,exporter,counterparty_hhi_terminal,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
-2021-09-01,exporter,counterparty_hhi_terminal,2,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
+2021-09-01,exporter,counterparty_hhi_terminal,2,LNGN0378,Skikda LNG Terminal,Algeria,1
 2021-09-01,exporter,counterparty_hhi_terminal,3,LNGN0334,Risavika LNG Terminal,Norway,1
-2021-09-01,exporter,counterparty_hhi_terminal,4,LNGN0378,Skikda LNG Terminal,Algeria,1
+2021-09-01,exporter,counterparty_hhi_terminal,4,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
 2021-09-01,exporter,counterparty_hhi_terminal,5,LNGN0435,Vysotsk LNG Terminal,Russia,0.507355247156
 2021-09-01,exporter,counterparty_hhi_terminal,6,LNGN0309,Prelude FLNG Terminal,Australia,0.500038249369
 2021-09-01,exporter,counterparty_hhi_terminal,7,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.280878368883
@@ -3991,10 +3991,10 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-10-01,exporter,throughput,15,LNGN0441,Wheatstone LNG Terminal,Australia,174000
 2021-10-01,exporter,throughput,16,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,138059
 2021-10-01,exporter,throughput,17,LNGN0435,Vysotsk LNG Terminal,Russia,54000
-2021-10-01,exporter,counterparty_hhi_terminal,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
+2021-10-01,exporter,counterparty_hhi_terminal,1,LNGN0441,Wheatstone LNG Terminal,Australia,1
 2021-10-01,exporter,counterparty_hhi_terminal,2,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,1
-2021-10-01,exporter,counterparty_hhi_terminal,3,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2021-10-01,exporter,counterparty_hhi_terminal,4,LNGN0441,Wheatstone LNG Terminal,Australia,1
+2021-10-01,exporter,counterparty_hhi_terminal,3,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
+2021-10-01,exporter,counterparty_hhi_terminal,4,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
 2021-10-01,exporter,counterparty_hhi_terminal,5,LNGN0378,Skikda LNG Terminal,Algeria,0.625
 2021-10-01,exporter,counterparty_hhi_terminal,6,LNGN0435,Vysotsk LNG Terminal,Russia,0.555555555556
 2021-10-01,exporter,counterparty_hhi_terminal,7,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.347294486473
@@ -4008,8 +4008,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-10-01,exporter,counterparty_hhi_terminal,15,LNGN0050,Calcasieu Pass LNG Terminal,United States,0.106265196747
 2021-10-01,exporter,counterparty_hhi_terminal,16,LNGN0124,Freeport LNG Terminal,United States,0.100282066621
 2021-10-01,exporter,counterparty_hhi_terminal,17,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.092382767259
-2021-10-01,exporter,weighted_dependence_generated,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
-2021-10-01,exporter,weighted_dependence_generated,2,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-10-01,exporter,weighted_dependence_generated,1,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-10-01,exporter,weighted_dependence_generated,2,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
 2021-10-01,exporter,weighted_dependence_generated,3,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.721789552398
 2021-10-01,exporter,weighted_dependence_generated,4,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.657480314961
 2021-10-01,exporter,weighted_dependence_generated,5,LNGN0452,Yamal LNG Terminal,Russia,0.547905809532
@@ -4042,8 +4042,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-10-01,exporter,role_specific_pagerank,15,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.0131818165971
 2021-10-01,exporter,role_specific_pagerank,16,LNGN0378,Skikda LNG Terminal,Algeria,0.0130470270181
 2021-10-01,exporter,role_specific_pagerank,17,LNGN0441,Wheatstone LNG Terminal,Australia,0.0106458091455
-2021-10-01,exporter,role_specific_dependence,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
-2021-10-01,exporter,role_specific_dependence,2,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-10-01,exporter,role_specific_dependence,1,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-10-01,exporter,role_specific_dependence,2,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
 2021-10-01,exporter,role_specific_dependence,3,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.721789552398
 2021-10-01,exporter,role_specific_dependence,4,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.657480314961
 2021-10-01,exporter,role_specific_dependence,5,LNGN0452,Yamal LNG Terminal,Russia,0.547905809532
@@ -4180,9 +4180,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-11-01,exporter,throughput,19,LNGN0351,Sakhalin II LNG Terminal,Russia,150000
 2021-11-01,exporter,throughput,20,LNGN0435,Vysotsk LNG Terminal,Russia,81938
 2021-11-01,exporter,counterparty_hhi_terminal,1,LNGN0309,Prelude FLNG Terminal,Australia,1
-2021-11-01,exporter,counterparty_hhi_terminal,2,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
+2021-11-01,exporter,counterparty_hhi_terminal,2,LNGN0351,Sakhalin II LNG Terminal,Russia,1
 2021-11-01,exporter,counterparty_hhi_terminal,3,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2021-11-01,exporter,counterparty_hhi_terminal,4,LNGN0351,Sakhalin II LNG Terminal,Russia,1
+2021-11-01,exporter,counterparty_hhi_terminal,4,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
 2021-11-01,exporter,counterparty_hhi_terminal,5,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.507964935432
 2021-11-01,exporter,counterparty_hhi_terminal,6,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.500408163265
 2021-11-01,exporter,counterparty_hhi_terminal,7,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.500143636886
@@ -4201,8 +4201,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-11-01,exporter,counterparty_hhi_terminal,20,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.0739706189436
 2021-11-01,exporter,weighted_dependence_generated,1,LNGN0309,Prelude FLNG Terminal,Australia,1
 2021-11-01,exporter,weighted_dependence_generated,2,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
-2021-11-01,exporter,weighted_dependence_generated,3,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2021-11-01,exporter,weighted_dependence_generated,4,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-11-01,exporter,weighted_dependence_generated,3,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-11-01,exporter,weighted_dependence_generated,4,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
 2021-11-01,exporter,weighted_dependence_generated,5,LNGN0452,Yamal LNG Terminal,Russia,0.699776568297
 2021-11-01,exporter,weighted_dependence_generated,6,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.674583321805
 2021-11-01,exporter,weighted_dependence_generated,7,LNGN0441,Wheatstone LNG Terminal,Australia,0.655123886264
@@ -4234,15 +4234,15 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2021-11-01,exporter,role_specific_pagerank,13,LNGN0441,Wheatstone LNG Terminal,Australia,0.0178652201225
 2021-11-01,exporter,role_specific_pagerank,14,LNGN0378,Skikda LNG Terminal,Algeria,0.0176797245532
 2021-11-01,exporter,role_specific_pagerank,15,LNGN0309,Prelude FLNG Terminal,Australia,0.015671403849
-2021-11-01,exporter,role_specific_pagerank,16,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,0.015671403849
-2021-11-01,exporter,role_specific_pagerank,17,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.015671403849
+2021-11-01,exporter,role_specific_pagerank,16,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.015671403849
+2021-11-01,exporter,role_specific_pagerank,17,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,0.015671403849
 2021-11-01,exporter,role_specific_pagerank,18,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.0140439772399
 2021-11-01,exporter,role_specific_pagerank,19,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.0137084590462
 2021-11-01,exporter,role_specific_pagerank,20,LNGN0351,Sakhalin II LNG Terminal,Russia,0.0120399802936
 2021-11-01,exporter,role_specific_dependence,1,LNGN0309,Prelude FLNG Terminal,Australia,1
 2021-11-01,exporter,role_specific_dependence,2,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
-2021-11-01,exporter,role_specific_dependence,3,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2021-11-01,exporter,role_specific_dependence,4,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-11-01,exporter,role_specific_dependence,3,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2021-11-01,exporter,role_specific_dependence,4,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
 2021-11-01,exporter,role_specific_dependence,5,LNGN0452,Yamal LNG Terminal,Russia,0.699776568297
 2021-11-01,exporter,role_specific_dependence,6,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.674583321805
 2021-11-01,exporter,role_specific_dependence,7,LNGN0441,Wheatstone LNG Terminal,Australia,0.655123886264
@@ -4579,12 +4579,12 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2022-01-01,exporter,throughput,18,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,160000
 2022-01-01,exporter,throughput,19,LNGN0351,Sakhalin II LNG Terminal,Russia,150000
 2022-01-01,exporter,throughput,20,LNGN0435,Vysotsk LNG Terminal,Russia,54000
-2022-01-01,exporter,counterparty_hhi_terminal,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
+2022-01-01,exporter,counterparty_hhi_terminal,1,LNGN0351,Sakhalin II LNG Terminal,Russia,1
 2022-01-01,exporter,counterparty_hhi_terminal,2,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
-2022-01-01,exporter,counterparty_hhi_terminal,3,LNGN0351,Sakhalin II LNG Terminal,Russia,1
-2022-01-01,exporter,counterparty_hhi_terminal,4,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,1
-2022-01-01,exporter,counterparty_hhi_terminal,5,LNGN0378,Skikda LNG Terminal,Algeria,0.555555555556
-2022-01-01,exporter,counterparty_hhi_terminal,6,LNGN0435,Vysotsk LNG Terminal,Russia,0.555555555556
+2022-01-01,exporter,counterparty_hhi_terminal,3,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,1
+2022-01-01,exporter,counterparty_hhi_terminal,4,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
+2022-01-01,exporter,counterparty_hhi_terminal,5,LNGN0435,Vysotsk LNG Terminal,Russia,0.555555555556
+2022-01-01,exporter,counterparty_hhi_terminal,6,LNGN0378,Skikda LNG Terminal,Algeria,0.555555555556
 2022-01-01,exporter,counterparty_hhi_terminal,7,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.530468783749
 2022-01-01,exporter,counterparty_hhi_terminal,8,LNGN0441,Wheatstone LNG Terminal,Australia,0.500028769433
 2022-01-01,exporter,counterparty_hhi_terminal,9,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.5
@@ -4772,18 +4772,18 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2022-02-01,exporter,throughput,11,LNGN0441,Wheatstone LNG Terminal,Australia,328000
 2022-02-01,exporter,throughput,12,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,305217
 2022-02-01,exporter,throughput,13,LNGN0378,Skikda LNG Terminal,Algeria,302000
-2022-02-01,exporter,throughput,14,LNGN0103,Elba Island LNG Terminal,United States,174000
-2022-02-01,exporter,throughput,15,LNGN0274,Oman Qalhat LNG Terminal,Oman,174000
+2022-02-01,exporter,throughput,14,LNGN0274,Oman Qalhat LNG Terminal,Oman,174000
+2022-02-01,exporter,throughput,15,LNGN0103,Elba Island LNG Terminal,United States,174000
 2022-02-01,exporter,throughput,16,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,170000
 2022-02-01,exporter,throughput,17,LNGN0322,Queensland Curtis LNG Terminal,Australia,167000
 2022-02-01,exporter,throughput,18,LNGN0085,Das Island LNG Terminal,United Arab Emirates,135000
 2022-02-01,exporter,throughput,19,LNGN0435,Vysotsk LNG Terminal,Russia,63938
 2022-02-01,exporter,counterparty_hhi_terminal,1,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,1
-2022-02-01,exporter,counterparty_hhi_terminal,2,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
-2022-02-01,exporter,counterparty_hhi_terminal,3,LNGN0103,Elba Island LNG Terminal,United States,1
-2022-02-01,exporter,counterparty_hhi_terminal,4,LNGN0274,Oman Qalhat LNG Terminal,Oman,1
-2022-02-01,exporter,counterparty_hhi_terminal,5,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2022-02-01,exporter,counterparty_hhi_terminal,6,LNGN0378,Skikda LNG Terminal,Algeria,1
+2022-02-01,exporter,counterparty_hhi_terminal,2,LNGN0103,Elba Island LNG Terminal,United States,1
+2022-02-01,exporter,counterparty_hhi_terminal,3,LNGN0378,Skikda LNG Terminal,Algeria,1
+2022-02-01,exporter,counterparty_hhi_terminal,4,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
+2022-02-01,exporter,counterparty_hhi_terminal,5,LNGN0274,Oman Qalhat LNG Terminal,Oman,1
+2022-02-01,exporter,counterparty_hhi_terminal,6,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
 2022-02-01,exporter,counterparty_hhi_terminal,7,LNGN0435,Vysotsk LNG Terminal,Russia,0.595464639261
 2022-02-01,exporter,counterparty_hhi_terminal,8,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.504544736358
 2022-02-01,exporter,counterparty_hhi_terminal,9,LNGN0441,Wheatstone LNG Terminal,Australia,0.501505800119
@@ -4797,11 +4797,11 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2022-02-01,exporter,counterparty_hhi_terminal,17,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.131086917366
 2022-02-01,exporter,counterparty_hhi_terminal,18,LNGN0345,Sabine Pass LNG Terminal,United States,0.128396336394
 2022-02-01,exporter,counterparty_hhi_terminal,19,LNGN0070,Corpus Christi LNG Terminal,United States,0.0890840970623
-2022-02-01,exporter,weighted_dependence_generated,1,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
-2022-02-01,exporter,weighted_dependence_generated,2,LNGN0274,Oman Qalhat LNG Terminal,Oman,1
-2022-02-01,exporter,weighted_dependence_generated,3,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
+2022-02-01,exporter,weighted_dependence_generated,1,LNGN0274,Oman Qalhat LNG Terminal,Oman,1
+2022-02-01,exporter,weighted_dependence_generated,2,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2022-02-01,exporter,weighted_dependence_generated,3,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
 2022-02-01,exporter,weighted_dependence_generated,4,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2022-02-01,exporter,weighted_dependence_generated,5,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2022-02-01,exporter,weighted_dependence_generated,5,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
 2022-02-01,exporter,weighted_dependence_generated,6,LNGN0441,Wheatstone LNG Terminal,Australia,0.778758798494
 2022-02-01,exporter,weighted_dependence_generated,7,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.733033681547
 2022-02-01,exporter,weighted_dependence_generated,8,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.720673502656
@@ -4829,17 +4829,17 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2022-02-01,exporter,role_specific_pagerank,11,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,0.0250466852407
 2022-02-01,exporter,role_specific_pagerank,12,LNGN0441,Wheatstone LNG Terminal,Australia,0.0217391314366
 2022-02-01,exporter,role_specific_pagerank,13,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.0210250112984
-2022-02-01,exporter,role_specific_pagerank,14,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0171614769718
-2022-02-01,exporter,role_specific_pagerank,15,LNGN0274,Oman Qalhat LNG Terminal,Oman,0.0171614769718
-2022-02-01,exporter,role_specific_pagerank,16,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.0171614769718
+2022-02-01,exporter,role_specific_pagerank,14,LNGN0274,Oman Qalhat LNG Terminal,Oman,0.0171614769718
+2022-02-01,exporter,role_specific_pagerank,15,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.0171614769718
+2022-02-01,exporter,role_specific_pagerank,16,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0171614769718
 2022-02-01,exporter,role_specific_pagerank,17,LNGN0378,Skikda LNG Terminal,Algeria,0.0124332790399
 2022-02-01,exporter,role_specific_pagerank,18,LNGN0103,Elba Island LNG Terminal,United States,0.0119560074505
 2022-02-01,exporter,role_specific_pagerank,19,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.011884216963
-2022-02-01,exporter,role_specific_dependence,1,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
-2022-02-01,exporter,role_specific_dependence,2,LNGN0274,Oman Qalhat LNG Terminal,Oman,1
-2022-02-01,exporter,role_specific_dependence,3,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
+2022-02-01,exporter,role_specific_dependence,1,LNGN0274,Oman Qalhat LNG Terminal,Oman,1
+2022-02-01,exporter,role_specific_dependence,2,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2022-02-01,exporter,role_specific_dependence,3,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
 2022-02-01,exporter,role_specific_dependence,4,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2022-02-01,exporter,role_specific_dependence,5,LNGN0435,Vysotsk LNG Terminal,Russia,1
+2022-02-01,exporter,role_specific_dependence,5,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
 2022-02-01,exporter,role_specific_dependence,6,LNGN0441,Wheatstone LNG Terminal,Australia,0.778758798494
 2022-02-01,exporter,role_specific_dependence,7,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.733033681547
 2022-02-01,exporter,role_specific_dependence,8,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.720673502656
@@ -4969,16 +4969,16 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2022-03-01,exporter,throughput,13,LNGN0322,Queensland Curtis LNG Terminal,Australia,334000
 2022-03-01,exporter,throughput,14,LNGN0103,Elba Island LNG Terminal,United States,318517
 2022-03-01,exporter,throughput,15,LNGN0378,Skikda LNG Terminal,Algeria,226500
-2022-03-01,exporter,throughput,16,LNGN0052,Cameroon FLNG Terminal,Cameroon,174000
-2022-03-01,exporter,throughput,17,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,174000
+2022-03-01,exporter,throughput,16,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,174000
+2022-03-01,exporter,throughput,17,LNGN0052,Cameroon FLNG Terminal,Cameroon,174000
 2022-03-01,exporter,throughput,18,LNGN0441,Wheatstone LNG Terminal,Australia,155000
 2022-03-01,exporter,throughput,19,LNGN0101,Egyptian LNG Terminal,Egypt,154948
 2022-03-01,exporter,throughput,20,LNGN0435,Vysotsk LNG Terminal,Russia,140907
-2022-03-01,exporter,counterparty_hhi_terminal,1,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
-2022-03-01,exporter,counterparty_hhi_terminal,2,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,1
-2022-03-01,exporter,counterparty_hhi_terminal,3,LNGN0101,Egyptian LNG Terminal,Egypt,1
-2022-03-01,exporter,counterparty_hhi_terminal,4,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
-2022-03-01,exporter,counterparty_hhi_terminal,5,LNGN0441,Wheatstone LNG Terminal,Australia,1
+2022-03-01,exporter,counterparty_hhi_terminal,1,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
+2022-03-01,exporter,counterparty_hhi_terminal,2,LNGN0441,Wheatstone LNG Terminal,Australia,1
+2022-03-01,exporter,counterparty_hhi_terminal,3,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
+2022-03-01,exporter,counterparty_hhi_terminal,4,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,1
+2022-03-01,exporter,counterparty_hhi_terminal,5,LNGN0101,Egyptian LNG Terminal,Egypt,1
 2022-03-01,exporter,counterparty_hhi_terminal,6,LNGN0378,Skikda LNG Terminal,Algeria,0.555555555556
 2022-03-01,exporter,counterparty_hhi_terminal,7,LNGN0103,Elba Island LNG Terminal,United States,0.508480961352
 2022-03-01,exporter,counterparty_hhi_terminal,8,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.333333372761
@@ -5173,8 +5173,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2022-04-01,exporter,throughput,17,LNGN0101,Egyptian LNG Terminal,Egypt,165772
 2022-04-01,exporter,throughput,18,LNGN0274,Oman Qalhat LNG Terminal,Oman,159800
 2022-04-01,exporter,throughput,19,LNGN0435,Vysotsk LNG Terminal,Russia,99938
-2022-04-01,exporter,counterparty_hhi_terminal,1,LNGN0101,Egyptian LNG Terminal,Egypt,1
-2022-04-01,exporter,counterparty_hhi_terminal,2,LNGN0274,Oman Qalhat LNG Terminal,Oman,1
+2022-04-01,exporter,counterparty_hhi_terminal,1,LNGN0274,Oman Qalhat LNG Terminal,Oman,1
+2022-04-01,exporter,counterparty_hhi_terminal,2,LNGN0101,Egyptian LNG Terminal,Egypt,1
 2022-04-01,exporter,counterparty_hhi_terminal,3,LNGN0322,Queensland Curtis LNG Terminal,Australia,1
 2022-04-01,exporter,counterparty_hhi_terminal,4,LNGN0378,Skikda LNG Terminal,Algeria,0.555555555556
 2022-04-01,exporter,counterparty_hhi_terminal,5,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.500437659746
@@ -7749,7 +7749,7 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2023-04-01,importer,role_specific_dependence,18,LNGN0464,Zeebrugge LNG Terminal,Belgium,1
 2023-04-01,importer,role_specific_dependence,19,LNGN0474,Świnoujście Polskie LNG Terminal,Poland,1
 2023-04-01,importer,role_specific_dependence,20,LNGN0385,South Hook LNG Terminal,United Kingdom,0.611212234217
-2023-05-01,exporter,throughput,1,LNGN0328,Rasgas LNG Terminal 3,Qatar,10041622
+2023-05-01,exporter,throughput,1,LNGN0328,Rasgas LNG Terminal 3,Qatar,9776622
 2023-05-01,exporter,throughput,2,LNGN0452,Yamal LNG Terminal,Russia,4453863
 2023-05-01,exporter,throughput,3,LNGN0070,Corpus Christi LNG Terminal,United States,2977400
 2023-05-01,exporter,throughput,4,LNGN0345,Sabine Pass LNG Terminal,United States,2677107
@@ -7790,7 +7790,7 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2023-05-01,exporter,counterparty_hhi_terminal,19,LNGN0274,Oman Qalhat LNG Terminal,Oman,0.167727880083
 2023-05-01,exporter,counterparty_hhi_terminal,20,LNGN0142,Gorgon LNG Terminal,Australia,0.167173113064
 2023-05-01,exporter,weighted_dependence_generated,1,LNGN0441,Wheatstone LNG Terminal,Australia,0.682464757383
-2023-05-01,exporter,weighted_dependence_generated,2,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.674419082608
+2023-05-01,exporter,weighted_dependence_generated,2,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.668679182591
 2023-05-01,exporter,weighted_dependence_generated,3,LNGN0452,Yamal LNG Terminal,Russia,0.657543038591
 2023-05-01,exporter,weighted_dependence_generated,4,LNGN0309,Prelude FLNG Terminal,Australia,0.591361698866
 2023-05-01,exporter,weighted_dependence_generated,5,LNGN0142,Gorgon LNG Terminal,Australia,0.580816079451
@@ -7802,19 +7802,19 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2023-05-01,exporter,weighted_dependence_generated,11,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.496568100575
 2023-05-01,exporter,weighted_dependence_generated,12,LNGN0345,Sabine Pass LNG Terminal,United States,0.494200790767
 2023-05-01,exporter,weighted_dependence_generated,13,LNGN0297,Pluto LNG Terminal,Australia,0.420795229068
-2023-05-01,exporter,weighted_dependence_generated,14,LNGN0261,Nigeria LNG Terminal,Nigeria,0.41241446483
+2023-05-01,exporter,weighted_dependence_generated,14,LNGN0261,Nigeria LNG Terminal,Nigeria,0.415586693524
 2023-05-01,exporter,weighted_dependence_generated,15,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,0.402348516063
 2023-05-01,exporter,weighted_dependence_generated,16,LNGN0050,Calcasieu Pass LNG Terminal,United States,0.350750283689
 2023-05-01,exporter,weighted_dependence_generated,17,LNGN0288,Peru LNG Terminal,Peru,0.334921254103
 2023-05-01,exporter,weighted_dependence_generated,18,LNGN0101,Egyptian LNG Terminal,Egypt,0.329133026782
 2023-05-01,exporter,weighted_dependence_generated,19,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.325004292373
-2023-05-01,exporter,weighted_dependence_generated,20,LNGN0070,Corpus Christi LNG Terminal,United States,0.321573101691
-2023-05-01,exporter,role_specific_pagerank,1,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.11063233361
+2023-05-01,exporter,weighted_dependence_generated,20,LNGN0070,Corpus Christi LNG Terminal,United States,0.324015515814
+2023-05-01,exporter,role_specific_pagerank,1,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.110136013961
 2023-05-01,exporter,role_specific_pagerank,2,LNGN0345,Sabine Pass LNG Terminal,United States,0.0368659366022
 2023-05-01,exporter,role_specific_pagerank,3,LNGN0452,Yamal LNG Terminal,Russia,0.0356839121785
 2023-05-01,exporter,role_specific_pagerank,4,LNGN0124,Freeport LNG Terminal,United States,0.0339122057325
-2023-05-01,exporter,role_specific_pagerank,5,LNGN0261,Nigeria LNG Terminal,Nigeria,0.0307821739801
-2023-05-01,exporter,role_specific_pagerank,6,LNGN0070,Corpus Christi LNG Terminal,United States,0.0272335218839
+2023-05-01,exporter,role_specific_pagerank,5,LNGN0261,Nigeria LNG Terminal,Nigeria,0.0310347917658
+2023-05-01,exporter,role_specific_pagerank,6,LNGN0070,Corpus Christi LNG Terminal,United States,0.0274772237477
 2023-05-01,exporter,role_specific_pagerank,7,LNGN0142,Gorgon LNG Terminal,Australia,0.0259774911381
 2023-05-01,exporter,role_specific_pagerank,8,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.0226966607944
 2023-05-01,exporter,role_specific_pagerank,9,LNGN0297,Pluto LNG Terminal,Australia,0.0213596592647
@@ -7830,7 +7830,7 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2023-05-01,exporter,role_specific_pagerank,19,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.0100347900922
 2023-05-01,exporter,role_specific_pagerank,20,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.00966803007223
 2023-05-01,exporter,role_specific_dependence,1,LNGN0441,Wheatstone LNG Terminal,Australia,0.682464757383
-2023-05-01,exporter,role_specific_dependence,2,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.674419082608
+2023-05-01,exporter,role_specific_dependence,2,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.668679182591
 2023-05-01,exporter,role_specific_dependence,3,LNGN0452,Yamal LNG Terminal,Russia,0.657543038591
 2023-05-01,exporter,role_specific_dependence,4,LNGN0309,Prelude FLNG Terminal,Australia,0.591361698866
 2023-05-01,exporter,role_specific_dependence,5,LNGN0142,Gorgon LNG Terminal,Australia,0.580816079451
@@ -7842,28 +7842,28 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2023-05-01,exporter,role_specific_dependence,11,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.496568100575
 2023-05-01,exporter,role_specific_dependence,12,LNGN0345,Sabine Pass LNG Terminal,United States,0.494200790767
 2023-05-01,exporter,role_specific_dependence,13,LNGN0297,Pluto LNG Terminal,Australia,0.420795229068
-2023-05-01,exporter,role_specific_dependence,14,LNGN0261,Nigeria LNG Terminal,Nigeria,0.41241446483
+2023-05-01,exporter,role_specific_dependence,14,LNGN0261,Nigeria LNG Terminal,Nigeria,0.415586693524
 2023-05-01,exporter,role_specific_dependence,15,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,0.402348516063
 2023-05-01,exporter,role_specific_dependence,16,LNGN0050,Calcasieu Pass LNG Terminal,United States,0.350750283689
 2023-05-01,exporter,role_specific_dependence,17,LNGN0288,Peru LNG Terminal,Peru,0.334921254103
 2023-05-01,exporter,role_specific_dependence,18,LNGN0101,Egyptian LNG Terminal,Egypt,0.329133026782
 2023-05-01,exporter,role_specific_dependence,19,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.325004292373
-2023-05-01,exporter,role_specific_dependence,20,LNGN0070,Corpus Christi LNG Terminal,United States,0.321573101691
+2023-05-01,exporter,role_specific_dependence,20,LNGN0070,Corpus Christi LNG Terminal,United States,0.324015515814
 2023-05-01,importer,throughput,1,LNGN0464,Zeebrugge LNG Terminal,Belgium,2058568
 2023-05-01,importer,throughput,2,LNGN0132,Gate LNG Terminal,Netherlands,1697524
 2023-05-01,importer,throughput,3,LNGN0097,Dunkirk LNG Terminal,France,1322641
 2023-05-01,importer,throughput,4,LNGN0121,Fos Tonkin LNG Terminal,France,1198200
 2023-05-01,importer,throughput,5,LNGN0056,Cartagena LNG Terminal (Spain),Spain,1133558
-2023-05-01,importer,throughput,6,LNGN0136,Gibraltar LNG Terminal,Gibraltar,1131335
-2023-05-01,importer,throughput,7,LNGN0385,South Hook LNG Terminal,United Kingdom,1128820
-2023-05-01,importer,throughput,8,LNGN0474,Świnoujście Polskie LNG Terminal,Poland,1067987
-2023-05-01,importer,throughput,9,LNGN0130,GasPort FSRU,Pakistan,1023106
-2023-05-01,importer,throughput,10,LNGN0244,Montoir LNG Terminal,France,1023000
-2023-05-01,importer,throughput,11,LNGN0374,Sines LNG Terminal,Portugal,1014000
-2023-05-01,importer,throughput,12,LNGN0144,Grain LNG Terminal,United Kingdom,1006009
-2023-05-01,importer,throughput,13,LNGN0008,Al Zour LNG Import Terminal,Kuwait,987166
-2023-05-01,importer,throughput,14,LNGN0381,Sodegaura LNG Terminal,Japan,952259
-2023-05-01,importer,throughput,15,LNGN0449,Xintian Tangshan LNG Terminal,China,910830
+2023-05-01,importer,throughput,6,LNGN0385,South Hook LNG Terminal,United Kingdom,1128820
+2023-05-01,importer,throughput,7,LNGN0474,Świnoujście Polskie LNG Terminal,Poland,1067987
+2023-05-01,importer,throughput,8,LNGN0130,GasPort FSRU,Pakistan,1023106
+2023-05-01,importer,throughput,9,LNGN0244,Montoir LNG Terminal,France,1023000
+2023-05-01,importer,throughput,10,LNGN0374,Sines LNG Terminal,Portugal,1014000
+2023-05-01,importer,throughput,11,LNGN0144,Grain LNG Terminal,United Kingdom,1006009
+2023-05-01,importer,throughput,12,LNGN0008,Al Zour LNG Import Terminal,Kuwait,987166
+2023-05-01,importer,throughput,13,LNGN0381,Sodegaura LNG Terminal,Japan,952259
+2023-05-01,importer,throughput,14,LNGN0449,Xintian Tangshan LNG Terminal,China,910830
+2023-05-01,importer,throughput,15,LNGN0136,Gibraltar LNG Terminal,Gibraltar,866335
 2023-05-01,importer,throughput,16,LNGN0168,Hazira LNG Terminal,India,851948
 2023-05-01,importer,throughput,17,LNGN0100,Eemshaven FSRU,Netherlands,848000
 2023-05-01,importer,throughput,18,LNGN0037,Bilbao LNG Terminal,Spain,822314
@@ -7910,25 +7910,25 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2023-05-01,importer,country_terminal_dependence,19,LNGN0428,Toscana FSRU,Italy,0.77686388845
 2023-05-01,importer,country_terminal_dependence,20,LNGN0132,Gate LNG Terminal,Netherlands,0.66686623265
 2023-05-01,importer,role_specific_pagerank,1,LNGN0324,Quintero LNG Terminal,Chile,0.0263893261585
-2023-05-01,importer,role_specific_pagerank,2,LNGN0132,Gate LNG Terminal,Netherlands,0.023539175507
+2023-05-01,importer,role_specific_pagerank,2,LNGN0132,Gate LNG Terminal,Netherlands,0.0235432282876
 2023-05-01,importer,role_specific_pagerank,3,LNGN0097,Dunkirk LNG Terminal,France,0.0177279046517
-2023-05-01,importer,role_specific_pagerank,4,LNGN0381,Sodegaura LNG Terminal,Japan,0.0169686289559
+2023-05-01,importer,role_specific_pagerank,4,LNGN0381,Sodegaura LNG Terminal,Japan,0.0169726798075
 2023-05-01,importer,role_specific_pagerank,5,LNGN0182,Inkoo FSRU,Finland,0.0166643632482
 2023-05-01,importer,role_specific_pagerank,6,LNGN0044,Brunnsviksholme LNG Terminal,Sweden,0.016573865098
-2023-05-01,importer,role_specific_pagerank,7,LNGN0168,Hazira LNG Terminal,India,0.0164534211227
-2023-05-01,importer,role_specific_pagerank,8,LNGN0230,Map Ta Phut LNG Terminal 2,Thailand,0.0153407934728
-2023-05-01,importer,role_specific_pagerank,9,LNGN0464,Zeebrugge LNG Terminal,Belgium,0.0149558197318
-2023-05-01,importer,role_specific_pagerank,10,LNGN0449,Xintian Tangshan LNG Terminal,China,0.0139132149274
+2023-05-01,importer,role_specific_pagerank,7,LNGN0168,Hazira LNG Terminal,India,0.0164575877129
+2023-05-01,importer,role_specific_pagerank,8,LNGN0230,Map Ta Phut LNG Terminal 2,Thailand,0.0153483203023
+2023-05-01,importer,role_specific_pagerank,9,LNGN0464,Zeebrugge LNG Terminal,Belgium,0.0149612704034
+2023-05-01,importer,role_specific_pagerank,10,LNGN0449,Xintian Tangshan LNG Terminal,China,0.0139182630601
 2023-05-01,importer,role_specific_pagerank,11,LNGN0374,Sines LNG Terminal,Portugal,0.0132694448454
 2023-05-01,importer,role_specific_pagerank,12,LNGN0463,Yung-An LNG Terminal,Taiwan,0.013173687615
-2023-05-01,importer,role_specific_pagerank,13,LNGN0121,Fos Tonkin LNG Terminal,France,0.0129502751337
-2023-05-01,importer,role_specific_pagerank,14,LNGN0056,Cartagena LNG Terminal (Spain),Spain,0.0128232360363
+2023-05-01,importer,role_specific_pagerank,13,LNGN0121,Fos Tonkin LNG Terminal,France,0.0129626475919
+2023-05-01,importer,role_specific_pagerank,14,LNGN0056,Cartagena LNG Terminal (Spain),Spain,0.0128283478252
 2023-05-01,importer,role_specific_pagerank,15,LNGN0178,Huelva LNG Terminal,Spain,0.0127880397838
 2023-05-01,importer,role_specific_pagerank,16,LNGN0170,Higashi Niigata LNG Terminal,Japan,0.0121296634193
 2023-05-01,importer,role_specific_pagerank,17,LNGN0025,Arun LNG Import Terminal,Indonesia,0.0119798932114
 2023-05-01,importer,role_specific_pagerank,18,LNGN0081,Dalian LNG Terminal,China,0.0119798932114
 2023-05-01,importer,role_specific_pagerank,19,LNGN0278,Panigaglia LNG Terminal,Italy,0.0119798932114
-2023-05-01,importer,role_specific_pagerank,20,LNGN0474,Świnoujście Polskie LNG Terminal,Poland,0.0115295324058
+2023-05-01,importer,role_specific_pagerank,20,LNGN0474,Świnoujście Polskie LNG Terminal,Poland,0.011533698996
 2023-05-01,importer,role_specific_dependence,1,LNGN0008,Al Zour LNG Import Terminal,Kuwait,1
 2023-05-01,importer,role_specific_dependence,2,LNGN0044,Brunnsviksholme LNG Terminal,Sweden,1
 2023-05-01,importer,role_specific_dependence,3,LNGN0074,Costa Norte LNG Terminal,Panama,1
@@ -8026,8 +8026,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2023-06-01,exporter,role_specific_pagerank,15,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.0139818466309
 2023-06-01,exporter,role_specific_pagerank,16,LNGN0351,Sakhalin II LNG Terminal,Russia,0.0134948172086
 2023-06-01,exporter,role_specific_pagerank,17,LNGN0435,Vysotsk LNG Terminal,Russia,0.0131106536898
-2023-06-01,exporter,role_specific_pagerank,18,LNGN0288,Peru LNG Terminal,Peru,0.0127236198961
-2023-06-01,exporter,role_specific_pagerank,19,LNGN0308,Portovaya LNG Terminal,Russia,0.0127236198961
+2023-06-01,exporter,role_specific_pagerank,18,LNGN0308,Portovaya LNG Terminal,Russia,0.0127236198961
+2023-06-01,exporter,role_specific_pagerank,19,LNGN0288,Peru LNG Terminal,Peru,0.0127236198961
 2023-06-01,exporter,role_specific_pagerank,20,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0122088797324
 2023-06-01,exporter,role_specific_dependence,1,LNGN0288,Peru LNG Terminal,Peru,1
 2023-06-01,exporter,role_specific_dependence,2,LNGN0308,Portovaya LNG Terminal,Russia,1
@@ -9557,9 +9557,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-02-01,exporter,throughput,6,LNGN0050,Calcasieu Pass LNG Terminal,United States,2025030
 2024-02-01,exporter,throughput,7,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1489058
 2024-02-01,exporter,throughput,8,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,1481782
-2024-02-01,exporter,throughput,9,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,1392000
-2024-02-01,exporter,throughput,10,LNGN0297,Pluto LNG Terminal,Australia,1274673
-2024-02-01,exporter,throughput,11,LNGN0142,Gorgon LNG Terminal,Australia,1171000
+2024-02-01,exporter,throughput,9,LNGN0297,Pluto LNG Terminal,Australia,1274673
+2024-02-01,exporter,throughput,10,LNGN0142,Gorgon LNG Terminal,Australia,1171000
+2024-02-01,exporter,throughput,11,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,1044000
 2024-02-01,exporter,throughput,12,LNGN0124,Freeport LNG Terminal,United States,1031590
 2024-02-01,exporter,throughput,13,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,734814
 2024-02-01,exporter,throughput,14,LNGN0378,Skikda LNG Terminal,Algeria,453000
@@ -9577,10 +9577,10 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-02-01,exporter,counterparty_hhi_terminal,6,LNGN0312,Punta Europa LNG Terminal,Equatorial Guinea,1
 2024-02-01,exporter,counterparty_hhi_terminal,7,LNGN0334,Risavika LNG Terminal,Norway,1
 2024-02-01,exporter,counterparty_hhi_terminal,8,LNGN0351,Sakhalin II LNG Terminal,Russia,1
-2024-02-01,exporter,counterparty_hhi_terminal,9,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.59375
-2024-02-01,exporter,counterparty_hhi_terminal,10,LNGN0435,Vysotsk LNG Terminal,Russia,0.591836734694
-2024-02-01,exporter,counterparty_hhi_terminal,11,LNGN0441,Wheatstone LNG Terminal,Australia,0.500279030308
-2024-02-01,exporter,counterparty_hhi_terminal,12,LNGN0101,Egyptian LNG Terminal,Egypt,0.500005081925
+2024-02-01,exporter,counterparty_hhi_terminal,9,LNGN0435,Vysotsk LNG Terminal,Russia,0.591836734694
+2024-02-01,exporter,counterparty_hhi_terminal,10,LNGN0441,Wheatstone LNG Terminal,Australia,0.500279030308
+2024-02-01,exporter,counterparty_hhi_terminal,11,LNGN0101,Egyptian LNG Terminal,Egypt,0.500005081925
+2024-02-01,exporter,counterparty_hhi_terminal,12,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.5
 2024-02-01,exporter,counterparty_hhi_terminal,13,LNGN0274,Oman Qalhat LNG Terminal,Oman,0.5
 2024-02-01,exporter,counterparty_hhi_terminal,14,LNGN0322,Queensland Curtis LNG Terminal,Australia,0.5
 2024-02-01,exporter,counterparty_hhi_terminal,15,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,0.405162869297
@@ -9591,9 +9591,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-02-01,exporter,counterparty_hhi_terminal,20,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.200181768455
 2024-02-01,exporter,weighted_dependence_generated,1,LNGN0013,American LNG Hialeah Terminal,United States,1
 2024-02-01,exporter,weighted_dependence_generated,2,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
-2024-02-01,exporter,weighted_dependence_generated,3,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.796851804574
-2024-02-01,exporter,weighted_dependence_generated,4,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.759602492319
-2024-02-01,exporter,weighted_dependence_generated,5,LNGN0441,Wheatstone LNG Terminal,Australia,0.748156170593
+2024-02-01,exporter,weighted_dependence_generated,3,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.759602492319
+2024-02-01,exporter,weighted_dependence_generated,4,LNGN0441,Wheatstone LNG Terminal,Australia,0.748156170593
+2024-02-01,exporter,weighted_dependence_generated,5,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.729135739432
 2024-02-01,exporter,weighted_dependence_generated,6,LNGN0452,Yamal LNG Terminal,Russia,0.658359588487
 2024-02-01,exporter,weighted_dependence_generated,7,LNGN0378,Skikda LNG Terminal,Algeria,0.596264957694
 2024-02-01,exporter,weighted_dependence_generated,8,LNGN0274,Oman Qalhat LNG Terminal,Oman,0.585240299262
@@ -9631,9 +9631,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-02-01,exporter,role_specific_pagerank,20,LNGN0052,Cameroon FLNG Terminal,Cameroon,0.0118098602054
 2024-02-01,exporter,role_specific_dependence,1,LNGN0013,American LNG Hialeah Terminal,United States,1
 2024-02-01,exporter,role_specific_dependence,2,LNGN0052,Cameroon FLNG Terminal,Cameroon,1
-2024-02-01,exporter,role_specific_dependence,3,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.796851804574
-2024-02-01,exporter,role_specific_dependence,4,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.759602492319
-2024-02-01,exporter,role_specific_dependence,5,LNGN0441,Wheatstone LNG Terminal,Australia,0.748156170593
+2024-02-01,exporter,role_specific_dependence,3,LNGN0328,Rasgas LNG Terminal 3,Qatar,0.759602492319
+2024-02-01,exporter,role_specific_dependence,4,LNGN0441,Wheatstone LNG Terminal,Australia,0.748156170593
+2024-02-01,exporter,role_specific_dependence,5,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.729135739432
 2024-02-01,exporter,role_specific_dependence,6,LNGN0452,Yamal LNG Terminal,Russia,0.658359588487
 2024-02-01,exporter,role_specific_dependence,7,LNGN0378,Skikda LNG Terminal,Algeria,0.596264957694
 2024-02-01,exporter,role_specific_dependence,8,LNGN0274,Oman Qalhat LNG Terminal,Oman,0.585240299262
@@ -9653,20 +9653,20 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-02-01,importer,throughput,2,LNGN0097,Dunkirk LNG Terminal,France,1707798
 2024-02-01,importer,throughput,3,LNGN0132,Gate LNG Terminal,Netherlands,1681310
 2024-02-01,importer,throughput,4,LNGN0195,Jieyang LNG Terminal (PipeChina),China,1061320
-2024-02-01,importer,throughput,5,LNGN0136,Gibraltar LNG Terminal,Gibraltar,1044000
-2024-02-01,importer,throughput,6,LNGN0385,South Hook LNG Terminal,United Kingdom,1021000
-2024-02-01,importer,throughput,7,LNGN0168,Hazira LNG Terminal,India,1020644
-2024-02-01,importer,throughput,8,LNGN0130,GasPort FSRU,Pakistan,1004723
-2024-02-01,importer,throughput,9,LNGN0314,Pyeongtaek LNG Terminal,South Korea,1003172
-2024-02-01,importer,throughput,10,LNGN0230,Map Ta Phut LNG Terminal 2,Thailand,888862
-2024-02-01,importer,throughput,11,LNGN0210,Krk FSRU,Croatia,864400
-2024-02-01,importer,throughput,12,LNGN0244,Montoir LNG Terminal,France,854400
-2024-02-01,importer,throughput,13,LNGN0055,Cartagena FSRU (Colombia),Colombia,851300
-2024-02-01,importer,throughput,14,LNGN0056,Cartagena LNG Terminal (Spain),Spain,826396
-2024-02-01,importer,throughput,15,LNGN0449,Xintian Tangshan LNG Terminal,China,797398
-2024-02-01,importer,throughput,16,LNGN0374,Sines LNG Terminal,Portugal,797072
-2024-02-01,importer,throughput,17,LNGN0474,Świnoujście Polskie LNG Terminal,Poland,769420
-2024-02-01,importer,throughput,18,LNGN0035,Barcelona LNG Terminal,Spain,698100
+2024-02-01,importer,throughput,5,LNGN0385,South Hook LNG Terminal,United Kingdom,1021000
+2024-02-01,importer,throughput,6,LNGN0168,Hazira LNG Terminal,India,1020644
+2024-02-01,importer,throughput,7,LNGN0130,GasPort FSRU,Pakistan,1004723
+2024-02-01,importer,throughput,8,LNGN0314,Pyeongtaek LNG Terminal,South Korea,1003172
+2024-02-01,importer,throughput,9,LNGN0230,Map Ta Phut LNG Terminal 2,Thailand,888862
+2024-02-01,importer,throughput,10,LNGN0210,Krk FSRU,Croatia,864400
+2024-02-01,importer,throughput,11,LNGN0244,Montoir LNG Terminal,France,854400
+2024-02-01,importer,throughput,12,LNGN0055,Cartagena FSRU (Colombia),Colombia,851300
+2024-02-01,importer,throughput,13,LNGN0056,Cartagena LNG Terminal (Spain),Spain,826396
+2024-02-01,importer,throughput,14,LNGN0449,Xintian Tangshan LNG Terminal,China,797398
+2024-02-01,importer,throughput,15,LNGN0374,Sines LNG Terminal,Portugal,797072
+2024-02-01,importer,throughput,16,LNGN0474,Świnoujście Polskie LNG Terminal,Poland,769420
+2024-02-01,importer,throughput,17,LNGN0035,Barcelona LNG Terminal,Spain,698100
+2024-02-01,importer,throughput,18,LNGN0136,Gibraltar LNG Terminal,Gibraltar,696000
 2024-02-01,importer,throughput,19,LNGN0463,Yung-An LNG Terminal,Taiwan,692000
 2024-02-01,importer,throughput,20,LNGN0186,Izmir Aliaga LNG Terminal,Türkiye,690000
 2024-02-01,importer,counterparty_hhi_terminal,1,LNGN0008,Al Zour LNG Import Terminal,Kuwait,1
@@ -9711,7 +9711,7 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-02-01,importer,country_terminal_dependence,20,LNGN0238,Melaka FSRU,Malaysia,0.855923927834
 2024-02-01,importer,role_specific_pagerank,1,LNGN0168,Hazira LNG Terminal,India,0.0216425873238
 2024-02-01,importer,role_specific_pagerank,2,LNGN0463,Yung-An LNG Terminal,Taiwan,0.0196940540488
-2024-02-01,importer,role_specific_pagerank,3,LNGN0385,South Hook LNG Terminal,United Kingdom,0.0182409698734
+2024-02-01,importer,role_specific_pagerank,3,LNGN0385,South Hook LNG Terminal,United Kingdom,0.0185297503274
 2024-02-01,importer,role_specific_pagerank,4,LNGN0464,Zeebrugge LNG Terminal,Belgium,0.0180368295715
 2024-02-01,importer,role_specific_pagerank,5,LNGN0460,Yokkaichi Works LNG Terminal,Japan,0.0166784436872
 2024-02-01,importer,role_specific_pagerank,6,LNGN0182,Inkoo FSRU,Finland,0.0165447027938
@@ -9722,12 +9722,12 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-02-01,importer,role_specific_pagerank,11,LNGN0132,Gate LNG Terminal,Netherlands,0.0147170753924
 2024-02-01,importer,role_specific_pagerank,12,LNGN0035,Barcelona LNG Terminal,Spain,0.0144733551616
 2024-02-01,importer,role_specific_pagerank,13,LNGN0097,Dunkirk LNG Terminal,France,0.0138023296767
-2024-02-01,importer,role_specific_pagerank,14,LNGN0136,Gibraltar LNG Terminal,Gibraltar,0.013351199234
-2024-02-01,importer,role_specific_pagerank,15,LNGN0230,Map Ta Phut LNG Terminal 2,Thailand,0.0131671146898
+2024-02-01,importer,role_specific_pagerank,14,LNGN0230,Map Ta Phut LNG Terminal 2,Thailand,0.0131671146898
+2024-02-01,importer,role_specific_pagerank,15,LNGN0136,Gibraltar LNG Terminal,Gibraltar,0.0127736383259
 2024-02-01,importer,role_specific_pagerank,16,LNGN0363,Shandong LNG Terminal,China,0.0127036657784
 2024-02-01,importer,role_specific_pagerank,17,LNGN0405,Tanjung Benoa FSRU,Indonesia,0.0126177695579
-2024-02-01,importer,role_specific_pagerank,18,LNGN0359,Senboku 2 LNG Terminal,Japan,0.0123119033294
-2024-02-01,importer,role_specific_pagerank,19,LNGN0055,Cartagena FSRU (Colombia),Colombia,0.012081222221
+2024-02-01,importer,role_specific_pagerank,18,LNGN0055,Cartagena FSRU (Colombia),Colombia,0.012370002675
+2024-02-01,importer,role_specific_pagerank,19,LNGN0359,Senboku 2 LNG Terminal,Japan,0.0123119033294
 2024-02-01,importer,role_specific_pagerank,20,LNGN0208,Kochi LNG Terminal,India,0.0116185165097
 2024-02-01,importer,role_specific_dependence,1,LNGN0008,Al Zour LNG Import Terminal,Kuwait,1
 2024-02-01,importer,role_specific_dependence,2,LNGN0044,Brunnsviksholme LNG Terminal,Sweden,1
@@ -11369,13 +11369,13 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-11-01,exporter,throughput,18,LNGN0351,Sakhalin II LNG Terminal,Russia,135000
 2024-11-01,exporter,throughput,19,LNGN0435,Vysotsk LNG Terminal,Russia,108000
 2024-11-01,exporter,throughput,20,LNGN0334,Risavika LNG Terminal,Norway,18000
-2024-11-01,exporter,counterparty_hhi_terminal,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
+2024-11-01,exporter,counterparty_hhi_terminal,1,LNGN0334,Risavika LNG Terminal,Norway,1
 2024-11-01,exporter,counterparty_hhi_terminal,2,LNGN0085,Das Island LNG Terminal,United Arab Emirates,1
 2024-11-01,exporter,counterparty_hhi_terminal,3,LNGN0124,Freeport LNG Terminal,United States,1
-2024-11-01,exporter,counterparty_hhi_terminal,4,LNGN0334,Risavika LNG Terminal,Norway,1
-2024-11-01,exporter,counterparty_hhi_terminal,5,LNGN0351,Sakhalin II LNG Terminal,Russia,1
-2024-11-01,exporter,counterparty_hhi_terminal,6,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,1
-2024-11-01,exporter,counterparty_hhi_terminal,7,LNGN0441,Wheatstone LNG Terminal,Australia,1
+2024-11-01,exporter,counterparty_hhi_terminal,4,LNGN0441,Wheatstone LNG Terminal,Australia,1
+2024-11-01,exporter,counterparty_hhi_terminal,5,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,1
+2024-11-01,exporter,counterparty_hhi_terminal,6,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
+2024-11-01,exporter,counterparty_hhi_terminal,7,LNGN0351,Sakhalin II LNG Terminal,Russia,1
 2024-11-01,exporter,counterparty_hhi_terminal,8,LNGN0435,Vysotsk LNG Terminal,Russia,0.722222222222
 2024-11-01,exporter,counterparty_hhi_terminal,9,LNGN0297,Pluto LNG Terminal,Australia,0.569470713449
 2024-11-01,exporter,counterparty_hhi_terminal,10,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.503016099027
@@ -11401,8 +11401,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-11-01,exporter,weighted_dependence_generated,10,LNGN0142,Gorgon LNG Terminal,Australia,0.613852460377
 2024-11-01,exporter,weighted_dependence_generated,11,LNGN0297,Pluto LNG Terminal,Australia,0.559342507349
 2024-11-01,exporter,weighted_dependence_generated,12,LNGN0206,Kiyanly LNG Terminal,Turkmenistan,0.541631288945
-2024-11-01,exporter,weighted_dependence_generated,13,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.5
-2024-11-01,exporter,weighted_dependence_generated,14,LNGN0124,Freeport LNG Terminal,United States,0.5
+2024-11-01,exporter,weighted_dependence_generated,13,LNGN0124,Freeport LNG Terminal,United States,0.5
+2024-11-01,exporter,weighted_dependence_generated,14,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.5
 2024-11-01,exporter,weighted_dependence_generated,15,LNGN0334,Risavika LNG Terminal,Norway,0.5
 2024-11-01,exporter,weighted_dependence_generated,16,LNGN0351,Sakhalin II LNG Terminal,Russia,0.384396355353
 2024-11-01,exporter,weighted_dependence_generated,17,LNGN0435,Vysotsk LNG Terminal,Russia,0.368504435995
@@ -11422,8 +11422,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-11-01,exporter,role_specific_pagerank,11,LNGN0297,Pluto LNG Terminal,Australia,0.023294922327
 2024-11-01,exporter,role_specific_pagerank,12,LNGN0435,Vysotsk LNG Terminal,Russia,0.0216650059243
 2024-11-01,exporter,role_specific_pagerank,13,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0197900820095
-2024-11-01,exporter,role_specific_pagerank,14,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.0179924631371
-2024-11-01,exporter,role_specific_pagerank,15,LNGN0124,Freeport LNG Terminal,United States,0.0179924631371
+2024-11-01,exporter,role_specific_pagerank,14,LNGN0124,Freeport LNG Terminal,United States,0.0179924631371
+2024-11-01,exporter,role_specific_pagerank,15,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.0179924631371
 2024-11-01,exporter,role_specific_pagerank,16,LNGN0334,Risavika LNG Terminal,Norway,0.0179924631371
 2024-11-01,exporter,role_specific_pagerank,17,LNGN0351,Sakhalin II LNG Terminal,Russia,0.0167518064245
 2024-11-01,exporter,role_specific_pagerank,18,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.016647229335
@@ -11441,8 +11441,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-11-01,exporter,role_specific_dependence,10,LNGN0142,Gorgon LNG Terminal,Australia,0.613852460377
 2024-11-01,exporter,role_specific_dependence,11,LNGN0297,Pluto LNG Terminal,Australia,0.559342507349
 2024-11-01,exporter,role_specific_dependence,12,LNGN0206,Kiyanly LNG Terminal,Turkmenistan,0.541631288945
-2024-11-01,exporter,role_specific_dependence,13,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.5
-2024-11-01,exporter,role_specific_dependence,14,LNGN0124,Freeport LNG Terminal,United States,0.5
+2024-11-01,exporter,role_specific_dependence,13,LNGN0124,Freeport LNG Terminal,United States,0.5
+2024-11-01,exporter,role_specific_dependence,14,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.5
 2024-11-01,exporter,role_specific_dependence,15,LNGN0334,Risavika LNG Terminal,Norway,0.5
 2024-11-01,exporter,role_specific_dependence,16,LNGN0351,Sakhalin II LNG Terminal,Russia,0.384396355353
 2024-11-01,exporter,role_specific_dependence,17,LNGN0435,Vysotsk LNG Terminal,Russia,0.368504435995
@@ -11563,14 +11563,14 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-12-01,exporter,throughput,12,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,219000
 2024-12-01,exporter,throughput,13,LNGN0124,Freeport LNG Terminal,United States,174000
 2024-12-01,exporter,throughput,14,LNGN0309,Prelude FLNG Terminal,Australia,174000
-2024-12-01,exporter,throughput,15,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,160000
-2024-12-01,exporter,throughput,16,LNGN0180,Ichthys FLNG Terminal,Australia,160000
+2024-12-01,exporter,throughput,15,LNGN0180,Ichthys FLNG Terminal,Australia,160000
+2024-12-01,exporter,throughput,16,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,160000
 2024-12-01,exporter,throughput,17,LNGN0039,Bontang LNG Terminal,Indonesia,138273
 2024-12-01,exporter,throughput,18,LNGN0435,Vysotsk LNG Terminal,Russia,96000
-2024-12-01,exporter,counterparty_hhi_terminal,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
-2024-12-01,exporter,counterparty_hhi_terminal,2,LNGN0039,Bontang LNG Terminal,Indonesia,1
-2024-12-01,exporter,counterparty_hhi_terminal,3,LNGN0124,Freeport LNG Terminal,United States,1
-2024-12-01,exporter,counterparty_hhi_terminal,4,LNGN0180,Ichthys FLNG Terminal,Australia,1
+2024-12-01,exporter,counterparty_hhi_terminal,1,LNGN0039,Bontang LNG Terminal,Indonesia,1
+2024-12-01,exporter,counterparty_hhi_terminal,2,LNGN0124,Freeport LNG Terminal,United States,1
+2024-12-01,exporter,counterparty_hhi_terminal,3,LNGN0180,Ichthys FLNG Terminal,Australia,1
+2024-12-01,exporter,counterparty_hhi_terminal,4,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1
 2024-12-01,exporter,counterparty_hhi_terminal,5,LNGN0309,Prelude FLNG Terminal,Australia,1
 2024-12-01,exporter,counterparty_hhi_terminal,6,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,0.673484706324
 2024-12-01,exporter,counterparty_hhi_terminal,7,LNGN0206,Kiyanly LNG Terminal,Turkmenistan,0.5239804858
@@ -11614,9 +11614,9 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2024-12-01,exporter,role_specific_pagerank,9,LNGN0166,Hammerfest LNG Snohvit Terminal,Norway,0.0247285541402
 2024-12-01,exporter,role_specific_pagerank,10,LNGN0206,Kiyanly LNG Terminal,Turkmenistan,0.0243394024836
 2024-12-01,exporter,role_specific_pagerank,11,LNGN0435,Vysotsk LNG Terminal,Russia,0.0218326579626
-2024-12-01,exporter,role_specific_pagerank,12,LNGN0039,Bontang LNG Terminal,Indonesia,0.0201088079686
-2024-12-01,exporter,role_specific_pagerank,13,LNGN0180,Ichthys FLNG Terminal,Australia,0.0201088079686
-2024-12-01,exporter,role_specific_pagerank,14,LNGN0309,Prelude FLNG Terminal,Australia,0.0201088079686
+2024-12-01,exporter,role_specific_pagerank,12,LNGN0180,Ichthys FLNG Terminal,Australia,0.0201088079686
+2024-12-01,exporter,role_specific_pagerank,13,LNGN0309,Prelude FLNG Terminal,Australia,0.0201088079686
+2024-12-01,exporter,role_specific_pagerank,14,LNGN0039,Bontang LNG Terminal,Indonesia,0.0201088079686
 2024-12-01,exporter,role_specific_pagerank,15,LNGN0124,Freeport LNG Terminal,United States,0.0187500590946
 2024-12-01,exporter,role_specific_pagerank,16,LNGN0026,Arzew-Bethioua LNG Terminal,Algeria,0.0175439576778
 2024-12-01,exporter,role_specific_pagerank,17,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,0.0152159306113

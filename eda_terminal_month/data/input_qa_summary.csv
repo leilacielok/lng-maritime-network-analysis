@@ -1,7 +1,9 @@
 check,value
 raw_workbook_rows,17592
-positive_export_rows_used,8645
+positive_export_rows_before_deduplication,8645
+possible_duplicate_export_rows,5
+duplicate_export_rows_removed,3
+positive_export_rows_used,8642
 observed_terminals,159
 months,60
-possible_duplicate_rows,10
-total_lng_volume_cmb,1441223871
+total_lng_volume_cmb,1440610871

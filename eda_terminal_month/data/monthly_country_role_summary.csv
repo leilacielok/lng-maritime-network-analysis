@@ -99,8 +99,8 @@ period_month,country_role,countries,total_throughput
 2023-04-01,exporter,12,32611991
 2023-04-01,importer,29,32992146
 2023-05-01,bidirectional,1,888788
-2023-05-01,exporter,13,34812451
-2023-05-01,importer,29,34105811
+2023-05-01,exporter,13,34547451
+2023-05-01,importer,29,33840811
 2023-06-01,bidirectional,2,1253981
 2023-06-01,exporter,14,30557513
 2023-06-01,importer,29,29879358
@@ -126,8 +126,8 @@ period_month,country_role,countries,total_throughput
 2024-01-01,exporter,13,34636152
 2024-01-01,importer,33,33642662
 2024-02-01,bidirectional,2,1280235
-2024-02-01,exporter,12,34047842
-2024-02-01,importer,30,33805091
+2024-02-01,exporter,12,33699842
+2024-02-01,importer,30,33457091
 2024-03-01,bidirectional,1,904900
 2024-03-01,exporter,13,32876549
 2024-03-01,importer,27,32642407
