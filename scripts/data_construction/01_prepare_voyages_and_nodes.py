@@ -7,7 +7,7 @@ The script reconstructs the two upstream datasets used by the network pipeline:
 
 Raw LNG-T3 inputs remain unchanged. The workbook preserves all original voyage
 rows (including return legs); filtering and voyage deduplication are performed
-later by ``03_build_multilayer_network.py`` and the terminal-month analysis.
+later by ``04_build_multilayer_network.py`` and the terminal-month analysis.
 """
 
 from __future__ import annotations
