@@ -260,9 +260,38 @@ def run_searoute(
         shutil.copyfile(temporary_output, output)
 
 
+def load_and_normalize_geojson(output: Path) -> tuple[dict, str]:
+    """Read SeaRoute output and rewrite it as UTF-8 when Java used ANSI."""
+    raw = output.read_bytes()
+    decoding_errors = []
+
+    for encoding in ("utf-8-sig", "cp1252"):
+        try:
+            geojson = json.loads(raw.decode(encoding))
+            break
+        except (UnicodeDecodeError, json.JSONDecodeError) as error:
+            decoding_errors.append(f"{encoding}: {error}")
+    else:
+        raise ValueError(
+            "Could not decode the SeaRoute GeoJSON as UTF-8 or Windows-1252. "
+            + " | ".join(decoding_errors)
+        )
+
+    # SeaRoute may use the Windows system encoding when writing text. Always
+    # normalize the final dataset so downstream scripts can reliably use UTF-8.
+    with output.open("w", encoding="utf-8", newline="\n") as destination:
+        json.dump(
+            geojson,
+            destination,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+
+    return geojson, encoding
+
+
 def validate_output(output: Path, expected_pairs: pd.DataFrame) -> dict:
-    with output.open(encoding="utf-8-sig") as source:
-        geojson = json.load(source)
+    geojson, source_encoding = load_and_normalize_geojson(output)
 
     features = geojson.get("features", [])
     if len(features) != len(expected_pairs):
@@ -315,6 +344,7 @@ def validate_output(output: Path, expected_pairs: pd.DataFrame) -> dict:
 
     return {
         "routes": len(features),
+        "source_encoding": source_encoding,
         "total_route_distance_km": sum(distances),
         "missing_distances": missing_distances,
         "degenerate_geometries": degenerate_geometries,
@@ -355,6 +385,8 @@ def main() -> None:
     print("SEAROUTE GENERATION COMPLETE")
     print("=" * 72)
     print(f"Routes generated: {qa['routes']:,}")
+    print(f"SeaRoute text encoding detected: {qa['source_encoding']}")
+    print("Final GeoJSON encoding: UTF-8")
     print(f"Routes with missing SeaRoute distance: {qa['missing_distances']:,}")
     print(f"Degenerate route geometries: {qa['degenerate_geometries']:,}")
     print(f"Large origin snaps (>100 km): {qa['large_origin_snaps']:,}")
