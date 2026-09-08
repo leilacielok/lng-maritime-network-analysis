@@ -25,8 +25,8 @@ from openpyxl.utils import get_column_letter
 
 VOYAGES_NAME = "LNG_tanker_voyage.csv"
 TERMINALS_NAME = "LNG_terminal.csv"
-REGISTRY_NAME = "PortWatch_28_geometry_registry_v12.xlsx"
-CHOKEPOINTS_NAME = "PortWatch_28_chokepoints_geometry_working_v10.geojson"
+REGISTRY_NAME = "PortWatch_28_geometry_registry.xlsx"
+CHOKEPOINTS_NAME = "PortWatch_28_chokepoints_geometry.geojson"
 MATCHED_OUTPUT_NAME = "LNG_voyage_node_matching_v1.xlsx"
 NODES_OUTPUT_NAME = "LNG_multilayer_nodes_v1.csv"
 

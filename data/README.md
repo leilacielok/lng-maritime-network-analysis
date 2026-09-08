@@ -13,8 +13,8 @@ Some files may not be included in the repository because of licensing restrictio
 
 The following files were manually compiled and validated as part of the study:
 
-* `PortWatch_28_geometry_registry_v12.xlsx` — documentation of the sources, reference coordinates, methodological decisions and derivation parameters for the 28 chokepoints.
-* `PortWatch_28_chokepoints_geometry_working_v10.geojson` — final operational Polygon and MultiPolygon geometries compiled or derived from the sources documented in the registry.
+* `PortWatch_28_geometry_registry.xlsx` — documentation of the sources, reference coordinates, methodological decisions and derivation parameters for the 28 chokepoints.
+* `PortWatch_28_chokepoints_geometry.geojson` — final operational Polygon and MultiPolygon geometries compiled or derived from the sources documented in the registry.
 
 ## Reconstructed routes
 
