@@ -6425,8 +6425,8 @@ period_month,terminal_role,metric,rank,terminal_id,node_name,country,value
 2022-10-01,exporter,role_specific_pagerank,14,LNGN0378,Skikda LNG Terminal,Algeria,0.0150182875802
 2022-10-01,exporter,role_specific_pagerank,15,LNGN0083,Damietta SEGAS LNG Terminal,Egypt,0.0138094832839
 2022-10-01,exporter,role_specific_pagerank,16,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,0.0138060337259
-2022-10-01,exporter,role_specific_pagerank,17,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,0.0138060337259
-2022-10-01,exporter,role_specific_pagerank,18,LNGN0103,Elba Island LNG Terminal,United States,0.0138060337259
+2022-10-01,exporter,role_specific_pagerank,17,LNGN0103,Elba Island LNG Terminal,United States,0.0138060337259
+2022-10-01,exporter,role_specific_pagerank,18,LNGN0423,Tiga Malaysia LNG Terminal,Malaysia,0.0138060337259
 2022-10-01,exporter,role_specific_pagerank,19,LNGN0085,Das Island LNG Terminal,United Arab Emirates,0.0128715798947
 2022-10-01,exporter,role_specific_pagerank,20,LNGN0274,Oman Qalhat LNG Terminal,Oman,0.0113998639822
 2022-10-01,exporter,role_specific_dependence,1,LNGN0027,Atlantic LNG Terminal,Trinidad and Tobago,1

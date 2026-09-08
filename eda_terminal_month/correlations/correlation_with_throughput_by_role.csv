@@ -9,9 +9,9 @@ exporter,effective_counterparties_country,0.844536504635,1318
 exporter,max_dependence_generated,0.401428266638,1318
 exporter,weighted_dependence_generated,0.0992433192544,1318
 exporter,country_terminal_dependence,,0
-exporter,import_pagerank,-0.0520351184244,1318
-exporter,export_pagerank,0.764030115131,1318
-exporter,role_specific_pagerank,0.764030115131,1318
+exporter,import_pagerank,-0.051989268197,1318
+exporter,export_pagerank,0.764026269397,1318
+exporter,role_specific_pagerank,0.764026269397,1318
 exporter,role_specific_dependence,0.0992433192544,1318
 importer,throughput,1,3234
 importer,voyage_count,0.919179562613,3234
@@ -23,9 +23,9 @@ importer,effective_counterparties_country,0.700105703637,3234
 importer,max_dependence_generated,,0
 importer,weighted_dependence_generated,,0
 importer,country_terminal_dependence,0.266049712811,3234
-importer,import_pagerank,0.267251746991,3234
-importer,export_pagerank,-0.092288644171,3234
-importer,role_specific_pagerank,0.267251746991,3234
+importer,import_pagerank,0.267252494293,3234
+importer,export_pagerank,-0.0922588662546,3234
+importer,role_specific_pagerank,0.267252494293,3234
 importer,role_specific_dependence,0.266049712811,3234
 bidirectional,throughput,,0
 bidirectional,voyage_count,,0
