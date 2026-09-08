@@ -7,7 +7,7 @@ export origin-destination pairs, and runs the Eurostat SeaRoute JAR stored in
 ``data/LNG_1037_routes_searoute.geojson``.
 
 Default routing settings reproduce the configuration used for the existing
-route dataset: 5 km network resolution and the Panama Canal disabled.
+route dataset: 5 km network resolution.
 """
 
 from __future__ import annotations
@@ -63,15 +63,7 @@ def parse_args() -> argparse.Namespace:
         default=5,
         help="SeaRoute maritime-network resolution in kilometres.",
     )
-    parser.add_argument(
-        "--panama",
-        type=int,
-        choices=[0, 1],
-        default=0,
-        help="Whether SeaRoute may use the Panama Canal.",
-    )
     return parser.parse_args()
-
 
 def require_columns(frame: pd.DataFrame, required: set[str], label: str) -> None:
     missing = required.difference(frame.columns)
@@ -222,7 +214,6 @@ def run_searoute(
     jar: Path,
     output: Path,
     resolution: int,
-    panama: int,
 ) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
 
@@ -243,7 +234,7 @@ def run_searoute(
             "-res",
             str(resolution),
             "-panama",
-            str(panama),
+            "1",
             "-olatCol",
             "fromLat",
             "-olonCol",
@@ -369,7 +360,6 @@ def main() -> None:
     print("=" * 72)
     print(f"Export OD pairs: {len(routes):,}")
     print(f"Resolution: {args.resolution} km")
-    print(f"Panama Canal enabled: {'yes' if args.panama else 'no'}")
 
     run_searoute(
         routes=routes,
@@ -377,7 +367,6 @@ def main() -> None:
         jar=jar,
         output=args.output,
         resolution=args.resolution,
-        panama=args.panama,
     )
     qa = validate_output(args.output, routes)
 
