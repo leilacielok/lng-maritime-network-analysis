@@ -14,7 +14,7 @@ def main():
     ap=argparse.ArgumentParser(description='Assign final PortWatch chokepoints to 1,037 Eurostat SeaRoute geometries by direct geometric intersection.')
     ap.add_argument('routes_geojson')
     ap.add_argument('chokepoints_geojson')
-    ap.add_argument('--out-prefix',default='LNG_1037_routes_with_final_chokepoints_v1')
+    ap.add_argument('--out-prefix',default='LNG_1037_routes_with_final_chokepoints')
     args=ap.parse_args()
     with open(args.routes_geojson,encoding='utf-8-sig') as f: routes=json.load(f)
     with open(args.chokepoints_geojson,encoding='utf-8-sig') as f: cpj=json.load(f)

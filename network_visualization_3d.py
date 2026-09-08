@@ -30,16 +30,16 @@ def discover_inputs(folder: Path) -> dict[str, Path]:
 
     return {
         "nodes": find_one(data_folder, [
-            "LNG_multilayer_nodes_v1.csv",
-            "LNG_multilayer_nodes_v1*.csv",
+            "LNG_multilayer_nodes.csv",
+            "LNG_multilayer_nodes*.csv",
         ]),
         "edges": find_one(data_folder, [
-            "LNG_multilayer_edges_monthly_v1.csv",
-            "LNG_multilayer_edges_monthly_v1*.csv",
+            "LNG_multilayer_edges_monthly.csv",
+            "LNG_multilayer_edges_monthly*.csv",
         ]),
         "routes": find_one(data_folder, [
-            "LNG_1037_routes_with_final_chokepoints_v1.geojson",
-            "LNG_1037_routes_with_final_chokepoints_v1*.geojson",
+            "LNG_1037_routes_with_final_chokepoints.geojson",
+            "LNG_1037_routes_with_final_chokepoints*.geojson",
         ]),
     }
 

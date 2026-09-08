@@ -20,12 +20,12 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 # FILES
 # ============================================================
 
-NODES_FILE = DATA_DIR / "LNG_multilayer_nodes_v1.csv"
-EDGES_FILE = DATA_DIR / "LNG_multilayer_edges_monthly_v1.csv"
-MONTHLY_QA_FILE = DATA_DIR / "LNG_multilayer_monthly_QA_v1.csv"
+NODES_FILE = DATA_DIR / "LNG_multilayer_nodes.csv"
+EDGES_FILE = DATA_DIR / "LNG_multilayer_edges_monthly.csv"
+MONTHLY_QA_FILE = DATA_DIR / "LNG_multilayer_monthly_QA.csv"
 
 # Add other files here later if needed.
-# ROUTES_FILE = DATA_DIR / "LNG_1037_routes_with_final_chokepoints_v1.geojson"
+# ROUTES_FILE = DATA_DIR / "LNG_1037_routes_with_final_chokepoints.geojson"
 
 
 # ============================================================

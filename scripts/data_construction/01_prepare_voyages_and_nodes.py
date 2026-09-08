@@ -2,12 +2,12 @@
 
 The script reconstructs the two upstream datasets used by the network pipeline:
 
-* ``LNG_voyage_node_matching_v1.xlsx``
-* ``LNG_multilayer_nodes_v1.csv``
+* ``LNG_voyage_node_matching.xlsx``
+* ``LNG_multilayer_nodes.csv``
 
 Raw LNG-T3 inputs remain unchanged. The workbook preserves all original voyage
 rows (including return legs); filtering and voyage deduplication are performed
-later by ``build_multilayer_network.py`` and the terminal-month analysis.
+later by ``03_build_multilayer_network.py`` and the terminal-month analysis.
 """
 
 from __future__ import annotations
@@ -27,8 +27,8 @@ VOYAGES_NAME = "LNG_tanker_voyage.csv"
 TERMINALS_NAME = "LNG_terminal.csv"
 REGISTRY_NAME = "PortWatch_28_geometry_registry.xlsx"
 CHOKEPOINTS_NAME = "PortWatch_28_chokepoints_geometry.geojson"
-MATCHED_OUTPUT_NAME = "LNG_voyage_node_matching_v1.xlsx"
-NODES_OUTPUT_NAME = "LNG_multilayer_nodes_v1.csv"
+MATCHED_OUTPUT_NAME = "LNG_voyage_node_matching.xlsx"
+NODES_OUTPUT_NAME = "LNG_multilayer_nodes.csv"
 
 STATUS_PRIORITY = {
     "operating": 0,
@@ -50,8 +50,9 @@ DUPLICATE_COLUMNS = [
 
 
 def parse_args() -> argparse.Namespace:
-    base_dir = Path(__file__).resolve().parent
-    data_dir = base_dir / "data"
+    project_root = Path(__file__).resolve().parents[2]
+    data_dir = project_root / "data"
+    
     parser = argparse.ArgumentParser(
         description="Match LNG-T3 voyages to terminal nodes and build node data."
     )

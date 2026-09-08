@@ -1,13 +1,13 @@
 """Build the monthly LNG terminal-chokepoint network from matched voyages.
 
 Inputs (by default, in a ``data`` folder beside this script):
-  - LNG_voyage_node_matching_v1.xlsx, sheet ``Matched Voyages``
-  - LNG_multilayer_nodes_v1.csv
-  - LNG_1037_routes_with_final_chokepoints_v1.geojson
+  - LNG_voyage_node_matching.xlsx, sheet ``Matched Voyages``
+  - LNG_multilayer_nodes.csv
+  - LNG_1037_routes_with_final_chokepoints.geojson
 
 Outputs:
-  - LNG_multilayer_edges_monthly_v1.csv
-  - LNG_multilayer_monthly_QA_v1.csv
+  - LNG_multilayer_edges_monthly.csv
+  - LNG_multilayer_monthly_QA.csv
 
 Month assignment uses the voyage departure date. Return/ballast movements are
 excluded. Exact duplicate laden voyages are removed before aggregation.
@@ -23,11 +23,11 @@ from pathlib import Path
 import pandas as pd
 
 
-DEFAULT_VOYAGES = "LNG_voyage_node_matching_v1.xlsx"
-DEFAULT_NODES = "LNG_multilayer_nodes_v1.csv"
-DEFAULT_ROUTES = "LNG_1037_routes_with_final_chokepoints_v1.geojson"
-DEFAULT_EDGES = "LNG_multilayer_edges_monthly_v1.csv"
-DEFAULT_MONTHLY_QA = "LNG_multilayer_monthly_QA_v1.csv"
+DEFAULT_VOYAGES = "LNG_voyage_node_matching.xlsx"
+DEFAULT_NODES = "LNG_multilayer_nodes.csv"
+DEFAULT_ROUTES = "LNG_1037_routes_with_final_chokepoints.geojson"
+DEFAULT_EDGES = "LNG_multilayer_edges_monthly.csv"
+DEFAULT_MONTHLY_QA = "LNG_multilayer_monthly_QA.csv"
 
 DATE_COLUMN = "start_date"
 DUPLICATE_COLUMNS = [

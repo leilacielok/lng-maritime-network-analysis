@@ -41,8 +41,8 @@ for directory in [
 # FILES
 # ============================================================
 
-NODES_FILE = DATA_DIR / "LNG_multilayer_nodes_v1.csv"
-EDGES_FILE = DATA_DIR / "LNG_multilayer_edges_monthly_v1.csv"
+NODES_FILE = DATA_DIR / "LNG_multilayer_nodes.csv"
+EDGES_FILE = DATA_DIR / "LNG_multilayer_edges_monthly.csv"
 
 
 # ============================================================

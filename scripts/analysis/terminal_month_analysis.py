@@ -33,8 +33,8 @@ for directory in [
 
 # The matched-voyage workbook is preferred because it contains the canonical
 # LNGN node IDs already used in the multilayer network.
-MATCHED_VOYAGES_FILE = DATA_DIR / "LNG_voyage_node_matching_v1.xlsx"
-NODES_FILE = DATA_DIR / "LNG_multilayer_nodes_v1.csv"
+MATCHED_VOYAGES_FILE = DATA_DIR / "LNG_voyage_node_matching.xlsx"
+NODES_FILE = DATA_DIR / "LNG_multilayer_nodes.csv"
 
 # Month assignment is based on voyage departure. Change to "end_date" if the
 # research design should assign a cargo to its delivery month instead.
