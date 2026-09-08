@@ -8,8 +8,13 @@ Some files may not be included in the repository because of licensing restrictio
 
 * `LNG_terminal.csv` — LNG-T3 terminal data.
 * `LNG_tanker_voyage.csv` — LNG-T3 voyage-level data for 2020–2024.
-* `PortWatch_28_geometry_registry_v12.xlsx` — sources, reference coordinates and construction methods for the 28 chokepoint geometries.
-* `PortWatch_28_chokepoints_geometry_working_v10.geojson` — final Polygon and MultiPolygon geometries used to identify route crossings.
+
+## Curated chokepoint data
+
+The following files were manually compiled and validated as part of the study:
+
+* `PortWatch_28_geometry_registry_v12.xlsx` — documentation of the sources, reference coordinates, methodological decisions and derivation parameters for the 28 chokepoints.
+* `PortWatch_28_chokepoints_geometry_working_v10.geojson` — final operational Polygon and MultiPolygon geometries compiled or derived from the sources documented in the registry.
 
 ## Reconstructed routes
 
