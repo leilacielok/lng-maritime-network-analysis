@@ -4,7 +4,7 @@
 
 data/*
 !data/README.md
-!data/PortWatch_28_geometry_registry_v12.xlsx
+!data/PortWatch_28_geometry_registry.xlsx
 
 # ==========================================
 # GENERATED OUTPUTS
