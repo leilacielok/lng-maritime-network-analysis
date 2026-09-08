@@ -364,7 +364,7 @@ def build_dashboard(folder: Path, output: Path, default_month: str | None = None
     print(f"  Route geometries: {len(routes_geojson.get('features', []))}")
     print(f"  Default month: {default_month}")
     print(f"  Output: {output}")
-    print("\nNote: the 3D globe uses Globe.gl/Three.js e texture online; serve connessione internet.")
+    print("\nNote: the 3D globe uses Globe.gl/Three.js and texture online; you need an internet connection.")
     return output
 
 
