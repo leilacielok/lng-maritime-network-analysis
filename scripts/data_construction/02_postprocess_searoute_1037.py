@@ -11,15 +11,45 @@ def route_num(rid):
     except: return 10**9
 
 def main():
-    ap=argparse.ArgumentParser(description='Assign final PortWatch chokepoints to 1,037 Eurostat SeaRoute geometries by direct geometric intersection.')
-    ap.add_argument('routes_geojson')
-    ap.add_argument('chokepoints_geojson')
-    ap.add_argument('--out-prefix',default='LNG_1037_routes_with_final_chokepoints')
-    args=ap.parse_args()
-    with open(args.routes_geojson,encoding='utf-8-sig') as f: routes=json.load(f)
-    with open(args.chokepoints_geojson,encoding='utf-8-sig') as f: cpj=json.load(f)
+    
+    project_root = Path(__file__).resolve().parents[2]
+    data_dir = project_root / "data"
+
+    ap = argparse.ArgumentParser(
+        description=(
+            "Assign final PortWatch chokepoints to 1,037 Eurostat "
+            "SeaRoute geometries by direct geometric intersection."
+        )
+    )
+
+    ap.add_argument(
+        "--routes",
+        type=Path,
+        default=data_dir / "LNG_1037_routes_searoute.geojson",
+    )
+    ap.add_argument(
+        "--chokepoints",
+        type=Path,
+        default=data_dir / "PortWatch_28_chokepoints_geometry.geojson",
+    )
+    ap.add_argument(
+        "--out-prefix",
+        type=Path,
+        default=data_dir / "LNG_1037_routes_with_final_chokepoints",
+    )
+
+    args = ap.parse_args()
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    with args.routes.open(encoding="utf-8-sig") as f:
+        routes = json.load(f)
+
+    with args.chokepoints.open(encoding="utf-8-sig") as f:
+        cpj = json.load(f)
+        
     cps=[(ft['properties'].get('node_id'),ft['properties'].get('chokepoint'),shape(ft['geometry'])) for ft in cpj['features']]
     if len(cps)!=28: raise ValueError(f'Expected 28 chokepoints, got {len(cps)}')
+    
     feats=routes.get('features',[])
     if len(feats)!=1037: raise ValueError(f'Expected 1,037 route features, got {len(feats)}')
     seen=set(); rc=[]; qa=[]
@@ -51,9 +81,19 @@ def main():
         if ape is not None and ape>0.15: flag.append('distance_deviation_gt15pct')
         qa.append({'route_id':rid,'distKM':dist,'observed_km':obs,'difference_km':diff,'abs_pct_error':ape,
                    'dFromKM':dfrom,'dToKM':dto,'n_chokepoints_final':len(hits),'qa_flags':'; '.join(flag)})
+    
     feats.sort(key=lambda ft: route_num(ft.get('properties',{}).get('route_id')))
-    out_geo=Path(args.out_prefix+'.geojson')
-    with open(out_geo,'w',encoding='utf-8') as f: json.dump(routes,f,ensure_ascii=False,separators=(',',':'))
+    
+    out_geo = args.out_prefix.with_suffix(".geojson")
+
+    with out_geo.open("w", encoding="utf-8") as f:
+        json.dump(
+            routes,
+            f,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+    
     wb=Workbook(); ws=wb.active; ws.title='Routes'
     prop_keys=[]
     for ft in feats:
@@ -81,6 +121,10 @@ def main():
             sh.column_dimensions[get_column_letter(col)].width=min(max(10,max(map(len,vals))+2),45)
         for row in sh.iter_rows():
             for c in row: c.alignment=Alignment(vertical='top',wrap_text=True)
-    out_xlsx=Path(args.out_prefix+'.xlsx'); wb.save(out_xlsx)
+    
+    out_xlsx = data_dir / "LNG_1037_routes_chokepoint_QA.xlsx"
+    wb.save(out_xlsx)
+    
     print(f'Wrote {out_geo} and {out_xlsx}; route-chokepoint rows={len(rc)}; flagged routes={sum(bool(x["qa_flags"]) for x in qa)}')
+
 if __name__=='__main__': main()

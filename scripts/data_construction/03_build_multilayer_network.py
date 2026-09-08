@@ -42,7 +42,7 @@ DUPLICATE_COLUMNS = [
 
 
 def parse_args() -> argparse.Namespace:
-    base_dir = Path(__file__).resolve().parent
+    base_dir = Path(__file__).resolve().parents[2]
     data_dir = base_dir / "data"
 
     parser = argparse.ArgumentParser(

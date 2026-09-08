@@ -1,6 +1,6 @@
 {
   "type": "FeatureCollection",
-  "name": "PortWatch_28_chokepoints_geometry_working_v1",
+  "name": "PortWatch_28_chokepoints_geometry_working",
   "crs": {
     "type": "name",
     "properties": {

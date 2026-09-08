@@ -179,7 +179,7 @@ def prepare_terminal_map(terminals: pd.DataFrame):
                 {
                     "canonical_node_id": canonical_id,
                     "node_name": name,
-                    "variant_node_id_v3": variant.variant_node_id,
+                    "variant_node_id": variant.variant_node_id,
                     "latitude": variant.lat,
                     "longitude": variant.lon,
                     "status": variant.status,
