@@ -75,12 +75,32 @@ def main():
         except: dfrom=None
         try: dto=float(p.get('dToKM'))
         except: dto=None
+        
         flag=[]
+        
         if dfrom is not None and dfrom>100: flag.append('large_origin_snap')
+        
         if dto is not None and dto>100: flag.append('large_destination_snap')
+        
         if ape is not None and ape>0.15: flag.append('distance_deviation_gt15pct')
-        qa.append({'route_id':rid,'distKM':dist,'observed_km':obs,'difference_km':diff,'abs_pct_error':ape,
-                   'dFromKM':dfrom,'dToKM':dto,'n_chokepoints_final':len(hits),'qa_flags':'; '.join(flag)})
+        
+        p["qa_status"] = "PASS" if not flag else "WATCH"
+        p["qa_flags"] = "; ".join(flag)
+        
+        qa.append(
+            {
+                "route_id": rid,
+                "distKM": dist,
+                "observed_km": obs,
+                "difference_km": diff,
+                "abs_pct_error": ape,
+                "dFromKM": dfrom,
+                "dToKM": dto,
+                "n_chokepoints_final": len(hits),
+                "qa_status": p["qa_status"],
+                "qa_flags": p["qa_flags"],
+            }
+        )
     
     feats.sort(key=lambda ft: route_num(ft.get('properties',{}).get('route_id')))
     
