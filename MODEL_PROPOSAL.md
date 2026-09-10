@@ -2,8 +2,7 @@
 
 ## Status and purpose
 
-This document summarises a preliminary modelling proposal for studying the criticality of LNG terminals and maritime chokepoints.
-The exploratory analysis suggests that node criticality is multidimensional and that terminals and chokepoints should not be treated as statistically identical units. The following proposal therefore uses separate measurement models for the two node types while retaining the complete directed LNG network to account for network dependence, temporal dynamics, and common monthly shocks.
+This document summarises a preliminary modelling proposal for studying the criticality of LNG terminals and maritime chokepoint after having conducted the exploratory analysis, which suggests that node criticality is multidimensional and that terminals and chokepoints should not be treated as statistically identical units. The following proposal therefore uses separate measurement models for the two node types while retaining the complete directed LNG network to account for network dependence, temporal dynamics, and common monthly shocks.
 ## 1. Dimensions of criticality
 
 The proposed latent dimensions are:
