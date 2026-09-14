@@ -111,6 +111,20 @@ def load_inputs(args: argparse.Namespace):
 
 def prepare_terminal_map(terminals: pd.DataFrame):
     terminals = terminals.copy()
+    
+    type_counts = (
+        terminals.groupby("name")["terminal_type"]
+        .nunique(dropna=False)
+    )
+
+    multiple_types = type_counts[type_counts > 1].sort_values(ascending=False)
+
+    print("\nTerminals associated with multiple infrastructure types:")
+    if multiple_types.empty:
+        print("None")
+    else:
+        print(multiple_types.to_string())
+    
     terminals["source_row"] = terminals.index + 2  # CSV header occupies row 1.
 
     # LNGN identifiers were assigned to distinct name-coordinate variants in
@@ -153,17 +167,22 @@ def prepare_terminal_map(terminals: pd.DataFrame):
             "areas": "country",
             "lat": "latitude",
             "lon": "longitude",
+            "terminal_type": "infrastructure_type",
+            "status": "infrastructure_status",
         }
     )[
         [
             "node_id", "node_name", "country", "region", "latitude",
-            "longitude", "UN_LOCODE", "status",
+            "longitude", "UN_LOCODE", "infrastructure_type", "infrastructure_status",
         ]
     ]
     terminal_map["is_operating"] = (
-        terminal_map["status"].astype(str).str.lower().eq("operating").astype(int)
+        terminal_map["infrastructure_status"]
+        .astype(str)
+        .str.lower()
+        .eq("operating")
+        .astype(int)
     )
-    terminal_map = terminal_map.drop(columns="status")
 
     coordinate_variants = []
     variant_counts = variants.groupby("name").size()
@@ -345,12 +364,15 @@ def build_final_nodes(
     chokepoint_nodes["coordinate_source"] = "IMF PortWatch reference location"
     chokepoint_nodes["UN_LOCODE"] = pd.NA
     chokepoint_nodes["is_operating"] = pd.NA
+    chokepoint_nodes["infrastructure_type"] = pd.NA
+    chokepoint_nodes["infrastructure_status"] = pd.NA
+    
     for column in count_and_flow:
         chokepoint_nodes[column] = pd.NA
 
     columns = [
-        "node_id", "node_name", "node_type", "layer", "terminal_role",
-        "country", "region", "latitude", "longitude", "coordinate_source",
+        "node_id", "node_name", "node_type", "layer", "terminal_role", "infrastructure_type",
+        "infrastructure_status", "country", "region", "latitude", "longitude", "coordinate_source",
         "UN_LOCODE", "is_operating", "origin_export_voyages",
         "destination_export_voyages", "origin_lng_volume_cmb",
         "destination_lng_volume_cmb", "geometry_status",
@@ -446,6 +468,29 @@ def validate_outputs(
     if nodes["node_id"].duplicated().any():
         raise ValueError("Final node table contains duplicated node IDs.")
 
+    terminal_nodes = nodes.loc[nodes["node_type"].eq("terminal")]
+
+    if terminal_nodes["infrastructure_type"].isna().any():
+        missing = terminal_nodes.loc[
+            terminal_nodes["infrastructure_type"].isna(),
+            ["node_id", "node_name"],
+        ]
+        raise ValueError(
+            "Some terminal nodes have no infrastructure type:\n"
+            + missing.to_string(index=False)
+        )
+
+    valid_types = {"import", "export"}
+    unexpected_types = (
+        set(terminal_nodes["infrastructure_type"].dropna().str.lower())
+        - valid_types
+    )
+
+    if unexpected_types:
+        raise ValueError(
+            "Unexpected infrastructure types: "
+            + ", ".join(sorted(unexpected_types))
+        )
 
 def main() -> None:
     args = parse_args()

@@ -1465,6 +1465,214 @@ def save_qa_summary(node_month):
         index=False
     )
 
+# ========================================================
+# SPARSITY ANALYSIS
+# ========================================================
+
+
+def analyze_temporal_sparsity(node_month):
+    print("\n" + "=" * 70)
+    print("TEMPORAL SPARSITY DIAGNOSTIC")
+    print("=" * 70)
+
+    data = node_month.copy()
+    data["period_month"] = pd.to_datetime(data["period_month"])
+
+    # ========================================================
+    # 1. Monthly aggregate diagnostics
+    # ========================================================
+
+    monthly = (
+        data.groupby("period_month")
+        .agg(
+            total_nodes=("node_id", "nunique"),
+            active_nodes=("active", "sum"),
+        )
+        .reset_index()
+    )
+
+    monthly["inactive_nodes"] = (
+        monthly["total_nodes"] - monthly["active_nodes"]
+    )
+
+    monthly["active_share"] = (
+        monthly["active_nodes"] / monthly["total_nodes"]
+    )
+
+    monthly["inactive_share"] = (
+        monthly["inactive_nodes"] / monthly["total_nodes"]
+    )
+
+    # Month-to-month change in sparsity
+    monthly["inactive_share_change"] = (
+        monthly["inactive_share"].diff()
+    )
+
+    # Robust anomaly indicator based on median and MAD
+    median_sparsity = monthly["inactive_share"].median()
+
+    mad_sparsity = (
+        monthly["inactive_share"] - median_sparsity
+    ).abs().median()
+
+    if mad_sparsity > 0:
+        monthly["robust_z_sparsity"] = (
+            0.6745
+            * (monthly["inactive_share"] - median_sparsity)
+            / mad_sparsity
+        )
+    else:
+        monthly["robust_z_sparsity"] = np.nan
+
+    monthly["high_sparsity_flag"] = (
+        monthly["robust_z_sparsity"] > 2.5
+    )
+
+    # ========================================================
+    # 2. Sparsity by node type
+    # ========================================================
+
+    by_type = (
+        data.groupby(["period_month", "node_type"])
+        .agg(
+            total_nodes=("node_id", "nunique"),
+            active_nodes=("active", "sum"),
+        )
+        .reset_index()
+    )
+
+    by_type["inactive_nodes"] = (
+        by_type["total_nodes"] - by_type["active_nodes"]
+    )
+
+    by_type["inactive_share"] = (
+        by_type["inactive_nodes"] / by_type["total_nodes"]
+    )
+
+    type_wide = by_type.pivot(
+        index="period_month",
+        columns="node_type",
+        values="inactive_share",
+    )
+
+    type_wide.columns = [
+        f"inactive_share_{str(col).lower()}"
+        for col in type_wide.columns
+    ]
+
+    monthly = monthly.merge(
+        type_wide.reset_index(),
+        on="period_month",
+        how="left",
+    )
+
+    monthly.to_csv(
+        DATA_OUTPUT_DIR / "monthly_sparsity_diagnostic.csv",
+        index=False,
+    )
+
+    # ========================================================
+    # 3. Sparsity time series
+    # ========================================================
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+
+    ax.plot(
+        monthly["period_month"],
+        monthly["inactive_share"],
+        marker="o",
+        markersize=3,
+        label="All nodes",
+    )
+
+    for column in type_wide.columns:
+        ax.plot(
+            type_wide.index,
+            type_wide[column],
+            linestyle="--",
+            alpha=0.8,
+            label=column.replace("inactive_share_", "").title(),
+        )
+
+    flagged = monthly[monthly["high_sparsity_flag"]]
+
+    ax.scatter(
+        flagged["period_month"],
+        flagged["inactive_share"],
+        color="red",
+        s=45,
+        label="High-sparsity month",
+        zorder=5,
+    )
+
+    ax.axhline(
+        median_sparsity,
+        color="black",
+        linestyle=":",
+        label="Monthly median",
+    )
+
+    ax.set_title("Share of inactive nodes by month")
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Inactive-node share")
+    ax.set_ylim(0, 1)
+    ax.legend()
+    fig.tight_layout()
+
+    fig.savefig(
+        TEMPORAL_DIR / "monthly_sparsity_over_time.png",
+        dpi=300,
+    )
+
+    plt.close(fig)
+
+    # ========================================================
+    # 4. Year × month heatmap
+    # ========================================================
+
+    monthly["year"] = monthly["period_month"].dt.year
+    monthly["month"] = monthly["period_month"].dt.month
+
+    calendar = monthly.pivot(
+        index="year",
+        columns="month",
+        values="inactive_share",
+    )
+
+    fig, ax = plt.subplots(figsize=(12, 4))
+
+    image = ax.imshow(
+        calendar.values,
+        cmap="YlOrRd",
+        vmin=0,
+        vmax=1,
+        aspect="auto",
+    )
+
+    ax.set_xticks(range(12))
+    ax.set_xticklabels(
+        ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    )
+
+    ax.set_yticks(range(len(calendar.index)))
+    ax.set_yticklabels(calendar.index)
+
+    ax.set_title("Temporal concentration of inactive node-months")
+    ax.set_xlabel("Month")
+    ax.set_ylabel("Year")
+
+    fig.colorbar(image, ax=ax, label="Inactive-node share")
+    fig.tight_layout()
+
+    fig.savefig(
+        TEMPORAL_DIR / "monthly_sparsity_calendar_heatmap.png",
+        dpi=300,
+    )
+
+    plt.close(fig)
+
+    return monthly, by_type
 
 # ============================================================
 # MAIN
@@ -1477,7 +1685,7 @@ def main():
         nodes,
         edges
     )
-
+    
     save_qa_summary(node_month)
 
     analyze_distributions(node_month)
@@ -1489,6 +1697,8 @@ def main():
     analyze_rank_stability(node_month)
 
     plot_top_node_timeseries(node_month)
+    
+    analyze_temporal_sparsity(node_month)
 
     print("\n" + "=" * 70)
     print("NODE-MONTH EDA COMPLETED")

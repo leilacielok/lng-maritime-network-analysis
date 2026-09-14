@@ -39,8 +39,6 @@ NODES_FILE = DATA_DIR / "LNG_multilayer_nodes.csv"
 # Month assignment is based on voyage departure. Change to "end_date" if the
 # research design should assign a cargo to its delivery month instead.
 DATE_COLUMN = "start_date"
-ROLE_EXPORT_THRESHOLD = 0.90
-ROLE_IMPORT_THRESHOLD = 0.10
 PAGERANK_ALPHA = 0.85
 TOP_N = 20
 
@@ -102,21 +100,26 @@ def lag1_autocorrelation(series):
         return np.nan
     return paired["previous"].corr(paired["current"], method="pearson")
 
-
-def role_from_share(export_share, throughput):
-    if throughput <= 0:
-        return "inactive"
-    if export_share >= ROLE_EXPORT_THRESHOLD:
-        return "exporter"
-    if export_share <= ROLE_IMPORT_THRESHOLD:
-        return "importer"
-    return "bidirectional"
-
-
 def write_csv(frame, path, index=False):
     frame.to_csv(path, index=index, float_format="%.12g")
 
+def flow_pattern(outgoing_flow, incoming_flow):
+    if outgoing_flow <= 0 and incoming_flow <= 0:
+        return "inactive"
+    if outgoing_flow > 0 and incoming_flow <= 0:
+        return "exporter"
+    if incoming_flow > 0 and outgoing_flow <= 0:
+        return "importer"
+    return "bidirectional"
 
+def net_trade_position(outgoing_flow, incoming_flow):
+    if outgoing_flow <= 0 and incoming_flow <= 0:
+        return "inactive"
+    if np.isclose(outgoing_flow, incoming_flow):
+        return "balanced"
+    if outgoing_flow > incoming_flow:
+        return "net_exporter"
+    return "net_importer"
 # ============================================================
 # LOAD AND VALIDATE DATA
 # ============================================================
@@ -281,14 +284,15 @@ def build_complete_panel(voyages, nodes):
             "node_name",
             "country",
             "region",
-            "terminal_role",
+            "infrastructure_type",
+            "infrastructure_status",
             "latitude",
             "longitude",
         ]
         if column in nodes.columns
     ]
     metadata = nodes[metadata_columns].rename(
-        columns={"node_id": "terminal_id", "terminal_role": "structural_role"}
+        columns={"node_id": "terminal_id"}
     )
     return panel.merge(metadata, on="terminal_id", how="left", validate="many_to_one")
 
@@ -365,12 +369,26 @@ def build_country_role_tables(voyages):
     panel["throughput"] = panel["outgoing_flow"] + panel["incoming_flow"]
     panel["voyage_count"] = panel["outgoing_voyages"] + panel["incoming_voyages"]
     panel["export_share"] = safe_divide(panel["outgoing_flow"], panel["throughput"])
-    panel["country_role"] = [
-        role_from_share(export_share, throughput)
-        for export_share, throughput in zip(
-            panel["export_share"].fillna(0), panel["throughput"]
+    panel["country_flow_pattern"] = [
+        flow_pattern(outgoing, incoming)
+        for outgoing, incoming in zip(
+            panel["outgoing_flow"],
+            panel["incoming_flow"],
         )
     ]
+
+    panel["country_role"] = [
+        net_trade_position(outgoing, incoming)
+        for outgoing, incoming in zip(
+            panel["outgoing_flow"],
+            panel["incoming_flow"],
+        )
+    ]
+
+    panel["normalized_trade_balance"] = safe_divide(
+        panel["outgoing_flow"] - panel["incoming_flow"],
+        panel["throughput"],
+    )
     panel["active"] = panel["throughput"].gt(0).astype(int)
     panel["year"] = panel["period_month"].dt.year
     panel["month"] = panel["period_month"].dt.month
@@ -394,12 +412,28 @@ def build_country_role_tables(voyages):
     full_period["export_share"] = safe_divide(
         full_period["outgoing_flow"], full_period["throughput"]
     )
-    full_period["country_role"] = [
-        role_from_share(export_share, throughput)
-        for export_share, throughput in zip(
-            full_period["export_share"].fillna(0), full_period["throughput"]
+    
+    full_period["country_flow_pattern"] = [
+        flow_pattern(outgoing, incoming)
+        for outgoing, incoming in zip(
+            full_period["outgoing_flow"],
+            full_period["incoming_flow"],
         )
     ]
+    
+    full_period["country_role"] = [
+        net_trade_position(outgoing, incoming)
+        for outgoing, incoming in zip(
+            full_period["outgoing_flow"],
+            full_period["incoming_flow"],
+        )
+    ]
+    
+    full_period["normalized_trade_balance"] = safe_divide(
+        full_period["outgoing_flow"] - full_period["incoming_flow"],
+        full_period["throughput"],
+    )
+    
     return (
         panel.sort_values(["period_month", "country"]).reset_index(drop=True),
         full_period.sort_values(["country"]).reset_index(drop=True),
@@ -523,8 +557,11 @@ def assemble_metrics(voyages, nodes):
     panel["voyage_count"] = panel["outgoing_voyages"] + panel["incoming_voyages"]
     panel["export_share"] = safe_divide(panel["outgoing_flow"], panel["throughput"])
     panel["terminal_role"] = [
-        role_from_share(export_share, throughput)
-        for export_share, throughput in zip(panel["export_share"].fillna(0), panel["throughput"])
+        flow_pattern(outgoing, incoming)
+        for outgoing, incoming in zip(
+            panel["outgoing_flow"],
+            panel["incoming_flow"],
+        )
     ]
     panel["active"] = panel["throughput"].gt(0).astype(int)
 
@@ -758,7 +795,7 @@ def main():
 
     output_columns = [
         "terminal_id", "node_name", "country", "region", "period_month", "year", "month",
-        "structural_role", "terminal_role", "active", "export_share",
+        "infrastructure_type","infrastructure_status", "terminal_role", "active", "export_share",
         "outgoing_flow", "incoming_flow", "throughput", "outgoing_voyages",
         "incoming_voyages", "voyage_count", "counterparty_count",
         "counterparty_country_count", "counterparty_hhi_terminal",
