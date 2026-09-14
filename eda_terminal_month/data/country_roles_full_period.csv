@@ -11,7 +11,7 @@ Chile,0,12615683,0,74,42,12615683,74,0,importer,net_importer,-1
 China,0,174697595,0,946,60,174697595,946,0,importer,net_importer,-1
 Colombia,0,2730574,0,16,10,2730574,16,0,importer,net_importer,-1
 Croatia,0,16836503,0,92,45,16836503,92,0,importer,net_importer,-1
-Egypt,17565154,499148,104,3,33,18064302,107,0.972368265322,bidirectional,net_exporter,0.944736530645
+Egypt,17236206,170200,102,1,33,17406406,103,0.990221990685,bidirectional,net_exporter,0.980443981371
 El Salvador,0,486158,0,3,3,486158,3,0,importer,net_importer,-1
 Equatorial Guinea,9672643,0,59,0,37,9672643,59,1,exporter,net_exporter,1
 Finland,0,4439451,0,103,54,4439451,103,0,importer,net_importer,-1
@@ -21,20 +21,20 @@ Gibraltar,0,13390260,0,76,30,13390260,76,0,importer,net_importer,-1
 Greece,0,9347836,0,61,36,9347836,61,0,importer,net_importer,-1
 Hong Kong,0,5553437,0,29,21,5553437,29,0,importer,net_importer,-1
 India,0,63859520,0,350,60,63859520,350,0,importer,net_importer,-1
-Indonesia,1935822,12611785,14,79,22,14547607,93,0.133068070921,bidirectional,net_importer,-0.733863858159
+Indonesia,0,10675963,0,65,20,10675963,65,0,importer,net_importer,-1
 Italy,0,15727148,0,130,44,15727148,130,0,importer,net_importer,-1
 Jamaica,0,2896532,0,17,13,2896532,17,0,importer,net_importer,-1
 Japan,0,137194998,0,857,60,137194998,857,0,importer,net_importer,-1
 Jordan,0,329000,0,2,2,329000,2,0,importer,net_importer,-1
 Kuwait,0,41429691,0,217,40,41429691,217,0,importer,net_importer,-1
 Lithuania,0,13018878,0,92,50,13018878,92,0,importer,net_importer,-1
-Malaysia,9627038,10299103,82,68,33,19926141,150,0.483136097451,bidirectional,net_importer,-0.0337278050978
+Malaysia,8117548,8789613,64,50,33,16907161,114,0.480124841776,bidirectional,net_importer,-0.0397503164488
 Malta,0,615675,0,4,4,615675,4,0,importer,net_importer,-1
 Mexico,0,2191580,0,13,13,2191580,13,0,importer,net_importer,-1
 Mozambique,174000,0,1,0,1,174000,1,1,exporter,net_exporter,1
 Netherlands,0,71348042,0,424,60,71348042,424,0,importer,net_importer,-1
 Nigeria,96162660,0,620,0,59,96162660,620,1,exporter,net_exporter,1
-Norway,28002632,268783,208,13,48,28271415,221,0.990492764511,bidirectional,net_exporter,0.980985529023
+Norway,27979663,245814,207,12,48,28225477,219,0.991291059492,bidirectional,net_exporter,0.982582118984
 Oman,9585942,0,57,0,31,9585942,57,1,exporter,net_exporter,1
 Pakistan,0,35097687,0,219,54,35097687,219,0,importer,net_importer,-1
 Panama,0,2152819,0,13,12,2152819,13,0,importer,net_importer,-1
@@ -52,6 +52,6 @@ Thailand,0,41434553,0,219,55,41434553,219,0,importer,net_importer,-1
 Trinidad and Tobago,27559221,0,172,0,56,27559221,172,1,exporter,net_exporter,1
 Turkmenistan,4831331,0,28,0,16,4831331,28,1,exporter,net_exporter,1
 Türkiye,0,52469179,0,315,59,52469179,315,0,importer,net_importer,-1
-United Arab Emirates,25925546,13666692,189,79,59,39592238,268,0.65481385518,bidirectional,net_exporter,0.309627710361
+United Arab Emirates,22934506,10675652,167,57,59,33610158,224,0.682368288777,bidirectional,net_exporter,0.364736577555
 United Kingdom,0,90904953,0,478,60,90904953,478,0,importer,net_importer,-1
-United States,358440871,8975660,2104,59,60,367416531,2163,0.975570886874,bidirectional,net_exporter,0.951141773749
+United States,355336578,5871367,2086,41,60,361207945,2127,0.983745188661,bidirectional,net_exporter,0.967490377323

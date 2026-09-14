@@ -1410,8 +1410,8 @@ LNGN0288,exporter,max_dependence_generated,11,0.18861386086
 LNGN0288,exporter,weighted_dependence_generated,11,0.171878825574
 LNGN0288,exporter,country_terminal_dependence,0,
 LNGN0288,exporter,import_pagerank,11,-0.0986285979527
-LNGN0288,exporter,export_pagerank,11,-0.000181724464775
-LNGN0288,exporter,role_specific_pagerank,11,-0.000181724464775
+LNGN0288,exporter,export_pagerank,11,-0.000181724464774
+LNGN0288,exporter,role_specific_pagerank,11,-0.000181724464774
 LNGN0288,exporter,role_specific_dependence,11,0.171878825574
 LNGN0290,importer,throughput,2,
 LNGN0290,importer,voyage_count,2,

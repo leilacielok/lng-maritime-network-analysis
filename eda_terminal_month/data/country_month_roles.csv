@@ -276,7 +276,7 @@ Thailand,2020-05-01,0,0,0,0,909000,5,1,3,909000,5,0,importer,net_importer,-1,1,2
 Trinidad and Tobago,2020-05-01,174000,1,1,1,0,0,0,0,174000,1,1,exporter,net_exporter,1,1,2020,5
 Turkmenistan,2020-05-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2020,5
 Türkiye,2020-05-01,0,0,0,0,589320,3,2,2,589320,3,0,importer,net_importer,-1,1,2020,5
-United Arab Emirates,2020-05-01,409640,3,1,3,137540,1,1,1,547180,4,0.748638473628,bidirectional,net_exporter,0.497276947257,1,2020,5
+United Arab Emirates,2020-05-01,272100,2,1,2,0,0,0,0,272100,2,1,exporter,net_exporter,1,1,2020,5
 United Kingdom,2020-05-01,0,0,0,0,1917755,8,1,1,1917755,8,0,importer,net_importer,-1,1,2020,5
 United States,2020-05-01,3178974,19,4,12,0,0,0,0,3178974,19,1,exporter,net_exporter,1,1,2020,5
 Algeria,2020-06-01,1101058,10,2,3,0,0,0,0,1101058,10,1,exporter,net_exporter,1,1,2020,6
@@ -388,7 +388,7 @@ Thailand,2020-07-01,0,0,0,0,648400,3,1,1,648400,3,0,importer,net_importer,-1,1,2
 Trinidad and Tobago,2020-07-01,309000,2,1,2,0,0,0,0,309000,2,1,exporter,net_exporter,1,1,2020,7
 Turkmenistan,2020-07-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2020,7
 Türkiye,2020-07-01,0,0,0,0,694058,4,2,2,694058,4,0,importer,net_importer,-1,1,2020,7
-United Arab Emirates,2020-07-01,274640,2,1,2,137100,1,1,1,411740,3,0.667022878516,bidirectional,net_exporter,0.334045757031,1,2020,7
+United Arab Emirates,2020-07-01,137540,1,1,1,0,0,0,0,137540,1,1,exporter,net_exporter,1,1,2020,7
 United Kingdom,2020-07-01,0,0,0,0,1251435,6,2,2,1251435,6,0,importer,net_importer,-1,1,2020,7
 United States,2020-07-01,1156000,7,2,6,135000,1,1,1,1291000,8,0.895429899303,bidirectional,net_exporter,0.790859798606,1,2020,7
 Algeria,2020-08-01,661000,5,2,4,0,0,0,0,661000,5,1,exporter,net_exporter,1,1,2020,8
@@ -444,7 +444,7 @@ Thailand,2020-08-01,0,0,0,0,642220,3,1,1,642220,3,0,importer,net_importer,-1,1,2
 Trinidad and Tobago,2020-08-01,138059,1,1,1,0,0,0,0,138059,1,1,exporter,net_exporter,1,1,2020,8
 Turkmenistan,2020-08-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2020,8
 Türkiye,2020-08-01,0,0,0,0,170000,1,1,1,170000,1,0,importer,net_importer,-1,1,2020,8
-United Arab Emirates,2020-08-01,407100,3,1,2,135000,1,1,1,542100,4,0.750968456004,bidirectional,net_exporter,0.501936912009,1,2020,8
+United Arab Emirates,2020-08-01,272100,2,1,1,0,0,0,0,272100,2,1,exporter,net_exporter,1,1,2020,8
 United Kingdom,2020-08-01,0,0,0,0,618908,3,2,2,618908,3,0,importer,net_importer,-1,1,2020,8
 United States,2020-08-01,1030270,6,5,5,138059,1,1,1,1168329,7,0.881832086681,bidirectional,net_exporter,0.763664173362,1,2020,8
 Algeria,2020-09-01,717500,7,2,3,0,0,0,0,717500,7,1,exporter,net_exporter,1,1,2020,9
@@ -1467,7 +1467,7 @@ Chile,2022-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2022,3
 China,2022-03-01,0,0,0,0,1925240,9,6,2,1925240,9,0,importer,net_importer,-1,1,2022,3
 Colombia,2022-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2022,3
 Croatia,2022-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2022,3
-Egypt,2022-03-01,328948,2,2,2,154948,1,1,1,483896,3,0.679790698828,bidirectional,net_exporter,0.359581397656,1,2022,3
+Egypt,2022-03-01,174000,1,1,1,0,0,0,0,174000,1,1,exporter,net_exporter,1,1,2022,3
 El Salvador,2022-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2022,3
 Equatorial Guinea,2022-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2022,3
 Finland,2022-03-01,0,0,0,0,36000,2,1,1,36000,2,0,importer,net_importer,-1,1,2022,3
@@ -2139,7 +2139,7 @@ Chile,2023-03-01,0,0,0,0,519000,3,2,2,519000,3,0,importer,net_importer,-1,1,2023
 China,2023-03-01,0,0,0,0,4109565,23,7,8,4109565,23,0,importer,net_importer,-1,1,2023,3
 Colombia,2023-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,3
 Croatia,2023-03-01,0,0,0,0,420000,2,1,1,420000,2,0,importer,net_importer,-1,1,2023,3
-Egypt,2023-03-01,1377800,8,2,4,174000,1,1,1,1551800,9,0.887872148473,bidirectional,net_exporter,0.775744296945,1,2023,3
+Egypt,2023-03-01,1203800,7,2,3,0,0,0,0,1203800,7,1,exporter,net_exporter,1,1,2023,3
 El Salvador,2023-03-01,0,0,0,0,138158,1,1,1,138158,1,0,importer,net_importer,-1,1,2023,3
 Equatorial Guinea,2023-03-01,175000,1,1,1,0,0,0,0,175000,1,1,exporter,net_exporter,1,1,2023,3
 Finland,2023-03-01,0,0,0,0,206200,3,2,1,206200,3,0,importer,net_importer,-1,1,2023,3
@@ -2156,7 +2156,7 @@ Japan,2023-03-01,0,0,0,0,2293469,15,5,4,2293469,15,0,importer,net_importer,-1,1,
 Jordan,2023-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,3
 Kuwait,2023-03-01,0,0,0,0,525152,3,1,2,525152,3,0,importer,net_importer,-1,1,2023,3
 Lithuania,2023-03-01,0,0,0,0,591908,4,1,1,591908,4,0,importer,net_importer,-1,1,2023,3
-Malaysia,2023-03-01,450000,3,1,3,449100,3,1,3,899100,6,0.500500500501,bidirectional,net_exporter,0.001001001001,1,2023,3
+Malaysia,2023-03-01,312000,2,1,2,311100,2,1,2,623100,4,0.500722195474,bidirectional,net_exporter,0.00144439094848,1,2023,3
 Malta,2023-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,3
 Mexico,2023-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,3
 Mozambique,2023-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,3
@@ -2180,9 +2180,9 @@ Thailand,2023-03-01,0,0,0,0,1408614,8,1,4,1408614,8,0,importer,net_importer,-1,1
 Trinidad and Tobago,2023-03-01,484158,3,1,3,0,0,0,0,484158,3,1,exporter,net_exporter,1,1,2023,3
 Turkmenistan,2023-03-01,160500,1,1,1,0,0,0,0,160500,1,1,exporter,net_exporter,1,1,2023,3
 Türkiye,2023-03-01,0,0,0,0,1301916,8,3,3,1301916,8,0,importer,net_importer,-1,1,2023,3
-United Arab Emirates,2023-03-01,816690,6,1,5,409400,3,1,2,1226090,9,0.666093027429,bidirectional,net_exporter,0.332186054857,1,2023,3
+United Arab Emirates,2023-03-01,544590,4,1,4,137300,1,1,1,681890,5,0.798647875757,bidirectional,net_exporter,0.597295751514,1,2023,3
 United Kingdom,2023-03-01,0,0,0,0,3324028,18,2,6,3324028,18,0,importer,net_importer,-1,1,2023,3
-United States,2023-03-01,8814801,52,5,18,475000,3,1,2,9289801,55,0.948868657143,bidirectional,net_exporter,0.897737314287,1,2023,3
+United States,2023-03-01,8474801,50,5,17,135000,1,1,1,8609801,51,0.984320195089,bidirectional,net_exporter,0.968640390179,1,2023,3
 Algeria,2023-04-01,1622058,12,2,6,0,0,0,0,1622058,12,1,exporter,net_exporter,1,1,2023,4
 Argentina,2023-04-01,0,0,0,0,160000,1,1,1,160000,1,0,importer,net_importer,-1,1,2023,4
 Australia,2023-04-01,4332864,27,5,5,0,0,0,0,4332864,27,1,exporter,net_exporter,1,1,2023,4
@@ -2205,7 +2205,7 @@ Gibraltar,2023-04-01,0,0,0,0,174000,1,1,1,174000,1,0,importer,net_importer,-1,1,
 Greece,2023-04-01,0,0,0,0,670400,4,1,4,670400,4,0,importer,net_importer,-1,1,2023,4
 Hong Kong,2023-04-01,0,0,0,0,145700,1,1,1,145700,1,0,importer,net_importer,-1,1,2023,4
 India,2023-04-01,0,0,0,0,1814325,10,4,6,1814325,10,0,importer,net_importer,-1,1,2023,4
-Indonesia,2023-04-01,138273,1,1,1,138273,1,1,1,276546,2,0.5,bidirectional,balanced,0,1,2023,4
+Indonesia,2023-04-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,4
 Italy,2023-04-01,0,0,0,0,679000,5,3,3,679000,5,0,importer,net_importer,-1,1,2023,4
 Jamaica,2023-04-01,0,0,0,0,347400,2,1,2,347400,2,0,importer,net_importer,-1,1,2023,4
 Japan,2023-04-01,0,0,0,0,2203644,14,6,1,2203644,14,0,importer,net_importer,-1,1,2023,4
@@ -2236,7 +2236,7 @@ Thailand,2023-04-01,0,0,0,0,828000,4,1,2,828000,4,0,importer,net_importer,-1,1,2
 Trinidad and Tobago,2023-04-01,1165217,7,1,5,0,0,0,0,1165217,7,1,exporter,net_exporter,1,1,2023,4
 Turkmenistan,2023-04-01,386200,2,1,2,0,0,0,0,386200,2,1,exporter,net_exporter,1,1,2023,4
 Türkiye,2023-04-01,0,0,0,0,988058,6,3,2,988058,6,0,importer,net_importer,-1,1,2023,4
-United Arab Emirates,2023-04-01,692490,5,1,3,135000,1,1,1,827490,6,0.836856034514,bidirectional,net_exporter,0.673712069028,1,2023,4
+United Arab Emirates,2023-04-01,557490,4,1,2,0,0,0,0,557490,4,1,exporter,net_exporter,1,1,2023,4
 United Kingdom,2023-04-01,0,0,0,0,2164029,12,2,3,2164029,12,0,importer,net_importer,-1,1,2023,4
 United States,2023-04-01,9076363,53,5,19,0,0,0,0,9076363,53,1,exporter,net_exporter,1,1,2023,4
 Algeria,2023-05-01,2053730,15,2,9,0,0,0,0,2053730,15,1,exporter,net_exporter,1,1,2023,5
@@ -2292,7 +2292,7 @@ Thailand,2023-05-01,0,0,0,0,702226,4,1,3,702226,4,0,importer,net_importer,-1,1,2
 Trinidad and Tobago,2023-05-01,330220,2,1,2,0,0,0,0,330220,2,1,exporter,net_exporter,1,1,2023,5
 Turkmenistan,2023-05-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,5
 Türkiye,2023-05-01,0,0,0,0,501158,3,1,3,501158,3,0,importer,net_importer,-1,1,2023,5
-United Arab Emirates,2023-05-01,407000,3,1,3,481788,3,1,2,888788,6,0.457926974712,bidirectional,net_importer,-0.0841460505767,1,2023,5
+United Arab Emirates,2023-05-01,272000,2,1,2,346788,2,1,1,618788,4,0.439568963845,bidirectional,net_importer,-0.120862072309,1,2023,5
 United Kingdom,2023-05-01,0,0,0,0,2134829,11,2,3,2134829,11,0,importer,net_importer,-1,1,2023,5
 United States,2023-05-01,9107409,53,5,20,315926,2,2,1,9423335,55,0.966474077383,bidirectional,net_exporter,0.932948154767,1,2023,5
 Algeria,2023-06-01,1984080,16,2,8,0,0,0,0,1984080,16,1,exporter,net_exporter,1,1,2023,6
@@ -2348,9 +2348,9 @@ Thailand,2023-06-01,0,0,0,0,1405710,8,1,5,1405710,8,0,importer,net_importer,-1,1
 Trinidad and Tobago,2023-06-01,1160666,7,1,5,0,0,0,0,1160666,7,1,exporter,net_exporter,1,1,2023,6
 Turkmenistan,2023-06-01,160500,1,1,1,0,0,0,0,160500,1,1,exporter,net_exporter,1,1,2023,6
 Türkiye,2023-06-01,0,0,0,0,833116,5,2,2,833116,5,0,importer,net_importer,-1,1,2023,6
-United Arab Emirates,2023-06-01,417800,3,1,3,490868,3,1,2,908668,6,0.45979389612,bidirectional,net_importer,-0.080412207759,1,2023,6
+United Arab Emirates,2023-06-01,280700,2,1,2,353768,2,1,1,634468,4,0.442417899721,bidirectional,net_importer,-0.115164200559,1,2023,6
 United Kingdom,2023-06-01,0,0,0,0,481498,2,1,1,481498,2,0,importer,net_importer,-1,1,2023,6
-United States,2023-06-01,7526988,44,4,17,305000,2,2,2,7831988,46,0.961057141558,bidirectional,net_exporter,0.922114283117,1,2023,6
+United States,2023-06-01,7356988,43,4,16,135000,1,1,1,7491988,44,0.981980750637,bidirectional,net_exporter,0.963961501273,1,2023,6
 Algeria,2023-07-01,752314,7,2,4,0,0,0,0,752314,7,1,exporter,net_exporter,1,1,2023,7
 Argentina,2023-07-01,0,0,0,0,174000,1,1,1,174000,1,0,importer,net_importer,-1,1,2023,7
 Australia,2023-07-01,3330957,21,5,6,0,0,0,0,3330957,21,1,exporter,net_exporter,1,1,2023,7
@@ -2380,7 +2380,7 @@ Japan,2023-07-01,0,0,0,0,2246189,15,8,5,2246189,15,0,importer,net_importer,-1,1,
 Jordan,2023-07-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,7
 Kuwait,2023-07-01,0,0,0,0,2282406,12,1,3,2282406,12,0,importer,net_importer,-1,1,2023,7
 Lithuania,2023-07-01,0,0,0,0,154880,1,1,1,154880,1,0,importer,net_importer,-1,1,2023,7
-Malaysia,2023-07-01,45000,1,1,1,378274,3,2,3,423274,4,0.106314113317,bidirectional,net_importer,-0.787371773367,1,2023,7
+Malaysia,2023-07-01,0,0,0,0,333274,2,2,2,333274,2,0,importer,net_importer,-1,1,2023,7
 Malta,2023-07-01,0,0,0,0,138158,1,1,1,138158,1,0,importer,net_importer,-1,1,2023,7
 Mexico,2023-07-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,7
 Mozambique,2023-07-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,7
@@ -2404,7 +2404,7 @@ Thailand,2023-07-01,0,0,0,0,734200,4,1,3,734200,4,0,importer,net_importer,-1,1,2
 Trinidad and Tobago,2023-07-01,610017,4,1,4,0,0,0,0,610017,4,1,exporter,net_exporter,1,1,2023,7
 Turkmenistan,2023-07-01,500500,3,1,2,0,0,0,0,500500,3,1,exporter,net_exporter,1,1,2023,7
 Türkiye,2023-07-01,0,0,0,0,456116,3,2,2,456116,3,0,importer,net_importer,-1,1,2023,7
-United Arab Emirates,2023-07-01,407100,3,1,3,765668,5,1,2,1172768,8,0.347127479604,bidirectional,net_importer,-0.305745040792,1,2023,7
+United Arab Emirates,2023-07-01,272100,2,1,2,630668,4,1,1,902768,6,0.301406341386,bidirectional,net_importer,-0.397187317229,1,2023,7
 United Kingdom,2023-07-01,0,0,0,0,680543,3,2,2,680543,3,0,importer,net_importer,-1,1,2023,7
 United States,2023-07-01,7688130,45,6,16,138059,1,1,1,7826189,46,0.982359357792,bidirectional,net_exporter,0.964718715584,1,2023,7
 Algeria,2023-08-01,1387916,12,2,7,0,0,0,0,1387916,12,1,exporter,net_exporter,1,1,2023,8
@@ -2460,7 +2460,7 @@ Thailand,2023-08-01,0,0,0,0,685000,4,1,3,685000,4,0,importer,net_importer,-1,1,2
 Trinidad and Tobago,2023-08-01,332000,2,1,2,0,0,0,0,332000,2,1,exporter,net_exporter,1,1,2023,8
 Turkmenistan,2023-08-01,170000,1,1,1,0,0,0,0,170000,1,1,exporter,net_exporter,1,1,2023,8
 Türkiye,2023-08-01,0,0,0,0,308058,2,2,1,308058,2,0,importer,net_importer,-1,1,2023,8
-United Arab Emirates,2023-08-01,426572,3,1,2,416061,3,1,2,842633,6,0.506236997602,bidirectional,net_exporter,0.0124739952031,1,2023,8
+United Arab Emirates,2023-08-01,291572,2,1,1,281061,2,1,1,572633,4,0.509177780533,bidirectional,net_exporter,0.0183555610662,1,2023,8
 United Kingdom,2023-08-01,0,0,0,0,312058,2,1,2,312058,2,0,importer,net_importer,-1,1,2023,8
 United States,2023-08-01,8140634,48,4,16,0,0,0,0,8140634,48,1,exporter,net_exporter,1,1,2023,8
 Algeria,2023-09-01,1600858,13,2,6,0,0,0,0,1600858,13,1,exporter,net_exporter,1,1,2023,9
@@ -2485,14 +2485,14 @@ Gibraltar,2023-09-01,0,0,0,0,841462,5,1,2,841462,5,0,importer,net_importer,-1,1,
 Greece,2023-09-01,0,0,0,0,180082,1,1,1,180082,1,0,importer,net_importer,-1,1,2023,9
 Hong Kong,2023-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,9
 India,2023-09-01,0,0,0,0,1603735,7,3,2,1603735,7,0,importer,net_importer,-1,1,2023,9
-Indonesia,2023-09-01,138273,1,1,1,646273,4,3,3,784546,5,0.176245879783,bidirectional,net_importer,-0.647508240435,1,2023,9
+Indonesia,2023-09-01,0,0,0,0,508000,3,3,2,508000,3,0,importer,net_importer,-1,1,2023,9
 Italy,2023-09-01,0,0,0,0,489166,3,2,3,489166,3,0,importer,net_importer,-1,1,2023,9
 Jamaica,2023-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,9
 Japan,2023-09-01,0,0,0,0,2986583,20,8,6,2986583,20,0,importer,net_importer,-1,1,2023,9
 Jordan,2023-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,9
 Kuwait,2023-09-01,0,0,0,0,1444192,8,1,4,1444192,8,0,importer,net_importer,-1,1,2023,9
 Lithuania,2023-09-01,0,0,0,0,479925,3,1,2,479925,3,0,importer,net_importer,-1,1,2023,9
-Malaysia,2023-09-01,354688,3,1,3,45000,1,1,1,399688,4,0.887412181502,bidirectional,net_exporter,0.774824363003,1,2023,9
+Malaysia,2023-09-01,309688,2,1,2,0,0,0,0,309688,2,1,exporter,net_exporter,1,1,2023,9
 Malta,2023-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,9
 Mexico,2023-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,9
 Mozambique,2023-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,9
@@ -2516,7 +2516,7 @@ Thailand,2023-09-01,0,0,0,0,713764,4,1,3,713764,4,0,importer,net_importer,-1,1,2
 Trinidad and Tobago,2023-09-01,480000,3,1,2,0,0,0,0,480000,3,1,exporter,net_exporter,1,1,2023,9
 Turkmenistan,2023-09-01,160500,1,1,1,0,0,0,0,160500,1,1,exporter,net_exporter,1,1,2023,9
 Türkiye,2023-09-01,0,0,0,0,689000,4,2,3,689000,4,0,importer,net_importer,-1,1,2023,9
-United Arab Emirates,2023-09-01,677000,5,1,2,407000,3,1,1,1084000,8,0.624538745387,bidirectional,net_exporter,0.249077490775,1,2023,9
+United Arab Emirates,2023-09-01,270000,2,1,1,0,0,0,0,270000,2,1,exporter,net_exporter,1,1,2023,9
 United Kingdom,2023-09-01,0,0,0,0,1356966,8,2,5,1356966,8,0,importer,net_importer,-1,1,2023,9
 United States,2023-09-01,6843538,40,4,19,0,0,0,0,6843538,40,1,exporter,net_exporter,1,1,2023,9
 Algeria,2023-10-01,2172550,17,2,5,0,0,0,0,2172550,17,1,exporter,net_exporter,1,1,2023,10
@@ -2541,14 +2541,14 @@ Gibraltar,2023-10-01,0,0,0,0,328880,2,1,2,328880,2,0,importer,net_importer,-1,1,
 Greece,2023-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,10
 Hong Kong,2023-10-01,0,0,0,0,433835,2,1,2,433835,2,0,importer,net_importer,-1,1,2023,10
 India,2023-10-01,0,0,0,0,1318800,8,3,5,1318800,8,0,importer,net_importer,-1,1,2023,10
-Indonesia,2023-10-01,138273,1,1,1,298273,2,2,2,436546,3,0.316743252716,bidirectional,net_importer,-0.366513494569,1,2023,10
+Indonesia,2023-10-01,0,0,0,0,160000,1,1,1,160000,1,0,importer,net_importer,-1,1,2023,10
 Italy,2023-10-01,0,0,0,0,760000,5,3,2,760000,5,0,importer,net_importer,-1,1,2023,10
 Jamaica,2023-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,10
 Japan,2023-10-01,0,0,0,0,3000183,19,6,6,3000183,19,0,importer,net_importer,-1,1,2023,10
 Jordan,2023-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,10
 Kuwait,2023-10-01,0,0,0,0,3698852,15,1,1,3698852,15,0,importer,net_importer,-1,1,2023,10
 Lithuania,2023-10-01,0,0,0,0,160000,1,1,1,160000,1,0,importer,net_importer,-1,1,2023,10
-Malaysia,2023-10-01,436000,4,1,3,531335,4,2,3,967335,8,0.450722862297,bidirectional,net_importer,-0.0985542754061,1,2023,10
+Malaysia,2023-10-01,346000,2,1,2,441335,2,1,2,787335,4,0.439457156103,bidirectional,net_importer,-0.121085687795,1,2023,10
 Malta,2023-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,10
 Mexico,2023-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,10
 Mozambique,2023-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,10
@@ -2597,7 +2597,7 @@ Gibraltar,2023-11-01,0,0,0,0,904217,5,1,4,904217,5,0,importer,net_importer,-1,1,
 Greece,2023-11-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,11
 Hong Kong,2023-11-01,0,0,0,0,265000,1,1,1,265000,1,0,importer,net_importer,-1,1,2023,11
 India,2023-11-01,0,0,0,0,1307320,7,2,3,1307320,7,0,importer,net_importer,-1,1,2023,11
-Indonesia,2023-11-01,138273,1,1,1,138273,1,1,1,276546,2,0.5,bidirectional,balanced,0,1,2023,11
+Indonesia,2023-11-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,11
 Italy,2023-11-01,0,0,0,0,395202,3,2,3,395202,3,0,importer,net_importer,-1,1,2023,11
 Jamaica,2023-11-01,0,0,0,0,174000,1,1,1,174000,1,0,importer,net_importer,-1,1,2023,11
 Japan,2023-11-01,0,0,0,0,2205047,15,8,5,2205047,15,0,importer,net_importer,-1,1,2023,11
@@ -2653,7 +2653,7 @@ Gibraltar,2023-12-01,0,0,0,0,494000,3,1,3,494000,3,0,importer,net_importer,-1,1,
 Greece,2023-12-01,0,0,0,0,403900,3,1,3,403900,3,0,importer,net_importer,-1,1,2023,12
 Hong Kong,2023-12-01,0,0,0,0,342835,2,1,2,342835,2,0,importer,net_importer,-1,1,2023,12
 India,2023-12-01,0,0,0,0,1549268,8,5,4,1549268,8,0,importer,net_importer,-1,1,2023,12
-Indonesia,2023-12-01,138273,1,1,1,448221,3,2,2,586494,4,0.23576200268,bidirectional,net_importer,-0.528475994639,1,2023,12
+Indonesia,2023-12-01,0,0,0,0,309948,2,1,1,309948,2,0,importer,net_importer,-1,1,2023,12
 Italy,2023-12-01,0,0,0,0,151700,1,1,1,151700,1,0,importer,net_importer,-1,1,2023,12
 Jamaica,2023-12-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2023,12
 Japan,2023-12-01,0,0,0,0,2646629,17,8,5,2646629,17,0,importer,net_importer,-1,1,2023,12
@@ -2684,9 +2684,9 @@ Thailand,2023-12-01,0,0,0,0,1164100,6,1,4,1164100,6,0,importer,net_importer,-1,1
 Trinidad and Tobago,2023-12-01,778179,5,1,4,0,0,0,0,778179,5,1,exporter,net_exporter,1,1,2023,12
 Turkmenistan,2023-12-01,500500,3,1,2,0,0,0,0,500500,3,1,exporter,net_exporter,1,1,2023,12
 Türkiye,2023-12-01,0,0,0,0,2175516,13,3,5,2175516,13,0,importer,net_importer,-1,1,2023,12
-United Arab Emirates,2023-12-01,696640,5,1,4,481220,3,1,2,1177860,8,0.591445502861,bidirectional,net_exporter,0.182891005722,1,2023,12
+United Arab Emirates,2023-12-01,424640,3,1,3,209220,1,1,1,633860,4,0.669927113243,bidirectional,net_exporter,0.339854226485,1,2023,12
 United Kingdom,2023-12-01,0,0,0,0,2826170,17,2,5,2826170,17,0,importer,net_importer,-1,1,2023,12
-United States,2023-12-01,10982836,64,5,22,601951,4,3,3,11584787,68,0.948039528047,bidirectional,net_exporter,0.896079056093,1,2023,12
+United States,2023-12-01,10817064,63,5,21,436179,3,3,2,11253243,66,0.961239706634,bidirectional,net_exporter,0.922479413268,1,2023,12
 Algeria,2024-01-01,1443992,12,2,4,0,0,0,0,1443992,12,1,exporter,net_exporter,1,1,2024,1
 Argentina,2024-01-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,1
 Australia,2024-01-01,3815874,24,5,9,0,0,0,0,3815874,24,1,exporter,net_exporter,1,1,2024,1
@@ -2709,14 +2709,14 @@ Gibraltar,2024-01-01,0,0,0,0,739000,4,1,3,739000,4,0,importer,net_importer,-1,1,
 Greece,2024-01-01,0,0,0,0,175113,1,1,1,175113,1,0,importer,net_importer,-1,1,2024,1
 Hong Kong,2024-01-01,0,0,0,0,580914,3,1,3,580914,3,0,importer,net_importer,-1,1,2024,1
 India,2024-01-01,0,0,0,0,873246,5,3,4,873246,5,0,importer,net_importer,-1,1,2024,1
-Indonesia,2024-01-01,138273,1,1,1,290888,2,2,2,429161,3,0.322193768772,bidirectional,net_importer,-0.355612462456,1,2024,1
+Indonesia,2024-01-01,0,0,0,0,152615,1,1,1,152615,1,0,importer,net_importer,-1,1,2024,1
 Italy,2024-01-01,0,0,0,0,538848,4,2,3,538848,4,0,importer,net_importer,-1,1,2024,1
 Jamaica,2024-01-01,0,0,0,0,352717,2,1,1,352717,2,0,importer,net_importer,-1,1,2024,1
 Japan,2024-01-01,0,0,0,0,1744689,11,7,4,1744689,11,0,importer,net_importer,-1,1,2024,1
 Jordan,2024-01-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,1
 Kuwait,2024-01-01,0,0,0,0,780412,4,1,2,780412,4,0,importer,net_importer,-1,1,2024,1
 Lithuania,2024-01-01,0,0,0,0,289820,2,1,1,289820,2,0,importer,net_importer,-1,1,2024,1
-Malaysia,2024-01-01,438000,4,1,3,669015,5,2,3,1107015,9,0.395658595412,bidirectional,net_importer,-0.208682809176,1,2024,1
+Malaysia,2024-01-01,348000,2,1,2,579015,3,2,2,927015,5,0.375398456336,bidirectional,net_importer,-0.249203087329,1,2024,1
 Malta,2024-01-01,0,0,0,0,165000,1,1,1,165000,1,0,importer,net_importer,-1,1,2024,1
 Mexico,2024-01-01,0,0,0,0,174000,1,1,1,174000,1,0,importer,net_importer,-1,1,2024,1
 Mozambique,2024-01-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,1
@@ -2740,9 +2740,9 @@ Thailand,2024-01-01,0,0,0,0,1603120,9,1,5,1603120,9,0,importer,net_importer,-1,1
 Trinidad and Tobago,2024-01-01,1017520,6,1,4,0,0,0,0,1017520,6,1,exporter,net_exporter,1,1,2024,1
 Turkmenistan,2024-01-01,216200,1,1,1,0,0,0,0,216200,1,1,exporter,net_exporter,1,1,2024,1
 Türkiye,2024-01-01,0,0,0,0,2126774,13,3,4,2126774,13,0,importer,net_importer,-1,1,2024,1
-United Arab Emirates,2024-01-01,407000,3,1,3,347100,2,1,2,754100,5,0.539716218008,bidirectional,net_exporter,0.0794324360164,1,2024,1
+United Arab Emirates,2024-01-01,270000,2,1,2,210100,1,1,1,480100,3,0.562382836909,bidirectional,net_exporter,0.124765673818,1,2024,1
 United Kingdom,2024-01-01,0,0,0,0,1542800,9,2,2,1542800,9,0,importer,net_importer,-1,1,2024,1
-United States,2024-01-01,9683187,56,5,21,334880,2,2,2,10018067,58,0.966572393656,bidirectional,net_exporter,0.933144787313,1,2024,1
+United States,2024-01-01,9503187,55,5,20,154880,1,1,1,9658067,56,0.983963664779,bidirectional,net_exporter,0.967927329558,1,2024,1
 Algeria,2024-02-01,1934782,15,2,6,0,0,0,0,1934782,15,1,exporter,net_exporter,1,1,2024,2
 Argentina,2024-02-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,2
 Australia,2024-02-01,3262288,21,5,6,0,0,0,0,3262288,21,1,exporter,net_exporter,1,1,2024,2
@@ -2772,7 +2772,7 @@ Japan,2024-02-01,0,0,0,0,1997073,13,6,5,1997073,13,0,importer,net_importer,-1,1,
 Jordan,2024-02-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,2
 Kuwait,2024-02-01,0,0,0,0,360920,2,1,1,360920,2,0,importer,net_importer,-1,1,2024,2
 Lithuania,2024-02-01,0,0,0,0,321208,2,1,2,321208,2,0,importer,net_importer,-1,1,2024,2
-Malaysia,2024-02-01,393000,3,1,3,312335,2,2,2,705335,5,0.557182048247,bidirectional,net_exporter,0.114364096493,1,2024,2
+Malaysia,2024-02-01,348000,2,1,2,267335,1,1,1,615335,3,0.565545597114,bidirectional,net_exporter,0.131091194228,1,2024,2
 Malta,2024-02-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,2
 Mexico,2024-02-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,2
 Mozambique,2024-02-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,2
@@ -2798,7 +2798,7 @@ Turkmenistan,2024-02-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,2
 Türkiye,2024-02-01,0,0,0,0,1672340,10,3,5,1672340,10,0,importer,net_importer,-1,1,2024,2
 United Arab Emirates,2024-02-01,433900,3,1,3,141000,1,1,1,574900,4,0.754739954775,bidirectional,net_exporter,0.509479909549,1,2024,2
 United Kingdom,2024-02-01,0,0,0,0,1366035,8,2,4,1366035,8,0,importer,net_importer,-1,1,2024,2
-United States,2024-02-01,8857633,52,6,20,308158,2,2,2,9165791,54,0.966379551967,bidirectional,net_exporter,0.932759103933,1,2024,2
+United States,2024-02-01,8687633,51,5,19,138158,1,1,1,8825791,52,0.984346105635,bidirectional,net_exporter,0.96869221127,1,2024,2
 Algeria,2024-03-01,2001372,17,2,4,0,0,0,0,2001372,17,1,exporter,net_exporter,1,1,2024,3
 Argentina,2024-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,3
 Australia,2024-03-01,3996228,25,6,6,0,0,0,0,3996228,25,1,exporter,net_exporter,1,1,2024,3
@@ -2828,7 +2828,7 @@ Japan,2024-03-01,0,0,0,0,2888407,18,6,7,2888407,18,0,importer,net_importer,-1,1,
 Jordan,2024-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,3
 Kuwait,2024-03-01,0,0,0,0,982974,5,1,3,982974,5,0,importer,net_importer,-1,1,2024,3
 Lithuania,2024-03-01,0,0,0,0,142759,1,1,1,142759,1,0,importer,net_importer,-1,1,2024,3
-Malaysia,2024-03-01,528490,4,1,3,45000,1,1,1,573490,5,0.921533069452,bidirectional,net_exporter,0.843066138904,1,2024,3
+Malaysia,2024-03-01,483490,3,1,2,0,0,0,0,483490,3,1,exporter,net_exporter,1,1,2024,3
 Malta,2024-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,3
 Mexico,2024-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,3
 Mozambique,2024-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,3
@@ -2854,7 +2854,7 @@ Turkmenistan,2024-03-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,3
 Türkiye,2024-03-01,0,0,0,0,1102858,7,3,4,1102858,7,0,importer,net_importer,-1,1,2024,3
 United Arab Emirates,2024-03-01,689800,5,1,4,215100,1,1,1,904900,6,0.762294176152,bidirectional,net_exporter,0.524588352304,1,2024,3
 United Kingdom,2024-03-01,0,0,0,0,419000,2,1,2,419000,2,0,importer,net_importer,-1,1,2024,3
-United States,2024-03-01,10141327,59,6,20,309421,2,2,2,10450748,61,0.970392454205,bidirectional,net_exporter,0.94078490841,1,2024,3
+United States,2024-03-01,9969965,58,6,19,138059,1,1,1,10108024,59,0.986341643035,bidirectional,net_exporter,0.972683286071,1,2024,3
 Algeria,2024-04-01,1878916,15,2,4,0,0,0,0,1878916,15,1,exporter,net_exporter,1,1,2024,4
 Argentina,2024-04-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,4
 Australia,2024-04-01,3917159,24,6,7,0,0,0,0,3917159,24,1,exporter,net_exporter,1,1,2024,4
@@ -2890,7 +2890,7 @@ Mexico,2024-04-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,4
 Mozambique,2024-04-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,4
 Netherlands,2024-04-01,0,0,0,0,1812858,11,2,4,1812858,11,0,importer,net_importer,-1,1,2024,4
 Nigeria,2024-04-01,1510078,10,1,7,0,0,0,0,1510078,10,1,exporter,net_exporter,1,1,2024,4
-Norway,2024-04-01,1078187,8,2,8,22969,1,1,1,1101156,9,0.979141011809,bidirectional,net_exporter,0.958282023619,1,2024,4
+Norway,2024-04-01,1055218,7,1,7,0,0,0,0,1055218,7,1,exporter,net_exporter,1,1,2024,4
 Oman,2024-04-01,313200,2,1,2,0,0,0,0,313200,2,1,exporter,net_exporter,1,1,2024,4
 Pakistan,2024-04-01,0,0,0,0,1153542,8,1,1,1153542,8,0,importer,net_importer,-1,1,2024,4
 Panama,2024-04-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,4
@@ -2910,7 +2910,7 @@ Turkmenistan,2024-04-01,160500,1,1,1,0,0,0,0,160500,1,1,exporter,net_exporter,1,
 Türkiye,2024-04-01,0,0,0,0,790316,5,3,3,790316,5,0,importer,net_importer,-1,1,2024,4
 United Arab Emirates,2024-04-01,709974,5,1,4,0,0,0,0,709974,5,1,exporter,net_exporter,1,1,2024,4
 United Kingdom,2024-04-01,0,0,0,0,779079,4,1,2,779079,4,0,importer,net_importer,-1,1,2024,4
-United States,2024-04-01,6829523,40,6,20,471859,3,2,3,7301382,43,0.935374015495,bidirectional,net_exporter,0.870748030989,1,2024,4
+United States,2024-04-01,6655523,39,6,19,297859,2,2,2,6953382,41,0.957163435002,bidirectional,net_exporter,0.914326870004,1,2024,4
 Algeria,2024-05-01,1726325,14,2,6,0,0,0,0,1726325,14,1,exporter,net_exporter,1,1,2024,5
 Argentina,2024-05-01,0,0,0,0,174000,1,1,1,174000,1,0,importer,net_importer,-1,1,2024,5
 Australia,2024-05-01,2488235,15,5,7,0,0,0,0,2488235,15,1,exporter,net_exporter,1,1,2024,5
@@ -2940,7 +2940,7 @@ Japan,2024-05-01,0,0,0,0,1044220,6,3,4,1044220,6,0,importer,net_importer,-1,1,20
 Jordan,2024-05-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,5
 Kuwait,2024-05-01,0,0,0,0,914700,5,1,2,914700,5,0,importer,net_importer,-1,1,2024,5
 Lithuania,2024-05-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,5
-Malaysia,2024-05-01,354000,2,1,2,673700,4,2,3,1027700,6,0.344458499562,bidirectional,net_importer,-0.311083000876,1,2024,5
+Malaysia,2024-05-01,180000,1,1,1,499700,3,2,2,679700,4,0.264822715904,bidirectional,net_importer,-0.470354568192,1,2024,5
 Malta,2024-05-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,5
 Mexico,2024-05-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,5
 Mozambique,2024-05-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,5
@@ -2964,9 +2964,9 @@ Thailand,2024-05-01,0,0,0,0,573200,3,1,2,573200,3,0,importer,net_importer,-1,1,2
 Trinidad and Tobago,2024-05-01,826000,5,1,5,0,0,0,0,826000,5,1,exporter,net_exporter,1,1,2024,5
 Turkmenistan,2024-05-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,5
 Türkiye,2024-05-01,0,0,0,0,332942,2,1,2,332942,2,0,importer,net_importer,-1,1,2024,5
-United Arab Emirates,2024-05-01,272000,2,1,2,641800,4,1,2,913800,6,0.297658130882,bidirectional,net_importer,-0.404683738236,1,2024,5
+United Arab Emirates,2024-05-01,135000,1,1,1,504800,3,1,1,639800,4,0.211003438575,bidirectional,net_importer,-0.577993122851,1,2024,5
 United Kingdom,2024-05-01,0,0,0,0,639266,4,2,3,639266,4,0,importer,net_importer,-1,1,2024,5
-United States,2024-05-01,4686097,27,5,14,318000,2,2,2,5004097,29,0.936452071173,bidirectional,net_exporter,0.872904142346,1,2024,5
+United States,2024-05-01,4506097,26,5,13,138000,1,1,1,4644097,27,0.970284858391,bidirectional,net_exporter,0.940569716782,1,2024,5
 Algeria,2024-06-01,716000,4,1,4,0,0,0,0,716000,4,1,exporter,net_exporter,1,1,2024,6
 Argentina,2024-06-01,0,0,0,0,160000,1,1,1,160000,1,0,importer,net_importer,-1,1,2024,6
 Australia,2024-06-01,2309922,14,4,7,0,0,0,0,2309922,14,1,exporter,net_exporter,1,1,2024,6
@@ -2996,7 +2996,7 @@ Japan,2024-06-01,0,0,0,0,515000,3,2,2,515000,3,0,importer,net_importer,-1,1,2024
 Jordan,2024-06-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,6
 Kuwait,2024-06-01,0,0,0,0,1007826,5,1,3,1007826,5,0,importer,net_importer,-1,1,2024,6
 Lithuania,2024-06-01,0,0,0,0,154880,1,1,1,154880,1,0,importer,net_importer,-1,1,2024,6
-Malaysia,2024-06-01,348000,2,1,2,454700,3,2,3,802700,5,0.433536813255,bidirectional,net_importer,-0.132926373489,1,2024,6
+Malaysia,2024-06-01,174000,1,1,1,280700,2,2,2,454700,3,0.382669892237,bidirectional,net_importer,-0.234660215527,1,2024,6
 Malta,2024-06-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,6
 Mexico,2024-06-01,0,0,0,0,172000,1,1,1,172000,1,0,importer,net_importer,-1,1,2024,6
 Mozambique,2024-06-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,6
@@ -3020,7 +3020,7 @@ Thailand,2024-06-01,0,0,0,0,755482,4,1,3,755482,4,0,importer,net_importer,-1,1,2
 Trinidad and Tobago,2024-06-01,491770,3,1,3,0,0,0,0,491770,3,1,exporter,net_exporter,1,1,2024,6
 Turkmenistan,2024-06-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,6
 Türkiye,2024-06-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,6
-United Arab Emirates,2024-06-01,544100,4,1,4,999700,5,1,2,1543800,9,0.352442026169,bidirectional,net_importer,-0.295115947662,1,2024,6
+United Arab Emirates,2024-06-01,407000,3,1,3,862600,4,1,1,1269600,7,0.320573408948,bidirectional,net_importer,-0.358853182105,1,2024,6
 United Kingdom,2024-06-01,0,0,0,0,174000,1,1,1,174000,1,0,importer,net_importer,-1,1,2024,6
 United States,2024-06-01,1879400,11,5,9,174000,1,1,1,2053400,12,0.915262491478,bidirectional,net_exporter,0.830524982955,1,2024,6
 Algeria,2024-07-01,760020,5,2,1,0,0,0,0,760020,5,1,exporter,net_exporter,1,1,2024,7
@@ -3045,7 +3045,7 @@ Gibraltar,2024-07-01,0,0,0,0,503500,3,1,2,503500,3,0,importer,net_importer,-1,1,
 Greece,2024-07-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,7
 Hong Kong,2024-07-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,7
 India,2024-07-01,0,0,0,0,1187535,5,1,1,1187535,5,0,importer,net_importer,-1,1,2024,7
-Indonesia,2024-07-01,138273,1,1,1,453273,3,3,2,591546,4,0.233748516599,bidirectional,net_importer,-0.532502966802,1,2024,7
+Indonesia,2024-07-01,0,0,0,0,315000,2,2,1,315000,2,0,importer,net_importer,-1,1,2024,7
 Italy,2024-07-01,0,0,0,0,138517,1,1,1,138517,1,0,importer,net_importer,-1,1,2024,7
 Jamaica,2024-07-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,7
 Japan,2024-07-01,0,0,0,0,1395900,8,4,5,1395900,8,0,importer,net_importer,-1,1,2024,7
@@ -3076,9 +3076,9 @@ Thailand,2024-07-01,0,0,0,0,1422420,7,1,3,1422420,7,0,importer,net_importer,-1,1
 Trinidad and Tobago,2024-07-01,174000,1,1,1,0,0,0,0,174000,1,1,exporter,net_exporter,1,1,2024,7
 Turkmenistan,2024-07-01,550152,3,1,2,0,0,0,0,550152,3,1,exporter,net_exporter,1,1,2024,7
 Türkiye,2024-07-01,0,0,0,0,510000,3,2,2,510000,3,0,importer,net_importer,-1,1,2024,7
-United Arab Emirates,2024-07-01,542100,4,1,2,1053500,6,1,2,1595600,10,0.33974680371,bidirectional,net_importer,-0.32050639258,1,2024,7
+United Arab Emirates,2024-07-01,135000,1,1,1,646400,3,1,1,781400,4,0.172766828769,bidirectional,net_importer,-0.654466342462,1,2024,7
 United Kingdom,2024-07-01,0,0,0,0,344762,2,2,2,344762,2,0,importer,net_importer,-1,1,2024,7
-United States,2024-07-01,2580098,15,5,12,516000,3,1,3,3096098,18,0.833338608791,bidirectional,net_exporter,0.666677217582,1,2024,7
+United States,2024-07-01,2403098,14,5,11,339000,2,1,2,2742098,16,0.876372033385,bidirectional,net_exporter,0.752744066769,1,2024,7
 Algeria,2024-08-01,713258,5,2,3,0,0,0,0,713258,5,1,exporter,net_exporter,1,1,2024,8
 Argentina,2024-08-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,8
 Australia,2024-08-01,2637263,16,4,6,0,0,0,0,2637263,16,1,exporter,net_exporter,1,1,2024,8
@@ -3101,7 +3101,7 @@ Gibraltar,2024-08-01,0,0,0,0,174000,1,1,1,174000,1,0,importer,net_importer,-1,1,
 Greece,2024-08-01,0,0,0,0,155000,1,1,1,155000,1,0,importer,net_importer,-1,1,2024,8
 Hong Kong,2024-08-01,0,0,0,0,310000,2,1,2,310000,2,0,importer,net_importer,-1,1,2024,8
 India,2024-08-01,0,0,0,0,2030590,9,3,3,2030590,9,0,importer,net_importer,-1,1,2024,8
-Indonesia,2024-08-01,276546,2,1,1,953546,6,4,3,1230092,8,0.224817330736,bidirectional,net_importer,-0.550365338528,1,2024,8
+Indonesia,2024-08-01,0,0,0,0,677000,4,3,2,677000,4,0,importer,net_importer,-1,1,2024,8
 Italy,2024-08-01,0,0,0,0,175000,1,1,1,175000,1,0,importer,net_importer,-1,1,2024,8
 Jamaica,2024-08-01,0,0,0,0,174000,1,1,1,174000,1,0,importer,net_importer,-1,1,2024,8
 Japan,2024-08-01,0,0,0,0,695400,4,3,4,695400,4,0,importer,net_importer,-1,1,2024,8
@@ -3134,7 +3134,7 @@ Turkmenistan,2024-08-01,170000,1,1,1,0,0,0,0,170000,1,1,exporter,net_exporter,1,
 Türkiye,2024-08-01,0,0,0,0,456358,3,2,3,456358,3,0,importer,net_importer,-1,1,2024,8
 United Arab Emirates,2024-08-01,542590,4,1,3,562320,3,1,1,1104910,7,0.491071670996,bidirectional,net_importer,-0.0178566580083,1,2024,8
 United Kingdom,2024-08-01,0,0,0,0,613673,3,2,3,613673,3,0,importer,net_importer,-1,1,2024,8
-United States,2024-08-01,2892076,17,5,9,680486,4,1,1,3572562,21,0.809524369346,bidirectional,net_exporter,0.619048738692,1,2024,8
+United States,2024-08-01,2211590,13,4,8,0,0,0,0,2211590,13,1,exporter,net_exporter,1,1,2024,8
 Algeria,2024-09-01,351616,3,1,2,0,0,0,0,351616,3,1,exporter,net_exporter,1,1,2024,9
 Argentina,2024-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,9
 Australia,2024-09-01,3623803,22,5,7,0,0,0,0,3623803,22,1,exporter,net_exporter,1,1,2024,9
@@ -3157,14 +3157,14 @@ Gibraltar,2024-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,9
 Greece,2024-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,9
 Hong Kong,2024-09-01,0,0,0,0,334000,2,1,2,334000,2,0,importer,net_importer,-1,1,2024,9
 India,2024-09-01,0,0,0,0,1068400,5,2,2,1068400,5,0,importer,net_importer,-1,1,2024,9
-Indonesia,2024-09-01,138273,1,1,1,1149221,7,4,3,1287494,8,0.107397005345,bidirectional,net_importer,-0.785205989309,1,2024,9
+Indonesia,2024-09-01,0,0,0,0,1010948,6,3,2,1010948,6,0,importer,net_importer,-1,1,2024,9
 Italy,2024-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,9
 Jamaica,2024-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,9
 Japan,2024-09-01,0,0,0,0,1771315,11,5,4,1771315,11,0,importer,net_importer,-1,1,2024,9
 Jordan,2024-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,9
 Kuwait,2024-09-01,0,0,0,0,1045533,5,1,2,1045533,5,0,importer,net_importer,-1,1,2024,9
 Lithuania,2024-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,9
-Malaysia,2024-09-01,389000,3,1,2,526540,4,2,2,915540,7,0.424885859711,bidirectional,net_importer,-0.150228280578,1,2024,9
+Malaysia,2024-09-01,170000,1,1,1,307540,2,1,1,477540,3,0.355991121163,bidirectional,net_importer,-0.288017757675,1,2024,9
 Malta,2024-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,9
 Mexico,2024-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,9
 Mozambique,2024-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,9
@@ -3188,9 +3188,9 @@ Thailand,2024-09-01,0,0,0,0,1620620,8,1,3,1620620,8,0,importer,net_importer,-1,1
 Trinidad and Tobago,2024-09-01,174000,1,1,1,0,0,0,0,174000,1,1,exporter,net_exporter,1,1,2024,9
 Turkmenistan,2024-09-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,9
 Türkiye,2024-09-01,0,0,0,0,308258,2,2,2,308258,2,0,importer,net_importer,-1,1,2024,9
-United Arab Emirates,2024-09-01,542000,4,1,3,921400,5,1,2,1463400,9,0.37037037037,bidirectional,net_importer,-0.259259259259,1,2024,9
+United Arab Emirates,2024-09-01,407000,3,1,2,786400,4,1,1,1193400,7,0.341042399866,bidirectional,net_importer,-0.317915200268,1,2024,9
 United Kingdom,2024-09-01,0,0,0,0,317208,2,2,2,317208,2,0,importer,net_importer,-1,1,2024,9
-United States,2024-09-01,2533284,15,5,12,348000,2,1,2,2881284,17,0.879220514187,bidirectional,net_exporter,0.758441028375,1,2024,9
+United States,2024-09-01,2359284,14,5,11,174000,1,1,1,2533284,15,0.931314451913,bidirectional,net_exporter,0.862628903826,1,2024,9
 Algeria,2024-10-01,795540,5,1,3,0,0,0,0,795540,5,1,exporter,net_exporter,1,1,2024,10
 Argentina,2024-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,10
 Australia,2024-10-01,3130051,19,5,6,0,0,0,0,3130051,19,1,exporter,net_exporter,1,1,2024,10
@@ -3213,14 +3213,14 @@ Gibraltar,2024-10-01,0,0,0,0,924703,5,1,2,924703,5,0,importer,net_importer,-1,1,
 Greece,2024-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,10
 Hong Kong,2024-10-01,0,0,0,0,168835,1,1,1,168835,1,0,importer,net_importer,-1,1,2024,10
 India,2024-10-01,0,0,0,0,1476517,6,1,2,1476517,6,0,importer,net_importer,-1,1,2024,10
-Indonesia,2024-10-01,414819,3,1,1,1380330,9,4,2,1795149,12,0.231077754549,bidirectional,net_importer,-0.537844490903,1,2024,10
+Indonesia,2024-10-01,0,0,0,0,965511,6,2,1,965511,6,0,importer,net_importer,-1,1,2024,10
 Italy,2024-10-01,0,0,0,0,517000,3,2,2,517000,3,0,importer,net_importer,-1,1,2024,10
 Jamaica,2024-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,10
 Japan,2024-10-01,0,0,0,0,1094000,7,3,3,1094000,7,0,importer,net_importer,-1,1,2024,10
 Jordan,2024-10-01,0,0,0,0,174000,1,1,1,174000,1,0,importer,net_importer,-1,1,2024,10
 Kuwait,2024-10-01,0,0,0,0,888261,4,1,2,888261,4,0,importer,net_importer,-1,1,2024,10
 Lithuania,2024-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,10
-Malaysia,2024-10-01,260000,3,1,2,1423975,10,2,4,1683975,13,0.154396591398,bidirectional,net_importer,-0.691206817203,1,2024,10
+Malaysia,2024-10-01,170000,1,1,1,1333975,8,2,3,1503975,9,0.11303379378,bidirectional,net_importer,-0.77393241244,1,2024,10
 Malta,2024-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,10
 Mexico,2024-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,10
 Mozambique,2024-10-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,10
@@ -3246,7 +3246,7 @@ Turkmenistan,2024-10-01,160500,1,1,1,0,0,0,0,160500,1,1,exporter,net_exporter,1,
 Türkiye,2024-10-01,0,0,0,0,310058,2,1,2,310058,2,0,importer,net_importer,-1,1,2024,10
 United Arab Emirates,2024-10-01,407100,3,1,1,653459,4,1,2,1060559,7,0.383854175015,bidirectional,net_importer,-0.232291649969,1,2024,10
 United Kingdom,2024-10-01,0,0,0,0,344000,2,1,2,344000,2,0,importer,net_importer,-1,1,2024,10
-United States,2024-10-01,2747624,16,5,11,521673,3,2,1,3269297,19,0.840432667941,bidirectional,net_exporter,0.680865335881,1,2024,10
+United States,2024-10-01,2225951,13,5,10,0,0,0,0,2225951,13,1,exporter,net_exporter,1,1,2024,10
 Algeria,2024-11-01,276116,2,1,2,0,0,0,0,276116,2,1,exporter,net_exporter,1,1,2024,11
 Argentina,2024-11-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,11
 Australia,2024-11-01,1657615,10,4,5,0,0,0,0,1657615,10,1,exporter,net_exporter,1,1,2024,11
@@ -3276,7 +3276,7 @@ Japan,2024-11-01,0,0,0,0,351200,2,1,2,351200,2,0,importer,net_importer,-1,1,2024
 Jordan,2024-11-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,11
 Kuwait,2024-11-01,0,0,0,0,346000,2,1,2,346000,2,0,importer,net_importer,-1,1,2024,11
 Lithuania,2024-11-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,11
-Malaysia,2024-11-01,135490,1,1,1,407490,3,1,2,542980,4,0.249530369443,bidirectional,net_importer,-0.500939261115,1,2024,11
+Malaysia,2024-11-01,0,0,0,0,272000,2,1,1,272000,2,0,importer,net_importer,-1,1,2024,11
 Malta,2024-11-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,11
 Mexico,2024-11-01,0,0,0,0,174000,1,1,1,174000,1,0,importer,net_importer,-1,1,2024,11
 Mozambique,2024-11-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,11
@@ -3325,14 +3325,14 @@ Gibraltar,2024-12-01,0,0,0,0,544100,3,1,3,544100,3,0,importer,net_importer,-1,1,
 Greece,2024-12-01,0,0,0,0,314274,2,1,2,314274,2,0,importer,net_importer,-1,1,2024,12
 Hong Kong,2024-12-01,0,0,0,0,265000,1,1,1,265000,1,0,importer,net_importer,-1,1,2024,12
 India,2024-12-01,0,0,0,0,1623252,7,2,2,1623252,7,0,importer,net_importer,-1,1,2024,12
-Indonesia,2024-12-01,138273,1,1,1,641273,4,3,2,779546,5,0.177376319037,bidirectional,net_importer,-0.645247361926,1,2024,12
+Indonesia,2024-12-01,0,0,0,0,503000,3,2,1,503000,3,0,importer,net_importer,-1,1,2024,12
 Italy,2024-12-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,12
 Jamaica,2024-12-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,12
 Japan,2024-12-01,0,0,0,0,471100,3,3,2,471100,3,0,importer,net_importer,-1,1,2024,12
 Jordan,2024-12-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,12
 Kuwait,2024-12-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,12
 Lithuania,2024-12-01,0,0,0,0,204000,2,1,2,204000,2,0,importer,net_importer,-1,1,2024,12
-Malaysia,2024-12-01,219000,2,1,1,969335,6,2,4,1188335,8,0.184291466632,bidirectional,net_importer,-0.631417066736,1,2024,12
+Malaysia,2024-12-01,0,0,0,0,750335,4,2,3,750335,4,0,importer,net_importer,-1,1,2024,12
 Malta,2024-12-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,12
 Mexico,2024-12-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,12
 Mozambique,2024-12-01,0,0,0,0,0,0,0,0,0,0,,inactive,inactive,,0,2024,12
