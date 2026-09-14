@@ -188,7 +188,14 @@ The introduction of an autoregressive component is motivated primarily by the po
 
 ### Network dependence
 
-The matrix $\widetilde{W}_{t-1}=[\widetilde{w}_{n\ell,t-1}]$ denotes the selected row-normalised network influence matrix derived from the complete directed, flow-weighted LNG network. An outgoing specification uses the row-normalised matrix $W_{t-1}$, whereas an incoming specification can be obtained by row-normalising its transpose. These alternatives represent different economic mechanisms and may be compared through sensitivity analyses.
+The matrix 
+```math
+\widetilde{\mathbf{W}}_{t-1}
+=
+\left[\widetilde{w}_{n\ell,t-1}\right]
+```
+
+denotes the selected row-normalised network influence matrix derived from the complete directed, flow-weighted LNG network. An outgoing specification uses the row-normalised matrix $W_{t-1}$, whereas an incoming specification can be obtained by row-normalising its transpose. These alternatives represent different economic mechanisms and may be compared through sensitivity analyses.
 
 The term
 
