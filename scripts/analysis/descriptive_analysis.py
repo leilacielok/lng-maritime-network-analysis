@@ -11,9 +11,23 @@ import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 DATA_DIR = BASE_DIR / "data"
-OUTPUT_DIR = BASE_DIR / "eda_outputs"
+EDA_DIR = BASE_DIR / "eda_outputs"
+OUTPUT_DIR = EDA_DIR / "network_level"
+DATA_OUTPUT_DIR = OUTPUT_DIR / "data"
+DISTRIBUTIONS_DIR = OUTPUT_DIR / "distributions"
+CORRELATIONS_DIR = OUTPUT_DIR / "correlations"
+TEMPORAL_DIR = OUTPUT_DIR / "temporal"
+RANKINGS_DIR = OUTPUT_DIR / "rankings"
 
-OUTPUT_DIR.mkdir(exist_ok=True)
+for directory in [
+    OUTPUT_DIR,
+    DATA_OUTPUT_DIR,
+    DISTRIBUTIONS_DIR,
+    CORRELATIONS_DIR,
+    TEMPORAL_DIR,
+    RANKINGS_DIR,
+]:
+    directory.mkdir(parents=True, exist_ok=True)
 
 
 # ============================================================
@@ -92,7 +106,7 @@ def dataset_overview(df, name):
     print(missing[missing["missing_count"] > 0])
 
     missing.to_csv(
-        OUTPUT_DIR / f"{name.lower()}_missing_values.csv"
+        DATA_OUTPUT_DIR / f"{name.lower()}_missing_values.csv"
     )
 
     print("\nDuplicated rows:")
@@ -138,7 +152,7 @@ def analyze_nodes(nodes):
         print(node_types)
 
         node_types.to_csv(
-            OUTPUT_DIR / "nodes_by_type.csv",
+            DATA_OUTPUT_DIR / "nodes_by_type.csv",
             index=False
         )
 
@@ -151,7 +165,7 @@ def analyze_nodes(nodes):
         plt.tight_layout()
 
         plt.savefig(
-            OUTPUT_DIR / "nodes_by_type.png",
+            DISTRIBUTIONS_DIR / "nodes_by_type.png",
             dpi=300
         )
         plt.close()
@@ -187,7 +201,7 @@ def analyze_nodes(nodes):
         )
 
         countries.to_csv(
-            OUTPUT_DIR / "nodes_by_country.csv",
+            DATA_OUTPUT_DIR / "nodes_by_country.csv",
             index=False
         )
 
@@ -223,7 +237,7 @@ def analyze_nodes(nodes):
             )
 
             missing_country.to_csv(
-                OUTPUT_DIR / "nodes_missing_country.csv",
+                DATA_OUTPUT_DIR / "nodes_missing_country.csv",
                 index=False
             )
 
@@ -245,7 +259,7 @@ def analyze_nodes(nodes):
             )
 
             country_by_type.to_csv(
-                OUTPUT_DIR / "nodes_by_country_and_type.csv",
+                DATA_OUTPUT_DIR / "nodes_by_country_and_type.csv",
                 index=False
             )
 
@@ -294,7 +308,7 @@ def analyze_edges(edges):
         print(edge_types)
 
         edge_types.to_csv(
-            OUTPUT_DIR / "edge_types.csv",
+            DATA_OUTPUT_DIR / "edge_types.csv",
             index=False
         )
 
@@ -354,7 +368,7 @@ def analyze_edges(edges):
     )
 
     extreme_qa.to_csv(
-        OUTPUT_DIR / "extreme_values_qa.csv",
+        DATA_OUTPUT_DIR / "extreme_values_qa.csv",
         index=False
     )
 
@@ -628,7 +642,7 @@ def analyze_temporal_network(edges, monthly_qa):
 
     # Save node-month chokepoint throughput
     chokepoint_monthly.to_csv(
-        OUTPUT_DIR /
+        DATA_OUTPUT_DIR /
         "monthly_chokepoint_throughput.csv",
         index=False
     )
@@ -842,7 +856,7 @@ def analyze_temporal_network(edges, monthly_qa):
     )
 
     activity_detail.to_csv(
-        OUTPUT_DIR / "temporal_activity_detail.csv",
+        TEMPORAL_DIR / "temporal_activity_detail.csv",
         index=False
     )
     
@@ -861,7 +875,7 @@ def analyze_temporal_network(edges, monthly_qa):
     )
 
     monthly.to_csv(
-        OUTPUT_DIR /
+        TEMPORAL_DIR /
         "monthly_network_statistics.csv",
         index=False
     )
@@ -901,7 +915,7 @@ def analyze_temporal_network(edges, monthly_qa):
         )
 
     activity_watch.to_csv(
-        OUTPUT_DIR / "temporal_activity_watch.csv",
+        TEMPORAL_DIR / "temporal_activity_watch.csv",
         index=False
     )
     
@@ -931,7 +945,7 @@ def analyze_temporal_network(edges, monthly_qa):
     plt.tight_layout()
 
     plt.savefig(
-        OUTPUT_DIR /
+        TEMPORAL_DIR /
         "global_lng_export_volume_over_time.png",
         dpi=300
     )
@@ -964,7 +978,7 @@ def analyze_temporal_network(edges, monthly_qa):
     plt.tight_layout()
 
     plt.savefig(
-        OUTPUT_DIR /
+        TEMPORAL_DIR /
         "active_edges_over_time.png",
         dpi=300
     )
@@ -1000,7 +1014,7 @@ def analyze_temporal_network(edges, monthly_qa):
     plt.tight_layout()
 
     plt.savefig(
-        OUTPUT_DIR /
+        TEMPORAL_DIR /
         "mean_edge_traversals_per_voyage.png",
         dpi=300
     )
@@ -1034,7 +1048,7 @@ def analyze_temporal_network(edges, monthly_qa):
     plt.tight_layout()
 
     plt.savefig(
-        OUTPUT_DIR /
+        TEMPORAL_DIR /
         "edge_flow_hhi_over_time.png",
         dpi=300
     )
@@ -1070,7 +1084,7 @@ def analyze_temporal_network(edges, monthly_qa):
     plt.tight_layout()
 
     plt.savefig(
-        OUTPUT_DIR /
+        TEMPORAL_DIR /
         "top_10_edge_flow_share_over_time.png",
         dpi=300
     )
@@ -1106,7 +1120,7 @@ def analyze_temporal_network(edges, monthly_qa):
     plt.tight_layout()
 
     plt.savefig(
-        OUTPUT_DIR /
+        TEMPORAL_DIR /
         "chokepoint_flow_hhi_over_time.png",
         dpi=300
     )
@@ -1141,7 +1155,7 @@ def analyze_temporal_network(edges, monthly_qa):
     plt.tight_layout()
 
     plt.savefig(
-        OUTPUT_DIR /
+        TEMPORAL_DIR /
         "active_chokepoints_over_time.png",
         dpi=300
     )
@@ -1171,7 +1185,7 @@ def analyze_flow_distribution(edges):
     )
 
     statistics.to_csv(
-        OUTPUT_DIR / "lng_flow_descriptive_statistics.csv"
+        DATA_OUTPUT_DIR / "lng_flow_descriptive_statistics.csv"
     )
 
     # --------------------------------------------------------
@@ -1191,7 +1205,7 @@ def analyze_flow_distribution(edges):
     plt.tight_layout()
 
     plt.savefig(
-        OUTPUT_DIR / "lng_flow_distribution.png",
+        DISTRIBUTIONS_DIR / "lng_flow_distribution.png",
         dpi=300
     )
     plt.close()
@@ -1216,7 +1230,7 @@ def analyze_flow_distribution(edges):
         plt.tight_layout()
 
         plt.savefig(
-            OUTPUT_DIR / "lng_flow_distribution_log.png",
+            DISTRIBUTIONS_DIR / "lng_flow_distribution_log.png",
             dpi=300
         )
         plt.close()
@@ -1282,7 +1296,7 @@ def analyze_top_edges(edges):
     print(top_edges.head(20))
 
     top_edges.to_csv(
-        OUTPUT_DIR / "edges_ranked_by_cumulative_flow.csv",
+        RANKINGS_DIR / "edges_ranked_by_cumulative_flow.csv",
         index=False
     )
 
@@ -1507,7 +1521,7 @@ def analyze_node_activity(nodes, edges):
     # --------------------------------------------------------
 
     activity.to_csv(
-        OUTPUT_DIR / "node_activity.csv",
+        DATA_OUTPUT_DIR / "node_activity.csv",
         index=False
     )
 
@@ -1566,7 +1580,7 @@ def analyze_flow_concentration(edges):
         )
 
     edge_flow.to_csv(
-        OUTPUT_DIR / "edge_flow_concentration.csv",
+        DATA_OUTPUT_DIR / "edge_flow_concentration.csv",
         index=False
     )
 
@@ -1642,7 +1656,7 @@ def analyze_outliers(edges):
     print(results_df)
 
     results_df.to_csv(
-        OUTPUT_DIR / "outlier_summary.csv",
+        DATA_OUTPUT_DIR / "outlier_summary.csv",
         index=False
     )
 
@@ -1681,7 +1695,7 @@ def analyze_correlations(edges):
     print(corr.round(3))
 
     corr.to_csv(
-        OUTPUT_DIR / "spearman_correlations.csv"
+        CORRELATIONS_DIR / "spearman_correlations.csv"
     )
 
 

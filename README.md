@@ -13,6 +13,26 @@ These files are used by Script 01, which prepares the matched LNG voyages and th
 
 Unique origin–destination routes are reconstructed from LNG voyage data and intersected with the final chokepoint geometries. The resulting sequence of terminals and chokepoints is then used to construct a directed monthly multilayer network and to analyse node criticality through measures of scale, structural position, concentration and dependence.
 
+## Exploratory-analysis outputs
+
+All exploratory-analysis results are stored under `eda_outputs/`, grouped first
+by unit of analysis and then by output type:
+
+```text
+eda_outputs/
+├── network_level/
+├── node_month/
+└── terminal_month/
+    ├── data/
+    ├── correlations/
+    ├── distributions/
+    ├── rankings/
+    └── temporal/
+```
+
+Each unit-of-analysis directory follows the same five-category layout. The
+corresponding scripts are in `scripts/analysis/`.
+
 ## Data sources
 
 The principal sources are the `LNG_tanker_voyage.csv` and `LNG_terminal.csv` files from the LNG-T3 dataset (Zhou et al., 2026), IMF PortWatch, and the additional geographic references documented in the geometry registry.
