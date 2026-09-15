@@ -1,0 +1,156 @@
+route_id,from_node_id,to_node_id,from_terminal,to_terminal,chokepoint_node_id,chokepoint,minimum_distance_km,exact_intersection,within_5km,new_at_5km,within_10km,new_at_10km,within_25km,new_at_25km
+R435,LNGN0026,LNGN0136,Arzew-Bethioua LNG Terminal,Gibraltar LNG Terminal,CP008,Gibraltar Strait,0.2339895330612771,False,True,True,True,True,True,True
+R193,LNGN0328,LNGN0136,Rasgas LNG Terminal 3,Gibraltar LNG Terminal,CP008,Gibraltar Strait,0.3607609612326942,False,True,True,True,True,True,True
+R253,LNGN0083,LNGN0136,Damietta SEGAS LNG Terminal,Gibraltar LNG Terminal,CP008,Gibraltar Strait,0.3607609612326942,False,True,True,True,True,True,True
+R478,LNGN0101,LNGN0136,Egyptian LNG Terminal,Gibraltar LNG Terminal,CP008,Gibraltar Strait,0.3607609612326942,False,True,True,True,True,True,True
+R629,LNGN0274,LNGN0136,Oman Qalhat LNG Terminal,Gibraltar LNG Terminal,CP008,Gibraltar Strait,0.3607609612326942,False,True,True,True,True,True,True
+R866,LNGN0206,LNGN0136,Kiyanly LNG Terminal,Gibraltar LNG Terminal,CP008,Gibraltar Strait,0.3607609612326942,False,True,True,True,True,True,True
+R209,LNGN0297,LNGN0426,Pluto LNG Terminal,Tongyoung LNG Terminal,CP012,Korea Strait,19.034079214702032,False,False,False,False,False,True,True
+R292,LNGN0142,LNGN0426,Gorgon LNG Terminal,Tongyoung LNG Terminal,CP012,Korea Strait,19.034079214702032,False,False,False,False,False,True,True
+R548,LNGN0441,LNGN0426,Wheatstone LNG Terminal,Tongyoung LNG Terminal,CP012,Korea Strait,19.034079214702032,False,False,False,False,False,True,True
+R045,LNGN0345,LNGN0181,Sabine Pass LNG Terminal,Incheon LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R063,LNGN0345,LNGN0314,Sabine Pass LNG Terminal,Pyeongtaek LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R069,LNGN0328,LNGN0426,Rasgas LNG Terminal 3,Tongyoung LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R082,LNGN0124,LNGN0040,Freeport LNG Terminal,Boryeong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R144,LNGN0050,LNGN0040,Calcasieu Pass LNG Terminal,Boryeong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R189,LNGN0070,LNGN0314,Corpus Christi LNG Terminal,Pyeongtaek LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R196,LNGN0345,LNGN0421,Sabine Pass LNG Terminal,Tianjin LNG Terminal (Sinopec),CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R227,LNGN0124,LNGN0421,Freeport LNG Terminal,Tianjin LNG Terminal (Sinopec),CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R236,LNGN0309,LNGN0426,Prelude FLNG Terminal,Tongyoung LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R246,LNGN0050,LNGN0421,Calcasieu Pass LNG Terminal,Tianjin LNG Terminal (Sinopec),CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R255,LNGN0124,LNGN0314,Freeport LNG Terminal,Pyeongtaek LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R271,LNGN0351,LNGN0421,Sakhalin II LNG Terminal,Tianjin LNG Terminal (Sinopec),CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R286,LNGN0124,LNGN0181,Freeport LNG Terminal,Incheon LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R323,LNGN0050,LNGN0314,Calcasieu Pass LNG Terminal,Pyeongtaek LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R334,LNGN0142,LNGN0354,Gorgon LNG Terminal,Samcheok LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R340,LNGN0274,LNGN0426,Oman Qalhat LNG Terminal,Tongyoung LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R372,LNGN0050,LNGN0449,Calcasieu Pass LNG Terminal,Xintian Tangshan LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R373,LNGN0070,LNGN0081,Corpus Christi LNG Terminal,Dalian LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R375,LNGN0070,LNGN0181,Corpus Christi LNG Terminal,Incheon LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R384,LNGN0124,LNGN0156,Freeport LNG Terminal,Gwangyang LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R414,LNGN0345,LNGN0040,Sabine Pass LNG Terminal,Boryeong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R421,LNGN0345,LNGN0363,Sabine Pass LNG Terminal,Shandong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R422,LNGN0351,LNGN0156,Sakhalin II LNG Terminal,Gwangyang LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R423,LNGN0351,LNGN0181,Sakhalin II LNG Terminal,Incheon LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R450,LNGN0050,LNGN0156,Calcasieu Pass LNG Terminal,Gwangyang LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R452,LNGN0050,LNGN0181,Calcasieu Pass LNG Terminal,Incheon LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R457,LNGN0050,LNGN0363,Calcasieu Pass LNG Terminal,Shandong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R465,LNGN0070,LNGN0040,Corpus Christi LNG Terminal,Boryeong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R469,LNGN0070,LNGN0421,Corpus Christi LNG Terminal,Tianjin LNG Terminal (Sinopec),CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R470,LNGN0070,LNGN0449,Corpus Christi LNG Terminal,Xintian Tangshan LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R476,LNGN0085,LNGN0426,Das Island LNG Terminal,Tongyoung LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R491,LNGN0124,LNGN0363,Freeport LNG Terminal,Shandong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R493,LNGN0124,LNGN0449,Freeport LNG Terminal,Xintian Tangshan LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R511,LNGN0261,LNGN0426,Nigeria LNG Terminal,Tongyoung LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R539,LNGN0345,LNGN0319,Sabine Pass LNG Terminal,Qidong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R560,LNGN0027,LNGN0081,Atlantic LNG Terminal,Dalian LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R562,LNGN0027,LNGN0181,Atlantic LNG Terminal,Incheon LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R567,LNGN0027,LNGN0421,Atlantic LNG Terminal,Tianjin LNG Terminal (Sinopec),CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R591,LNGN0083,LNGN0354,Damietta SEGAS LNG Terminal,Samcheok LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R662,LNGN0351,LNGN0059,Sakhalin II LNG Terminal,Chaozhou LNG Terminal (Huaying),CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R663,LNGN0351,LNGN0081,Sakhalin II LNG Terminal,Dalian LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R664,LNGN0351,LNGN0319,Sakhalin II LNG Terminal,Qidong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R665,LNGN0351,LNGN0449,Sakhalin II LNG Terminal,Xintian Tangshan LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R666,LNGN0351,LNGN0463,Sakhalin II LNG Terminal,Yung-An LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R683,LNGN0013,LNGN0319,American LNG Hialeah Terminal,Qidong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R702,LNGN0027,LNGN0040,Atlantic LNG Terminal,Boryeong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R749,LNGN0070,LNGN0156,Corpus Christi LNG Terminal,Gwangyang LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R762,LNGN0070,LNGN0319,Corpus Christi LNG Terminal,Qidong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R824,LNGN0124,LNGN0081,Freeport LNG Terminal,Dalian LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R835,LNGN0124,LNGN0319,Freeport LNG Terminal,Qidong LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R911,LNGN0274,LNGN0354,Oman Qalhat LNG Terminal,Samcheok LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R933,LNGN0297,LNGN0354,Pluto LNG Terminal,Samcheok LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R977,LNGN0345,LNGN0081,Sabine Pass LNG Terminal,Dalian LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R980,LNGN0345,LNGN0156,Sabine Pass LNG Terminal,Gwangyang LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R990,LNGN0345,LNGN0449,Sabine Pass LNG Terminal,Xintian Tangshan LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R992,LNGN0351,LNGN0195,Sakhalin II LNG Terminal,Jieyang LNG Terminal (PipeChina),CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R995,LNGN0351,LNGN0314,Sakhalin II LNG Terminal,Pyeongtaek LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R997,LNGN0351,LNGN0473,Sakhalin II LNG Terminal,Zhuhai LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R1011,LNGN0423,LNGN0426,Tiga Malaysia LNG Terminal,Tongyoung LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R1026,LNGN0441,LNGN0354,Wheatstone LNG Terminal,Samcheok LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R1031,LNGN0452,LNGN0354,Yamal LNG Terminal,Samcheok LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R1034,LNGN0452,LNGN0426,Yamal LNG Terminal,Tongyoung LNG Terminal,CP012,Korea Strait,19.034079214702036,False,False,False,False,False,True,True
+R127,LNGN0142,LNGN0405,Gorgon LNG Terminal,Tanjung Benoa FSRU,CP015,Lombok Strait,19.10226689649046,False,False,False,False,False,True,True
+R170,LNGN0297,LNGN0405,Pluto LNG Terminal,Tanjung Benoa FSRU,CP015,Lombok Strait,19.10226689649046,False,False,False,False,False,True,True
+R430,LNGN0441,LNGN0405,Wheatstone LNG Terminal,Tanjung Benoa FSRU,CP015,Lombok Strait,19.10226689649046,False,False,False,False,False,True,True
+R856,LNGN0180,LNGN0405,Ichthys FLNG Terminal,Tanjung Benoa FSRU,CP015,Lombok Strait,19.10226689649046,False,False,False,False,False,True,True
+R942,LNGN0309,LNGN0244,Prelude FLNG Terminal,Montoir LNG Terminal,CP015,Lombok Strait,22.721032858258305,False,False,False,False,False,True,True
+R209,LNGN0297,LNGN0426,Pluto LNG Terminal,Tongyoung LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R257,LNGN0142,LNGN0156,Gorgon LNG Terminal,Gwangyang LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R292,LNGN0142,LNGN0426,Gorgon LNG Terminal,Tongyoung LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R334,LNGN0142,LNGN0354,Gorgon LNG Terminal,Samcheok LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R548,LNGN0441,LNGN0426,Wheatstone LNG Terminal,Tongyoung LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R931,LNGN0297,LNGN0156,Pluto LNG Terminal,Gwangyang LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R933,LNGN0297,LNGN0354,Pluto LNG Terminal,Samcheok LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R1001,LNGN0423,LNGN0156,Tiga Malaysia LNG Terminal,Gwangyang LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R1007,LNGN0423,LNGN0253,Tiga Malaysia LNG Terminal,Nagasaki LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R1010,LNGN0423,LNGN0425,Tiga Malaysia LNG Terminal,Tobata LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R1011,LNGN0423,LNGN0426,Tiga Malaysia LNG Terminal,Tongyoung LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R1018,LNGN0441,LNGN0156,Wheatstone LNG Terminal,Gwangyang LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R1026,LNGN0441,LNGN0354,Wheatstone LNG Terminal,Samcheok LNG Terminal,CP014,Luzon Strait,0.5932781307966342,False,True,True,True,True,True,True
+R192,LNGN0309,LNGN0463,Prelude FLNG Terminal,Yung-An LNG Terminal,CP027,Mindoro Strait,5.22041987865922,False,False,False,True,True,True,True
+R408,LNGN0309,LNGN0437,Prelude FLNG Terminal,Wenzhou LNG Terminal,CP027,Mindoro Strait,5.22041987865922,False,False,False,True,True,True,True
+R859,LNGN0180,LNGN0463,Ichthys FLNG Terminal,Yung-An LNG Terminal,CP027,Mindoro Strait,5.22041987865922,False,False,False,True,True,True,True
+R941,LNGN0309,LNGN0175,Prelude FLNG Terminal,Hong Kong FSRU,CP027,Mindoro Strait,5.22041987865922,False,False,False,True,True,True,True
+R945,LNGN0309,LNGN0473,Prelude FLNG Terminal,Zhuhai LNG Terminal,CP027,Mindoro Strait,5.22041987865922,False,False,False,True,True,True,True
+R098,LNGN0322,LNGN0463,Queensland Curtis LNG Terminal,Yung-An LNG Terminal,CP027,Mindoro Strait,5.2204198786592295,False,False,False,True,True,True,True
+R302,LNGN0322,LNGN0195,Queensland Curtis LNG Terminal,Jieyang LNG Terminal (PipeChina),CP027,Mindoro Strait,5.2204198786592295,False,False,False,True,True,True,True
+R962,LNGN0322,LNGN0175,Queensland Curtis LNG Terminal,Hong Kong FSRU,CP027,Mindoro Strait,5.2204198786592295,False,False,False,True,True,True,True
+R059,LNGN0297,LNGN0195,Pluto LNG Terminal,Jieyang LNG Terminal (PipeChina),CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R065,LNGN0297,LNGN0463,Pluto LNG Terminal,Yung-An LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R083,LNGN0142,LNGN0040,Gorgon LNG Terminal,Boryeong LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R085,LNGN0142,LNGN0463,Gorgon LNG Terminal,Yung-An LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R086,LNGN0297,LNGN0314,Pluto LNG Terminal,Pyeongtaek LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R088,LNGN0441,LNGN0463,Wheatstone LNG Terminal,Yung-An LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R093,LNGN0142,LNGN0472,Gorgon LNG Terminal,Zhoushan LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R118,LNGN0142,LNGN0319,Gorgon LNG Terminal,Qidong LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R134,LNGN0142,LNGN0314,Gorgon LNG Terminal,Pyeongtaek LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R148,LNGN0142,LNGN0181,Gorgon LNG Terminal,Incheon LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R149,LNGN0297,LNGN0421,Pluto LNG Terminal,Tianjin LNG Terminal (Sinopec),CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R168,LNGN0142,LNGN0195,Gorgon LNG Terminal,Jieyang LNG Terminal (PipeChina),CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R207,LNGN0142,LNGN0449,Gorgon LNG Terminal,Xintian Tangshan LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R209,LNGN0297,LNGN0426,Pluto LNG Terminal,Tongyoung LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R229,LNGN0142,LNGN0421,Gorgon LNG Terminal,Tianjin LNG Terminal (Sinopec),CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R257,LNGN0142,LNGN0156,Gorgon LNG Terminal,Gwangyang LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R259,LNGN0142,LNGN0437,Gorgon LNG Terminal,Wenzhou LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R266,LNGN0297,LNGN0181,Pluto LNG Terminal,Incheon LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R292,LNGN0142,LNGN0426,Gorgon LNG Terminal,Tongyoung LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R299,LNGN0297,LNGN0040,Pluto LNG Terminal,Boryeong LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R336,LNGN0142,LNGN0473,Gorgon LNG Terminal,Zhuhai LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R355,LNGN0441,LNGN0472,Wheatstone LNG Terminal,Zhoushan LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R390,LNGN0142,LNGN0163,Gorgon LNG Terminal,Hainan Shennan LNG Storage Facility,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R403,LNGN0297,LNGN0319,Pluto LNG Terminal,Qidong LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R404,LNGN0297,LNGN0437,Pluto LNG Terminal,Wenzhou LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R427,LNGN0441,LNGN0040,Wheatstone LNG Terminal,Boryeong LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R428,LNGN0441,LNGN0319,Wheatstone LNG Terminal,Qidong LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R495,LNGN0142,LNGN0081,Gorgon LNG Terminal,Dalian LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R496,LNGN0142,LNGN0175,Gorgon LNG Terminal,Hong Kong FSRU,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R498,LNGN0142,LNGN0398,Gorgon LNG Terminal,Taichung LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R518,LNGN0297,LNGN0363,Pluto LNG Terminal,Shandong LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R519,LNGN0297,LNGN0447,Pluto LNG Terminal,Wuhaogou LNG Storage Facility,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R520,LNGN0297,LNGN0473,Pluto LNG Terminal,Zhuhai LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R546,LNGN0441,LNGN0314,Wheatstone LNG Terminal,Pyeongtaek LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R547,LNGN0441,LNGN0421,Wheatstone LNG Terminal,Tianjin LNG Terminal (Sinopec),CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R548,LNGN0441,LNGN0426,Wheatstone LNG Terminal,Tongyoung LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R631,LNGN0297,LNGN0081,Pluto LNG Terminal,Dalian LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R632,LNGN0297,LNGN0163,Pluto LNG Terminal,Hainan Shennan LNG Storage Facility,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R633,LNGN0297,LNGN0175,Pluto LNG Terminal,Hong Kong FSRU,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R672,LNGN0441,LNGN0398,Wheatstone LNG Terminal,Taichung LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R673,LNGN0441,LNGN0437,Wheatstone LNG Terminal,Wenzhou LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R844,LNGN0142,LNGN0363,Gorgon LNG Terminal,Shandong LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R931,LNGN0297,LNGN0156,Pluto LNG Terminal,Gwangyang LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R934,LNGN0297,LNGN0398,Pluto LNG Terminal,Taichung LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R935,LNGN0297,LNGN0449,Pluto LNG Terminal,Xintian Tangshan LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R936,LNGN0297,LNGN0472,Pluto LNG Terminal,Zhoushan LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R1016,LNGN0441,LNGN0059,Wheatstone LNG Terminal,Chaozhou LNG Terminal (Huaying),CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R1018,LNGN0441,LNGN0156,Wheatstone LNG Terminal,Gwangyang LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R1019,LNGN0441,LNGN0163,Wheatstone LNG Terminal,Hainan Shennan LNG Storage Facility,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R1021,LNGN0441,LNGN0181,Wheatstone LNG Terminal,Incheon LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R1022,LNGN0441,LNGN0195,Wheatstone LNG Terminal,Jieyang LNG Terminal (PipeChina),CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R1028,LNGN0441,LNGN0363,Wheatstone LNG Terminal,Shandong LNG Terminal,CP027,Mindoro Strait,11.535781025311127,False,False,False,False,False,True,True
+R334,LNGN0142,LNGN0354,Gorgon LNG Terminal,Samcheok LNG Terminal,CP027,Mindoro Strait,11.535781025311131,False,False,False,False,False,True,True
+R933,LNGN0297,LNGN0354,Pluto LNG Terminal,Samcheok LNG Terminal,CP027,Mindoro Strait,11.535781025311131,False,False,False,False,False,True,True
+R1026,LNGN0441,LNGN0354,Wheatstone LNG Terminal,Samcheok LNG Terminal,CP027,Mindoro Strait,11.535781025311131,False,False,False,False,False,True,True
+R965,LNGN0322,LNGN0230,Queensland Curtis LNG Terminal,Map Ta Phut LNG Terminal 2,CP016,Ombai Strait,17.675033196149318,False,False,False,False,False,True,True
+R242,LNGN0441,LNGN0164,Wheatstone LNG Terminal,Hakodate LNG Terminal,CP013,Tsugaru Strait,7.909327959771025,False,False,False,True,True,True,True
+R391,LNGN0142,LNGN0164,Gorgon LNG Terminal,Hakodate LNG Terminal,CP013,Tsugaru Strait,7.909327959771025,False,False,False,True,True,True,True

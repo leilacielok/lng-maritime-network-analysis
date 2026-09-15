@@ -1,0 +1,29 @@
+chokepoint_node_id,chokepoint,geometry_status,exact_route_count,minimum_route_distance_km,route_count_5km,additional_routes_5km,route_count_10km,additional_routes_10km,route_count_25km,additional_routes_25km,sensitivity_status
+CP001,Suez Canal,PUBLISHED_POLYGON_READY,151,0.0,151,0,151,0,151,0,exactly_observed
+CP002,Panama Canal,DERIVED_OPERATIONAL_CORRIDOR__FINAL_FOR_TRANSIT_CLASSIFICATION,148,0.0,148,0,148,0,148,0,exactly_observed
+CP003,Bosporus Strait,DERIVED_OPERATIONAL_CORRIDOR__FINAL_FOR_TRANSIT_CLASSIFICATION,0,71.32231220975497,0,0,0,0,0,0,not_observed_within_25km
+CP004,Bab el-Mandeb Strait,PUBLISHED_POLYGON_READY,147,0.0,147,0,147,0,147,0,exactly_observed
+CP005,Malacca Strait,MARINE_REGIONS_DETAILED_POLYGON__FINAL,133,0.0,133,0,133,0,133,0,exactly_observed
+CP006,Strait of Hormuz,MARINE_REGIONS_SEAVOX_DETAILED_POLYGON__FINAL,122,0.0,122,0,122,0,122,0,exactly_observed
+CP007,Cape of Good Hope,PUBLISHED_POLYGON_READY,65,0.0,65,0,65,0,65,0,exactly_observed
+CP008,Gibraltar Strait,MARINE_REGIONS_DETAILED_POLYGON__FINAL,216,0.0,222,6,222,6,222,6,exactly_observed
+CP009,Dover Strait,MARINE_REGIONS_DETAILED_POLYGON__FINAL,91,0.0,91,0,91,0,91,0,exactly_observed
+CP010,Oresund Strait,DERIVED_OPERATIONAL_GATE__BLOCK2,47,0.0,47,0,47,0,47,0,exactly_observed
+CP011,Taiwan Strait,DERIVED_OPERATIONAL_GATE__BLOCK2,152,0.0,152,0,152,0,152,0,exactly_observed
+CP012,Korea Strait,DERIVED_OPERATIONAL_GATE__BLOCK2,3,0.0,3,0,3,0,68,65,exactly_observed
+CP013,Tsugaru Strait,DERIVED_OPERATIONAL_GATE_REFINED__TSUGARU,50,0.0,50,0,52,2,52,2,exactly_observed
+CP014,Luzon Strait,DERIVED_OPERATIONAL_GATE__BLOCK2,43,0.0,56,13,56,13,56,13,exactly_observed
+CP015,Lombok Strait,POINT_PLACEHOLDER__GEOMETRY_TO_SOURCE,69,0.0,69,0,69,0,74,5,exactly_observed
+CP016,Ombai Strait,DERIVED_OPERATIONAL_GATE__BLOCK3,57,0.0,57,0,57,0,58,1,exactly_observed
+CP017,Bohai Strait,DERIVED_OPERATIONAL_GATE__BLOCK3,35,0.0,35,0,35,0,35,0,exactly_observed
+CP018,Torres Strait,POINT_PLACEHOLDER__GEOMETRY_TO_SOURCE,5,0.0,5,0,5,0,5,0,exactly_observed
+CP019,Sunda Strait,POINT_PLACEHOLDER__GEOMETRY_TO_SOURCE,51,0.0,51,0,51,0,51,0,exactly_observed
+CP020,Makassar Strait,MARINE_REGIONS_DETAILED_POLYGON__FINAL,58,0.0,58,0,58,0,58,0,exactly_observed
+CP021,Magellan Strait,DERIVED_OPERATIONAL_GATE__BLOCK3,2,0.0,2,0,2,0,2,0,exactly_observed
+CP022,Yucatan Channel,DERIVED_OPERATIONAL_GATE__BLOCK3,137,0.0,137,0,137,0,137,0,exactly_observed
+CP023,Windward Passage,DERIVED_OPERATIONAL_GATE__BLOCK3,10,0.0,10,0,10,0,10,0,exactly_observed
+CP024,Mona Passage,DERIVED_OPERATIONAL_GATE__BLOCK3,17,0.0,17,0,17,0,17,0,exactly_observed
+CP025,Balabac Strait,DERIVED_OPERATIONAL_GATE__BLOCK3,0,162.03877055000223,0,0,0,0,0,0,not_observed_within_25km
+CP026,Bering Strait,POINT_PLACEHOLDER__GEOMETRY_TO_SOURCE,0,2617.316473696976,0,0,0,0,0,0,not_observed_within_25km
+CP027,Mindoro Strait,DERIVED_OPERATIONAL_GATE__BLOCK3,0,5.22041987865922,0,0,8,8,63,63,near_miss_within_10km
+CP028,Kerch Strait,DERIVED_OPERATIONAL_GATE__BLOCK3,0,829.7424774734691,0,0,0,0,0,0,not_observed_within_25km

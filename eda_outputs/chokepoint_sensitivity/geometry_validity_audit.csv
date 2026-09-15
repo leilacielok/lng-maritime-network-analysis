@@ -1,0 +1,1066 @@
+feature_type,feature_id,feature_name,geometry_type,is_valid,validity_reason,is_empty
+route,R001,Yamal LNG Terminal -> Zeebrugge LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R002,Rasgas LNG Terminal 3 -> GasPort FSRU,MultiLineString,True,Valid Geometry,False
+route,R003,Yamal LNG Terminal -> Montoir LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R004,Rasgas LNG Terminal 3 -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R005,Rasgas LNG Terminal 3 -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R006,Rasgas LNG Terminal 3 -> Zeebrugge LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R007,Nigeria LNG Terminal -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R008,Yamal LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R009,Rasgas LNG Terminal 3 -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R010,Rasgas LNG Terminal 3 -> Taichung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R011,Yamal LNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R012,Yamal LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R013,Skikda LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R014,Rasgas LNG Terminal 3 -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R015,Rasgas LNG Terminal 3 -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R016,Rasgas LNG Terminal 3 -> Krk FSRU,MultiLineString,True,Valid Geometry,False
+route,R017,Rasgas LNG Terminal 3 -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R018,Sabine Pass LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R019,Vysotsk LNG Terminal -> Tornio Manga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R020,Arzew-Bethioua LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R021,Rasgas LNG Terminal 3 -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R022,Rasgas LNG Terminal 3 -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R023,Rasgas LNG Terminal 3 -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R024,Vysotsk LNG Terminal -> Zeebrugge LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R025,Rasgas LNG Terminal 3 -> Kochi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R026,Pluto LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R027,Arzew-Bethioua LNG Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R028,Nigeria LNG Terminal -> Huelva LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R029,Arzew-Bethioua LNG Terminal -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R030,Rasgas LNG Terminal 3 -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R031,Sabine Pass LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R032,Rasgas LNG Terminal 3 -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R033,Pluto LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R034,Rasgas LNG Terminal 3 -> Jebel Ali FLNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R035,Rasgas LNG Terminal 3 -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R036,Rasgas LNG Terminal 3 -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R037,Skikda LNG Terminal -> Panigaglia LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R038,Corpus Christi LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R039,Pluto LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R040,Yamal LNG Terminal -> Mugardos LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R041,Das Island LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R042,Rasgas LNG Terminal 3 -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R043,Hammerfest LNG Snohvit Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R044,Sabine Pass LNG Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R045,Sabine Pass LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R046,Sabine Pass LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R047,Vysotsk LNG Terminal -> Brunnsviksholme LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R048,Corpus Christi LNG Terminal -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R049,Nigeria LNG Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R050,Rasgas LNG Terminal 3 -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R051,Corpus Christi LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R052,Corpus Christi LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R053,Rasgas LNG Terminal 3 -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R054,Nigeria LNG Terminal -> Montoir LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R055,Hammerfest LNG Snohvit Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R056,Pluto LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R057,Freeport LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R058,Nigeria LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R059,Pluto LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R060,Vysotsk LNG Terminal -> Lysekil LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R061,Yamal LNG Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R062,Corpus Christi LNG Terminal -> Huelva LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R063,Sabine Pass LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R064,Pluto LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R065,Pluto LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R066,Das Island LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R067,Sabine Pass LNG Terminal -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R068,Nigeria LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R069,Rasgas LNG Terminal 3 -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R070,Sabine Pass LNG Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R071,Sabine Pass LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R072,Freeport LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R073,Gorgon LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R074,Queensland Curtis LNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R075,Wheatstone LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R076,Calcasieu Pass LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R077,Hammerfest LNG Snohvit Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R078,Sabine Pass LNG Terminal -> Eemshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R079,Nigeria LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R080,Sabine Pass LNG Terminal -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R081,Das Island LNG Terminal -> Jebel Ali FLNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R082,Freeport LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R083,Gorgon LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R084,Gorgon LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R085,Gorgon LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R086,Pluto LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R087,Sabine Pass LNG Terminal -> Montoir LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R088,Wheatstone LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R089,Yamal LNG Terminal -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R090,Yamal LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R091,Sabine Pass LNG Terminal -> Zeebrugge LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R092,Calcasieu Pass LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R093,Gorgon LNG Terminal -> Zhoushan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R094,Nigeria LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R095,Yamal LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R096,Nigeria LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R097,Nigeria LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R098,Queensland Curtis LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R099,Sabine Pass LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R100,Atlantic LNG Terminal -> Quintero LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R101,Calcasieu Pass LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R102,Freeport LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R103,Skikda LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R104,Wheatstone LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R105,Arzew-Bethioua LNG Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R106,Arzew-Bethioua LNG Terminal -> Panigaglia LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R107,Calcasieu Pass LNG Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R108,Corpus Christi LNG Terminal -> Eemshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R109,Nigeria LNG Terminal -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R110,Nigeria LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R111,Sabine Pass LNG Terminal -> Huelva LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R112,Yamal LNG Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R113,Atlantic LNG Terminal -> Penuelas LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R114,Calcasieu Pass LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R115,Calcasieu Pass LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R116,Corpus Christi LNG Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R117,Das Island LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R118,Gorgon LNG Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R119,Nigeria LNG Terminal -> GasPort FSRU,MultiLineString,True,Valid Geometry,False
+route,R120,Pluto LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R121,Pluto LNG Terminal -> Yanai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R122,Rasgas LNG Terminal 3 -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R123,Yamal LNG Terminal -> Huelva LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R124,Arzew-Bethioua LNG Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R125,Atlantic LNG Terminal -> Everett Marine Terminal,MultiLineString,True,Valid Geometry,False
+route,R126,Calcasieu Pass LNG Terminal -> Montoir LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R127,Gorgon LNG Terminal -> Tanjung Benoa FSRU,MultiLineString,True,Valid Geometry,False
+route,R128,Rasgas LNG Terminal 3 -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R129,Arzew-Bethioua LNG Terminal -> DÃ¶rtyol FSRU,MultiLineString,True,Valid Geometry,False
+route,R130,Corpus Christi LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R131,Corpus Christi LNG Terminal -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R132,Elba Island LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R133,Freeport LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R134,Gorgon LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R135,Gorgon LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R136,Hammerfest LNG Snohvit Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R137,Nigeria LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R138,Pluto LNG Terminal -> Melaka FSRU,MultiLineString,True,Valid Geometry,False
+route,R139,Sabine Pass LNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R140,Sabine Pass LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R141,Tiga Malaysia LNG Terminal -> Pengerang Johor LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R142,Yamal LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R143,Yamal LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R144,Calcasieu Pass LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R145,Calcasieu Pass LNG Terminal -> Ennore LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R146,Corpus Christi LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R147,Corpus Christi LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R148,Gorgon LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R149,Pluto LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R150,Queensland Curtis LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R151,Risavika LNG Terminal -> Lysekil LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R152,Sabine Pass LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R153,Sabine Pass LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R154,Sabine Pass LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R155,Sabine Pass LNG Terminal -> Taichung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R156,Sabine Pass LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R157,Tiga Malaysia LNG Terminal -> Pinghu LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R158,Wheatstone LNG Terminal -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R159,Wheatstone LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R160,Arzew-Bethioua LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R161,Atlantic LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R162,Calcasieu Pass LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R163,Calcasieu Pass LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R164,Corpus Christi LNG Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R165,Corpus Christi LNG Terminal -> Taichung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R166,Damietta SEGAS LNG Terminal -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R167,Freeport LNG Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R168,Gorgon LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R169,Nigeria LNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R170,Pluto LNG Terminal -> Tanjung Benoa FSRU,MultiLineString,True,Valid Geometry,False
+route,R171,Queensland Curtis LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R172,Rasgas LNG Terminal 3 -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R173,Rasgas LNG Terminal 3 -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R174,Sabine Pass LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R175,Sabine Pass LNG Terminal -> Mugardos LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R176,Vysotsk LNG Terminal -> Fredrikstad LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R177,Das Island LNG Terminal -> Pengerang Johor LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R178,Freeport LNG Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R179,Rasgas LNG Terminal 3 -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R180,Rasgas LNG Terminal 3 -> Melaka FSRU,MultiLineString,True,Valid Geometry,False
+route,R181,Sabine Pass LNG Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R182,Sabine Pass LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R183,Sabine Pass LNG Terminal -> Quintero LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R184,Sabine Pass LNG Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R185,Sabine Pass LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R186,Arzew-Bethioua LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R187,Cameroon FLNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R188,Corpus Christi LNG Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R189,Corpus Christi LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R190,Corpus Christi LNG Terminal -> Zeebrugge LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R191,Nigeria LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R192,Prelude FLNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R193,Rasgas LNG Terminal 3 -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R194,Rasgas LNG Terminal 3 -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R195,Sabine Pass LNG Terminal -> Mejillones LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R196,Sabine Pass LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R197,Skikda LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R198,Vysotsk LNG Terminal -> Pori LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R199,Bontang LNG Terminal -> Nusantara Regas Satu Terminal,MultiLineString,True,Valid Geometry,False
+route,R200,Calcasieu Pass LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R201,Calcasieu Pass LNG Terminal -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R202,Cameroon FLNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R203,Corpus Christi LNG Terminal -> El Musel LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R204,Corpus Christi LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R205,Corpus Christi LNG Terminal -> Montoir LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R206,Freeport LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R207,Gorgon LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R208,Pluto LNG Terminal -> Kagoshima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R209,Pluto LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R210,Rasgas LNG Terminal 3 -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R211,Rasgas LNG Terminal 3 -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R212,Rasgas LNG Terminal 3 -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R213,Rasgas LNG Terminal 3 -> Zhoushan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R214,Sabine Pass LNG Terminal -> Dabhol LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R215,Sabine Pass LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R216,Sabine Pass LNG Terminal -> Wilhelmshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R217,Skikda LNG Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R218,Vysotsk LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R219,Yamal LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R220,Atlantic LNG Terminal -> Saint John LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R221,Calcasieu Pass LNG Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R222,Calcasieu Pass LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R223,Calcasieu Pass LNG Terminal -> Zeebrugge LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R224,Corpus Christi LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R225,Das Island LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R226,Freeport LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R227,Freeport LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R228,Freeport LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R229,Gorgon LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R230,Hammerfest LNG Snohvit Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R231,Hammerfest LNG Snohvit Terminal -> Montoir LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R232,Nigeria LNG Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R233,Nigeria LNG Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R234,Nigeria LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R235,Nigeria LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R236,Prelude FLNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R237,Punta Europa LNG Terminal -> Quintero LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R238,Queensland Curtis LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R239,Rasgas LNG Terminal 3 -> Mundra LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R240,Sabine Pass LNG Terminal -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R241,Sakhalin II LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R242,Wheatstone LNG Terminal -> Hakodate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R243,Wheatstone LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R244,Yamal LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R245,Calcasieu Pass LNG Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R246,Calcasieu Pass LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R247,Calcasieu Pass LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R248,Corpus Christi LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R249,Corpus Christi LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R250,Corpus Christi LNG Terminal -> Mejillones LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R251,Corpus Christi LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R252,Damietta SEGAS LNG Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R253,Damietta SEGAS LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R254,Das Island LNG Terminal -> Dabhol LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R255,Freeport LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R256,Gorgon LNG Terminal -> Arun LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R257,Gorgon LNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R258,Gorgon LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R259,Gorgon LNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R260,Gorgon LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R261,Hammerfest LNG Snohvit Terminal -> Inkoo FSRU,MultiLineString,True,Valid Geometry,False
+route,R262,Hammerfest LNG Snohvit Terminal -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R263,Nigeria LNG Terminal -> Mundra LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R264,Nigeria LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R265,Nigeria LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R266,Pluto LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R267,Pluto LNG Terminal -> Mizushima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R268,Queensland Curtis LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R269,Rasgas LNG Terminal 3 -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R270,Rasgas LNG Terminal 3 -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R271,Sakhalin II LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R272,Yamal LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R273,Atlantic LNG Terminal -> Old Harbour FSRU,MultiLineString,True,Valid Geometry,False
+route,R274,Atlantic LNG Terminal -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R275,Calcasieu Pass LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R276,Calcasieu Pass LNG Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R277,Calcasieu Pass LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R278,Calcasieu Pass LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R279,Calcasieu Pass LNG Terminal -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R280,Corpus Christi LNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R281,Corpus Christi LNG Terminal -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R282,Corpus Christi LNG Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R283,Damietta SEGAS LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R284,Das Island LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R285,Freeport LNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R286,Freeport LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R287,Freeport LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R288,Freeport LNG Terminal -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R289,Freeport LNG Terminal -> Wilhelmshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R290,Freeport LNG Terminal -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R291,Gorgon LNG Terminal -> Guangxi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R292,Gorgon LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R293,Gorgon LNG Terminal -> Yanai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R294,Nigeria LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R295,Nigeria LNG Terminal -> Mugardos LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R296,Nigeria LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R297,Oman Qalhat LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R298,Oman Qalhat LNG Terminal -> Kochi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R299,Pluto LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R300,Prelude FLNG Terminal -> Arun LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R301,Prelude FLNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R302,Queensland Curtis LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R303,Queensland Curtis LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R304,Rasgas LNG Terminal 3 -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R305,Rasgas LNG Terminal 3 -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R306,Risavika LNG Terminal -> Brunnsviksholme LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R307,Sabine Pass LNG Terminal -> Cove Point LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R308,Sabine Pass LNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R309,Skikda LNG Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R310,Tiga Malaysia LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R311,Tiga Malaysia LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R312,Wheatstone LNG Terminal -> Mizushima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R313,Yamal LNG Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R314,Yamal LNG Terminal -> Guangxi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R315,Arzew-Bethioua LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R316,Arzew-Bethioua LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R317,Arzew-Bethioua LNG Terminal -> Huelva LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R318,Atlantic LNG Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R319,Atlantic LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R320,Calcasieu Pass LNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R321,Calcasieu Pass LNG Terminal -> Costa Norte LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R322,Calcasieu Pass LNG Terminal -> Eemshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R323,Calcasieu Pass LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R324,Corpus Christi LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R325,Corpus Christi LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R326,Corpus Christi LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R327,Damietta SEGAS LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R328,Damietta SEGAS LNG Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R329,Das Island LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R330,Das Island LNG Terminal -> Mundra LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R331,Elba Island LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R332,Freeport LNG Terminal -> Zeebrugge LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R333,Gorgon LNG Terminal -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R334,Gorgon LNG Terminal -> Samcheok LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R335,Gorgon LNG Terminal -> Tobata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R336,Gorgon LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R337,Hammerfest LNG Snohvit Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R338,Hammerfest LNG Snohvit Terminal -> Zeebrugge LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R339,Nigeria LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R340,Oman Qalhat LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R341,Pluto LNG Terminal -> Pengerang Johor LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R342,Pluto LNG Terminal -> Tobata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R343,Portovaya LNG Terminal -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R344,Prelude FLNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R345,Punta Europa LNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R346,Queensland Curtis LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R347,Rasgas LNG Terminal 3 -> Hainan Shennan LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R348,Rasgas LNG Terminal 3 -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R349,Rasgas LNG Terminal 3 -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R350,Rasgas LNG Terminal 3 -> Shin-Sendai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R351,Sabine Pass LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R352,Sabine Pass LNG Terminal -> Samcheok LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R353,Sakhalin II LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R354,Sakhalin II LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R355,Wheatstone LNG Terminal -> Zhoushan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R356,Yamal LNG Terminal -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R357,Yamal LNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R358,Arzew-Bethioua LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R359,Atlantic LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R360,Atlantic LNG Terminal -> Cartagena FSRU (Colombia),MultiLineString,True,Valid Geometry,False
+route,R361,Atlantic LNG Terminal -> Delimara FSRU,MultiLineString,True,Valid Geometry,False
+route,R362,Atlantic LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R363,Atlantic LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R364,Calcasieu Pass LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R365,Calcasieu Pass LNG Terminal -> Cove Point LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R366,Calcasieu Pass LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R367,Calcasieu Pass LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R368,Calcasieu Pass LNG Terminal -> Pichilingue LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R369,Calcasieu Pass LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R370,Calcasieu Pass LNG Terminal -> Shin-Sendai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R371,Calcasieu Pass LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R372,Calcasieu Pass LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R373,Corpus Christi LNG Terminal -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R374,Corpus Christi LNG Terminal -> DÃ¶rtyol FSRU,MultiLineString,True,Valid Geometry,False
+route,R375,Corpus Christi LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R376,Corpus Christi LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R377,Damietta SEGAS LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R378,Damietta SEGAS LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R379,Das Island LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R380,Das Island LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R381,Elba Island LNG Terminal -> Eemshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R382,Freeport LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R383,Freeport LNG Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R384,Freeport LNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R385,Freeport LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R386,Freeport LNG Terminal -> Mejillones LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R387,Freeport LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R388,Freeport LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R389,Freeport LNG Terminal -> Zhoushan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R390,Gorgon LNG Terminal -> Hainan Shennan LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R391,Gorgon LNG Terminal -> Hakodate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R392,Gorgon LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R393,Gorgon LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R394,Gorgon LNG Terminal -> Kagoshima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R395,Hammerfest LNG Snohvit Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R396,Hammerfest LNG Snohvit Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R397,Nigeria LNG Terminal -> Jebel Ali FLNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R398,Nigeria LNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R399,Nigeria LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R400,Oman Qalhat LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R401,Oman Qalhat LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R402,Peru LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R403,Pluto LNG Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R404,Pluto LNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R405,Portovaya LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R406,Portovaya LNG Terminal -> Inkoo FSRU,MultiLineString,True,Valid Geometry,False
+route,R407,Portovaya LNG Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R408,Prelude FLNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R409,Punta Europa LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R410,Rasgas LNG Terminal 3 -> Chaozhou LNG Terminal (Huaying),MultiLineString,True,Valid Geometry,False
+route,R411,Rasgas LNG Terminal 3 -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R412,Rasgas LNG Terminal 3 -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R413,Rasgas LNG Terminal 3 -> Montoir LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R414,Sabine Pass LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R415,Sabine Pass LNG Terminal -> Costa Norte LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R416,Sabine Pass LNG Terminal -> Krk FSRU,MultiLineString,True,Valid Geometry,False
+route,R417,Sabine Pass LNG Terminal -> New Fortress Barcarena FSRU,MultiLineString,True,Valid Geometry,False
+route,R418,Sabine Pass LNG Terminal -> Pichilingue LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R419,Sabine Pass LNG Terminal -> Piombino FSRU,MultiLineString,True,Valid Geometry,False
+route,R420,Sabine Pass LNG Terminal -> Sergipe FSRU,MultiLineString,True,Valid Geometry,False
+route,R421,Sabine Pass LNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R422,Sakhalin II LNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R423,Sakhalin II LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R424,Tiga Malaysia LNG Terminal -> Melaka FSRU,MultiLineString,True,Valid Geometry,False
+route,R425,Tiga Malaysia LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R426,Tiga Malaysia LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R427,Wheatstone LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R428,Wheatstone LNG Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R429,Wheatstone LNG Terminal -> Shin-Sendai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R430,Wheatstone LNG Terminal -> Tanjung Benoa FSRU,MultiLineString,True,Valid Geometry,False
+route,R431,Wheatstone LNG Terminal -> Toyama Shinko LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R432,Yamal LNG Terminal -> Chaozhou LNG Terminal (Huaying),MultiLineString,True,Valid Geometry,False
+route,R433,Yamal LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R434,Arzew-Bethioua LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R435,Arzew-Bethioua LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R436,Arzew-Bethioua LNG Terminal -> Piombino FSRU,MultiLineString,True,Valid Geometry,False
+route,R437,Arzew-Bethioua LNG Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R438,Arzew-Bethioua LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R439,Atlantic LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R440,Atlantic LNG Terminal -> Cove Point LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R441,Atlantic LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R442,Atlantic LNG Terminal -> Eemshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R443,Atlantic LNG Terminal -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R444,Atlantic LNG Terminal -> Mejillones LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R445,Atlantic LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R446,Atlantic LNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R447,Bontang LNG Terminal -> Jawa Satu FSRU,MultiLineString,True,Valid Geometry,False
+route,R448,Calcasieu Pass LNG Terminal -> BrunsbÃ¼ttel FSRU,MultiLineString,True,Valid Geometry,False
+route,R449,Calcasieu Pass LNG Terminal -> GasPort FSRU,MultiLineString,True,Valid Geometry,False
+route,R450,Calcasieu Pass LNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R451,Calcasieu Pass LNG Terminal -> Huelva LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R452,Calcasieu Pass LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R453,Calcasieu Pass LNG Terminal -> Mejillones LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R454,Calcasieu Pass LNG Terminal -> Mugardos LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R455,Calcasieu Pass LNG Terminal -> New Fortress Barcarena FSRU,MultiLineString,True,Valid Geometry,False
+route,R456,Calcasieu Pass LNG Terminal -> Old Harbour FSRU,MultiLineString,True,Valid Geometry,False
+route,R457,Calcasieu Pass LNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R458,Calcasieu Pass LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R459,Calcasieu Pass LNG Terminal -> Wilhelmshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R460,Cameroon FLNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R461,Cameroon FLNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R462,Cameroon FLNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R463,Corpus Christi LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R464,Corpus Christi LNG Terminal -> Arun LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R465,Corpus Christi LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R466,Corpus Christi LNG Terminal -> Cove Point LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R467,Corpus Christi LNG Terminal -> Mugardos LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R468,Corpus Christi LNG Terminal -> Piombino FSRU,MultiLineString,True,Valid Geometry,False
+route,R469,Corpus Christi LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R470,Corpus Christi LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R471,Corpus Christi LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R472,Das Island LNG Terminal -> Ennore LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R473,Das Island LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R474,Das Island LNG Terminal -> Kochi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R475,Das Island LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R476,Das Island LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R477,Das Island LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R478,Egyptian LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R479,Egyptian LNG Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R480,Egyptian LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R481,Egyptian LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R482,Elba Island LNG Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R483,Elba Island LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R484,Elba Island LNG Terminal -> Quintero LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R485,Freeport LNG Terminal -> Cartagena FSRU (Colombia),MultiLineString,True,Valid Geometry,False
+route,R486,Freeport LNG Terminal -> Eemshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R487,Freeport LNG Terminal -> Krk FSRU,MultiLineString,True,Valid Geometry,False
+route,R488,Freeport LNG Terminal -> Montoir LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R489,Freeport LNG Terminal -> Porto do AÃ§u FSRU,MultiLineString,True,Valid Geometry,False
+route,R490,Freeport LNG Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R491,Freeport LNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R492,Freeport LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R493,Freeport LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R494,Freeport LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R495,Gorgon LNG Terminal -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R496,Gorgon LNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R497,Gorgon LNG Terminal -> Pengerang Johor LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R498,Gorgon LNG Terminal -> Taichung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R499,Hammerfest LNG Snohvit Terminal -> Huelva LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R500,Hammerfest LNG Snohvit Terminal -> Mukran FSRU,MultiLineString,True,Valid Geometry,False
+route,R501,Hammerfest LNG Snohvit Terminal -> Wilhelmshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R502,Kiyanly LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R503,Nigeria LNG Terminal -> Dabhol LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R504,Nigeria LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R505,Nigeria LNG Terminal -> DÃ¶rtyol FSRU,MultiLineString,True,Valid Geometry,False
+route,R506,Nigeria LNG Terminal -> Ennore LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R507,Nigeria LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R508,Nigeria LNG Terminal -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R509,Nigeria LNG Terminal -> Old Harbour FSRU,MultiLineString,True,Valid Geometry,False
+route,R510,Nigeria LNG Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R511,Nigeria LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R512,Nigeria LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R513,Nigeria LNG Terminal -> Zeebrugge LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R514,Oman Qalhat LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R515,Oman Qalhat LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R516,Pluto LNG Terminal -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R517,Pluto LNG Terminal -> Hitachi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R518,Pluto LNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R519,Pluto LNG Terminal -> Wuhaogou LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R520,Pluto LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R521,Prelude FLNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R522,Prelude FLNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R523,Punta Europa LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R524,Punta Europa LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R525,Punta Europa LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R526,Punta Europa LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R527,Punta Europa LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R528,Punta Europa LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R529,Queensland Curtis LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R530,Rasgas LNG Terminal 3 -> Ennore LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R531,Rasgas LNG Terminal 3 -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R532,Rasgas LNG Terminal 3 -> Sodeshi Shimizu LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R533,Rasgas LNG Terminal 3 -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R534,Rasgas LNG Terminal 3 -> Toyama Shinko LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R535,Risavika LNG Terminal -> Inkoo FSRU,MultiLineString,True,Valid Geometry,False
+route,R536,Sabine Pass LNG Terminal -> Cartagena FSRU (Colombia),MultiLineString,True,Valid Geometry,False
+route,R537,Sabine Pass LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R538,Sabine Pass LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R539,Sabine Pass LNG Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R540,Sabine Pass LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R541,Skikda LNG Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R542,Tiga Malaysia LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R543,Tiga Malaysia LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R544,Tiga Malaysia LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R545,Vysotsk LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R546,Wheatstone LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R547,Wheatstone LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R548,Wheatstone LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R549,Yamal LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R550,Yamal LNG Terminal -> Shin-Sendai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R551,American LNG Hialeah Terminal -> Wilhelmshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R552,Arzew-Bethioua LNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R553,Arzew-Bethioua LNG Terminal -> Hainan Shennan LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R554,Arzew-Bethioua LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R555,Arzew-Bethioua LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R556,Arzew-Bethioua LNG Terminal -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R557,Arzew-Bethioua LNG Terminal -> Zeebrugge LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R558,Atlantic LNG Terminal -> Acajutla FSRU,MultiLineString,True,Valid Geometry,False
+route,R559,Atlantic LNG Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R560,Atlantic LNG Terminal -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R561,Atlantic LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R562,Atlantic LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R563,Atlantic LNG Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R564,Atlantic LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R565,Atlantic LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R566,Atlantic LNG Terminal -> Mundra LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R567,Atlantic LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R568,Bontang LNG Terminal -> Arun LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R569,Calcasieu Pass LNG Terminal -> Chaozhou LNG Terminal (Huaying),MultiLineString,True,Valid Geometry,False
+route,R570,Calcasieu Pass LNG Terminal -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R571,Calcasieu Pass LNG Terminal -> Hitachi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R572,Calcasieu Pass LNG Terminal -> Inkoo FSRU,MultiLineString,True,Valid Geometry,False
+route,R573,Calcasieu Pass LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R574,Calcasieu Pass LNG Terminal -> Mukran FSRU,MultiLineString,True,Valid Geometry,False
+route,R575,Calcasieu Pass LNG Terminal -> Piombino FSRU,MultiLineString,True,Valid Geometry,False
+route,R576,Calcasieu Pass LNG Terminal -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R577,Calcasieu Pass LNG Terminal -> Zhoushan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R578,Corpus Christi LNG Terminal -> Costa Norte LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R579,Corpus Christi LNG Terminal -> Dabhol LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R580,Corpus Christi LNG Terminal -> Guangxi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R581,Corpus Christi LNG Terminal -> Quintero LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R582,Corpus Christi LNG Terminal -> Samcheok LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R583,Corpus Christi LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R584,Corpus Christi LNG Terminal -> Sergipe FSRU,MultiLineString,True,Valid Geometry,False
+route,R585,Corpus Christi LNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R586,Corpus Christi LNG Terminal -> Zhoushan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R587,Corpus Christi LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R588,Damietta SEGAS LNG Terminal -> DÃ¶rtyol FSRU,MultiLineString,True,Valid Geometry,False
+route,R589,Damietta SEGAS LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R590,Damietta SEGAS LNG Terminal -> Piombino FSRU,MultiLineString,True,Valid Geometry,False
+route,R591,Damietta SEGAS LNG Terminal -> Samcheok LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R592,Das Island LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R593,Egyptian LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R594,Egyptian LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R595,Egyptian LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R596,Elba Island LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R597,Elba Island LNG Terminal -> Krk FSRU,MultiLineString,True,Valid Geometry,False
+route,R598,Elba Island LNG Terminal -> Mundra LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R599,Elba Island LNG Terminal -> New Fortress Barcarena FSRU,MultiLineString,True,Valid Geometry,False
+route,R600,Freeport LNG Terminal -> BrunsbÃ¼ttel FSRU,MultiLineString,True,Valid Geometry,False
+route,R601,Freeport LNG Terminal -> DÃ¶rtyol FSRU,MultiLineString,True,Valid Geometry,False
+route,R602,Freeport LNG Terminal -> Escobar FSRU,MultiLineString,True,Valid Geometry,False
+route,R603,Freeport LNG Terminal -> Guangxi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R604,Freeport LNG Terminal -> Mugardos LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R605,Freeport LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R606,Freeport LNG Terminal -> Philippines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R607,Freeport LNG Terminal -> Pichilingue LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R608,Freeport LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R609,Freeport LNG Terminal -> Samcheok LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R610,Gorgon LNG Terminal -> Gorontalo FSRU,MultiLineString,True,Valid Geometry,False
+route,R611,Gorgon LNG Terminal -> Kochi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R612,Hammerfest LNG Snohvit Terminal -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R613,Hammerfest LNG Snohvit Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R614,Kiyanly LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R615,Kiyanly LNG Terminal -> Izmir Aliaga LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R616,Kiyanly LNG Terminal -> Wilhelmshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R617,Kiyanly LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R618,Kiyanly LNG Terminal -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R619,Nigeria LNG Terminal -> Hainan Shennan LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R620,Nigeria LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R621,Nigeria LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R622,Nigeria LNG Terminal -> Penuelas LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R623,Nigeria LNG Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R624,Nigeria LNG Terminal -> Toyama Shinko LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R625,Nigeria LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R626,Nigeria LNG Terminal -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R627,Oman Qalhat LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R628,Oman Qalhat LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R629,Oman Qalhat LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R630,Pluto LNG Terminal -> Arun LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R631,Pluto LNG Terminal -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R632,Pluto LNG Terminal -> Hainan Shennan LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R633,Pluto LNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R634,Pluto LNG Terminal -> Toyama Shinko LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R635,Portovaya LNG Terminal -> DÃ¶rtyol FSRU,MultiLineString,True,Valid Geometry,False
+route,R636,Portovaya LNG Terminal -> Hamina LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R637,Prelude FLNG Terminal -> Gorontalo FSRU,MultiLineString,True,Valid Geometry,False
+route,R638,Prelude FLNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R639,Prelude FLNG Terminal -> Pengerang Johor LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R640,Prelude FLNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R641,Punta Europa LNG Terminal -> Kochi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R642,Punta Europa LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R643,Punta Europa LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R644,Punta Europa LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R645,Queensland Curtis LNG Terminal -> Sodeshi Shimizu LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R646,Queensland Curtis LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R647,Rasgas LNG Terminal 3 -> Eemshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R648,Rasgas LNG Terminal 3 -> Piombino FSRU,MultiLineString,True,Valid Geometry,False
+route,R649,Rasgas LNG Terminal 3 -> Summit FSRU,MultiLineString,True,Valid Geometry,False
+route,R650,Sabine Pass LNG Terminal -> Aqaba Jordan FSRU,MultiLineString,True,Valid Geometry,False
+route,R651,Sabine Pass LNG Terminal -> Arun LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R652,Sabine Pass LNG Terminal -> Escobar FSRU,MultiLineString,True,Valid Geometry,False
+route,R653,Sabine Pass LNG Terminal -> Guanabara Bay FSRU,MultiLineString,True,Valid Geometry,False
+route,R654,Sabine Pass LNG Terminal -> Guangxi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R655,Sabine Pass LNG Terminal -> Kochi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R656,Sabine Pass LNG Terminal -> Mukran FSRU,MultiLineString,True,Valid Geometry,False
+route,R657,Sabine Pass LNG Terminal -> Old Harbour FSRU,MultiLineString,True,Valid Geometry,False
+route,R658,Sabine Pass LNG Terminal -> Penuelas LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R659,Sabine Pass LNG Terminal -> Toyama Shinko LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R660,Sabine Pass LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R661,Sabine Pass LNG Terminal -> Zhoushan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R662,Sakhalin II LNG Terminal -> Chaozhou LNG Terminal (Huaying),MultiLineString,True,Valid Geometry,False
+route,R663,Sakhalin II LNG Terminal -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R664,Sakhalin II LNG Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R665,Sakhalin II LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R666,Sakhalin II LNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R667,Tiga Malaysia LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R668,Tiga Malaysia LNG Terminal -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R669,Tiga Malaysia LNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R670,Wheatstone LNG Terminal -> Kagoshima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R671,Wheatstone LNG Terminal -> Sodeshi Shimizu LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R672,Wheatstone LNG Terminal -> Taichung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R673,Wheatstone LNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R674,Yamal LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R675,Yamal LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R676,Yamal LNG Terminal -> Nagasaki LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R677,Yamal LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R678,Yamal LNG Terminal -> Zhoushan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R679,Yamal LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R680,American LNG Hialeah Terminal -> Cove Point LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R681,American LNG Hialeah Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R682,American LNG Hialeah Terminal -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R683,American LNG Hialeah Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R684,American LNG Hialeah Terminal -> Sergipe FSRU,MultiLineString,True,Valid Geometry,False
+route,R685,American LNG Hialeah Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R686,Arzew-Bethioua LNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R687,Arzew-Bethioua LNG Terminal -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R688,Arzew-Bethioua LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R689,Arzew-Bethioua LNG Terminal -> Inkoo FSRU,MultiLineString,True,Valid Geometry,False
+route,R690,Arzew-Bethioua LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R691,Arzew-Bethioua LNG Terminal -> Montoir LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R692,Arzew-Bethioua LNG Terminal -> Pengerang Johor LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R693,Arzew-Bethioua LNG Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R694,Arzew-Bethioua LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R695,Arzew-Bethioua LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R696,Arzew-Bethioua LNG Terminal -> Taichung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R697,Arzew-Bethioua LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R698,Arzew-Bethioua LNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R699,Arzew-Bethioua LNG Terminal -> Wilhelmshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R700,Arzew-Bethioua LNG Terminal -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R701,Atlantic LNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R702,Atlantic LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R703,Atlantic LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R704,Atlantic LNG Terminal -> Huelva LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R705,Atlantic LNG Terminal -> Jebel Ali FLNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R706,Atlantic LNG Terminal -> Kochi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R707,Atlantic LNG Terminal -> Krk FSRU,MultiLineString,True,Valid Geometry,False
+route,R708,Atlantic LNG Terminal -> Pengerang Johor LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R709,Atlantic LNG Terminal -> Porto do AÃ§u FSRU,MultiLineString,True,Valid Geometry,False
+route,R710,Atlantic LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R711,Atlantic LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R712,Atlantic LNG Terminal -> Sepetiba Bay FSRU,MultiLineString,True,Valid Geometry,False
+route,R713,Atlantic LNG Terminal -> Sergipe FSRU,MultiLineString,True,Valid Geometry,False
+route,R714,Atlantic LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R715,Atlantic LNG Terminal -> Wilhelmshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R716,Atlantic LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R717,Atlantic LNG Terminal -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R718,Calcasieu Pass LNG Terminal -> Bahia FSRU,MultiLineString,True,Valid Geometry,False
+route,R719,Calcasieu Pass LNG Terminal -> Cartagena FSRU (Colombia),MultiLineString,True,Valid Geometry,False
+route,R720,Calcasieu Pass LNG Terminal -> Dabhol LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R721,Calcasieu Pass LNG Terminal -> DÃ¶rtyol FSRU,MultiLineString,True,Valid Geometry,False
+route,R722,Calcasieu Pass LNG Terminal -> Escobar FSRU,MultiLineString,True,Valid Geometry,False
+route,R723,Calcasieu Pass LNG Terminal -> Guangxi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R724,Calcasieu Pass LNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R725,Calcasieu Pass LNG Terminal -> Jawa Satu FSRU,MultiLineString,True,Valid Geometry,False
+route,R726,Calcasieu Pass LNG Terminal -> Jebel Ali FLNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R727,Calcasieu Pass LNG Terminal -> Kochi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R728,Calcasieu Pass LNG Terminal -> Le Havre FSRU,MultiLineString,True,Valid Geometry,False
+route,R729,Calcasieu Pass LNG Terminal -> Nusantara Regas Satu Terminal,MultiLineString,True,Valid Geometry,False
+route,R730,Calcasieu Pass LNG Terminal -> Samcheok LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R731,Calcasieu Pass LNG Terminal -> Sergipe FSRU,MultiLineString,True,Valid Geometry,False
+route,R732,Calcasieu Pass LNG Terminal -> Summit FSRU,MultiLineString,True,Valid Geometry,False
+route,R733,Calcasieu Pass LNG Terminal -> Yanai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R734,Cameroon FLNG Terminal -> Dabhol LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R735,Cameroon FLNG Terminal -> DÃ¶rtyol FSRU,MultiLineString,True,Valid Geometry,False
+route,R736,Cameroon FLNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R737,Cameroon FLNG Terminal -> Guangxi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R738,Cameroon FLNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R739,Cameroon FLNG Terminal -> Huelva LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R740,Cameroon FLNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R741,Cameroon FLNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R742,Cameroon FLNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R743,Cameroon FLNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R744,Cameroon FLNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R745,Coral South FLNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R746,Corpus Christi LNG Terminal -> Cartagena FSRU (Colombia),MultiLineString,True,Valid Geometry,False
+route,R747,Corpus Christi LNG Terminal -> Chaozhou LNG Terminal (Huaying),MultiLineString,True,Valid Geometry,False
+route,R748,Corpus Christi LNG Terminal -> Guanabara Bay FSRU,MultiLineString,True,Valid Geometry,False
+route,R749,Corpus Christi LNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R750,Corpus Christi LNG Terminal -> Hainan Shennan LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R751,Corpus Christi LNG Terminal -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R752,Corpus Christi LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R753,Corpus Christi LNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R754,Corpus Christi LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R755,Corpus Christi LNG Terminal -> Kochi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R756,Corpus Christi LNG Terminal -> Krk FSRU,MultiLineString,True,Valid Geometry,False
+route,R757,Corpus Christi LNG Terminal -> Kushiro LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R758,Corpus Christi LNG Terminal -> Mukran FSRU,MultiLineString,True,Valid Geometry,False
+route,R759,Corpus Christi LNG Terminal -> Mundra LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R760,Corpus Christi LNG Terminal -> New Fortress Barcarena FSRU,MultiLineString,True,Valid Geometry,False
+route,R761,Corpus Christi LNG Terminal -> Porto do AÃ§u FSRU,MultiLineString,True,Valid Geometry,False
+route,R762,Corpus Christi LNG Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R763,Corpus Christi LNG Terminal -> Wilhelmshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R764,Cove Point LNG Export Terminal -> Montego Bay LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R765,Damietta SEGAS LNG Terminal -> Ain Sokhna Hoegh FSRU,MultiLineString,True,Valid Geometry,False
+route,R766,Damietta SEGAS LNG Terminal -> Cartagena FSRU (Colombia),MultiLineString,True,Valid Geometry,False
+route,R767,Damietta SEGAS LNG Terminal -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R768,Damietta SEGAS LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R769,Damietta SEGAS LNG Terminal -> GasPort FSRU,MultiLineString,True,Valid Geometry,False
+route,R770,Damietta SEGAS LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R771,Damietta SEGAS LNG Terminal -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R772,Damietta SEGAS LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R773,Damietta SEGAS LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R774,Damietta SEGAS LNG Terminal -> Krk FSRU,MultiLineString,True,Valid Geometry,False
+route,R775,Damietta SEGAS LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R776,Damietta SEGAS LNG Terminal -> Mejillones LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R777,Damietta SEGAS LNG Terminal -> Old Harbour FSRU,MultiLineString,True,Valid Geometry,False
+route,R778,Damietta SEGAS LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R779,Damietta SEGAS LNG Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R780,Damietta SEGAS LNG Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R781,Damietta SEGAS LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R782,Damietta SEGAS LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R783,Damietta SEGAS LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R784,Das Island LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R785,Das Island LNG Terminal -> GasPort FSRU,MultiLineString,True,Valid Geometry,False
+route,R786,Das Island LNG Terminal -> Guangxi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R787,Das Island LNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R788,Das Island LNG Terminal -> Hongmei LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R789,Das Island LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R790,Das Island LNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R791,Das Island LNG Terminal -> Taichung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R792,Das Island LNG Terminal -> Wuhaogou LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R793,Egyptian LNG Terminal -> Ain Sokhna Hoegh FSRU,MultiLineString,True,Valid Geometry,False
+route,R794,Egyptian LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R795,Egyptian LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R796,Egyptian LNG Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R797,Egyptian LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R798,Egyptian LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R799,Egyptian LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R800,Egyptian LNG Terminal -> Quintero LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R801,Egyptian LNG Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R802,Egyptian LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R803,Egyptian LNG Terminal -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R804,Elba Island LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R805,Elba Island LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R806,Elba Island LNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R807,Elba Island LNG Terminal -> Cartagena FSRU (Colombia),MultiLineString,True,Valid Geometry,False
+route,R808,Elba Island LNG Terminal -> Cove Point LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R809,Elba Island LNG Terminal -> Escobar FSRU,MultiLineString,True,Valid Geometry,False
+route,R810,Elba Island LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R811,Elba Island LNG Terminal -> Grain LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R812,Elba Island LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R813,Elba Island LNG Terminal -> Huelva LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R814,Elba Island LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R815,Elba Island LNG Terminal -> Mejillones LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R816,Elba Island LNG Terminal -> Ohgishima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R817,Elba Island LNG Terminal -> Piombino FSRU,MultiLineString,True,Valid Geometry,False
+route,R818,Elba Island LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R819,Elba Island LNG Terminal -> Toyama Shinko LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R820,Freeport LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R821,Freeport LNG Terminal -> Arun LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R822,Freeport LNG Terminal -> Costa Norte LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R823,Freeport LNG Terminal -> Dabhol LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R824,Freeport LNG Terminal -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R825,Freeport LNG Terminal -> GasPort FSRU,MultiLineString,True,Valid Geometry,False
+route,R826,Freeport LNG Terminal -> Guanabara Bay FSRU,MultiLineString,True,Valid Geometry,False
+route,R827,Freeport LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R828,Freeport LNG Terminal -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R829,Freeport LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R830,Freeport LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R831,Freeport LNG Terminal -> Mukran FSRU,MultiLineString,True,Valid Geometry,False
+route,R832,Freeport LNG Terminal -> Mundra LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R833,Freeport LNG Terminal -> New Fortress Barcarena FSRU,MultiLineString,True,Valid Geometry,False
+route,R834,Freeport LNG Terminal -> Niihama LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R835,Freeport LNG Terminal -> Qidong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R836,Freeport LNG Terminal -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R837,Freeport LNG Terminal -> Summit FSRU,MultiLineString,True,Valid Geometry,False
+route,R838,Freeport LNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R839,Freeport LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R840,Gladstone LNG Terminal -> Gorontalo FSRU,MultiLineString,True,Valid Geometry,False
+route,R841,Gorgon LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R842,Gorgon LNG Terminal -> Fangchenggang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R843,Gorgon LNG Terminal -> Kushiro LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R844,Gorgon LNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R845,Gorgon LNG Terminal -> Shin-Sendai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R846,Gorgon LNG Terminal -> Toyama Shinko LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R847,Hammerfest LNG Snohvit Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R848,Hammerfest LNG Snohvit Terminal -> BrunsbÃ¼ttel FSRU,MultiLineString,True,Valid Geometry,False
+route,R849,Hammerfest LNG Snohvit Terminal -> Cartagena FSRU (Colombia),MultiLineString,True,Valid Geometry,False
+route,R850,Hammerfest LNG Snohvit Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R851,Hammerfest LNG Snohvit Terminal -> Cove Point LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R852,Hammerfest LNG Snohvit Terminal -> Everett Marine Terminal,MultiLineString,True,Valid Geometry,False
+route,R853,Hammerfest LNG Snohvit Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R854,Hammerfest LNG Snohvit Terminal -> Le Havre FSRU,MultiLineString,True,Valid Geometry,False
+route,R855,Hammerfest LNG Snohvit Terminal -> Old Harbour FSRU,MultiLineString,True,Valid Geometry,False
+route,R856,Ichthys FLNG Terminal -> Tanjung Benoa FSRU,MultiLineString,True,Valid Geometry,False
+route,R857,Ichthys FLNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R858,Ichthys FLNG Terminal -> Toyama Shinko LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R859,Ichthys FLNG Terminal -> Yung-An LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R860,Ichthys FLNG Terminal -> Zhoushan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R861,Kiyanly LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R862,Kiyanly LNG Terminal -> Barcelona LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R863,Kiyanly LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R864,Kiyanly LNG Terminal -> DÃ¶rtyol FSRU,MultiLineString,True,Valid Geometry,False
+route,R865,Kiyanly LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R866,Kiyanly LNG Terminal -> Gibraltar LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R867,Kiyanly LNG Terminal -> Hazira LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R868,Kiyanly LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R869,Kiyanly LNG Terminal -> Kochi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R870,Kiyanly LNG Terminal -> Krk FSRU,MultiLineString,True,Valid Geometry,False
+route,R871,Kiyanly LNG Terminal -> Montoir LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R872,Kiyanly LNG Terminal -> Revithoussa LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R873,Kiyanly LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R874,Kiyanly LNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R875,Kiyanly LNG Terminal -> South Hook LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R876,Nigeria LNG Terminal -> Cartagena FSRU (Colombia),MultiLineString,True,Valid Geometry,False
+route,R877,Nigeria LNG Terminal -> Chaozhou LNG Terminal (Huaying),MultiLineString,True,Valid Geometry,False
+route,R878,Nigeria LNG Terminal -> Costa Norte LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R879,Nigeria LNG Terminal -> Cove Point LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R880,Nigeria LNG Terminal -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R881,Nigeria LNG Terminal -> Eemshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R882,Nigeria LNG Terminal -> Guangxi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R883,Nigeria LNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R884,Nigeria LNG Terminal -> Inkoo FSRU,MultiLineString,True,Valid Geometry,False
+route,R885,Nigeria LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R886,Nigeria LNG Terminal -> Kochi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R887,Nigeria LNG Terminal -> Krk FSRU,MultiLineString,True,Valid Geometry,False
+route,R888,Nigeria LNG Terminal -> New Fortress Barcarena FSRU,MultiLineString,True,Valid Geometry,False
+route,R889,Nigeria LNG Terminal -> Pichilingue LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R890,Nigeria LNG Terminal -> Piombino FSRU,MultiLineString,True,Valid Geometry,False
+route,R891,Nigeria LNG Terminal -> Quintero LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R892,Nigeria LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R893,Nigeria LNG Terminal -> Shin-Sendai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R894,Nigeria LNG Terminal -> Summit FSRU,MultiLineString,True,Valid Geometry,False
+route,R895,Nigeria LNG Terminal -> Wilhelmshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R896,Nigeria LNG Terminal -> Wuhaogou LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R897,Nigeria LNG Terminal -> Yanai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R898,Oman Qalhat LNG Terminal -> Bilbao LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R899,Oman Qalhat LNG Terminal -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R900,Oman Qalhat LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R901,Oman Qalhat LNG Terminal -> DÃ¶rtyol FSRU,MultiLineString,True,Valid Geometry,False
+route,R902,Oman Qalhat LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R903,Oman Qalhat LNG Terminal -> GasPort FSRU,MultiLineString,True,Valid Geometry,False
+route,R904,Oman Qalhat LNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R905,Oman Qalhat LNG Terminal -> Hainan Shennan LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R906,Oman Qalhat LNG Terminal -> Higashi Niigata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R907,Oman Qalhat LNG Terminal -> Kagoshima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R908,Oman Qalhat LNG Terminal -> Krk FSRU,MultiLineString,True,Valid Geometry,False
+route,R909,Oman Qalhat LNG Terminal -> Marmara LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R910,Oman Qalhat LNG Terminal -> Mundra LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R911,Oman Qalhat LNG Terminal -> Samcheok LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R912,Oman Qalhat LNG Terminal -> Sodegaura LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R913,Oman Qalhat LNG Terminal -> Summit FSRU,MultiLineString,True,Valid Geometry,False
+route,R914,Oman Qalhat LNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R915,Oman Qalhat LNG Terminal -> Toscana FSRU,MultiLineString,True,Valid Geometry,False
+route,R916,Oman Qalhat LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R917,Oman Qalhat LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R918,Peru LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R919,Peru LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R920,Peru LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R921,Peru LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R922,Peru LNG Terminal -> Pichilingue LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R923,Peru LNG Terminal -> Quintero LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R924,Peru LNG Terminal -> Saint John LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R925,Peru LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R926,Peru LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R927,Pluto LNG Terminal -> Cartagena LNG Terminal (Spain),MultiLineString,True,Valid Geometry,False
+route,R928,Pluto LNG Terminal -> Cove Point LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R929,Pluto LNG Terminal -> Gate LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R930,Pluto LNG Terminal -> Guangxi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R931,Pluto LNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R932,Pluto LNG Terminal -> Nusantara Regas Satu Terminal,MultiLineString,True,Valid Geometry,False
+route,R933,Pluto LNG Terminal -> Samcheok LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R934,Pluto LNG Terminal -> Taichung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R935,Pluto LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R936,Pluto LNG Terminal -> Zhoushan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R937,Portovaya LNG Terminal -> Ain Sokhna Hoegh FSRU,MultiLineString,True,Valid Geometry,False
+route,R938,Portovaya LNG Terminal -> Sagunto LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R939,Portovaya LNG Terminal -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R940,Prelude FLNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R941,Prelude FLNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R942,Prelude FLNG Terminal -> Montoir LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R943,Prelude FLNG Terminal -> Summit FSRU,MultiLineString,True,Valid Geometry,False
+route,R944,Prelude FLNG Terminal -> Tianjin LNG Terminal (Sinopec),MultiLineString,True,Valid Geometry,False
+route,R945,Prelude FLNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R946,Punta Europa LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R947,Punta Europa LNG Terminal -> Arun LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R948,Punta Europa LNG Terminal -> Boryeong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R949,Punta Europa LNG Terminal -> Eemshaven FSRU,MultiLineString,True,Valid Geometry,False
+route,R950,Punta Europa LNG Terminal -> Ennore LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R951,Punta Europa LNG Terminal -> Gorontalo FSRU,MultiLineString,True,Valid Geometry,False
+route,R952,Punta Europa LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R953,Punta Europa LNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R954,Punta Europa LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R955,Punta Europa LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R956,Punta Europa LNG Terminal -> Mundra LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R957,Punta Europa LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R958,Punta Europa LNG Terminal -> Sines LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R959,Punta Europa LNG Terminal -> Toyama Shinko LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R960,Punta Europa LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R961,Punta Europa LNG Terminal -> ÅšwinoujÅ›cie Polskie LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R962,Queensland Curtis LNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R963,Queensland Curtis LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R964,Queensland Curtis LNG Terminal -> Kagoshima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R965,Queensland Curtis LNG Terminal -> Map Ta Phut LNG Terminal 2,MultiLineString,True,Valid Geometry,False
+route,R966,Queensland Curtis LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R967,Rasgas LNG Terminal 3 -> Cove Point LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R968,Rasgas LNG Terminal 3 -> Dabhol LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R969,Rasgas LNG Terminal 3 -> Gorontalo FSRU,MultiLineString,True,Valid Geometry,False
+route,R970,Rasgas LNG Terminal 3 -> Nusantara Regas Satu Terminal,MultiLineString,True,Valid Geometry,False
+route,R971,Rasgas LNG Terminal 3 -> Shanghai Yangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R972,Risavika LNG Terminal -> Fredrikstad LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R973,Risavika LNG Terminal -> Klaipeda FSRU,MultiLineString,True,Valid Geometry,False
+route,R974,Sabine Pass LNG Terminal -> Acajutla FSRU,MultiLineString,True,Valid Geometry,False
+route,R975,Sabine Pass LNG Terminal -> Bahia FSRU,MultiLineString,True,Valid Geometry,False
+route,R976,Sabine Pass LNG Terminal -> BrunsbÃ¼ttel FSRU,MultiLineString,True,Valid Geometry,False
+route,R977,Sabine Pass LNG Terminal -> Dalian LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R978,Sabine Pass LNG Terminal -> Ennore LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R979,Sabine Pass LNG Terminal -> GasPort FSRU,MultiLineString,True,Valid Geometry,False
+route,R980,Sabine Pass LNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R981,Sabine Pass LNG Terminal -> Hainan Shennan LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R982,Sabine Pass LNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R983,Sabine Pass LNG Terminal -> Inkoo FSRU,MultiLineString,True,Valid Geometry,False
+route,R984,Sabine Pass LNG Terminal -> Jebel Ali FLNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R985,Sabine Pass LNG Terminal -> Le Havre FSRU,MultiLineString,True,Valid Geometry,False
+route,R986,Sabine Pass LNG Terminal -> Mundra LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R987,Sabine Pass LNG Terminal -> Pengerang Johor LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R988,Sabine Pass LNG Terminal -> Sabine Pass LNG Import Terminal,MultiLineString,False,Too few points in geometry component[-93.8741 29.7541],False
+route,R989,Sabine Pass LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R990,Sabine Pass LNG Terminal -> Xintian Tangshan LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R991,Sabine Pass LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R992,Sakhalin II LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R993,Sakhalin II LNG Terminal -> Kagoshima LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R994,Sakhalin II LNG Terminal -> Kushiro LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R995,Sakhalin II LNG Terminal -> Pyeongtaek LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R996,Sakhalin II LNG Terminal -> Tobata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R997,Sakhalin II LNG Terminal -> Zhuhai LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R998,Skikda LNG Terminal -> DÃ¶rtyol FSRU,MultiLineString,True,Valid Geometry,False
+route,R999,Tiga Malaysia LNG Terminal -> Al Zour LNG Import Terminal,MultiLineString,True,Valid Geometry,False
+route,R1000,Tiga Malaysia LNG Terminal -> Dunkirk LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1001,Tiga Malaysia LNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1002,Tiga Malaysia LNG Terminal -> Hainan Shennan LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R1003,Tiga Malaysia LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1004,Tiga Malaysia LNG Terminal -> Hong Kong FSRU,MultiLineString,True,Valid Geometry,False
+route,R1005,Tiga Malaysia LNG Terminal -> Hongmei LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1006,Tiga Malaysia LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1007,Tiga Malaysia LNG Terminal -> Nagasaki LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1008,Tiga Malaysia LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1009,Tiga Malaysia LNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1010,Tiga Malaysia LNG Terminal -> Tobata LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1011,Tiga Malaysia LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1012,Tiga Malaysia LNG Terminal -> Toyama Shinko LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1013,Tiga Malaysia LNG Terminal -> Wuhaogou LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R1014,Tiga Malaysia LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1015,Vysotsk LNG Terminal -> Hamina LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1016,Wheatstone LNG Terminal -> Chaozhou LNG Terminal (Huaying),MultiLineString,True,Valid Geometry,False
+route,R1017,Wheatstone LNG Terminal -> Guangxi LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1018,Wheatstone LNG Terminal -> Gwangyang LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1019,Wheatstone LNG Terminal -> Hainan Shennan LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R1020,Wheatstone LNG Terminal -> Himeji LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1021,Wheatstone LNG Terminal -> Incheon LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1022,Wheatstone LNG Terminal -> Jieyang LNG Terminal (PipeChina),MultiLineString,True,Valid Geometry,False
+route,R1023,Wheatstone LNG Terminal -> Kushiro LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1024,Wheatstone LNG Terminal -> Pengerang Johor LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1025,Wheatstone LNG Terminal -> Pichilingue LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1026,Wheatstone LNG Terminal -> Samcheok LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1027,Wheatstone LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1028,Wheatstone LNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1029,Yamal LNG Terminal -> Fos Tonkin LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1030,Yamal LNG Terminal -> Hainan Shennan LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R1031,Yamal LNG Terminal -> Samcheok LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1032,Yamal LNG Terminal -> Senboku 2 LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1033,Yamal LNG Terminal -> Shandong LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1034,Yamal LNG Terminal -> Tongyoung LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1035,Yamal LNG Terminal -> Wenzhou LNG Terminal,MultiLineString,True,Valid Geometry,False
+route,R1036,Yamal LNG Terminal -> Wuhaogou LNG Storage Facility,MultiLineString,True,Valid Geometry,False
+route,R1037,Yamal LNG Terminal -> Yokkaichi Works LNG Terminal,MultiLineString,True,Valid Geometry,False
+chokepoint,CP001,Suez Canal,Polygon,True,Valid Geometry,False
+chokepoint,CP002,Panama Canal,Polygon,True,Valid Geometry,False
+chokepoint,CP003,Bosporus Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP004,Bab el-Mandeb Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP005,Malacca Strait,MultiPolygon,True,Valid Geometry,False
+chokepoint,CP006,Strait of Hormuz,MultiPolygon,True,Valid Geometry,False
+chokepoint,CP007,Cape of Good Hope,Polygon,True,Valid Geometry,False
+chokepoint,CP008,Gibraltar Strait,MultiPolygon,True,Valid Geometry,False
+chokepoint,CP009,Dover Strait,MultiPolygon,True,Valid Geometry,False
+chokepoint,CP010,Oresund Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP011,Taiwan Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP012,Korea Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP013,Tsugaru Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP014,Luzon Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP015,Lombok Strait,MultiPolygon,True,Valid Geometry,False
+chokepoint,CP016,Ombai Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP017,Bohai Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP018,Torres Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP019,Sunda Strait,MultiPolygon,True,Valid Geometry,False
+chokepoint,CP020,Makassar Strait,MultiPolygon,True,Valid Geometry,False
+chokepoint,CP021,Magellan Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP022,Yucatan Channel,Polygon,True,Valid Geometry,False
+chokepoint,CP023,Windward Passage,Polygon,True,Valid Geometry,False
+chokepoint,CP024,Mona Passage,Polygon,True,Valid Geometry,False
+chokepoint,CP025,Balabac Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP026,Bering Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP027,Mindoro Strait,Polygon,True,Valid Geometry,False
+chokepoint,CP028,Kerch Strait,Polygon,True,Valid Geometry,False
