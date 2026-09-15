@@ -1,10 +1,25 @@
 #!/usr/bin/env python3
 import argparse, json
 from pathlib import Path
+from pyproj import CRS, Transformer
 from shapely.geometry import shape
+from shapely.ops import transform
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
 from openpyxl.utils import get_column_letter
+
+BUFFER_KM = 25
+
+def metric_buffer(geometry, distance_km):
+    """Buffer a WGS84 geometry in metres using a local AEQD projection."""
+    centre = geometry.representative_point()
+    local = CRS.from_proj4(
+        f"+proj=aeqd +lat_0={centre.y} +lon_0={centre.x} "
+        "+datum=WGS84 +units=m +no_defs"
+    )
+    forward = Transformer.from_crs("OGC:CRS84", local, always_xy=True).transform
+    inverse = Transformer.from_crs(local, "OGC:CRS84", always_xy=True).transform
+    return transform(inverse, transform(forward, geometry).buffer(distance_km * 1000))
 
 def route_num(rid):
     try: return int(str(rid).lstrip('Rr'))
@@ -18,7 +33,7 @@ def main():
     ap = argparse.ArgumentParser(
         description=(
             "Assign final PortWatch chokepoints to 1,037 Eurostat "
-            "SeaRoute geometries by direct geometric intersection."
+            "SeaRoute geometries using a uniform 25 km spatial-tolerance buffer."
         )
     )
 
@@ -47,7 +62,15 @@ def main():
     with args.chokepoints.open(encoding="utf-8-sig") as f:
         cpj = json.load(f)
         
-    cps=[(ft['properties'].get('node_id'),ft['properties'].get('chokepoint'),shape(ft['geometry'])) for ft in cpj['features']]
+    cps=[]
+    for ft in cpj['features']:
+        geometry=shape(ft['geometry'])
+        cps.append((
+            ft['properties'].get('node_id'),
+            ft['properties'].get('chokepoint'),
+            geometry,
+            metric_buffer(geometry, BUFFER_KM),
+        ))
     if len(cps)!=28: raise ValueError(f'Expected 28 chokepoints, got {len(cps)}')
     
     feats=routes.get('features',[])
@@ -60,13 +83,26 @@ def main():
         if rid in seen: raise ValueError(f'Duplicate route_id {rid}')
         seen.add(rid)
         g=shape(ft['geometry'])
-        hits=[]
-        for node_id,name,cpg in cps:
-            if g.intersects(cpg):
+        exact_hits=[]; hits=[]
+        for node_id,name,cpg,cpg_buffered in cps:
+            exact=g.intersects(cpg)
+            buffered=g.intersects(cpg_buffered)
+            if exact: exact_hits.append((node_id,name))
+            if buffered:
                 hits.append((node_id,name))
-                rc.append({'route_id':rid,'chokepoint_node_id':node_id,'chokepoint':name})
+                rc.append({
+                    'route_id':rid,
+                    'chokepoint_node_id':node_id,
+                    'chokepoint':name,
+                    'exact_intersection':exact,
+                    'classification_method':'exact_intersection' if exact else f'within_{BUFFER_KM}km',
+                })
+        p['n_chokepoints_exact']=len(exact_hits)
+        p['chokepoints_exact']='; '.join(name for _,name in exact_hits)
         p['n_chokepoints_final']=len(hits)
         p['chokepoints_final']='; '.join(name for _,name in hits)
+        p['chokepoints_buffer_km']=BUFFER_KM
+        p['n_chokepoints_added_by_buffer']=len(hits)-len(exact_hits)
         dist=p.get('distKM'); obs=p.get('voyage_distance_km_observed')
         try:
             diff=float(dist)-float(obs); ape=abs(diff)/float(obs) if float(obs)!=0 else None
@@ -97,6 +133,8 @@ def main():
                 "dFromKM": dfrom,
                 "dToKM": dto,
                 "n_chokepoints_final": len(hits),
+                "n_chokepoints_exact": len(exact_hits),
+                "n_chokepoints_added_by_buffer": len(hits)-len(exact_hits),
                 "qa_status": p["qa_status"],
                 "qa_flags": p["qa_flags"],
             }
@@ -121,15 +159,16 @@ def main():
             if k not in prop_keys: prop_keys.append(k)
     ws.append(prop_keys)
     for ft in feats: ws.append([ft.get('properties',{}).get(k) for k in prop_keys])
-    wr=wb.create_sheet('Route-Chokepoint'); wr.append(['route_id','chokepoint_node_id','chokepoint'])
-    for r in rc: wr.append(list(r.values()))
+    wr=wb.create_sheet('Route-Chokepoint'); rch=list(rc[0].keys()); wr.append(rch)
+    for r in rc: wr.append([r[k] for k in rch])
     wq=wb.create_sheet('QA'); qh=list(qa[0].keys()); wq.append(qh)
     for r in sorted(qa,key=lambda x:route_num(x['route_id'])): wq.append([r[k] for k in qh])
     wm=wb.create_sheet('Method');
     for row in [
         ('Item','Description'),
-        ('Transit classification','Direct topological intersection between each Eurostat SeaRoute geometry and each of the 28 final chokepoint Polygon/MultiPolygon geometries.'),
-        ('Distance buffers','None used for final transit classification.'),
+        ('Transit classification','Intersection between each Eurostat SeaRoute geometry and each of the 28 final chokepoint geometries after applying a uniform metric tolerance buffer.'),
+        ('Distance buffers',f'Uniform {BUFFER_KM} km buffer around every chokepoint geometry, constructed in a local azimuthal-equidistant projection and transformed back to CRS84.'),
+        ('Exact baseline','The original exact-intersection assignments are retained in chokepoints_exact and n_chokepoints_exact for reproducibility and sensitivity comparison.'),
         ('QA','Flags origin/destination network snap >100 km and route-vs-observed distance deviation >15% for manual review; flags do not automatically alter classifications.'),
     ]: wm.append(row)
     
@@ -143,7 +182,7 @@ def main():
         for row in sh.iter_rows():
             for c in row: c.alignment=Alignment(vertical='top',wrap_text=True)
     
-    out_xlsx = data_dir / "LNG_1037_routes_chokepoint_QA.xlsx"
+    out_xlsx = args.out_prefix.parent / "LNG_1037_routes_chokepoint_QA.xlsx"
     wb.save(out_xlsx)
     
     print(f'Wrote {out_geo} and {out_xlsx}; route-chokepoint rows={len(rc)}; flagged routes={sum(bool(x["qa_flags"]) for x in qa)}')

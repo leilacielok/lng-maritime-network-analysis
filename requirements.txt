@@ -155,6 +155,7 @@ pydown==1.4
 Pygments==2.16.1
 pyloco==0.0.139
 pyparsing==3.2.0
+pyproj==3.8.0
 pyproject_hooks==1.0.0
 pyrsistent==0.19.3
 python-dateutil==2.8.2
