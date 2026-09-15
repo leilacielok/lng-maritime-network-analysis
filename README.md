@@ -4,8 +4,8 @@ This repository contains the code and supporting geographic files developed for 
 
 ## Chokepoint geometry files
 
-* `PortWatch_28_geometry_registry.xlsx` documents the sources, reference information and geometry-processing decisions for the 28 maritime chokepoints included in the analysis.
-* `PortWatch_28_chokepoints_geometry.geojson` contains the final polygon geometries used to identify which chokepoints are crossed by the reconstructed LNG routes.
+* `data/curated/PortWatch_28_geometry_registry.xlsx` documents the sources, reference information and geometry-processing decisions for the 28 maritime chokepoints included in the analysis.
+* `data/curated/PortWatch_28_chokepoints_geometry.geojson` contains the final polygon geometries used to identify which chokepoints are crossed by the reconstructed LNG routes.
 
 These files are used by Script 01, which prepares the matched LNG voyages and the node table required by the subsequent network-construction pipeline. The original LNG-T3 input files are not redistributed in this repository.
 

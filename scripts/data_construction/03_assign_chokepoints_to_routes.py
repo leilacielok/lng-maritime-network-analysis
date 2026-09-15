@@ -29,6 +29,8 @@ def main():
     
     project_root = Path(__file__).resolve().parents[2]
     data_dir = project_root / "data"
+    curated_dir = data_dir / "curated"
+    processed_dir = data_dir / "processed"
 
     ap = argparse.ArgumentParser(
         description=(
@@ -40,21 +42,21 @@ def main():
     ap.add_argument(
         "--routes",
         type=Path,
-        default=data_dir / "LNG_1037_routes_searoute.geojson",
+        default=processed_dir / "LNG_1037_routes_searoute.geojson",
     )
     ap.add_argument(
         "--chokepoints",
         type=Path,
-        default=data_dir / "PortWatch_28_chokepoints_geometry.geojson",
+        default=curated_dir / "PortWatch_28_chokepoints_geometry.geojson",
     )
     ap.add_argument(
         "--out-prefix",
         type=Path,
-        default=data_dir / "LNG_1037_routes_with_final_chokepoints",
+        default=processed_dir / "LNG_1037_routes_with_final_chokepoints",
     )
 
     args = ap.parse_args()
-    data_dir.mkdir(parents=True, exist_ok=True)
+    args.out_prefix.parent.mkdir(parents=True, exist_ok=True)
 
     with args.routes.open(encoding="utf-8-sig") as f:
         routes = json.load(f)

@@ -30,19 +30,7 @@ EXPECTED_CHOKEPOINTS = 28
 
 
 def code_root() -> Path:
-    here = Path(__file__).resolve().parent
-    return next((p for p in (here, *here.parents) if p.name.lower() == "code"), here)
-
-
-def find_file(root: Path, filename: str) -> Path:
-    preferred = [root / "data" / filename, root / "data" / "processed" / filename,
-                 root / "data" / "marnet" / filename, root / "marnet" / filename,
-                 root / filename]
-    preferred.extend(sorted(root.rglob(filename)))
-    found = next((p for p in preferred if p.is_file()), None)
-    if found is None:
-        raise FileNotFoundError(f"Could not find {filename!r} under {root}")
-    return found
+    return Path(__file__).resolve().parents[2]
 
 
 def read_geojson(path: Path) -> dict:
@@ -348,8 +336,8 @@ def plot_summary(summary: pd.DataFrame, path: Path) -> None:
 
 def main() -> None:
     root = code_root()
-    routes_path = find_file(root, ROUTES_FILENAME)
-    cp_path = find_file(root, CHOKEPOINTS_FILENAME)
+    routes_path = root / "data" / "processed" / ROUTES_FILENAME
+    cp_path = root / "data" / "curated" / CHOKEPOINTS_FILENAME
     output = root / "eda_outputs" / "chokepoint_sensitivity"; output.mkdir(parents=True, exist_ok=True)
     routes, chokepoints = read_geojson(routes_path), read_geojson(cp_path)
     route_geometries, cp_geometries, qa = validate_inputs(routes, chokepoints)
