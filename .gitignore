@@ -4,19 +4,16 @@
 
 data/*
 !data/README.md
-
 !data/raw/
 data/raw/*
-!data/raw/.gitkeep
-
+!data/raw/README.md
 !data/curated/
 data/curated/*
 !data/curated/PortWatch_28_geometry_registry.xlsx
 !data/curated/PortWatch_28_chokepoints_geometry.geojson
-
 !data/processed/
 data/processed/*
-!data/processed/.gitkeep
+!data/processed/README.md
 
 # ==========================================
 # GENERATED OUTPUTS
