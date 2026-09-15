@@ -350,7 +350,7 @@ def main() -> None:
     root = code_root()
     routes_path = find_file(root, ROUTES_FILENAME)
     cp_path = find_file(root, CHOKEPOINTS_FILENAME)
-    output = root / "outputs" / "chokepoint_sensitivity"; output.mkdir(parents=True, exist_ok=True)
+    output = root / "eda_outputs" / "chokepoint_sensitivity"; output.mkdir(parents=True, exist_ok=True)
     routes, chokepoints = read_geojson(routes_path), read_geojson(cp_path)
     route_geometries, cp_geometries, qa = validate_inputs(routes, chokepoints)
     detail, summary, assignments = analyse(routes, chokepoints, route_geometries, cp_geometries)
