@@ -1,6 +1,6 @@
 """Build the monthly LNG terminal-chokepoint network from matched voyages.
 
-Inputs (by default, in a ``data`` folder beside this script):
+Inputs (by default, in ``data/processed``):
   - LNG_voyage_node_matching.xlsx, sheet ``Matched Voyages``
   - LNG_multilayer_nodes.csv
   - LNG_1037_routes_with_final_chokepoints.geojson
@@ -43,7 +43,7 @@ DUPLICATE_COLUMNS = [
 
 def parse_args() -> argparse.Namespace:
     base_dir = Path(__file__).resolve().parents[2]
-    data_dir = base_dir / "data"
+    processed_dir = base_dir / "data" / "processed"
 
     parser = argparse.ArgumentParser(
         description=(
@@ -54,25 +54,25 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--voyages",
         type=Path,
-        default=data_dir / DEFAULT_VOYAGES,
+        default=processed_dir / DEFAULT_VOYAGES,
         help="Matched-voyage workbook.",
     )
     parser.add_argument(
         "--nodes",
         type=Path,
-        default=data_dir / DEFAULT_NODES,
+        default=processed_dir / DEFAULT_NODES,
         help="Multilayer node table.",
     )
     parser.add_argument(
         "--routes",
         type=Path,
-        default=data_dir / DEFAULT_ROUTES,
+        default=processed_dir / DEFAULT_ROUTES,
         help="Route GeoJSON with final chokepoint assignments.",
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=data_dir,
+        default=processed_dir,
         help="Directory for the two output CSV files.",
     )
     return parser.parse_args()

@@ -9,7 +9,7 @@ from pathlib import Path
 import pandas as pd
 
 def discover_inputs(project_root: Path) -> dict[str, Path]:
-    data_folder = project_root / "data"
+    data_folder = project_root / "data" / "processed"
 
     files = {
         "nodes": data_folder / "LNG_multilayer_nodes.csv",

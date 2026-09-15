@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Generate maritime routes for the 1,037 observed LNG export OD pairs.
 
-The script reads ``data/LNG_voyage_node_matching.xlsx``, prepares the unique
+The script reads ``data/processed/LNG_voyage_node_matching.xlsx``, prepares the unique
 export origin-destination pairs, and runs the Eurostat SeaRoute JAR stored in
 ``tools/searoute``. The resulting unclassified route geometries are written to
-``data/LNG_1037_routes_searoute.geojson``.
+``data/processed/LNG_1037_routes_searoute.geojson``.
 
 Default routing settings reproduce the configuration used for the existing
 route dataset: 5 km network resolution.
@@ -29,7 +29,7 @@ EXPECTED_ROUTE_COUNT = 1_037
 
 def parse_args() -> argparse.Namespace:
     project_root = Path(__file__).resolve().parents[2]
-    data_dir = project_root / "data"
+    processed_dir = project_root / "data" / "processed"
     searoute_dir = project_root / "tools" / "searoute"
 
     parser = argparse.ArgumentParser(
@@ -41,7 +41,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--workbook",
         type=Path,
-        default=data_dir / WORKBOOK_NAME,
+        default=processed_dir / WORKBOOK_NAME,
         help="Voyage matching workbook produced by script 01.",
     )
     parser.add_argument(
@@ -53,7 +53,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output",
         type=Path,
-        default=data_dir / OUTPUT_NAME,
+        default=processed_dir / OUTPUT_NAME,
         help="Output GeoJSON containing the unclassified SeaRoute routes.",
     )
     parser.add_argument(

@@ -10,7 +10,7 @@ import pandas as pd
 # ============================================================
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-DATA_DIR = BASE_DIR / "data"
+DATA_DIR = BASE_DIR / "data" / "processed"
 EDA_DIR = BASE_DIR / "eda_outputs"
 OUTPUT_DIR = EDA_DIR / "network_level"
 DATA_OUTPUT_DIR = OUTPUT_DIR / "data"

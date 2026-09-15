@@ -2,8 +2,8 @@
 
 The script reconstructs the two upstream datasets used by the network pipeline:
 
-* ``LNG_voyage_node_matching.xlsx``
-* ``LNG_multilayer_nodes.csv``
+* ``data/processed/LNG_voyage_node_matching.xlsx``
+* ``data/processed/LNG_multilayer_nodes.csv``
 
 Raw LNG-T3 inputs remain unchanged. The workbook preserves all original voyage
 rows (including return legs); filtering and voyage deduplication are performed
@@ -52,15 +52,18 @@ DUPLICATE_COLUMNS = [
 def parse_args() -> argparse.Namespace:
     project_root = Path(__file__).resolve().parents[2]
     data_dir = project_root / "data"
+    raw_dir = data_dir / "raw"
+    curated_dir = data_dir / "curated"
+    processed_dir = data_dir / "processed"
     
     parser = argparse.ArgumentParser(
         description="Match LNG-T3 voyages to terminal nodes and build node data."
     )
-    parser.add_argument("--voyages", type=Path, default=data_dir / VOYAGES_NAME)
-    parser.add_argument("--terminals", type=Path, default=data_dir / TERMINALS_NAME)
-    parser.add_argument("--registry", type=Path, default=data_dir / REGISTRY_NAME)
-    parser.add_argument("--chokepoints", type=Path, default=data_dir / CHOKEPOINTS_NAME)
-    parser.add_argument("--output-dir", type=Path, default=data_dir)
+    parser.add_argument("--voyages", type=Path, default=raw_dir / VOYAGES_NAME)
+    parser.add_argument("--terminals", type=Path, default=raw_dir / TERMINALS_NAME)
+    parser.add_argument("--registry", type=Path, default=curated_dir / REGISTRY_NAME)
+    parser.add_argument("--chokepoints", type=Path, default=curated_dir / CHOKEPOINTS_NAME)
+    parser.add_argument("--output-dir", type=Path, default=processed_dir)
     return parser.parse_args()
 
 
