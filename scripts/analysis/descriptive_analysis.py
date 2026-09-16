@@ -424,9 +424,6 @@ def analyze_edges(edges):
         index=False
     )
 
-    print("\nTop extreme observations:")
-    print(extreme_qa.head(40).to_string(index=False))
-
 # ============================================================
 # TEMPORAL ANALYSIS
 # ============================================================
@@ -911,20 +908,6 @@ def analyze_temporal_network(edges, monthly_qa):
         TEMPORAL_DIR / "temporal_activity_detail.csv",
         index=False
     )
-    
-    # ========================================================
-    # 9. SAVE MONTHLY OUTPUT
-    # ========================================================
-
-    print(
-        "\nMonthly structural network statistics:"
-    )
-
-    print(
-        monthly.to_string(
-            index=False
-        )
-    )
 
     monthly.to_csv(
         TEMPORAL_DIR /
@@ -933,7 +916,7 @@ def analyze_temporal_network(edges, monthly_qa):
     )
 
     # --------------------------------------------------------
-    # Print months requiring low-activity inspection
+    # Months with lower activity
     # --------------------------------------------------------
 
     activity_watch = (
@@ -951,20 +934,6 @@ def analyze_temporal_network(edges, monthly_qa):
             ]
         ]
     )
-
-    print(
-        "\nMonths flagged for low temporal activity review:"
-    )
-
-    if activity_watch.empty:
-        print("None")
-
-    else:
-        print(
-            activity_watch.to_string(
-                index=False
-            )
-        )
 
     activity_watch.to_csv(
         TEMPORAL_DIR / "temporal_activity_watch.csv",
@@ -1219,9 +1188,6 @@ def analyze_temporal_network(edges, monthly_qa):
 # ============================================================
 
 def analyze_flow_distribution(edges):
-    if "lng_flow_cmb" not in edges.columns:
-        print("\nNo lng_flow_cmb column found. Flow analysis skipped.")
-        return
 
     print("\n" + "=" * 70)
     print("LNG FLOW DISTRIBUTION")
@@ -1287,7 +1253,6 @@ def analyze_flow_distribution(edges):
         )
         plt.close()
 
-
 # ============================================================
 # TOP EDGES
 # ============================================================
@@ -1298,13 +1263,6 @@ def analyze_top_edges(edges):
         "to_node_id",
         "lng_flow_cmb",
     }
-
-    if not required.issubset(edges.columns):
-        return
-
-    print("\n" + "=" * 70)
-    print("TOP EDGES BY CUMULATIVE LNG FLOW")
-    print("=" * 70)
 
     top_edges = (
         edges.groupby(
@@ -1324,34 +1282,29 @@ def analyze_top_edges(edges):
         )
     )
 
-    if "voyage_count" in edges.columns:
-        voyages = (
-            edges.groupby(
-                ["from_node_id", "to_node_id"],
-                as_index=False
-            )["voyage_count"]
-            .sum()
-            .rename(
-                columns={
-                    "voyage_count": "cumulative_voyage_traversals"
-                }
-            )
+    voyages = (
+        edges.groupby(
+            ["from_node_id", "to_node_id"],
+            as_index=False
+        )["voyage_count"]
+        .sum()
+        .rename(
+            columns={
+                "voyage_count": "cumulative_voyage_traversals"
+            }
         )
+    )
 
-        top_edges = top_edges.merge(
-            voyages,
-            on=["from_node_id", "to_node_id"],
-            how="left"
-        )
-
-    print("\nTop 20 edges:")
-    print(top_edges.head(20))
+    top_edges = top_edges.merge(
+        voyages,
+        on=["from_node_id", "to_node_id"],
+        how="left"
+    )
 
     top_edges.to_csv(
         RANKINGS_DIR / "edges_ranked_by_cumulative_flow.csv",
         index=False
     )
-
 
 # ============================================================
 # NODE ACTIVITY
@@ -1363,9 +1316,6 @@ def analyze_node_activity(nodes, edges):
         "to_node_id",
         "lng_flow_cmb",
     }
-
-    if not required.issubset(edges.columns):
-        return
 
     print("\n" + "=" * 70)
     print("NODE ACTIVITY")
@@ -1415,55 +1365,33 @@ def analyze_node_activity(nodes, edges):
     # Add node type
     # --------------------------------------------------------
 
-    if "node_type" in nodes.columns:
+    node_info = (
+        nodes[
+            ["node_id", "node_type"]
+        ]
+        .drop_duplicates("node_id")
+    )
 
-        node_info = (
-            nodes[
-                ["node_id", "node_type"]
-            ]
-            .drop_duplicates("node_id")
-        )
-
-        activity = activity.merge(
-            node_info,
-            on="node_id",
-            how="left"
-        )
-
-    else:
-        activity["node_type"] = "unknown"
-
-    # Avoid problems with missing node types
-    activity["node_type"] = (
-        activity["node_type"]
-        .fillna("unknown")
+    activity = activity.merge(
+        node_info,
+        on="node_id",
+        how="left"
     )
 
     # --------------------------------------------------------
     # Flow indicators
     # --------------------------------------------------------
 
-    # Sum of all incoming and outgoing edge flows associated
-    # with the node.
-    #
-    # For chokepoints, this double-counts transit cargo because
-    # the same LNG appears once on the incoming edge and once
-    # on the outgoing edge.
+    # Sum of all incoming and outgoing edge flows associated with the node.
+    # For chokepoints, this double-counts transit cargo because the same LNG appears once on the incoming edge and once on the outgoing edge.
     activity["incident_flow"] = (
         activity["incoming_flow"]
         + activity["outgoing_flow"]
     )
 
     # Observed LNG throughput.
-    #
-    # For chokepoints:
-    # incoming and outgoing flows represent the same physical
-    # cargo, so dividing incident flow by two avoids double
-    # counting.
-    #
-    # For LNG terminals:
-    # the terminal is normally an origin or destination, so the
-    # total incident flow is the appropriate observed throughput.
+    # For chokepoints dividing incident flow by two avoids double counting.
+     # For LNG terminals the total incident flow is the appropriate observed throughput.
     activity["node_throughput"] = np.where(
         activity["node_type"]
         .astype(str)
@@ -1479,10 +1407,6 @@ def analyze_node_activity(nodes, edges):
         + activity["outgoing_flow"]
     )
 
-    # Difference between incoming and outgoing flow.
-    #
-    # For pure transit chokepoints this should generally be
-    # close to zero.
     activity["flow_imbalance"] = abs(
         activity["outgoing_flow"]
         - activity["incoming_flow"]
@@ -1546,45 +1470,17 @@ def analyze_node_activity(nodes, edges):
         "node_throughput",
         ascending=False
     )
-
-    print("\nTop 20 nodes by observed LNG throughput:")
-
-    print(
-        activity[
-            [
-                "node_id",
-                "node_type",
-                "node_throughput",
-                "incident_flow",
-                "flow_imbalance",
-                "incoming_flow",
-                "outgoing_flow",
-                "in_degree",
-                "out_degree",
-                "total_degree",
-            ]
-        ]
-        .head(20)
-        .to_string(index=False)
-    )
-
-    # --------------------------------------------------------
-    # Save output
-    # --------------------------------------------------------
-
+    
     activity.to_csv(
         DATA_OUTPUT_DIR / "node_activity.csv",
         index=False
     )
-
 
 # ============================================================
 # CONCENTRATION
 # ============================================================
 
 def analyze_flow_concentration(edges):
-    if "lng_flow_cmb" not in edges.columns:
-        return
 
     print("\n" + "=" * 70)
     print("FLOW CONCENTRATION")
@@ -1603,9 +1499,6 @@ def analyze_flow_concentration(edges):
     )
 
     total_flow = edge_flow["lng_flow_cmb"].sum()
-
-    if total_flow <= 0:
-        return
 
     edge_flow["flow_share"] = (
         edge_flow["lng_flow_cmb"]
@@ -1656,9 +1549,6 @@ def analyze_outliers(edges):
         if col in edges.columns
     ]
 
-    if not available:
-        return
-
     print("\n" + "=" * 70)
     print("OUTLIER CHECK")
     print("=" * 70)
@@ -1704,9 +1594,6 @@ def analyze_outliers(edges):
         )
 
     results_df = pd.DataFrame(results)
-
-    print(results_df)
-
     results_df.to_csv(
         DATA_OUTPUT_DIR / "outlier_summary.csv",
         index=False
@@ -1742,9 +1629,6 @@ def analyze_correlations(edges):
     corr = edges[columns].corr(
         method="spearman"
     )
-
-    print("\nSpearman correlation matrix:")
-    print(corr.round(3))
 
     corr.to_csv(
         CORRELATIONS_DIR / "spearman_correlations.csv"
