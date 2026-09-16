@@ -128,140 +128,199 @@ def analyze_nodes(nodes):
     # Node types
     # --------------------------------------------------------
 
-    possible_type_columns = [
-        "node_type",
-        "type",
-        "layer",
-        "category",
-    ]
+    type_col = "node_type"
 
-    type_col = next(
-        (col for col in possible_type_columns if col in nodes.columns),
-        None
+    node_types = (
+        nodes[type_col]
+        .value_counts(dropna=False)
+        .rename_axis(type_col)
+        .reset_index(name="count")
     )
 
-    if type_col:
-        node_types = (
-            nodes[type_col]
-            .value_counts(dropna=False)
-            .rename_axis(type_col)
-            .reset_index(name="count")
-        )
+    print(f"\nNodes by {type_col}:")
+    print(node_types)
 
-        print(f"\nNodes by {type_col}:")
-        print(node_types)
+    node_types.to_csv(
+        DATA_OUTPUT_DIR / "nodes_by_type.csv",
+        index=False
+    )
 
-        node_types.to_csv(
-            DATA_OUTPUT_DIR / "nodes_by_type.csv",
-            index=False
-        )
+    plt.figure(figsize=(8, 5))
+    node_types.set_index(type_col)["count"].plot(kind="bar")
 
-        plt.figure(figsize=(8, 5))
-        node_types.set_index(type_col)["count"].plot(kind="bar")
+    plt.title("Number of nodes by type")
+    plt.xlabel("Node type")
+    plt.ylabel("Number of nodes")
+    plt.tight_layout()
 
-        plt.title("Number of nodes by type")
-        plt.xlabel("Node type")
-        plt.ylabel("Number of nodes")
-        plt.tight_layout()
-
-        plt.savefig(
-            DISTRIBUTIONS_DIR / "nodes_by_type.png",
-            dpi=300
-        )
-        plt.close()
+    plt.savefig(
+        DISTRIBUTIONS_DIR / "nodes_by_type.png",
+        dpi=300
+    )
+    plt.close()
 
     # --------------------------------------------------------
     # Countries
     # --------------------------------------------------------
 
-    possible_country_columns = [
-        "country",
-        "country_name",
-        "iso3",
-    ]
+    country_col = "country"
 
-    country_col = next(
-        (col for col in possible_country_columns if col in nodes.columns),
-        None
+    # ----------------------------------------------------
+    # All nodes with country information
+    # ----------------------------------------------------
+
+    nodes_with_country = nodes[nodes[country_col].notna()].copy()
+
+    countries = (
+        nodes_with_country[country_col]
+        .value_counts()
+        .rename_axis(country_col)
+        .reset_index(name="node_count")
     )
 
-    if country_col:
+    countries.to_csv(
+        DATA_OUTPUT_DIR / "nodes_by_country.csv",
+        index=False
+    )
 
-        # ----------------------------------------------------
-        # All nodes with country information
-        # ----------------------------------------------------
+    print("\nTop countries by number of nodes:")
+    print(countries.head(20))
 
-        nodes_with_country = nodes[nodes[country_col].notna()].copy()
+    # ----------------------------------------------------
+    # Country counts by node type
+    # ----------------------------------------------------
 
-        countries = (
-            nodes_with_country[country_col]
-            .value_counts()
-            .rename_axis(country_col)
-            .reset_index(name="node_count")
+    country_by_type = (
+        nodes_with_country
+        .groupby([type_col, country_col])
+        .size()
+        .reset_index(name="node_count")
+        .sort_values(
+            ["node_count"],
+            ascending=False
         )
+    )
 
-        countries.to_csv(
-            DATA_OUTPUT_DIR / "nodes_by_country.csv",
-            index=False
-        )
+    country_by_type.to_csv(
+        DATA_OUTPUT_DIR / "nodes_by_country_and_type.csv",
+        index=False
+    )
+    
+    # --------------------------------------------------------
+    # Terminal processing capacity
+    # --------------------------------------------------------
 
-        print("\nTop countries by number of nodes:")
-        print(countries.head(20))
+    terminal_nodes = (
+        nodes[nodes["node_type"].eq("terminal")]
+        .copy()
+    )
 
-        # ----------------------------------------------------
-        # Missing country values
-        # ----------------------------------------------------
+    terminal_nodes["capacity_mtpa"] = pd.to_numeric(
+        terminal_nodes["capacity_mtpa"],
+        errors="raise"
+    )
 
-        missing_country = nodes[nodes[country_col].isna()].copy()
-
-        print(
-            f"\nNodes without country information: "
-            f"{len(missing_country):,}"
-        )
-
-        if len(missing_country) > 0:
-            columns_to_show = ["node_id"]
-
-            if type_col:
-                columns_to_show.append(type_col)
-
-            available_columns = [
-                col for col in columns_to_show
-                if col in missing_country.columns
+    capacity_statistics = (
+        terminal_nodes["capacity_mtpa"]
+        .describe(
+            percentiles=[
+                0.01,
+                0.05,
+                0.25,
+                0.50,
+                0.75,
+                0.95,
+                0.99,
             ]
+        )
+        .rename("capacity_mtpa")
+        .to_frame()
+    )
 
-            print(
-                missing_country[
-                    available_columns
-                ].head(50)
-            )
+    capacity_statistics.to_csv(
+        DATA_OUTPUT_DIR /
+        "terminal_capacity_descriptive_statistics.csv"
+    )
 
-            missing_country.to_csv(
-                DATA_OUTPUT_DIR / "nodes_missing_country.csv",
-                index=False
-            )
+    # --------------------------------------------------------
+    # Capacity by infrastructure type
+    # --------------------------------------------------------
 
-        # ----------------------------------------------------
-        # Country counts by node type
-        # ----------------------------------------------------
+    capacity_by_type = (
+        terminal_nodes
+        .groupby(
+            "infrastructure_type",
+            dropna=False
+        )
+        .agg(
+            terminal_count=("node_id", "nunique"),
+            total_capacity_mtpa=("capacity_mtpa", "sum"),
+            mean_capacity_mtpa=("capacity_mtpa", "mean"),
+            median_capacity_mtpa=("capacity_mtpa", "median"),
+            min_capacity_mtpa=("capacity_mtpa", "min"),
+            max_capacity_mtpa=("capacity_mtpa", "max"),
+        )
+        .reset_index()
+    )
 
-        if type_col:
+    capacity_by_type.to_csv(
+        DATA_OUTPUT_DIR /
+        "terminal_capacity_by_infrastructure_type.csv",
+        index=False
+    )
 
-            country_by_type = (
-                nodes_with_country
-                .groupby([type_col, country_col])
-                .size()
-                .reset_index(name="node_count")
-                .sort_values(
-                    ["node_count"],
-                    ascending=False
-                )
-            )
+    # --------------------------------------------------------
+    # Capacity by country
+    # --------------------------------------------------------
 
-            country_by_type.to_csv(
-                DATA_OUTPUT_DIR / "nodes_by_country_and_type.csv",
-                index=False
-            )
+    capacity_by_country = (
+        terminal_nodes
+        .groupby(
+            "country",
+            dropna=False
+        )
+        .agg(
+            terminal_count=("node_id", "nunique"),
+            total_capacity_mtpa=("capacity_mtpa", "sum"),
+            mean_capacity_mtpa=("capacity_mtpa", "mean"),
+            median_capacity_mtpa=("capacity_mtpa", "median"),
+        )
+        .reset_index()
+        .sort_values(
+            "total_capacity_mtpa",
+            ascending=False
+        )
+    )
+
+    capacity_by_country.to_csv(
+        DATA_OUTPUT_DIR /
+        "terminal_capacity_by_country.csv",
+        index=False
+    )
+
+    # --------------------------------------------------------
+    # Capacity distribution
+    # --------------------------------------------------------
+
+    plt.figure(figsize=(8, 5))
+
+    plt.hist(
+        terminal_nodes["capacity_mtpa"],
+        bins=30,
+        edgecolor="black"
+    )
+
+    plt.title("Distribution of LNG terminal processing capacity")
+    plt.xlabel("Processing capacity (MTPA)")
+    plt.ylabel("Number of terminals")
+    plt.tight_layout()
+
+    plt.savefig(
+        DISTRIBUTIONS_DIR /
+        "terminal_capacity_distribution.png",
+        dpi=300
+    )
+    plt.close()
 
 
 # ============================================================
@@ -276,41 +335,34 @@ def analyze_edges(edges):
     print(f"\nTotal edge-period observations: {len(edges):,}")
 
     # --------------------------------------------------------
-    # Unique physical/directed edges
+    # Unique directed edges
     # --------------------------------------------------------
 
-    required_cols = {"from_node_id", "to_node_id"}
+    unique_edges = (
+        edges[["from_node_id", "to_node_id"]]
+        .drop_duplicates()
+    )
 
-    if required_cols.issubset(edges.columns):
-        unique_edges = (
-            edges[["from_node_id", "to_node_id"]]
-            .drop_duplicates()
-        )
-
-        print(
-            f"Unique directed node pairs: "
-            f"{len(unique_edges):,}"
-        )
+    print(
+        f"Unique directed node pairs: "
+        f"{len(unique_edges):,}"
+    )
 
     # --------------------------------------------------------
     # Edge types
     # --------------------------------------------------------
 
-    if "edge_type" in edges.columns:
-        edge_types = (
-            edges["edge_type"]
-            .value_counts(dropna=False)
-            .rename_axis("edge_type")
-            .reset_index(name="count")
-        )
+    edge_types = (
+        edges["edge_type"]
+        .value_counts(dropna=False)
+        .rename_axis("edge_type")
+        .reset_index(name="count")
+    )
 
-        print("\nEdge types:")
-        print(edge_types)
-
-        edge_types.to_csv(
-            DATA_OUTPUT_DIR / "edge_types.csv",
-            index=False
-        )
+    edge_types.to_csv(
+        DATA_OUTPUT_DIR / "edge_types.csv",
+        index=False
+    )
 
     # --------------------------------------------------------
     # Extreme-value QA
