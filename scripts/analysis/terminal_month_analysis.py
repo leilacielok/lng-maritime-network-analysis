@@ -31,13 +31,10 @@ for directory in [
     directory.mkdir(parents=True, exist_ok=True)
 
 
-# The matched-voyage workbook is preferred because it contains the canonical
-# LNGN node IDs already used in the multilayer network.
 MATCHED_VOYAGES_FILE = DATA_DIR / "LNG_voyage_node_matching.xlsx"
 NODES_FILE = DATA_DIR / "LNG_multilayer_nodes.csv"
 
-# Month assignment is based on voyage departure. Change to "end_date" if the
-# research design should assign a cargo to its delivery month instead.
+# Month assignment is based on voyage departure
 DATE_COLUMN = "start_date"
 PAGERANK_ALPHA = 0.85
 TOP_N = 20
@@ -271,33 +268,43 @@ def load_data():
 
 def build_complete_panel(voyages, nodes):
     months = pd.date_range(
-        voyages["period_month"].min(), voyages["period_month"].max(), freq="MS"
+        voyages["period_month"].min(),
+        voyages["period_month"].max(),
+        freq="MS",
+    )
+    
+    panel = (
+        pd.MultiIndex.from_product(
+            [nodes["node_id"].sort_values(), months],
+            names=["terminal_id", "period_month"],
         )
-    panel = pd.MultiIndex.from_product(
-        [nodes["node_id"].sort_values(), months],
-        names=["terminal_id", "period_month"],
-    ).to_frame(index=False)
+        .to_frame(index=False)
+    )
 
     metadata_columns = [
-        column
-        for column in [
-            "node_id",
-            "node_name",
-            "country",
-            "region",
-            "infrastructure_type",
-            "infrastructure_status",
-            "capacity_mtpa",
-            "latitude",
-            "longitude",
-        ]
-        if column in nodes.columns
+        "node_id",
+        "node_name",
+        "country",
+        "latitude",
+        "longitude",
+        "infrastructure_type",
+        "capacity_mtpa",
     ]
-    metadata = nodes[metadata_columns].rename(
-        columns={"node_id": "terminal_id"}
-    )
-    return panel.merge(metadata, on="terminal_id", how="left", validate="many_to_one")
 
+    terminal_metadata = (
+        nodes[metadata_columns]
+        .drop_duplicates(subset=["node_id"])
+        .rename(columns={"node_id": "terminal_id"})
+    )
+
+    panel = panel.merge(
+        terminal_metadata,
+        on="terminal_id",
+        how="left",
+        validate="many_to_one",
+    )
+    
+    return panel
 
 def calculate_basic_activity(voyages):
     outgoing = (
@@ -569,37 +576,142 @@ def calculate_directional_pagerank(voyages, all_terminal_ids):
             )
     return pd.DataFrame(records)
 
+def calculate_voyage_distance_metrics(voyages):
+    """
+    Calculate the arithmetic mean voyage distance for each terminal-month.
+    """
+
+    distance_data = voyages[
+        [
+            "period_month",
+            "from_node_id",
+            "to_node_id",
+            "voyage_distance",
+        ]
+    ].copy()
+
+    distance_data["voyage_distance"] = pd.to_numeric(
+        distance_data["voyage_distance"],
+        errors="coerce",
+    )
+
+    distance_data = distance_data.loc[
+        distance_data["period_month"].notna()
+        & distance_data["voyage_distance"].gt(0)
+    ]
+
+    # Mean distance of voyages departing from each terminal
+    outgoing_distance = (
+        distance_data.dropna(subset=["from_node_id"])
+        .groupby(
+            ["period_month", "from_node_id"],
+            as_index=False,
+        )
+        .agg(
+            mean_outgoing_voyage_distance=(
+                "voyage_distance",
+                "mean",
+            )
+        )
+        .rename(columns={"from_node_id": "terminal_id"})
+    )
+
+    # Mean distance of voyages arriving at each terminal
+    incoming_distance = (
+        distance_data.dropna(subset=["to_node_id"])
+        .groupby(
+            ["period_month", "to_node_id"],
+            as_index=False,
+        )
+        .agg(
+            mean_incoming_voyage_distance=(
+                "voyage_distance",
+                "mean",
+            )
+        )
+        .rename(columns={"to_node_id": "terminal_id"})
+    )
+
+    return outgoing_distance.merge(
+        incoming_distance,
+        on=["terminal_id", "period_month"],
+        how="outer",
+        validate="one_to_one",
+    )
 
 def assemble_metrics(voyages, nodes):
     panel = build_complete_panel(voyages, nodes)
-    outgoing, incoming = calculate_basic_activity(voyages)
+
+    outgoing_activity, incoming_activity = calculate_basic_activity(voyages)
+    distance_metrics = calculate_voyage_distance_metrics(voyages)
     concentration = calculate_concentration(voyages)
     export_dep, receipt_dep = calculate_dependence(voyages)
-    pagerank = calculate_directional_pagerank(voyages, nodes["node_id"].tolist())
+    pagerank = calculate_directional_pagerank(
+        voyages,
+        nodes["node_id"].tolist(),
+    )
+    
+    metric_frames = [
+        outgoing_activity,
+        incoming_activity,
+        distance_metrics,
+        concentration,
+        export_dep,
+        receipt_dep,
+        pagerank,
+    ]
+    
+    for frame in metric_frames:
+        panel = panel.merge(frame, on=["terminal_id", "period_month"], how="left", validate="one_to_one")
+    
+    activity_columns = [
+    "outgoing_flow",
+    "incoming_flow",
+    "outgoing_voyages",
+    "incoming_voyages",
+]
 
-    for frame in [outgoing, incoming, concentration, export_dep, receipt_dep, pagerank]:
-        panel = panel.merge(frame, on=["terminal_id", "period_month"], how="left")
-
-    activity_columns = ["outgoing_flow", "incoming_flow", "outgoing_voyages", "incoming_voyages"]
     panel[activity_columns] = panel[activity_columns].fillna(0)
-    panel["throughput"] = panel["outgoing_flow"] + panel["incoming_flow"]
-    panel["voyage_count"] = panel["outgoing_voyages"] + panel["incoming_voyages"]
-    panel["export_share"] = safe_divide(panel["outgoing_flow"], panel["throughput"])
+
+    panel["throughput"] = (
+        panel["outgoing_flow"]
+        + panel["incoming_flow"]
+    )
+
+    panel["voyage_count"] = (
+        panel["outgoing_voyages"]
+        + panel["incoming_voyages"]
+    )
+
+    panel["export_share"] = safe_divide(
+        panel["outgoing_flow"],
+        panel["throughput"],
+    )
+
     panel["terminal_role"] = [
-        flow_pattern(outgoing, incoming)
-        for outgoing, incoming in zip(
+        flow_pattern(out_flow, in_flow)
+        for out_flow, in_flow in zip(
             panel["outgoing_flow"],
             panel["incoming_flow"],
         )
     ]
+
     panel["active"] = panel["throughput"].gt(0).astype(int)
 
     exporter = panel["terminal_role"].eq("exporter")
     importer = panel["terminal_role"].eq("importer")
     bidirectional = panel["terminal_role"].eq("bidirectional")
 
-    # For bidirectional terminals, combine inbound and outbound measures using
-    # the corresponding flow shares.
+    panel["mean_voyage_distance"] = np.select(
+        [exporter, importer],
+        [
+            panel["mean_outgoing_voyage_distance"],
+            panel["mean_incoming_voyage_distance"],
+        ],
+        default=np.nan,
+    )
+    
+    # For bidirectional terminals, combine inbound and outbound measures using the corresponding flow shares.
     out_share = panel["export_share"].fillna(0)
     in_share = 1 - out_share
     panel["counterparty_hhi_terminal"] = np.select(
@@ -919,22 +1031,66 @@ def main():
     country_month, country_full_period = build_country_role_tables(voyages)
 
     output_columns = [
-        "terminal_id", "node_name", "country", "region", "period_month", "year", "month",
-        "infrastructure_type","infrastructure_status", "terminal_role", "capacity_mtpa", "active", "export_share",
-        "outgoing_flow", "incoming_flow", "throughput", "outgoing_voyages",
-        "incoming_voyages", "voyage_count", "counterparty_count",
-        "counterparty_country_count", "counterparty_hhi_terminal",
-        "counterparty_hhi_country", "effective_counterparties_terminal",
-        "effective_counterparties_country", "max_dependence_generated",
-        "weighted_dependence_generated", "country_terminal_dependence",
-        "role_specific_dependence", "import_pagerank", "export_pagerank",
-        "role_specific_pagerank", "latitude", "longitude",
-    ]
-    output_columns = [column for column in output_columns if column in panel.columns]
-    write_csv(panel[output_columns], DATA_OUTPUT_DIR / "terminal_month_metrics.csv")
-    write_csv(country_month, DATA_OUTPUT_DIR / "country_month_roles.csv")
-    write_csv(country_full_period, DATA_OUTPUT_DIR / "country_roles_full_period.csv")
+        # Identifiers and metadata
+        "terminal_id",
+        "node_name",
+        "period_month",
+        "year",
+        "month",
+        "infrastructure_type",
+        "capacity_mtpa",
 
+        # Activity and role
+        "terminal_role",
+        "active",
+        "export_share",
+        "outgoing_flow",
+        "incoming_flow",
+        "throughput",
+        "outgoing_voyages",
+        "incoming_voyages",
+        "voyage_count",
+
+        # Voyage distance
+        "mean_outgoing_voyage_distance",
+        "mean_incoming_voyage_distance",
+        "mean_voyage_distance",
+
+        # Counterparties
+        "counterparty_count",
+        "counterparty_country_count",
+        "counterparty_hhi_terminal",
+        "counterparty_hhi_country",
+        "effective_counterparties_terminal",
+        "effective_counterparties_country",
+
+        # Dependence
+        "max_dependence_generated",
+        "weighted_dependence_generated",
+        "country_terminal_dependence",
+        "role_specific_dependence",
+
+        # PageRank
+        "import_pagerank",
+        "export_pagerank",
+        "role_specific_pagerank",
+    ]
+    
+    write_csv(
+        panel[output_columns],
+        DATA_OUTPUT_DIR / "terminal_month_metrics.csv",
+    )
+    
+    write_csv(
+        country_month,
+        DATA_OUTPUT_DIR / "country_month_roles.csv",
+    )
+
+    write_csv(
+        country_full_period,
+        DATA_OUTPUT_DIR / "country_roles_full_period.csv",
+    )
+    
     country_role_summary = (
         country_month.loc[country_month["active"].eq(1)]
         .groupby(["period_month", "country_role"], as_index=False)
