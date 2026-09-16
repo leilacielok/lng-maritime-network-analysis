@@ -286,6 +286,7 @@ def build_complete_panel(voyages, nodes):
             "region",
             "infrastructure_type",
             "infrastructure_status",
+            "capacity_mtpa",
             "latitude",
             "longitude",
         ]
@@ -822,7 +823,7 @@ def main():
 
     output_columns = [
         "terminal_id", "node_name", "country", "region", "period_month", "year", "month",
-        "infrastructure_type","infrastructure_status", "terminal_role", "active", "export_share",
+        "infrastructure_type","infrastructure_status", "terminal_role", "capacity_mtpa", "active", "export_share",
         "outgoing_flow", "incoming_flow", "throughput", "outgoing_voyages",
         "incoming_voyages", "voyage_count", "counterparty_count",
         "counterparty_country_count", "counterparty_hhi_terminal",

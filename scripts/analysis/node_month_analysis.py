@@ -3,13 +3,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
-try:
-    import networkx as nx
-except ImportError as exc:
-    raise ImportError(
-        "This analysis requires networkx. Install it with: pip install networkx"
-    ) from exc
+import networkx as nx
 
 
 # ============================================================
@@ -918,21 +912,10 @@ def analyze_correlations(node_month):
     if len(metrics) < 2:
         return
 
-    pearson = node_month[metrics].corr(method="pearson")
     spearman = node_month[metrics].corr(method="spearman")
-
-    pearson.to_csv(
-        CORRELATIONS_DIR / "pearson_correlations.csv"
-    )
 
     spearman.to_csv(
         CORRELATIONS_DIR / "spearman_correlations.csv"
-    )
-
-    plot_correlation_matrix(
-        pearson,
-        "Pearson correlations across node-month observations",
-        CORRELATIONS_DIR / "pearson_correlation_heatmap.png"
     )
 
     plot_correlation_matrix(
@@ -952,13 +935,6 @@ def analyze_correlations(node_month):
 
             if len(group) < 3:
                 continue
-
-            group[metrics].corr(
-                method="pearson"
-            ).to_csv(
-                CORRELATIONS_DIR /
-                f"pearson_correlations_{safe_name}.csv"
-            )
 
             group[metrics].corr(
                 method="spearman"
