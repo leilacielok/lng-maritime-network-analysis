@@ -96,8 +96,8 @@ def load_inputs(args: argparse.Namespace):
     require_columns(
         terminals,
         {
-            "name", "status", "terminal_type", "region", "areas", "lat",
-            "lon", "UN_LOCODE",
+            "name", "status", "terminal_type", "capacity_mtpa", "region", "areas",
+            "lat", "lon", "UN_LOCODE",
         },
         "LNG terminal table",
     )
@@ -114,6 +114,20 @@ def load_inputs(args: argparse.Namespace):
 
 def prepare_terminal_map(terminals: pd.DataFrame):
     terminals = terminals.copy()
+
+    # PortWatch reports LNG processing capacity in million tonnes per annum.
+    # Rename it in the processed outputs so that the unit remains explicit.
+    terminals["capacity_mtpa"] = pd.to_numeric(terminals["capacity_mtpa"], errors="coerce")
+    invalid_capacity = terminals["capacity_mtpa"].isna() | terminals["capacity_mtpa"].lt(0)
+    if invalid_capacity.any():
+        invalid = terminals.loc[
+            invalid_capacity,
+            ["name", "status", "terminal_type", "capacity_mtpa"],
+        ]
+        raise ValueError(
+            "LNG terminal table contains missing, non-numeric, or negative "
+            "capacity values:\n" + invalid.to_string(index=False)
+        )
     
     type_counts = (
         terminals.groupby("name")["terminal_type"]
@@ -172,11 +186,13 @@ def prepare_terminal_map(terminals: pd.DataFrame):
             "lon": "longitude",
             "terminal_type": "infrastructure_type",
             "status": "infrastructure_status",
+            "capacity": "capacity_mtpa",
         }
     )[
         [
             "node_id", "node_name", "country", "region", "latitude",
-            "longitude", "UN_LOCODE", "infrastructure_type", "infrastructure_status",
+            "longitude", "UN_LOCODE", "infrastructure_type",
+            "infrastructure_status", "capacity_mtpa",
         ]
     ]
     terminal_map["is_operating"] = (
@@ -369,14 +385,15 @@ def build_final_nodes(
     chokepoint_nodes["is_operating"] = pd.NA
     chokepoint_nodes["infrastructure_type"] = pd.NA
     chokepoint_nodes["infrastructure_status"] = pd.NA
+    chokepoint_nodes["capacity_mtpa"] = pd.NA
     
     for column in count_and_flow:
         chokepoint_nodes[column] = pd.NA
 
     columns = [
         "node_id", "node_name", "node_type", "layer", "terminal_role", "infrastructure_type",
-        "infrastructure_status", "country", "region", "latitude", "longitude", "coordinate_source",
-        "UN_LOCODE", "is_operating", "origin_export_voyages",
+        "infrastructure_status", "capacity_mtpa", "country", "region", "latitude",
+        "longitude", "coordinate_source", "UN_LOCODE", "is_operating", "origin_export_voyages",
         "destination_export_voyages", "origin_lng_volume_cmb",
         "destination_lng_volume_cmb", "geometry_status",
     ]
@@ -480,6 +497,16 @@ def validate_outputs(
         ]
         raise ValueError(
             "Some terminal nodes have no infrastructure type:\n"
+            + missing.to_string(index=False)
+        )
+
+    if terminal_nodes["capacity_mtpa"].isna().any():
+        missing = terminal_nodes.loc[
+            terminal_nodes["capacity_mtpa"].isna(),
+            ["node_id", "node_name"],
+        ]
+        raise ValueError(
+            "Some terminal nodes have no LNG processing capacity:\n"
             + missing.to_string(index=False)
         )
 
