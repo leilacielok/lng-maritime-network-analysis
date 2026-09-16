@@ -57,6 +57,7 @@ METRICS = [
     "import_pagerank",
     "export_pagerank",
     "role_specific_pagerank",
+    "role_specific_dependence",
 ]
 
 
@@ -688,14 +689,15 @@ def make_summary(panel):
 
 
 def make_correlations(panel):
-    active = panel.loc[panel["active"].eq(1), METRICS + ["role_specific_dependence"]]
-    write_csv(active.corr(method="pearson"), CORRELATIONS_DIR / "pearson_active.csv", index=True)
+    
+    #  Correlations across active terminal-month observations
+    active = panel.loc[panel["active"].eq(1), METRICS]
     write_csv(active.corr(method="spearman"), CORRELATIONS_DIR / "spearman_active.csv", index=True)
 
     rows = []
     for role in ["exporter", "importer", "bidirectional"]:
         subset = panel.loc[panel["terminal_role"].eq(role)]
-        for metric in METRICS + ["role_specific_dependence"]:
+        for metric in METRICS:
             rows.append(
                 {
                     "terminal_role": role,
@@ -708,20 +710,115 @@ def make_correlations(panel):
             )
     write_csv(pd.DataFrame(rows), CORRELATIONS_DIR / "correlation_with_throughput_by_role.csv")
 
+    # Terminal-level correlations with capacity
+
+    terminal_metadata = (
+        panel.groupby(
+            "terminal_id",
+            as_index=False,
+        )
+        .agg(
+            node_name=("node_name", "first"),
+            infrastructure_type=(
+                "infrastructure_type",
+                "first",
+            ),
+            capacity_mtpa=("capacity_mtpa", "first"),
+            active_share=("active", "mean"),
+        )
+    )
+
+    terminal_means = (
+        panel.loc[panel["active"].eq(1)]
+        .groupby("terminal_id")[METRICS]
+        .mean()
+        .add_prefix("mean_")
+        .reset_index()
+    )
+
+    terminal_level = terminal_metadata.merge(
+        terminal_means,
+        on="terminal_id",
+        how="left",
+        validate="one_to_one",
+    )
+
+    capacity_variables = [
+        "capacity_mtpa",
+        "active_share",
+        *[
+            f"mean_{metric}"
+            for metric in METRICS
+        ],
+    ]
+
+    capacity_correlations = (
+        terminal_level[capacity_variables]
+        .corr(method="spearman")
+    )
+    
+    write_csv(
+        terminal_level,
+        DATA_OUTPUT_DIR /
+        "terminal_level_capacity_metrics.csv",
+    )
+
+    write_csv(
+        capacity_correlations,
+        CORRELATIONS_DIR /
+        "capacity_spearman_terminal_level.csv",
+        index=True,
+    )
+    
+    # Capacity correlations by infrastructure type
+
+    capacity_rows = []
+
+    for infrastructure_type, subset in terminal_level.groupby(
+        "infrastructure_type"
+    ):
+        for variable in capacity_variables[1:]:
+            capacity_rows.append(
+                {
+                    "infrastructure_type":
+                        infrastructure_type,
+                    "variable": variable,
+                    "spearman_with_capacity":
+                        safe_spearman(
+                            subset["capacity_mtpa"],
+                            subset[variable],
+                        ),
+                    "terminals": (
+                        subset[
+                            ["capacity_mtpa", variable]
+                        ]
+                        .dropna()
+                        .shape[0]
+                    ),
+                }
+            )
+
+    write_csv(
+        pd.DataFrame(capacity_rows),
+        CORRELATIONS_DIR /
+        "capacity_spearman_by_infrastructure_type.csv",
+    )
 
 def make_temporal_stability(panel):
-    active = panel.loc[panel["active"].eq(1)].copy()
     rows = []
-    for terminal_id, group in active.groupby("terminal_id"):
+    for terminal_id, group in panel.groupby("terminal_id"):
         group = group.sort_values("period_month")
-        role = group["terminal_role"].mode().iloc[0]
-        for metric in METRICS + ["role_specific_dependence"]:
+        active_roles = group.loc[group["active"].eq(1),"terminal_role"]
+        role = (active_roles.mode().iloc[0]
+            if not active_roles.empty
+            else "inactive")
+        for metric in METRICS:
             rows.append(
                 {
                     "terminal_id": terminal_id,
                     "modal_role": role,
                     "metric": metric,
-                    "active_months": group[metric].notna().sum(),
+                    "active_months": int(group["active"].sum()),
                     "lag1_autocorrelation": lag1_autocorrelation(group[metric]),
                 }
             )
@@ -729,7 +826,7 @@ def make_temporal_stability(panel):
     write_csv(stability, TEMPORAL_DIR / "lag1_autocorrelation_by_terminal.csv")
 
     rank_rows = []
-    for metric in METRICS + ["role_specific_dependence"]:
+    for metric in METRICS:
         ranks = panel.loc[panel["active"].eq(1), ["period_month", "terminal_id", metric]].dropna()
         ranks["rank"] = ranks.groupby("period_month")[metric].rank(method="average", ascending=False)
         wide = ranks.pivot(index="terminal_id", columns="period_month", values="rank")
