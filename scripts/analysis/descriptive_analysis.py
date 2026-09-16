@@ -185,26 +185,6 @@ def analyze_nodes(nodes):
 
     print("\nTop countries by number of nodes:")
     print(countries.head(20))
-
-    # ----------------------------------------------------
-    # Country counts by node type
-    # ----------------------------------------------------
-
-    country_by_type = (
-        nodes_with_country
-        .groupby([type_col, country_col])
-        .size()
-        .reset_index(name="node_count")
-        .sort_values(
-            ["node_count"],
-            ascending=False
-        )
-    )
-
-    country_by_type.to_csv(
-        DATA_OUTPUT_DIR / "nodes_by_country_and_type.csv",
-        index=False
-    )
     
     # --------------------------------------------------------
     # Terminal processing capacity
