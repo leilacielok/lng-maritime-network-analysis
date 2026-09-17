@@ -124,17 +124,6 @@ def net_trade_position(outgoing_flow, incoming_flow):
 
 def load_data():
 
-    if not MATCHED_VOYAGES_FILE.exists():
-        raise FileNotFoundError(
-            f"Missing {MATCHED_VOYAGES_FILE}. Place the matching workbook "
-            "inside the data folder."
-        )
-    if not NODES_FILE.exists():
-        raise FileNotFoundError(
-            f"Missing {NODES_FILE}. Place the multilayer node table inside "
-            "the data folder."
-        )
-
     voyages = pd.read_excel(MATCHED_VOYAGES_FILE, sheet_name="Matched Voyages")
     nodes = pd.read_csv(NODES_FILE)
 
@@ -152,7 +141,17 @@ def load_data():
         "from_country",
         "to_country",
     }
-    required_nodes = {"node_id", "node_name", "node_type", "country", "region"}
+    required_nodes = {
+        "node_id",
+        "node_name",
+        "node_type",
+        "country",
+        "region",
+        "infrastructure_type",
+        "capacity_mtpa",
+        "unit_count",
+        "start_year",
+    }
 
     missing_voyages = required_voyages.difference(voyages.columns)
     missing_nodes = required_nodes.difference(nodes.columns)
@@ -289,6 +288,8 @@ def build_complete_panel(voyages, nodes):
         "longitude",
         "infrastructure_type",
         "capacity_mtpa",
+        "unit_count",
+        "start_year",
     ]
 
     terminal_metadata = (
@@ -303,6 +304,16 @@ def build_complete_panel(voyages, nodes):
         how="left",
         validate="many_to_one",
     )
+    
+    panel["terminal_age"] = (
+        panel["period_month"].dt.year - panel["start_year"]
+    )
+
+    panel.loc[
+        panel["start_year"].isna()
+        | (panel["terminal_age"] < 0),
+        "terminal_age",
+    ] = np.nan
     
     return panel
 
@@ -1039,6 +1050,9 @@ def main():
         "month",
         "infrastructure_type",
         "capacity_mtpa",
+        "unit_count",
+        "start_year",
+        "terminal_age",
 
         # Activity and role
         "terminal_role",
