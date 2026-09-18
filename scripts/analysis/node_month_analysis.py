@@ -50,10 +50,8 @@ CORE_METRICS = [
     "total_voyages",
     "total_route_exposure",
     "total_degree",
-    "total_strength",
     "betweenness",
     "pagerank",
-    "eigenvector",
     "share_monthly_network_flow",
 ]
 
@@ -136,10 +134,6 @@ def safe_spearman(x, y):
 # ============================================================
 
 def load_data():
-    print("\n" + "=" * 70)
-    print("LOADING NODE-MONTH INPUT DATA")
-    print("=" * 70)
-
     nodes = pd.read_csv(NODES_FILE)
     edges = pd.read_csv(EDGES_FILE)
 
@@ -175,14 +169,6 @@ def load_data():
         raise ValueError(
             "Some period_month values could not be parsed as dates."
         )
-
-    print(f"Nodes: {len(nodes):,}")
-    print(f"Edge-month observations: {len(edges):,}")
-    print(
-        "Months: "
-        f"{edges['period_month'].min():%Y-%m} to "
-        f"{edges['period_month'].max():%Y-%m}"
-    )
 
     return nodes, edges
 
@@ -253,10 +239,6 @@ def build_panel_index(nodes, edges):
 # ============================================================
 
 def calculate_basic_node_month_metrics(edges):
-    print("\n" + "=" * 70)
-    print("CALCULATING NODE-MONTH ACTIVITY METRICS")
-    print("=" * 70)
-
     edges = edges.copy()
     edges["from_node_id"] = edges["from_node_id"].astype(str)
     edges["to_node_id"] = edges["to_node_id"].astype(str)
@@ -467,15 +449,9 @@ def calculate_basic_node_month_metrics(edges):
 # ============================================================
 
 def calculate_monthly_centralities(edges):
-    print("\n" + "=" * 70)
-    print("CALCULATING MONTHLY CENTRALITIES")
-    print("=" * 70)
-
     rows = []
 
     for period_month, month_edges in edges.groupby("period_month"):
-        print(f"  {period_month:%Y-%m}")
-
         graph = nx.DiGraph()
 
         for row in month_edges.itertuples(index=False):
@@ -494,13 +470,7 @@ def calculate_monthly_centralities(edges):
                     weight=weight
                 )
 
-        # Strength = weighted degree using LNG flow as edge weight.
-        in_strength = dict(graph.in_degree(weight="weight"))
-        out_strength = dict(graph.out_degree(weight="weight"))
-
-        # For shortest-path centrality, high LNG flow should imply
-        # stronger/closer connectivity, not a longer path. Therefore
-        # distance is defined as the inverse of positive flow.
+        # For shortest-path centrality, high LNG flow should imply stronger/closer connectivity, not a longer path. Therefore distance is defined as the inverse of positive flow.
         for source, target, data in graph.edges(data=True):
             weight = data.get("weight", 0.0)
 
@@ -530,54 +500,13 @@ def calculate_monthly_centralities(edges):
                 node: np.nan for node in graph.nodes
             }
 
-        # Eigenvector centrality is computed on the undirected weighted
-        # projection to obtain one structural score per node and avoid
-        # ambiguity between left/right directed eigenvectors.
-        undirected = nx.Graph()
-
-        for source, target, data in graph.edges(data=True):
-            weight = data.get("weight", 0.0)
-
-            if undirected.has_edge(source, target):
-                undirected[source][target]["weight"] += weight
-            else:
-                undirected.add_edge(
-                    source,
-                    target,
-                    weight=weight
-                )
-
-        try:
-            eigenvector = nx.eigenvector_centrality_numpy(
-                undirected,
-                weight="weight"
-            )
-        except Exception:
-            try:
-                eigenvector = nx.eigenvector_centrality(
-                    undirected,
-                    weight="weight",
-                    max_iter=5000
-                )
-            except Exception:
-                eigenvector = {
-                    node: np.nan for node in graph.nodes
-                }
-
         for node in graph.nodes:
             rows.append(
                 {
                     "node_id": node,
                     "period_month": period_month,
-                    "in_strength": in_strength.get(node, 0.0),
-                    "out_strength": out_strength.get(node, 0.0),
-                    "total_strength": (
-                        in_strength.get(node, 0.0)
-                        + out_strength.get(node, 0.0)
-                    ),
                     "betweenness": betweenness.get(node, np.nan),
                     "pagerank": pagerank.get(node, np.nan),
-                    "eigenvector": eigenvector.get(node, np.nan),
                 }
             )
 
@@ -625,12 +554,8 @@ def build_node_month_dataset(nodes, edges):
         "in_degree",
         "out_degree",
         "total_degree",
-        "in_strength",
-        "out_strength",
-        "total_strength",
         "betweenness",
         "pagerank",
-        "eigenvector",
     ]
 
     for col in zero_columns:
@@ -750,27 +675,9 @@ def build_node_month_dataset(nodes, edges):
 
     node_month["months_since_last_active"] = months_since
 
-    # --------------------------------------------------------
-    # Internal consistency QA
-    # --------------------------------------------------------
-
-    if {"total_strength", "incident_flow"}.issubset(node_month.columns):
-        node_month["qa_strength_minus_incident_flow"] = (
-            node_month["total_strength"]
-            - node_month["incident_flow"]
-        )
-
     node_month.to_csv(
         DATA_OUTPUT_DIR / "node_month_metrics.csv",
         index=False
-    )
-
-    print(
-        f"\nNode-month observations: {len(node_month):,}"
-    )
-    print(
-        f"Active node-month observations: "
-        f"{node_month['active'].sum():,}"
     )
 
     return node_month
@@ -781,10 +688,6 @@ def build_node_month_dataset(nodes, edges):
 # ============================================================
 
 def analyze_distributions(node_month):
-    print("\n" + "=" * 70)
-    print("NODE-MONTH DISTRIBUTIONS")
-    print("=" * 70)
-
     metrics = [
         metric
         for metric in CORE_METRICS
@@ -899,10 +802,6 @@ def plot_correlation_matrix(corr, title, output_file):
 
 
 def analyze_correlations(node_month):
-    print("\n" + "=" * 70)
-    print("NODE-MONTH CORRELATIONS")
-    print("=" * 70)
-
     metrics = [
         metric
         for metric in CORE_METRICS
@@ -913,10 +812,6 @@ def analyze_correlations(node_month):
         return
 
     spearman = node_month[metrics].corr(method="spearman")
-
-    spearman.to_csv(
-        CORRELATIONS_DIR / "spearman_correlations.csv"
-    )
 
     plot_correlation_matrix(
         spearman,
@@ -1002,10 +897,6 @@ def analyze_correlations(node_month):
 # ============================================================
 
 def analyze_temporal_stability(node_month):
-    print("\n" + "=" * 70)
-    print("TEMPORAL STABILITY")
-    print("=" * 70)
-
     metrics = [
         metric
         for metric in CORE_METRICS
@@ -1046,11 +937,6 @@ def analyze_temporal_stability(node_month):
             )
 
     stability = pd.DataFrame(rows)
-
-    stability.to_csv(
-        DATA_OUTPUT_DIR / "node_month_temporal_stability.csv",
-        index=False
-    )
 
     # --------------------------------------------------------
     # Cross-sectional month-to-month persistence by metric
@@ -1150,10 +1036,6 @@ def analyze_temporal_stability(node_month):
 # ============================================================
 
 def analyze_rank_stability(node_month):
-    print("\n" + "=" * 70)
-    print("MONTHLY RANK STABILITY")
-    print("=" * 70)
-
     metrics = [
         metric
         for metric in CORE_METRICS
@@ -1239,11 +1121,6 @@ def analyze_rank_stability(node_month):
         / rank_stability["months_observed"]
     )
 
-    rank_stability.to_csv(
-        DATA_OUTPUT_DIR / "node_month_rank_stability.csv",
-        index=False
-    )
-
     # --------------------------------------------------------
     # Rank correlation between consecutive months
     # --------------------------------------------------------
@@ -1301,79 +1178,6 @@ def analyze_rank_stability(node_month):
 
 
 # ============================================================
-# TOP-NODE TIME SERIES
-# ============================================================
-
-def plot_top_node_timeseries(node_month, top_n=10):
-    """
-    Plot the nodes with the highest mean value over the full period.
-    Separate plots are produced for terminals and chokepoints.
-    """
-    metrics = [
-        metric
-        for metric in CORE_METRICS
-        if metric in node_month.columns
-    ]
-
-    if "node_type" not in node_month.columns:
-        return
-
-    for metric in metrics:
-        for node_type, type_group in node_month.groupby("node_type"):
-            ranking = (
-                type_group
-                .groupby("node_id")[metric]
-                .mean()
-                .sort_values(ascending=False)
-            )
-
-            top_nodes = ranking.head(top_n).index
-
-            plot_data = type_group[
-                type_group["node_id"].isin(top_nodes)
-            ]
-
-            if plot_data.empty:
-                continue
-
-            plt.figure(figsize=(11, 6))
-
-            for node_id, node_group in plot_data.groupby("node_id"):
-                node_group = node_group.sort_values("period_month")
-
-                plt.plot(
-                    node_group["period_month"],
-                    node_group[metric],
-                    label=node_id
-                )
-
-            plt.title(
-                f"{metric} over time - top {top_n} {node_type} nodes"
-            )
-            plt.xlabel("Month")
-            plt.ylabel(metric)
-            plt.legend(
-                fontsize=7,
-                ncol=2
-            )
-            plt.tight_layout()
-
-            safe_type = (
-                str(node_type)
-                .lower()
-                .replace(" ", "_")
-            )
-
-            plt.savefig(
-                TEMPORAL_DIR /
-                f"{metric}_top_{top_n}_{safe_type}_timeseries.png",
-                dpi=300
-            )
-
-            plt.close()
-
-
-# ============================================================
 # QA SUMMARY
 # ============================================================
 
@@ -1426,16 +1230,6 @@ def save_qa_summary(node_month):
         }
     )
 
-    if "qa_strength_minus_incident_flow" in node_month.columns:
-        qa_rows.append(
-            {
-                "check": "max_abs_strength_minus_incident_flow",
-                "value": node_month[
-                    "qa_strength_minus_incident_flow"
-                ].abs().max(),
-            }
-        )
-
     pd.DataFrame(qa_rows).to_csv(
         DATA_OUTPUT_DIR / "node_month_qa_summary.csv",
         index=False
@@ -1447,10 +1241,6 @@ def save_qa_summary(node_month):
 
 
 def analyze_temporal_sparsity(node_month):
-    print("\n" + "=" * 70)
-    print("TEMPORAL SPARSITY DIAGNOSTIC")
-    print("=" * 70)
-
     data = node_month.copy()
     data["period_month"] = pd.to_datetime(data["period_month"])
 
@@ -1668,24 +1458,23 @@ def main():
 
     analyze_correlations(node_month)
 
-    analyze_temporal_stability(node_month)
+    temporal_stability = analyze_temporal_stability(node_month)
 
-    analyze_rank_stability(node_month)
-
-    plot_top_node_timeseries(node_month)
+    _, rank_stability = analyze_rank_stability(node_month)
     
-    analyze_temporal_sparsity(node_month)
-
-    print("\n" + "=" * 70)
-    print("NODE-MONTH EDA COMPLETED")
-    print("=" * 70)
-
-    print(f"\nResults saved in:\n{OUTPUT_DIR}")
-
-    print(
-        "\nMain panel dataset:\n"
-        f"{DATA_OUTPUT_DIR / 'node_month_metrics.csv'}"
+    node_metric_stability = temporal_stability.merge(
+        rank_stability,
+        on=["node_id", "node_type", "metric"],
+        how="outer",
+        validate="one_to_one",
     )
+
+    node_metric_stability.to_csv(
+        DATA_OUTPUT_DIR / "node_metric_stability.csv",
+        index=False,
+    )
+
+    analyze_temporal_sparsity(node_month)
 
 
 if __name__ == "__main__":
