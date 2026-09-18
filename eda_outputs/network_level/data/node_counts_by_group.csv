@@ -1,0 +1,59 @@
+grouping_dimension,group,node_count
+node_type,terminal,159
+node_type,chokepoint,28
+country,Japan,18
+country,China,17
+country,United States,11
+country,Australia,7
+country,Spain,7
+country,Brazil,6
+country,South Korea,6
+country,Indonesia,6
+country,India,5
+country,Finland,4
+country,France,4
+country,Russia,4
+country,Italy,3
+country,Germany,3
+country,Egypt,3
+country,Norway,3
+country,Malaysia,3
+country,Türkiye,3
+country,United Kingdom,2
+country,Jamaica,2
+country,Netherlands,2
+country,United Arab Emirates,2
+country,Sweden,2
+country,Algeria,2
+country,Taiwan,2
+country,Chile,2
+country,Equatorial Guinea,1
+country,Qatar,1
+country,Greece,1
+country,Canada,1
+country,Mexico,1
+country,Philippines,1
+country,Portugal,1
+country,Bangladesh,1
+country,Peru,1
+country,Oman,1
+country,Nigeria,1
+country,Belgium,1
+country,El Salvador,1
+country,Thailand,1
+country,Panama,1
+country,Kuwait,1
+country,Jordan,1
+country,Trinidad and Tobago,1
+country,Cameroon,1
+country,Colombia,1
+country,Mozambique,1
+country,Malta,1
+country,Croatia,1
+country,Argentina,1
+country,Pakistan,1
+country,Gibraltar,1
+country,Hong Kong,1
+country,Turkmenistan,1
+country,Lithuania,1
+country,Poland,1

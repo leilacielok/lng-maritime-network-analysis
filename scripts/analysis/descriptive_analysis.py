@@ -47,29 +47,9 @@ MONTHLY_QA_FILE = DATA_DIR / "LNG_multilayer_monthly_QA.csv"
 # ============================================================
 
 def load_data():
-    print("\n" + "=" * 70)
-    print("LOADING DATA")
-    print("=" * 70)
-
     nodes = pd.read_csv(NODES_FILE)
     edges = pd.read_csv(EDGES_FILE)
     monthly_qa = pd.read_csv(MONTHLY_QA_FILE)
-
-    print(f"Nodes file: {NODES_FILE.name}")
-    print(f"Rows: {len(nodes):,}")
-    print(f"Columns: {len(nodes.columns)}")
-
-    print()
-
-    print(f"Edges file: {EDGES_FILE.name}")
-    print(f"Rows: {len(edges):,}")
-    print(f"Columns: {len(edges.columns)}")
-
-    print()
-
-    print(f"Monthly QA file: {MONTHLY_QA_FILE.name}")
-    print(f"Rows: {len(monthly_qa):,}")
-    print(f"Columns: {len(monthly_qa.columns)}")
 
     return nodes, edges, monthly_qa
 
@@ -78,22 +58,7 @@ def load_data():
 # BASIC DATASET OVERVIEW
 # ============================================================
 
-def dataset_overview(df, name):
-    print("\n" + "=" * 70)
-    print(f"{name.upper()} DATASET OVERVIEW")
-    print("=" * 70)
-
-    print("\nShape:")
-    print(df.shape)
-
-    print("\nColumns:")
-    for col in df.columns:
-        print(f"  - {col}")
-
-    print("\nData types:")
-    print(df.dtypes)
-
-    print("\nMissing values:")
+def calculate_missing_values(df, name):
     missing = (
         df.isna()
         .sum()
@@ -102,15 +67,14 @@ def dataset_overview(df, name):
     )
 
     missing["missing_share"] = missing["missing_count"] / len(df)
-
-    print(missing[missing["missing_count"] > 0])
-
-    missing.to_csv(
-        DATA_OUTPUT_DIR / f"{name.lower()}_missing_values.csv"
+    missing = (
+        missing
+        .rename_axis("variable")
+        .reset_index()
     )
+    missing.insert(0, "dataset", name.lower())
 
-    print("\nDuplicated rows:")
-    print(df.duplicated().sum())
+    return missing
 
 
 # ============================================================
@@ -118,12 +82,6 @@ def dataset_overview(df, name):
 # ============================================================
 
 def analyze_nodes(nodes):
-    print("\n" + "=" * 70)
-    print("NODE ANALYSIS")
-    print("=" * 70)
-
-    print(f"\nTotal node records: {len(nodes):,}")
-
     # --------------------------------------------------------
     # Node types
     # --------------------------------------------------------
@@ -135,14 +93,6 @@ def analyze_nodes(nodes):
         .value_counts(dropna=False)
         .rename_axis(type_col)
         .reset_index(name="count")
-    )
-
-    print(f"\nNodes by {type_col}:")
-    print(node_types)
-
-    node_types.to_csv(
-        DATA_OUTPUT_DIR / "nodes_by_type.csv",
-        index=False
     )
 
     plt.figure(figsize=(8, 5))
@@ -178,14 +128,6 @@ def analyze_nodes(nodes):
         .reset_index(name="node_count")
     )
 
-    countries.to_csv(
-        DATA_OUTPUT_DIR / "nodes_by_country.csv",
-        index=False
-    )
-
-    print("\nTop countries by number of nodes:")
-    print(countries.head(20))
-    
     # --------------------------------------------------------
     # Terminal processing capacity
     # --------------------------------------------------------
@@ -243,12 +185,6 @@ def analyze_nodes(nodes):
         .reset_index()
     )
 
-    capacity_by_type.to_csv(
-        DATA_OUTPUT_DIR /
-        "terminal_capacity_by_infrastructure_type.csv",
-        index=False
-    )
-
     # --------------------------------------------------------
     # Capacity by country
     # --------------------------------------------------------
@@ -272,10 +208,43 @@ def analyze_nodes(nodes):
         )
     )
 
-    capacity_by_country.to_csv(
-        DATA_OUTPUT_DIR /
-        "terminal_capacity_by_country.csv",
-        index=False
+    # Consolidate related summaries to keep the data output
+    # directory compact while preserving the aggregation level.
+    node_counts_by_group = pd.concat(
+        [
+            node_types.rename(
+                columns={type_col: "group", "count": "node_count"}
+            ).assign(grouping_dimension="node_type"),
+            countries.rename(
+                columns={country_col: "group", "node_count": "node_count"}
+            ).assign(grouping_dimension="country"),
+        ],
+        ignore_index=True,
+    )[
+        ["grouping_dimension", "group", "node_count"]
+    ]
+
+    node_counts_by_group.to_csv(
+        DATA_OUTPUT_DIR / "node_counts_by_group.csv",
+        index=False,
+    )
+
+    capacity_by_type = capacity_by_type.rename(
+        columns={"infrastructure_type": "group"}
+    ).assign(grouping_dimension="infrastructure_type")
+
+    capacity_by_country = capacity_by_country.rename(
+        columns={"country": "group"}
+    ).assign(grouping_dimension="country")
+
+    terminal_capacity_by_group = pd.concat(
+        [capacity_by_type, capacity_by_country],
+        ignore_index=True,
+    )
+
+    terminal_capacity_by_group.to_csv(
+        DATA_OUTPUT_DIR / "terminal_capacity_by_group.csv",
+        index=False,
     )
 
     # --------------------------------------------------------
@@ -308,26 +277,6 @@ def analyze_nodes(nodes):
 # ============================================================
 
 def analyze_edges(edges):
-    print("\n" + "=" * 70)
-    print("EDGE ANALYSIS")
-    print("=" * 70)
-
-    print(f"\nTotal edge-period observations: {len(edges):,}")
-
-    # --------------------------------------------------------
-    # Unique directed edges
-    # --------------------------------------------------------
-
-    unique_edges = (
-        edges[["from_node_id", "to_node_id"]]
-        .drop_duplicates()
-    )
-
-    print(
-        f"Unique directed node pairs: "
-        f"{len(unique_edges):,}"
-    )
-
     # --------------------------------------------------------
     # Edge types
     # --------------------------------------------------------
@@ -410,7 +359,6 @@ def analyze_edges(edges):
 
 def analyze_temporal_network(edges, monthly_qa):
     if "period_month" not in edges.columns:
-        print("\nNo period_month column found. Temporal analysis skipped.")
         return
 
     required_qa = {
@@ -420,17 +368,7 @@ def analyze_temporal_network(edges, monthly_qa):
     }
 
     if not required_qa.issubset(monthly_qa.columns):
-        missing = required_qa.difference(monthly_qa.columns)
-
-        print(
-            "\nMonthly QA file is missing required columns: "
-            + ", ".join(sorted(missing))
-        )
         return
-
-    print("\n" + "=" * 70)
-    print("TEMPORAL NETWORK ANALYSIS")
-    print("=" * 70)
 
     edges = edges.copy()
     monthly_qa = monthly_qa.copy()
@@ -868,58 +806,12 @@ def analyze_temporal_network(edges, monthly_qa):
         >= 2
     )
 
-    activity_detail = (
-        monthly[
-            [
-                "period_month",
-                "unique_export_voyages",
-                "global_export_lng_volume",
-                "active_edges",
-                "voyages_vs_median",
-                "volume_vs_median",
-                "active_edges_vs_median",
-                "qa_low_activity_watch",
-            ]
-        ]
-        .sort_values("period_month")
-    )
-
-    activity_detail.to_csv(
-        TEMPORAL_DIR / "temporal_activity_detail.csv",
-        index=False
-    )
-
     monthly.to_csv(
         TEMPORAL_DIR /
         "monthly_network_statistics.csv",
         index=False
     )
 
-    # --------------------------------------------------------
-    # Months with lower activity
-    # --------------------------------------------------------
-
-    activity_watch = (
-        monthly[
-            monthly["qa_low_activity_watch"]
-        ][
-            [
-                "period_month",
-                "unique_export_voyages",
-                "global_export_lng_volume",
-                "active_edges",
-                "voyages_vs_median",
-                "volume_vs_median",
-                "active_edges_vs_median",
-            ]
-        ]
-    )
-
-    activity_watch.to_csv(
-        TEMPORAL_DIR / "temporal_activity_watch.csv",
-        index=False
-    )
-    
     # ========================================================
     # PLOT 1 — GLOBAL LNG EXPORT VOLUME
     # ========================================================
@@ -1023,40 +915,6 @@ def analyze_temporal_network(edges, monthly_qa):
     plt.close()
 
     # ========================================================
-    # PLOT 4 — EDGE-FLOW HHI
-    # ========================================================
-
-    plt.figure(figsize=(10, 5))
-
-    plt.plot(
-        monthly["period_month"],
-        monthly["edge_flow_hhi"],
-        marker="o",
-        markersize=3
-    )
-
-    plt.title(
-        "Monthly concentration of LNG flow "
-        "across edges"
-    )
-
-    plt.xlabel("Month")
-
-    plt.ylabel(
-        "Edge-flow HHI"
-    )
-
-    plt.tight_layout()
-
-    plt.savefig(
-        TEMPORAL_DIR /
-        "edge_flow_hhi_over_time.png",
-        dpi=300
-    )
-
-    plt.close()
-
-    # ========================================================
     # PLOT 5 — TOP-10 EDGE SHARE
     # ========================================================
 
@@ -1087,42 +945,6 @@ def analyze_temporal_network(edges, monthly_qa):
     plt.savefig(
         TEMPORAL_DIR /
         "top_10_edge_flow_share_over_time.png",
-        dpi=300
-    )
-
-    plt.close()
-
-    # ========================================================
-    # PLOT 6 — TRUE CHOKEPOINT HHI
-    # ========================================================
-
-    plt.figure(figsize=(10, 5))
-
-    plt.plot(
-        monthly["period_month"],
-        monthly[
-            "chokepoint_flow_hhi"
-        ],
-        marker="o",
-        markersize=3
-    )
-
-    plt.title(
-        "Monthly concentration of LNG throughput "
-        "across chokepoints"
-    )
-
-    plt.xlabel("Month")
-
-    plt.ylabel(
-        "Chokepoint throughput HHI"
-    )
-
-    plt.tight_layout()
-
-    plt.savefig(
-        TEMPORAL_DIR /
-        "chokepoint_flow_hhi_over_time.png",
         dpi=300
     )
 
@@ -1168,15 +990,7 @@ def analyze_temporal_network(edges, monthly_qa):
 # ============================================================
 
 def analyze_flow_distribution(edges):
-
-    print("\n" + "=" * 70)
-    print("LNG FLOW DISTRIBUTION")
-    print("=" * 70)
-
     flow = edges["lng_flow_cmb"].dropna()
-
-    print("\nDescriptive statistics:")
-    print(flow.describe(percentiles=[0.01, 0.05, 0.25, 0.5, 0.75, 0.95, 0.99]))
 
     statistics = flow.describe(
         percentiles=[0.01, 0.05, 0.25, 0.5, 0.75, 0.95, 0.99]
@@ -1296,10 +1110,6 @@ def analyze_node_activity(nodes, edges):
         "to_node_id",
         "lng_flow_cmb",
     }
-
-    print("\n" + "=" * 70)
-    print("NODE ACTIVITY")
-    print("=" * 70)
 
     # --------------------------------------------------------
     # Outgoing activity
@@ -1461,11 +1271,6 @@ def analyze_node_activity(nodes, edges):
 # ============================================================
 
 def analyze_flow_concentration(edges):
-
-    print("\n" + "=" * 70)
-    print("FLOW CONCENTRATION")
-    print("=" * 70)
-
     edge_flow = (
         edges.groupby(
             ["from_node_id", "to_node_id"],
@@ -1488,21 +1293,6 @@ def analyze_flow_concentration(edges):
     edge_flow["cumulative_flow_share"] = (
         edge_flow["flow_share"].cumsum()
     )
-
-    n_edges = len(edge_flow)
-
-    for share in [0.50, 0.75, 0.90]:
-        n_required = (
-            edge_flow["cumulative_flow_share"]
-            < share
-        ).sum() + 1
-
-        print(
-            f"Edges required to account for "
-            f"{share:.0%} of total flow: "
-            f"{n_required:,} / {n_edges:,} "
-            f"({n_required / n_edges:.1%})"
-        )
 
     edge_flow.to_csv(
         DATA_OUTPUT_DIR / "edge_flow_concentration.csv",
@@ -1528,10 +1318,6 @@ def analyze_outliers(edges):
         for col in numeric_columns
         if col in edges.columns
     ]
-
-    print("\n" + "=" * 70)
-    print("OUTLIER CHECK")
-    print("=" * 70)
 
     results = []
 
@@ -1602,10 +1388,6 @@ def analyze_correlations(edges):
     if len(columns) < 2:
         return
 
-    print("\n" + "=" * 70)
-    print("CORRELATIONS")
-    print("=" * 70)
-
     corr = edges[columns].corr(
         method="spearman"
     )
@@ -1622,8 +1404,18 @@ def analyze_correlations(edges):
 def main():
     nodes, edges, monthly_qa = load_data()
 
-    dataset_overview(nodes, "nodes")
-    dataset_overview(edges, "edges")
+    missing_values = pd.concat(
+        [
+            calculate_missing_values(nodes, "nodes"),
+            calculate_missing_values(edges, "edges"),
+        ],
+        ignore_index=True,
+    )
+
+    missing_values.to_csv(
+        DATA_OUTPUT_DIR / "dataset_missing_values.csv",
+        index=False,
+    )
 
     analyze_nodes(nodes)
     analyze_edges(edges)
@@ -1641,15 +1433,6 @@ def main():
     analyze_outliers(edges)
 
     analyze_correlations(edges)
-
-    print("\n" + "=" * 70)
-    print("EDA COMPLETED")
-    print("=" * 70)
-
-    print(
-        f"\nResults saved in:\n{OUTPUT_DIR}"
-    )
-
 
 if __name__ == "__main__":
     main()
