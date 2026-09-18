@@ -804,19 +804,27 @@ def make_summary(panel):
     write_csv(summary.reset_index(names="metric"), DATA_OUTPUT_DIR / "metric_summary_active.csv")
 
     roles = panel.groupby(["period_month", "terminal_role"], as_index=False).agg(
-        terminal_months=("terminal_id", "size"),
-        terminals=("terminal_id", "nunique"),
+        entities=("terminal_id", "nunique"),
         total_throughput=("throughput", "sum"),
     )
-    write_csv(roles, DATA_OUTPUT_DIR / "monthly_role_summary.csv")
+    roles = (
+        roles
+        .rename(columns={"terminal_role": "role"})
+        .assign(entity_level="terminal")
+    )
+
+    return roles[
+        [
+            "period_month",
+            "entity_level",
+            "role",
+            "entities",
+            "total_throughput",
+        ]
+    ]
 
 
 def make_correlations(panel):
-    
-    #  Correlations across active terminal-month observations
-    active = panel.loc[panel["active"].eq(1), METRICS]
-    write_csv(active.corr(method="spearman"), CORRELATIONS_DIR / "spearman_active.csv", index=True)
-
     rows = []
     for role in ["exporter", "importer", "bidirectional"]:
         subset = panel.loc[panel["terminal_role"].eq(role)]
@@ -1019,23 +1027,6 @@ def make_plots(panel):
         plt.close(fig)
 
 
-def print_diagnostics(panel):
-    active = panel.loc[panel["active"].eq(1)]
-    print("\n" + "=" * 72)
-    print("TERMINAL-MONTH PANEL")
-    print("=" * 72)
-    print(f"Rows: {len(panel):,}")
-    print(f"Active terminal-months: {len(active):,}")
-    print(f"Terminals: {panel['terminal_id'].nunique():,}")
-    print("\nMonthly role counts (all panel rows):")
-    print(panel["terminal_role"].value_counts().to_string())
-    print("\nActive-observation missing shares:")
-    print(active[METRICS + ["role_specific_dependence"]].isna().mean().sort_values(ascending=False).to_string())
-    print("\nPageRank monthly sum range (should be approximately 1):")
-    pr_sums = panel.groupby("period_month")[["import_pagerank", "export_pagerank"]].sum()
-    print(pr_sums.agg(["min", "max"]).to_string())
-
-
 def main():
     voyages, nodes = load_data()
     panel = assemble_metrics(voyages, nodes)
@@ -1106,44 +1097,46 @@ def main():
     )
     
     country_role_summary = (
-        country_month.loc[country_month["active"].eq(1)]
+        country_month
         .groupby(["period_month", "country_role"], as_index=False)
         .agg(
-            countries=("country", "nunique"),
+            entities=("country", "nunique"),
             total_throughput=("throughput", "sum"),
         )
-    )
-    write_csv(
-        country_role_summary,
-        DATA_OUTPUT_DIR / "monthly_country_role_summary.csv",
+        .rename(columns={"country_role": "role"})
+        .assign(entity_level="country")
     )
 
-    make_summary(panel)
+    country_role_summary = country_role_summary[
+        [
+            "period_month",
+            "entity_level",
+            "role",
+            "entities",
+            "total_throughput",
+        ]
+    ]
+
+    terminal_role_summary = make_summary(panel)
+
+    monthly_role_summary = (
+        pd.concat(
+            [terminal_role_summary, country_role_summary],
+            ignore_index=True,
+        )
+        .sort_values(["period_month", "entity_level", "role"])
+        .reset_index(drop=True)
+    )
+
+    write_csv(
+        monthly_role_summary,
+        DATA_OUTPUT_DIR / "monthly_role_summary.csv",
+    )
+
     make_correlations(panel)
     make_temporal_stability(panel)
     make_rankings(panel)
     make_plots(panel)
-    print_diagnostics(panel)
-
-    print("\n" + "=" * 72)
-    print("COUNTRY CLASSIFICATION")
-    print("=" * 72)
-    print("Active country-month roles:")
-    print(
-        country_month.loc[country_month["active"].eq(1), "country_role"]
-        .value_counts()
-        .to_string()
-    )
-    print("\nFull-period country roles:")
-    print(country_full_period["country_role"].value_counts().to_string())
-
-    print("\nAnalysis complete.")
-    print(f"Main output: {DATA_OUTPUT_DIR / 'terminal_month_metrics.csv'}")
-    print(f"Country-month output: {DATA_OUTPUT_DIR / 'country_month_roles.csv'}")
-    print(
-        "Full-period country output: "
-        f"{DATA_OUTPUT_DIR / 'country_roles_full_period.csv'}"
-    )
 
 
 if __name__ == "__main__":
