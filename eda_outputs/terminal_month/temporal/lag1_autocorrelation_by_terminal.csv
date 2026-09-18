@@ -81,7 +81,7 @@ LNGN0025,importer,weighted_dependence_generated,15,
 LNGN0025,importer,country_terminal_dependence,15,0.173622923624
 LNGN0025,importer,import_pagerank,15,0.513367962552
 LNGN0025,importer,export_pagerank,15,0.591797764392
-LNGN0025,importer,role_specific_pagerank,15,0.0375403736348
+LNGN0025,importer,role_specific_pagerank,15,0.0375403736347
 LNGN0025,importer,role_specific_dependence,15,0.173622923624
 LNGN0026,exporter,throughput,60,0.506836633443
 LNGN0026,exporter,voyage_count,60,0.435310584853

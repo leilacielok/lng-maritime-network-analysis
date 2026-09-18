@@ -887,12 +887,6 @@ def make_correlations(panel):
         terminal_level[capacity_variables]
         .corr(method="spearman")
     )
-    
-    write_csv(
-        terminal_level,
-        DATA_OUTPUT_DIR /
-        "terminal_level_capacity_metrics.csv",
-    )
 
     write_csv(
         capacity_correlations,
