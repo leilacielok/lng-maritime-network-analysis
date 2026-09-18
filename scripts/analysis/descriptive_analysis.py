@@ -55,29 +55,6 @@ def load_data():
 
 
 # ============================================================
-# BASIC DATASET OVERVIEW
-# ============================================================
-
-def calculate_missing_values(df, name):
-    missing = (
-        df.isna()
-        .sum()
-        .sort_values(ascending=False)
-        .to_frame("missing_count")
-    )
-
-    missing["missing_share"] = missing["missing_count"] / len(df)
-    missing = (
-        missing
-        .rename_axis("variable")
-        .reset_index()
-    )
-    missing.insert(0, "dataset", name.lower())
-
-    return missing
-
-
-# ============================================================
 # NODE ANALYSIS
 # ============================================================
 
@@ -114,10 +91,6 @@ def analyze_nodes(nodes):
     # --------------------------------------------------------
 
     country_col = "country"
-
-    # ----------------------------------------------------
-    # All nodes with country information
-    # ----------------------------------------------------
 
     nodes_with_country = nodes[nodes[country_col].notna()].copy()
 
@@ -189,40 +162,46 @@ def analyze_nodes(nodes):
 
     # Consolidate related summaries to keep the data output
     # directory compact while preserving the aggregation level.
-    node_counts_by_group = pd.concat(
-        [
-            node_types.rename(
-                columns={type_col: "group", "count": "node_count"}
-            ).assign(grouping_dimension="node_type"),
-            countries.rename(
-                columns={country_col: "group", "node_count": "node_count"}
-            ).assign(grouping_dimension="country"),
-        ],
-        ignore_index=True,
-    )[
-        ["grouping_dimension", "group", "node_count"]
-    ]
-
-    node_counts_by_group.to_csv(
-        DATA_OUTPUT_DIR / "node_counts_by_group.csv",
-        index=False,
+    node_type_summary = (
+        node_types
+        .rename(
+            columns={
+                type_col: "group",
+                "count": "node_count",
+            }
+        )
+        .assign(grouping_dimension="node_type")
     )
 
     capacity_by_type = capacity_by_type.rename(
-        columns={"infrastructure_type": "group"}
+        columns={"infrastructure_type": "group", "terminal_count": "node_count"}
     ).assign(grouping_dimension="infrastructure_type")
 
     capacity_by_country = capacity_by_country.rename(
-        columns={"country": "group"}
+        columns={"country": "group", "terminal_count": "node_count",}
     ).assign(grouping_dimension="country")
 
-    terminal_capacity_by_group = pd.concat(
-        [capacity_by_type, capacity_by_country],
+    node_group_summary = pd.concat(
+        [node_type_summary, capacity_by_type, capacity_by_country],
         ignore_index=True,
     )
 
-    terminal_capacity_by_group.to_csv(
-        DATA_OUTPUT_DIR / "terminal_capacity_by_group.csv",
+    column_order = [
+        "grouping_dimension",
+        "group",
+        "node_count",
+        "total_capacity_mtpa",
+        "mean_capacity_mtpa",
+        "median_capacity_mtpa",
+        "min_capacity_mtpa",
+        "max_capacity_mtpa",
+    ]
+
+    node_group_summary = node_group_summary.reindex(
+        columns=column_order
+    )
+    node_group_summary.to_csv(
+        DATA_OUTPUT_DIR / "node_group_summary.csv",
         index=False,
     )
 
@@ -1382,19 +1361,6 @@ def analyze_correlations(edges):
 
 def main():
     nodes, edges, monthly_qa = load_data()
-
-    missing_values = pd.concat(
-        [
-            calculate_missing_values(nodes, "nodes"),
-            calculate_missing_values(edges, "edges"),
-        ],
-        ignore_index=True,
-    )
-
-    missing_values.to_csv(
-        DATA_OUTPUT_DIR / "dataset_missing_values.csv",
-        index=False,
-    )
 
     analyze_nodes(nodes)
     analyze_edges(edges)
