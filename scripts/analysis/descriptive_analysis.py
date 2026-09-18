@@ -142,27 +142,6 @@ def analyze_nodes(nodes):
         errors="raise"
     )
 
-    capacity_statistics = (
-        terminal_nodes["capacity_mtpa"]
-        .describe(
-            percentiles=[
-                0.01,
-                0.05,
-                0.25,
-                0.50,
-                0.75,
-                0.95,
-                0.99,
-            ]
-        )
-        .rename("capacity_mtpa")
-        .to_frame()
-    )
-
-    capacity_statistics.to_csv(
-        DATA_OUTPUT_DIR /
-        "terminal_capacity_descriptive_statistics.csv"
-    )
 
     # --------------------------------------------------------
     # Capacity by infrastructure type
