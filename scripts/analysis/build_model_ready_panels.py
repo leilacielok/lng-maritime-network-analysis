@@ -224,6 +224,11 @@ def build_activity_panel(node_month, nodes, edges):
         capacity = pd.to_numeric(panel["capacity_mtpa"], errors="coerce")
         panel["log1p_capacity_mtpa"] = np.log1p(capacity)
 
+    panel = panel.drop(
+        columns=["flow_imbalance"],
+        errors="ignore",
+    )
+    
     return panel.sort_values(["period_month", "node_id"]).reset_index(drop=True)
 
 
