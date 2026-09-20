@@ -15,7 +15,7 @@ NETWORK_LEVEL_DIR = BASE_DIR / "eda_outputs" / "network_level"
 DATA_OUTPUT_DIR = NETWORK_LEVEL_DIR / "data"
 TEMPORAL_OUTPUT_DIR = NETWORK_LEVEL_DIR / "temporal"
 
-NODES_FILE = DATA_DIR / "LNG_multilayer_nodes.csv"
+NODES_FILE = DATA_DIR / "LNG_multilayer_nodes_observed.csv"
 EDGES_FILE = DATA_DIR / "LNG_multilayer_edges_monthly.csv"
 
 NODE_MONTH_OUTPUT = DATA_OUTPUT_DIR / "node_month_structure_metrics.csv"

@@ -2,10 +2,11 @@
 
 Inputs (by default, in ``data/processed``):
   - LNG_voyage_node_matching.xlsx, sheet ``Matched Voyages``
-  - LNG_multilayer_nodes.csv
+  - LNG_multilayer_nodes_observed.csv
   - LNG_1037_routes_with_final_chokepoints.geojson
 
 Outputs:
+  - LNG_multilayer_nodes_observed.csv
   - LNG_multilayer_edges_monthly.csv
   - LNG_multilayer_monthly_QA.csv
 
@@ -24,7 +25,8 @@ import pandas as pd
 
 
 DEFAULT_VOYAGES = "LNG_voyage_node_matching.xlsx"
-DEFAULT_NODES = "LNG_multilayer_nodes.csv"
+DEFAULT_NODES = "LNG_multilayer_nodes_observed.csv"
+DEFAULT_OBSERVED_NODES = "LNG_multilayer_nodes_observed.csv"
 DEFAULT_ROUTES = "LNG_1037_routes_with_final_chokepoints.geojson"
 DEFAULT_EDGES = "LNG_multilayer_edges_monthly.csv"
 DEFAULT_MONTHLY_QA = "LNG_multilayer_monthly_QA.csv"
@@ -286,6 +288,50 @@ def build_route_table(
 
     return pd.DataFrame(route_records)
 
+def select_observed_nodes(
+    nodes: pd.DataFrame,
+    routes: pd.DataFrame,
+) -> pd.DataFrame:
+    """Keep terminals and chokepoints appearing in at least one final route."""
+
+    observed_node_ids: set[str] = set()
+
+    for path_nodes in routes["path_nodes"]:
+        observed_node_ids.update(
+            str(node_id) for node_id in path_nodes
+        )
+
+    observed_nodes = nodes.loc[
+        nodes["node_id"].isin(observed_node_ids)
+    ].copy()
+
+    observed_nodes = (
+        observed_nodes
+        .sort_values(["node_type", "node_id"])
+        .reset_index(drop=True)
+    )
+
+    terminal_count = int(
+        observed_nodes["node_type"].eq("terminal").sum()
+    )
+
+    chokepoint_count = int(
+        observed_nodes["node_type"].eq("chokepoint").sum()
+    )
+
+    if terminal_count != 159:
+        raise ValueError(
+            "Expected 159 observed terminals, found "
+            f"{terminal_count}."
+        )
+
+    if chokepoint_count != 24:
+        raise ValueError(
+            "Expected 24 observed chokepoints, found "
+            f"{chokepoint_count}."
+        )
+
+    return observed_nodes
 
 def attach_routes(voyages: pd.DataFrame, routes: pd.DataFrame) -> pd.DataFrame:
     merged = voyages.merge(
@@ -464,7 +510,7 @@ def validate_outputs(
         raise ValueError(f"Expected 8,642 deduplicated voyages, got {len(voyages):,}.")
     if len(routes) != 1_037:
         raise ValueError(f"Expected 1,037 routes, got {len(routes):,}.")
-    if len(nodes) != 187:
+    if len(nodes) != 183:
         raise ValueError(f"Expected 187 nodes, got {len(nodes):,}.")
     if monthly_qa["period_month"].nunique() != 60:
         raise ValueError("Expected 60 monthly observations.")
@@ -487,9 +533,18 @@ def main() -> None:
             raise FileNotFoundError(path)
 
     voyages, input_qa = load_voyages(args.voyages)
-    nodes = load_nodes(args.nodes)
+    
+    candidate_nodes = load_nodes(args.nodes)
     route_features = load_routes(args.routes)
-    routes = build_route_table(route_features, nodes)
+    routes = build_route_table(
+        route_features,
+        candidate_nodes,
+    )
+    nodes = select_observed_nodes(
+        candidate_nodes,
+        routes,
+    )
+
     voyages = attach_routes(voyages, routes)
     traversals = expand_voyages(voyages)
     edges = build_edges(traversals, voyages, nodes)
@@ -497,28 +552,21 @@ def main() -> None:
     validate_outputs(voyages, routes, edges, monthly_qa, nodes)
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    observed_nodes_path = (
+        args.output_dir / DEFAULT_OBSERVED_NODES)
+
     edges_path = args.output_dir / DEFAULT_EDGES
     qa_path = args.output_dir / DEFAULT_MONTHLY_QA
-    edges.to_csv(edges_path, index=False)
-    monthly_qa.to_csv(qa_path, index=False)
 
-    print("\n" + "=" * 72)
-    print("INPUT QA")
-    print("=" * 72)
-    for check, value in input_qa.items():
-        print(f"{check}: {value:,}")
-    print(f"observed_terminals: {len(set(voyages['from_node_id']) | set(voyages['to_node_id'])):,}")
-    print(f"months: {voyages['period_month'].nunique():,}")
-
-    print("\n" + "=" * 72)
-    print("NETWORK OUTPUT")
-    print("=" * 72)
-    print(f"routes: {len(routes):,}")
-    print(f"edge-month rows: {len(edges):,}")
-    print(f"monthly QA rows: {len(monthly_qa):,}")
-    print(f"edges output: {edges_path}")
-    print(f"monthly QA output: {qa_path}")
-
+    nodes.to_csv(
+        observed_nodes_path,
+        index=False,)
+    edges.to_csv(
+        edges_path,
+        index=False,)
+    monthly_qa.to_csv(
+        qa_path,
+        index=False,)
 
 if __name__ == "__main__":
     main()

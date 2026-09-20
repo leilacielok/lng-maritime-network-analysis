@@ -32,7 +32,7 @@ for directory in [
 
 
 MATCHED_VOYAGES_FILE = DATA_DIR / "LNG_voyage_node_matching.xlsx"
-NODES_FILE = DATA_DIR / "LNG_multilayer_nodes.csv"
+NODES_FILE = DATA_DIR / "LNG_multilayer_nodes_observed.csv"
 
 # Month assignment is based on voyage departure
 DATE_COLUMN = "start_date"

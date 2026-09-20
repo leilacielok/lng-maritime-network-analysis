@@ -35,7 +35,7 @@ STRUCTURE_FILE = (
     / "data"
     / "node_month_structure_metrics.csv"
 )
-NODES_FILE = PROCESSED_DIR / "LNG_multilayer_nodes.csv"
+NODES_FILE = PROCESSED_DIR / "LNG_multilayer_nodes_observed.csv"
 EDGES_FILE = PROCESSED_DIR / "LNG_multilayer_edges_monthly.csv"
 
 OUTPUT_DIR = PROCESSED_DIR / "model_ready"
