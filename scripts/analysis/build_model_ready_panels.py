@@ -339,12 +339,34 @@ def build_terminal_panel(terminal_month, activity_panel, structure, nodes):
     )
 
     terminal = terminal.sort_values(["node_id", "period_month"]).reset_index(drop=True)
+    
+    grouped = terminal.groupby("node_id", sort=False)
+    terminal["mean_voyage_distance_lag1"] = (
+        grouped["mean_voyage_distance"].shift(1)
+    )
+    terminal["log1p_mean_voyage_distance_lag1"] = np.log1p(
+        terminal["mean_voyage_distance_lag1"]
+    )
+    inactive_lag = terminal["activity_lag1"].eq(0)
+    terminal.loc[
+        inactive_lag,
+        "log1p_mean_voyage_distance_lag1",
+    ] = 0
     terminal["throughput_lag1"] = terminal.groupby("node_id")["throughput"].shift(1)
     terminal["log1p_throughput_lag1"] = np.log1p(terminal["throughput_lag1"])
     capacity = pd.to_numeric(terminal["capacity_mtpa"], errors="coerce")
     terminal["log1p_capacity_mtpa"] = np.log1p(capacity)
     terminal = add_seasonality(terminal)
     terminal = terminal.rename(columns={"node_id": "terminal_id"})
+    
+    terminal = terminal.drop(
+        columns=[
+            "mean_outgoing_voyage_distance",
+            "mean_incoming_voyage_distance",
+            "mean_voyage_distance"
+        ],
+        errors="ignore",
+    )
     return terminal.sort_values(["period_month", "terminal_id"]).reset_index(drop=True)
 
 
@@ -402,7 +424,7 @@ def build_chokepoint_panel(node_month, activity_panel, structure):
         "months_since_last_active",
     ]
 
-    chokepoints = chokepoints.drop(columns_to_drop)
+    chokepoints = chokepoints.drop(columns_to_drop, errors="ignore",)
 
     return chokepoints.sort_values(
         ["period_month", "node_id"]
