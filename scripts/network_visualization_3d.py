@@ -12,7 +12,7 @@ def discover_inputs(project_root: Path) -> dict[str, Path]:
     data_folder = project_root / "data" / "processed"
 
     files = {
-        "nodes": data_folder / "LNG_multilayer_nodes.csv",
+        "nodes": data_folder / "LNG_multilayer_nodes_observed.csv",
         "edges": data_folder / "LNG_multilayer_edges_monthly.csv",
         "routes": data_folder / "LNG_1037_routes_with_final_chokepoints.geojson",
     }
