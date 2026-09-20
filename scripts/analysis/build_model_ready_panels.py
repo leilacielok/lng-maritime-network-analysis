@@ -207,6 +207,8 @@ def build_activity_panel(node_month, nodes, edges):
     panel["throughput_lag1"] = grouped["node_throughput"].shift(1)
     panel["log1p_throughput_lag1"] = np.log1p(panel["throughput_lag1"])
     panel["voyage_count_lag1"] = grouped["total_voyages"].shift(1)
+    panel["log1p_voyage_count_lag1"] = np.log1p(
+        panel["voyage_count_lag1"])
     panel["lag_available"] = panel["activity_lag1"].notna().astype(int)
 
     neighbor_activity = build_historical_neighbor_activity(panel, edges)
@@ -313,12 +315,14 @@ def build_terminal_panel(terminal_month, activity_panel, structure, nodes):
             "node_id",
             "period_month",
             "activity_lag1",
+            "voyage_count_lag1",
+            "log1p_voyage_count_lag1",
             "neighbor_activity_lag1",
             "active_neighbor_count_lag1",
             "historical_neighbor_count_lag1",
             "lag_available",
             "month_sin",
-            "month_cos",
+            "month_cos"
         ]
     ]
     terminal = terminal.merge(
@@ -368,6 +372,7 @@ def build_chokepoint_panel(node_month, activity_panel, structure):
             "throughput_lag1",
             "log1p_throughput_lag1",
             "voyage_count_lag1",
+            "log1p_voyage_count_lag1",
             "neighbor_activity_lag1",
             "active_neighbor_count_lag1",
             "historical_neighbor_count_lag1",
