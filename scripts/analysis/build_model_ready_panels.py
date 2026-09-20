@@ -393,7 +393,18 @@ def build_chokepoint_panel(node_month, activity_panel, structure):
         validate="one_to_one",
         suffixes=("", "_structure"),
     )
-    return add_seasonality(chokepoints).sort_values(
+    
+    chokepoints = add_seasonality(chokepoints)
+
+    columns_to_drop = [
+        "country",
+        "flow_imbalance",
+        "months_since_last_active",
+    ]
+
+    chokepoints = chokepoints.drop(columns_to_drop)
+
+    return chokepoints.sort_values(
         ["period_month", "node_id"]
     ).reset_index(drop=True)
 
