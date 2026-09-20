@@ -1,7 +1,7 @@
 check,value
-node_month_rows,11220
-unique_nodes,187
+node_month_rows,10980
+unique_nodes,183
 unique_months,60
 active_node_months,5792
-inactive_node_months,5428
+inactive_node_months,5188
 duplicate_node_month_keys,0

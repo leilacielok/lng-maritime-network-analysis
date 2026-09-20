@@ -1,6 +1,6 @@
 grouping_dimension,group,node_count,total_capacity_mtpa,mean_capacity_mtpa,median_capacity_mtpa,min_capacity_mtpa,max_capacity_mtpa
 node_type,terminal,159,,,,,
-node_type,chokepoint,28,,,,,
+node_type,chokepoint,24,,,,,
 infrastructure_type,export,36,305.84,8.495555555555555,6.6,0.06,29.5
 infrastructure_type,import,123,771.31,6.270813008130081,5.0,0.1,54.5
 country,South Korea,6,151.5,25.25,19.05,,
