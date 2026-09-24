@@ -942,20 +942,11 @@ As described in Section~\ref{subsec:temporal_aggregation}, both datasets retain 
 \section{Network evolution and connectivity}
 \label{sec:network_evolution}
 
-The numbers of active nodes and directed edges generally increase from 2021 to late 2023, both reaching their observed maxima in December 2023, before declining during the second half of 2024. Table~\ref{tab:eda_monthly_summary} reports their monthly ranges and averages. These changes describe participation in the observed network rather than changes in the set of potential nodes.
+Table~\ref{tab:eda_monthly_summary} summarises the monthly numbers of active nodes, directed edges and distinct export voyages, as well as exported LNG volume and directed density. 
+Active nodes and edges generally increase from 2021 to late 2023, reaching their respective maxima in December 2023, before declining during the second half of 2024. 
+These changes describe participation in the observed network rather than changes in the set of potential nodes.
 
-Distinct export voyages and exported LNG volume also vary substantially across months (Table~\ref{tab:eda_monthly_summary}). Figure~\ref{fig:eda_export_volume} shows the volume series. As described in Chapter 3, this aggregate comes from the original voyages rather than the sum of flows on successive network edges.
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=.82\textwidth]{images/global_lng_export_volume_over_time.png}
-  \caption{Monthly LNG export volume based on distinct observed export voyages (cubic metres).}
-  \label{fig:eda_export_volume}
-\end{figure}
-
-Directed density is calculated among active nodes, so its changing denominator matters: a month with fewer edges can still have higher density if fewer nodes are active. The monthly graph is not always weakly connected, although its largest weakly connected component contains at least 89.8\% of active nodes throughout the period. Thus, most active nodes belong to one component even when smaller components exist. The bridge and articulation measures examine a different aspect of connectivity: whether removing particular nodes or connections disrupts it.
-
-\begin{table}[htbp]
+\begin{table}[H]
   \centering
   \caption{Selected monthly network and node-activity summaries, 2020--2024.}
   \label{tab:eda_monthly_summary}
@@ -970,10 +961,54 @@ Directed density is calculated among active nodes, so its changing denominator m
     Directed density among active nodes & 0.0122 & 0.0148 & 0.0180 \\
     \hline
   \end{tabular}
-  \begin{flushleft}\footnotesize Sources: \texttt{monthly\_network\_statistics.csv} and \texttt{monthly\_network\_structure.csv}; rounded descriptive values.\end{flushleft}
+  \begin{flushleft}
+    \footnotesize Sources: \texttt{monthly\_network\_statistics.csv}
+    and \texttt{monthly\_network\_structure.csv}; rounded descriptive values.
+  \end{flushleft}
 \end{table}
 
-The temporal quality-assurance indicator identifies months with at least two of three observed quantities---voyages, original-voyage volume and active edges---below 70\% of their respective 60-month medians. It flags several months in 2020 and early 2021, as well as November--December 2024. The flag identifies unusually low \emph{observed activity}, not missing data or a verified external shock. In particular, the late-2024 decline should not be assigned a substantive cause without separate evidence.
+To illustrate the geographic structure of one monthly network,
+Figure~\ref{fig:lng_network_june2021} shows a snapshot of the active terminals,
+chokepoints, and directed connections in June 2021. This month has
+98 active nodes and 138 edges, therefore it displays values close to the monthly
+averages reported in Table~\ref{tab:eda_monthly_summary}. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/lng_network_2021-06.png}
+    \caption{Geographic snapshot of the observed LNG network in June 2021.
+    Points show active terminals and chokepoints; arrows indicate the
+    direction of observed network connections. Connections are drawn
+    schematically between node coordinates and do not represent vessel
+    trajectories.}
+    \label{fig:lng_network_june2021}
+\end{figure}
+
+Figure~\ref{fig:eda_export_volume} shows how observed LNG export volume
+changes from month to month, complementing the range and average reported
+in the table. The increase through 2023 is consistent with the broader
+expansion of global LNG trade described by \citet{zhou2026}; the comparison
+provides context rather than an explanation for every monthly fluctuation.
+As explained in Chapter 3, monthly export volume is calculated from the
+original voyages, since summing flows over successive network edges would
+count some shipments more than once.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=.82\textwidth]{images/global_lng_export_volume_over_time.png}
+  \caption{Monthly LNG export volume based on distinct observed export voyages (cubic metres).}
+  \label{fig:eda_export_volume}
+\end{figure}
+
+Directed density is calculated among active nodes, so its changing denominator matters: a month with fewer edges can still have higher density if fewer nodes are active. 
+The monthly graph is not always weakly connected, although its largest weakly connected component contains at least 89.8\% of active nodes throughout the period. 
+Thus, most active nodes belong to one component even when smaller components exist. 
+The bridge and articulation measures examine a different aspect of connectivity: whether removing particular nodes or connections disrupts it.
+
+The temporal quality-assurance indicator identifies months with at least two of three observed quantities---voyages, original-voyage volume and active edges---below 70\% of their respective 60-month medians. 
+It flags several months in 2020 and early 2021, as well as November--December 2024. 
+The flag identifies unusually low \emph{observed activity}, not missing data or a verified external shock. 
+In particular, the late-2024 decline should not be assigned a substantive cause without separate evidence.
 
 \section{Node activity and temporal sparsity}
 \label{sec:activity_sparsity}
