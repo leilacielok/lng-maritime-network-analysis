@@ -955,6 +955,7 @@ The numbers of active nodes and directed edges generally increase from 2021 to l
 As the set of potential nodes remains fixed, these changes reflect solely monthly participation in the network.
 
 Table~\ref{tab:eda_monthly_summary} reports the ranges and averages of active nodes, directed edges, distinct export voyages, exported LNG volume, and directed density across the 60 months.
+Directed density is calculated among active nodes, so its changing denominator matters: a month with fewer edges can still have higher density if fewer nodes are active. 
 
 \begin{table}[H]
   \centering
@@ -979,53 +980,60 @@ Table~\ref{tab:eda_monthly_summary} reports the ranges and averages of active no
 
 To illustrate the geographic structure of one monthly network,
 Figure~\ref{fig:lng_network_june2021} shows a snapshot of the active terminals,
-chokepoints, and directed connections in June 2021. This month has
-98 active nodes and 138 edges, therefore it displays values close to the monthly
-averages reported in Table~\ref{tab:eda_monthly_summary}. 
+chokepoints, and directed connections in June 2021. The network
+has 98 active nodes and 138 directed edges in that month, values
+close to the monthly averages reported in Table~\ref{tab:eda_monthly_summary}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{images/lng_network_2021-06.png}
     \caption{Geographic snapshot of the observed LNG network in June 2021.
     Points show active terminals and chokepoints; arrows indicate the
-    direction of observed network connections. Connections are drawn
-    schematically between node coordinates and do not represent vessel
-    trajectories.}
+    direction of observed network connections. 
+    Line width represents monthly LNG volume on each directed edge; connections are schematic rather than sailed routes.}
     \label{fig:lng_network_june2021}
 \end{figure}
 
 Figure~\ref{fig:eda_export_volume} shows how observed LNG export volume
 changes from month to month, complementing the range and average reported
-in the table. The increase through 2023 is consistent with the broader
-expansion of global LNG trade described by \citet{zhou2026}; the comparison
-provides context rather than an explanation for every monthly fluctuation.
-As explained in Chapter 3, monthly export volume is calculated from the
-original voyages, since summing flows over successive network edges would
-count some shipments more than once.
+in the table. 
+The increase in observed export volume through 2023 is consistent with
+the growth in global LNG trade reported by the U.S. Energy Information
+Administration \citep{eia2024lng}. This comparison provides context for
+the overall pattern but does not explain individual monthly fluctuations.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=.82\textwidth]{images/global_lng_export_volume_over_time.png}
-  \caption{Monthly LNG export volume based on distinct observed export voyages (cubic metres).}
+  \caption{Monthly LNG export volume based on observed export voyages (cubic metres).}
   \label{fig:eda_export_volume}
 \end{figure}
 
-Directed density is calculated among active nodes, so its changing denominator matters: a month with fewer edges can still have higher density if fewer nodes are active. 
-The monthly graph is not always weakly connected, although its largest weakly connected component contains at least 89.8\% of active nodes throughout the period. 
-Thus, most active nodes belong to one component even when smaller components exist. 
-The bridge and articulation measures examine a different aspect of connectivity: whether removing particular nodes or connections disrupts it.
-
-The temporal quality-assurance indicator identifies months with at least two of three observed quantities---voyages, original-voyage volume and active edges---below 70\% of their respective 60-month medians. 
-It flags several months in 2020 and early 2021, as well as November--December 2024. 
-The flag identifies unusually low \emph{observed activity}, not missing data or a verified external shock. 
-In particular, the late-2024 decline should not be assigned a substantive cause without separate evidence.
+Changes in the numbers of nodes and edges, and in exported volume, do not
+show whether active nodes belong to the same connected part of the network.
+To examine this aspect, the weakly connected components of each
+monthly graph were considered. The monthly graph is not always weakly connected, although
+its largest weakly connected component contains at least 89.8\% of active
+nodes throughout the period. Thus, most active nodes belong to one component
+even when smaller components exist. 
 
 \section{Node activity and temporal sparsity}
 \label{sec:activity_sparsity}
 
-A node is active in month $t$ when it has positive observed throughput in that month. Of 10,980 potential node-month observations ($183\times60$), 5,792 (52.75\%) are active and 5,188 (47.25\%) inactive. The monthly inactive share ranges from 31.15\% to 60.66\%. This is sparsity in \emph{node activity}; it should not be conflated with directed graph density, which uses active nodes as its denominator.
+Using the node activity definition introduced in Chapter~\ref{subsec:node_activity_definition}, of 10,980 potential node-month observations, 5,792 (52.75\%) are active and 5,188 (47.25\%) inactive. 
+Consistent with the broad pattern in exported LNG volume shown in Figure~\ref{fig:eda_export_volume}, node participation generally increases through 2023 and declines towards the end of 2024. 
+Correspondingly, the monthly share of inactive nodes ranges from 31.15\% to 60.66\% (Figure~\ref{fig:eda_sparsity}).
 
-Terminals account for 9,540 observations, of which 4,552 are active and 4,988 inactive (52.29\% inactive). The 24 chokepoints account for 1,440 observations, of which 1,240 are active and 200 inactive (13.89\% inactive). Thus, the aggregate inactivity pattern is predominantly a terminal phenomenon, although chokepoint activity is not constant. The different base rates also caution against assuming that the two node types share the same activity process.
+Terminals account for 9,540 node--month observations, of which 4,552 are
+active and 4,988 inactive (52.29\%). The 24 chokepoints account
+for 1,440 observations, of which 1,240 are active and 200 inactive
+(13.89\%). This difference is consistent with the nodes'
+distinct roles in the network: a terminal participates as an origin or
+destination of a voyage, whereas a chokepoint can be traversed by voyages
+linking many different terminal pairs. Aggregate inactivity is therefore
+predominantly a terminal phenomenon, although chokepoint activity is not
+constant. These different base rates suggest that activity may need to be
+examined separately by node type.
 
 \begin{figure}[htbp]
   \centering
@@ -1034,7 +1042,9 @@ Terminals account for 9,540 observations, of which 4,552 are active and 4,988 in
   \label{fig:eda_sparsity}
 \end{figure}
 
-Inactivity is substantively relevant to the interpretation of centrality: an inactive node may receive a zero in the balanced node-month dataset even though the criticality measure is chiefly meaningful when it participates in trade. A later activity component can therefore address participation separately from the magnitude of criticality conditional on activity. The descriptive shares support examining such a specification; they do not by themselves establish the best probability model or its predictors.
+Inactivity is substantively relevant to the interpretation of centrality: an inactive node may receive a zero in the balanced node-month dataset even though the criticality measure is chiefly meaningful when it participates in trade. 
+A later activity component can therefore address participation separately from the magnitude of criticality conditional on activity.
+The descriptive shares support examining such a specification.
 
 \section{Terminal roles and criticality}
 \label{sec:terminal_trade_patterns}
@@ -1055,7 +1065,11 @@ The role-specific dependence measure has a median of 0.406 and a 75th percentile
 \subsection{Structural position}
 \label{subsec:terminal_structure}
 
-The monthly undirected projection provides complementary binary indicators: whether a terminal is an articulation point, whether it is incident to a global bridge or to a local bridge that is not global, and whether it is adjacent to an articulation point. They reflect connectivity and exposure to fragile connections rather than trade volume. These indicators can be discussed alongside centrality and dependence, without treating them as interchangeable. For terminals, shortest-path betweenness in the directed monthly network is identically zero in the published node-month summary and consequently offers no variation for a terminal criticality outcome.
+The monthly undirected projection provides complementary binary indicators: 
+whether a terminal is an articulation point, whether it is incident to a global bridge or to a local bridge that is not global, and whether it is adjacent to an articulation point. 
+They reflect connectivity and exposure to fragile connections rather than trade volume. 
+These indicators can be discussed alongside centrality and dependence, without treating them as interchangeable. 
+For terminals, shortest-path betweenness in the directed monthly network is identically zero in the published node-month summary and consequently offers no variation for a terminal criticality outcome.
 
 \section{Chokepoint criticality}
 \label{sec:chokepoint_criticality_measures}
