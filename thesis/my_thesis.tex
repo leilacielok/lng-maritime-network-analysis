@@ -476,6 +476,7 @@ s^{\mathrm{out}}_{i,t}
 so that exporters have \(s^{\mathrm{out}}_{i,t}=1\), importers have \(s^{\mathrm{out}}_{i,t}=0\), and bidirectional terminals take values between zero and one.
 
 \subsubsection{Counterparty concentration}
+\label{hhi_index}
 The concentration of a terminal's trade across its counterparties was measured using the Herfindahl--Hirschman Index (HHI), a standard measure of concentration based on the squared shares of individual counterparties \citep{hirschman1945}. 
 The outgoing and incoming terminal-level concentration indices were calculated, respectively, as
 
@@ -519,6 +520,7 @@ s^{\mathrm{out}}_{i,t}H^{\mathrm{out}}_{i,t}
 \end{equation}
 
 \subsubsection{Directional PageRank}
+\label{subsubsec:directional_pagerank}
 Terminal network importance was measured using PageRank, which considers both the magnitude of a terminal's connections and the importance of the terminals to which it is connected \citep{page1999pagerank}. 
 The measure was calculated separately for importing and exporting roles on the monthly directed and flow-weighted terminal network: import PageRank was calculated using the observed direction of LNG flows, whereas export PageRank was calculated after reversing all edges. 
 Intuitively, import PageRank assigns greater importance to terminals receiving flows from other important terminals, while export PageRank captures the corresponding importance of LNG suppliers.
@@ -1057,23 +1059,15 @@ position.
 \subsection{Terminal roles and operational activity}
 \label{subsec:terminal_roles_eda}
 Terminal participation is uneven across the 60 monthly networks.
-Of the 9,540 terminal--month observations, 3,234 are active importer
-months, 1,318 are active exporter months, and 4,988 are inactive months.
+Of the 9,540 terminal--month observations, 3,234 are active importer months, 1,318 are active exporter months, and 4,988 are inactive months.
 
-Country-level roles were assessed over the full 2020--2024 period
-using each country's net trade position. Qatar, the United States,
-and Russia recorded the largest cumulative export volumes, while
-China, France, and Japan recorded the largest cumulative import
-volumes. A net role does not imply trade in only one direction:
-Malaysia was a net importer despite recording exports, and the
-United States was a net exporter despite recording imports.
+Country-level roles were assessed over the full 2020--2024 period using each country's net trade position. 
+Qatar, the United States, and Russia recorded the largest cumulative export volumes, while China, France, and Japan recorded the largest cumulative import volumes. 
+A net role does not imply trade in only one direction: Malaysia was a net importer despite recording exports, and the United States was a net exporter despite recording imports.
 
-Table~\ref{tab:eda_terminal_activity_by_role} compares throughput,
-voyage counts, and numbers of terminal counterparties across active
-importer and exporter months. Exporter observations have higher
-medians and 95th percentiles for all three measures. For example,
-median monthly throughput is approximately 0.505 million cubic
-metres for exporters and 0.328 million cubic metres for importers.
+Table~\ref{tab:eda_terminal_activity_by_role} compares throughput, voyage counts, and numbers of terminal counterparties across active importer and exporter months. 
+Exporter observations have higher medians and 95th percentiles for all three measures. 
+For example, median monthly throughput is approximately 0.505 million cubic metres for exporters and 0.328 million cubic metres for importers.
 
 \begin{table}[htbp]
     \centering
@@ -1092,36 +1086,76 @@ metres for exporters and 0.328 million cubic metres for importers.
         Terminal counterparties & 1 & 4 & 3 & 14 \\
         \hline
     \end{tabular}
+    \begin{flushleft}
+        \footnotesize Source: calculations from
+        \texttt{terminal\_month\_metrics.csv}, restricted to active
+        terminal--month observations and grouped by terminal role.
+        Throughput values are rounded to three decimal places.
+    \end{flushleft}
 \end{table}
 
 Across all active terminal--month observations, median throughput
 is 346,000 cubic metres, but its distribution is highly right-skewed: the 95th
 percentile is approximately 1.90 million cubic metres, while Rasgas LNG Terminal 3 reaches the observed maximum of 10.91 million cubic metres in October 2023. 
 This skew motivates considering a transformation of lagged throughput in the subsequent modelling analysis.
-The differences in voyage counts and counterparties shown in Table~\ref{tab:eda_terminal_activity_by_role}
-also indicate that monthly terminal activity varies in both operational scale and the number of trading connections.
 
+The differences in voyage counts and counterparties in Table~\ref{tab:eda_terminal_activity_by_role} also show that monthly terminal activity varies beyond traded volume. 
+Active exporter terminal--months involve more terminal counterparties than active importer terminal--months, with respective medians of three and one, which suggests greater diversification of observed trading connections among exporters. 
 
 \subsection{Centrality, concentration and dependence}
 \label{subsec:terminal_criticality_eda}
+The terminal measures discussed below were defined in Section~\ref{subsec:terminal_measures}. Here, their distributions are examined across active terminal--month observations.
 
-The role-specific PageRank uses the reversed terminal trade graph for exporters and the original graph for importers; in each case the directed edges are weighted by LNG volume. It has a median of 0.0142 among active terminal-months (95th percentile 0.0363). 
-Its interpretation depends on the observed role, and it is computed on the active monthly terminal graph before the balanced panel assigns zero to inactive terminals.
+Role-specific PageRank has a median of 0.0142 and a 95th percentile of 0.0363. 
+Its distribution is clearly right-skewed, as most observations have relatively low values, while a small number attain substantially higher PageRank. 
+Whereas this is a signal of variation in measured network position, a high PageRank alone does not establish a node's criticality in the network. 
+For this reason, the following measures were evaluated to describe other dimensions of its role in the network.
 
-The counterparty HHI describes how the terminal's relevant inflow or outflow is distributed among its counterparties. 
-An HHI of one means that all role-relevant flow involves one terminal or one country. Among active terminal-months, the median terminal-level HHI is 0.556 and the median country-level HHI is 0.674; the respective 75th percentiles are both one. 
-The country-level index aggregates counterparties by country and can consequently be higher than its terminal-level counterpart. The effective-counterparty quantities are their reciprocals and should be treated as alternative expressions of the same concentration measures, not additional independent outcomes.
+The counterparty concentration measures show substantial variation
+among active terminal--month observations. The median HHI is 0.556
+when counterparties are individual terminals and 0.674 when they
+are aggregated by country. These values correspond to effective
+numbers of approximately 1.8 terminals and 1.5 countries,
+respectively. Thus, even when a terminal trades with several
+partners, its observed monthly flow may be concentrated among
+relatively few of them.
 
-The role-specific dependence measure has a median of 0.406 and a 75th percentile of 0.782 among active terminal-months. 
-Its construction differs by role: for exporters, it is the export-flow-weighted share of each recipient terminal's imports supplied by that exporter; for importers, it is the terminal's share of its country's observed LNG receipts. 
-These two interpretations must be reported explicitly when comparing the pooled role-specific measure. 
-In particular, counterparty HHI describes concentration of a terminal's own trade, whereas dependence asks how much others rely on that terminal under the relevant role-specific definition.
+An HHI of one occurs in 43.5\% of active terminal--month
+observations at the terminal level, meaning that all role-relevant
+flow observed in that month involves a single terminal counterparty.
+At the country level, the corresponding share is 47.4\%: all
+role-relevant flow goes to or comes from one country, which may
+contain multiple terminal counterparties.
+
+Role-specific dependence has a median of 0.406 across active
+terminal--month observations, but this pooled value combines
+different interpretations for the two terminal roles. Among active
+exporter months, the median is 0.495: higher values indicate that
+a larger share of the exporter's flow reaches importing terminals
+that rely heavily on its supply. 
+Among active importer months instead, where higher values indicate that the terminal
+accounts for a larger share of its country's observed LNG receipts, the median is 0.333.
+
+The two role-specific values refer to different forms of reliance.
+For an exporter, dependence describes how strongly its importing
+terminal counterparties rely on its supply. For an importer, it
+describes how much of its country's observed LNG receipts pass
+through that terminal. Their numerical values therefore should
+not be interpreted as measuring the same relationship.
+
+Counterparty HHI captures yet another aspect of trade relationships:
+the concentration of a terminal's own trade across its partners.
+An importer may receive all its LNG from one exporter, giving it
+an HHI of one, while handling only a small share of its country's
+total imports and therefore having low role-specific dependence.
+
+Both measures are therefore retained to describe complementary
+aspects of a terminal's role in the trade network.
 
 \subsection{Structural position}
 \label{subsec:terminal_structure}
 
-The monthly undirected projection provides complementary binary indicators: 
-whether a terminal is an articulation point, whether it is incident to a global bridge or to a local bridge that is not global, and whether it is adjacent to an articulation point. 
+The monthly undirected projection provides complementary binary indicators: whether a terminal is an articulation point, whether it is incident to a global bridge or to a local bridge that is not global, and whether it is adjacent to an articulation point. 
 They reflect connectivity and exposure to fragile connections rather than trade volume. 
 These indicators can be discussed alongside centrality and dependence, without treating them as interchangeable. 
 For terminals, shortest-path betweenness in the directed monthly network is identically zero in the published node-month summary and consequently offers no variation for a terminal criticality outcome.
