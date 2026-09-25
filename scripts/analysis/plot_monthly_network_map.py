@@ -156,7 +156,7 @@ def draw_panel(ax, nodes, edges, land):
             float(source.longitude), float(source.latitude),
             float(target.longitude), float(target.latitude),
         )
-        width = 0.45 + 1.3 * np.sqrt(edge.lng_flow_cmb / max_flow)
+        width = 0.4 + 2.8 * np.sqrt(edge.lng_flow_cmb / max_flow)
         segments.extend(parts)
         widths.extend([width] * len(parts))
         # One arrow per directed edge, placed on its longest displayed segment.
@@ -173,7 +173,7 @@ def draw_panel(ax, nodes, edges, land):
             arrows.append((start, end, width))
     ax.add_collection(LineCollection(
         segments, linewidths=widths, colors="#285f82",
-        alpha=0.38, zorder=1,
+        alpha=0.55, zorder=1,
     ))
     for start, end, width in arrows:
         p1 = start + 0.58 * (end - start)

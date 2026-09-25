@@ -933,18 +933,28 @@ network activity and estimated route exposure within the study period.
 This chapter explores the structure and evolution of the LNG maritime network from January 2020 to December 2024. 
 It describes monthly trade flows and connectivity, the frequency of node activity, terminal trade roles, and the distributions and associations of the network measures introduced in Chapter 3.
 
-The results are organised by observational unit. Section~\ref{sec:network_evolution} examines the monthly graphs, using original-voyage summaries for aggregate trade volume and voyage counts. 
-Section~\ref{sec:activity_sparsity} examines activity in the balanced node--month dataset, and Section~\ref{sec:chokepoint_criticality_measures} describes the chokepoint network measures. 
-Section~\ref{sec:terminal_trade_patterns} examines terminal roles and counterparty measures in the terminal--month dataset derived from matched voyages. 
+The results are organised by observational unit. Section~\ref{sec:network_evolution}
+describes the monthly graphs, using original-voyage summaries for aggregate
+trade volume and voyage counts. Section~\ref{sec:activity_sparsity}
+examines activity in the balanced node--month dataset.
+Section~\ref{sec:terminal_trade_patterns} explores terminal roles and
+counterparty measures in the terminal--month dataset derived from matched
+voyages. Section~\ref{sec:chokepoint_criticality_measures} then presents
+the network measures for chokepoints, calculated from the monthly graphs and summarised across
+chokepoint--month observations.
 
-As described in Section~\ref{subsec:temporal_aggregation}, both datasets retain inactive months; summaries restricted to active observations are identified where they appear.
+As described in Section~\ref{subsec:temporal_aggregation}, the node--month and terminal--month
+datasets retain observations for inactive months. Summaries restricted
+to active observations are identified where they appear.
 
 \section{Network evolution and connectivity}
 \label{sec:network_evolution}
 
-Table~\ref{tab:eda_monthly_summary} summarises the monthly numbers of active nodes, directed edges and distinct export voyages, as well as exported LNG volume and directed density. 
-Active nodes and edges generally increase from 2021 to late 2023, reaching their respective maxima in December 2023, before declining during the second half of 2024. 
-These changes describe participation in the observed network rather than changes in the set of potential nodes.
+The observed LNG maritime network changes in size over the study period. 
+The numbers of active nodes and directed edges generally increase from 2021 to late 2023, reaching their respective maxima in December 2023, before declining during the second half of 2024. 
+As the set of potential nodes remains fixed, these changes reflect solely monthly participation in the network.
+
+Table~\ref{tab:eda_monthly_summary} reports the ranges and averages of active nodes, directed edges, distinct export voyages, exported LNG volume, and directed density across the 60 months.
 
 \begin{table}[H]
   \centering
@@ -956,7 +966,7 @@ These changes describe participation in the observed network rather than changes
     \hline
     Active nodes & 72 & 96.5 & 126 \\
     Active directed edges & 88 & 136.5 & 192 \\
-    Distinct export voyages & 70 & 144.0 & 237 \\
+    Export voyages & 70 & 144.0 & 237 \\
     Exported volume (million cubic metres) & 11.48 & 24.01 & 38.77 \\
     Directed density among active nodes & 0.0122 & 0.0148 & 0.0180 \\
     \hline
