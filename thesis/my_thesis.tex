@@ -335,27 +335,36 @@ Table~\ref{tab:data_sources} summarises the principal data sources, their units 
 
 \section{Data preparation}
 \label{sec:data_preparation}
-Before constructing the network, the voyage and terminal datasets were harmonised to ensure that each observed shipment could be associated with a unique origin and destination node. 
-This harmonization process began by converting date fields and numerical variables into consistent formats as an initial validation step, followed by the parsing of all voyage dates, LNG volumes, terminal capacities, and unit counts, with no invalid non-missing values detected. 
-Start year was unavailable for 64 of the 545 records in the original terminal inventory, although this information was complete for all 159 terminals subsequently retained in the network.
+Before constructing the network, the voyage and terminal datasets were
+harmonised to ensure that each observed shipment could be associated
+with a unique origin and destination node.
 
-The LNG-T3 terminal inventory contains 545 records corresponding to 471 unique terminal names. Sixty-five terminal names appear more than once, reflecting different infrastructure-status records for the same facility. Most repeated records report identical coordinates, whereas three terminal names are associated with two distinct coordinate variants each. To construct a unique terminal map, distinct name--coordinate combinations were initially assigned separate identifiers, while records sharing both terminal name and coordinates were treated as referring to the same facility.
+As an initial validation step, voyage dates, LNG volumes, terminal
+capacities, and unit counts were parsed into consistent formats. No
+invalid or missing values were found in these fields.
 
-A canonical record was then selected for each terminal name using the infrastructure status reported in the original dataset, with priority given to operating facilities, followed by facilities under construction, idle, mothballed, and proposed. 
-The coordinate variants associated with the three affected terminal names were retained in a separate validation table, together with an indicator identifying the variant selected as canonical. 
-Each of the resulting 471 terminal records was assigned a unique node identifier.
+The LNG-T3 terminal inventory contains 545 records corresponding to
+471 unique terminal names. Sixty-five names occur more than once,
+generally because the same facility has multiple infrastructure-status
+records. Whereas most repeated records have identical coordinates, three
+terminal names have two coordinate variants each.
+
+Records were first distinguished by name and coordinates. 
+One record was then selected to represent each terminal name in the final terminal map, based on the infrastructure status reported for that record in the LNG-T3 inventory. 
+The selection prioritised records classified as \emph{operating}, followed by those classified as \emph{under construction}, \emph{idle}, \emph{mothballed}, and \emph{proposed}.
+Each of the 471 terminals in the final map was then assigned a
+unique node identifier.
 
 Voyage origins and destinations were matched to the consolidated terminal map using the terminal names reported in the LNG-T3 voyage data. 
 The corresponding node identifiers and coordinates were attached to each voyage record, and the matching status of the two endpoints was recorded separately. 
 All origin and destination values in the 17,592 voyage records were successfully matched to the terminal map.
 
-The original voyage table contains 8,645 laden export voyages and 8,947 return movements, with all return movements reporting zero transported LNG volume and therefore being excluded from the trade network. 
-The retained records were additionally required to have a valid departure date, matched origin and destination identifiers, and a strictly positive LNG volume. 
+The original voyage table contains 8,645 laden export voyages and 8,947 return movements. Since the latter take place after delivery and therefore report zero transported LNG volume, only the laden export voyages were retained to construct the LNG trade network. 
+The retained voyages were also required to have a valid departure date, matched origin and destination identifiers, and a strictly positive LNG volume.
 All export records satisfied these conditions, meaning that these checks did not produce any further exclusions.
 
 Potential duplicate export observations were identified using the departure and arrival dates, tanker IMO number, voyage type, origin and destination terminals, and transported volume. 
-Five rows belonged to two duplicate groups: one voyage appeared twice and another appeared three times. 
-Retaining the first observation in each group removed three duplicate rows. The final dataset used to construct the network therefore contains 8,642 laden LNG voyages.
+After removing three duplicate entries, the final dataset used to construct the network contains 8,642 laden LNG voyages.
 
 \subsection{Terminal infrastructure characteristics}
 \label{subsec:terminal_roles_characteristics}
@@ -390,7 +399,6 @@ The global LNG maritime network was represented as a sequence of monthly directe
     G_t = (V,E_t,W_t), \qquad t=1,\ldots,60, 
     \label{eq:dynamic_network} 
 \end{equation}
-
 where \(V\) is the time-invariant set of terminal and chokepoint nodes, \(E_t\) is the set of directed connections observed in month \(t\), and \(W_t=[w_{ij,t}]\) is the corresponding weighted adjacency matrix. 
 An element \(w_{ij,t}>0\) represents the total LNG volume transported from node \(i\) to node \(j\) during month \(t\), while \(w_{ij,t}=0\) indicates that no such connection was observed.
 
@@ -401,8 +409,8 @@ The final node set contains 183 nodes and can be written as
 \begin{equation} 
     V = V^{T} \cup V^{C}, \qquad |V^{T}|=159, \qquad |V^{C}|=24, 
 \end{equation}
-
 where \(V^{T}\) denotes the set of LNG terminals and \(V^{C}\) the set of maritime chokepoints. 
+
 The 159 terminal nodes are the facilities that appear as an origin or destination of at least one retained laden voyage. 
 Of the 28 candidate chokepoints included in the geographic registry, 24 were traversed by at least one reconstructed route and were therefore retained in the observed network.
 
@@ -412,26 +420,24 @@ To incorporate the maritime infrastructure traversed during transportation, the 
 \begin{equation} 
     P_r = \left( v_{r,0},v_{r,1},\ldots,v_{r,K_r} \right), 
 \end{equation}
-
 where \(v_{r,0}\) is the departure terminal, \(v_{r,K_r}\) is the arrival terminal, and any intermediate nodes are the chokepoints crossed by the route. 
 The voyage was then expanded into the consecutive directed connections
 
 \begin{equation} 
-    (v_{r,0},v_{r,1}), (v_{r,1},v_{r,2}), \ldots, (v_{r,K_r-1},v_{r,K_r}). 
+    E(P_r)=\left\{(v_{r,0},v_{r,1}), (v_{r,1},v_{r,2}), \ldots, (v_{r,K_r-1},v_{r,K_r})\right\}. 
 \end{equation} 
 
 A route that crossed no retained chokepoint generated a direct terminal-to-terminal edge. 
 Routes crossing one or more chokepoints generated terminal-to-chokepoint, chokepoint-to-chokepoint, and chokepoint-to-terminal edges according to the order in which those nodes were encountered.
 
-Let \(\mathcal{R}_t\) denote the set of voyages assigned to month \(t\), \(q_r\) the LNG volume transported by voyage \(r\), and \(\mathcal{E}(P_r)\) the set of consecutive directed connections in its ordered path. 
-Monthly edge weights were defined as
+Let \(\mathcal{R}_t\) denote the set of voyages during month \(t\), and \(q_r\) the LNG volume transported by voyage \(r\). 
+The edge weight from node \(i\) to node \(j\) at month \(t\) is defined as
 
 \begin{equation} 
     w_{ij,t} = \sum_{r\in\mathcal{R}_t} q_r\, 
     \mathbb{I} \left\{ (i,j)\in\mathcal{E}(P_r) \right\}, 
     \label{eq:monthly_edge_weight} 
 \end{equation}
-
 where \(\mathbb{I}\{\cdot\}\) is the indicator function. 
 Thus, the full volume of a shipment was assigned to every segment traversed by its route.
 Because shipments crossing multiple segments would consequently be counted more than once in the sum of all edge weights, aggregate monthly trade volume was calculated directly from the original voyage observations.
@@ -497,28 +503,27 @@ s^{\mathrm{out}}_{i,t}
 \frac{O_{i,t}}{T_{i,t}},
 \label{eq:export_share}
 \end{equation}
-
 so that exporters have \(s^{\mathrm{out}}_{i,t}=1\), importers have \(s^{\mathrm{out}}_{i,t}=0\), and bidirectional terminals take values between zero and one.
 
 \subsubsection{Counterparty concentration}
 \label{hhi_index}
 The concentration of a terminal's trade across its counterparties was measured using the Herfindahl--Hirschman Index (HHI), a standard measure of concentration based on the squared shares of individual counterparties \citep{hirschman1945}. 
-The outgoing and incoming terminal-level concentration indices were calculated, respectively, as
 
+Let \(\mathcal{D}_{i,t}=\{j:q_{ij,t}>0\}\) be the set of
+destination terminals receiving LNG from terminal \(i\) in month \(t\),
+and let \(\mathcal{S}_{i,t}=\{j:q_{ji,t}>0\}\) be the set of
+origin terminals supplying it. 
+The outgoing and incoming terminal-level concentration indices were calculated, respectively, as
 \begin{equation}
 \begin{aligned}
 H^{\mathrm{out}}_{i,t}
 &=
-\sum_j
-\left(
-\frac{q_{ij,t}}{O_{i,t}}
-\right)^2, \\
+\sum_{j\in\mathcal{D}_{i,t}}
+\left(\frac{q_{ij,t}}{O_{i,t}}\right)^2,\\
 H^{\mathrm{in}}_{i,t}
 &=
-\sum_j
-\left(
-\frac{q_{ji,t}}{I_{i,t}}
-\right)^2.
+\sum_{j\in\mathcal{S}_{i,t}}
+\left(\frac{q_{ji,t}}{I_{i,t}}\right)^2.
 \end{aligned}
 \label{eq:terminal_hhi}
 \end{equation}
@@ -564,8 +569,10 @@ PR^{\mathrm{imp}}_{j,t}
 {\sum_k q_{jk,t}},
 \label{eq:import_pagerank}
 \end{equation}
-
-where \(N_t\) is the number of active terminals in month \(t\), and the damping factor was set to \(\alpha=0.85\). Export PageRank, \(PR^{\mathrm{exp}}_{i,t}\), was obtained by applying the same calculation to the reversed monthly network.
+where \(N_t\) is the number of active terminals in month \(t\), and the damping factor was set to \(\alpha=0.85\), following the
+conventional value used by \citet{brin1998anatomy}. In this formulation, \(\alpha\) controls the contribution propagated through the
+network's directed flows, while \(1-\alpha\) determines the uniform redistribution component. 
+Export PageRank, \(PR^{\mathrm{exp}}_{i,t}\), was obtained by applying the same calculation to the reversed monthly network.
 
 The role-specific PageRank measure was defined as
 
@@ -652,8 +659,7 @@ Mean voyage distance was calculated as the unweighted arithmetic mean of the rec
 \sum_{r\in\mathcal{R}^{\mathrm{out}}_{i,t}} L_r,
 \label{eq:outgoing_distance}
 \end{equation}
-
-where \(\mathcal{R}^{\mathrm{out}}_{i,t}\) is the set of voyages departing from terminal \(i\) in month \(t\), \(n^{\mathrm{out}}_{i,t}\) is their number, and \(L_r\) is the reconstructed distance of voyage \(r\).
+where \(\mathcal{R}^{\mathrm{out}}_{i,t}\) is the set of voyages departing from terminal \(i\) in month \(t\), \(n^{\mathrm{out}}_{i,t}\) is the cardinality of this set, and \(L_r\) is the reconstructed distance of voyage \(r\).
 
 For an importing terminal, the corresponding measure was defined as
 
@@ -664,8 +670,7 @@ For an importing terminal, the corresponding measure was defined as
 \sum_{r\in\mathcal{R}^{\mathrm{in}}_{i,t}} L_r,
 \label{eq:incoming_distance}
 \end{equation}
-
-where \(\mathcal{R}^{\mathrm{in}}_{i,t}\) is the set of voyages arriving at terminal \(i\) in month \(t\). The role-relevant mean voyage distance was subsequently lagged by one month before being included among the model covariates.
+where \(\mathcal{R}^{\mathrm{in}}_{i,t}\) is the set of voyages arriving at terminal \(i\) in month \(t\) with cardinality \(n_{i,t}^{in}\). The role-relevant mean voyage distance was subsequently lagged by one month before being included among the model covariates.
 
 \subsection{Chokepoint criticality measures}
 \label{subsec:chokepoint_measures}
@@ -684,7 +689,6 @@ A distance measure was therefore assigned to each directed edge as the inverse o
 w_{ij,t}>0.
 \label{eq:inverse_flow_distance}
 \end{equation}
-
 where \(w_{ij,t}\) is the LNG volume transported from node \(i\) to node \(j\) during month \(t\). 
 Under this transformation, edges carrying larger LNG volumes are treated as stronger and therefore shorter connections.
 
@@ -699,8 +703,7 @@ B_{i,t}
 {\sigma_{jk,t}},
 \label{eq:weighted_betweenness}
 \end{equation}
-
-where \(N_t=|V_t|\) is the number of active nodes in month \(t\) and \(\sigma_{jk,t}\) is the number of shortest directed paths from node \(j\) to node \(k\) calculated using the edge distances defined in Equation~\ref{eq:inverse_flow_distance}. 
+where \(N_t=|V_t|\) is the number of active nodes in month \(t\) and \(\sigma_{jk,t}\) in the denominator is the number of shortest directed paths from node \(j\) to node \(k\), calculated using the edge distances defined in Equation~\ref{eq:inverse_flow_distance}. 
 The term \(\sigma_{jk,t}(i)\) denotes the number of these paths that pass through node \(i\).
 A high value of \(B_{i,t}\) indicates that a chokepoint lies on a large share of the shortest paths defined by the distribution of LNG flows and therefore occupies an important intermediary position in the monthly transportation network.
 
@@ -720,11 +723,13 @@ PR_{j,t}
 {\sum_k w_{jk,t}},
 \label{eq:node_pagerank}
 \end{equation}
-
 where \(\alpha=0.85\) is the damping factor. 
 
 \subsubsection{Share of monthly network flow}
-For a terminal, monthly node throughput equals the sum of its incoming and outgoing flows. For a chokepoint, the same shipment appears on both an incoming and an outgoing segment as it passes through the node. Chokepoint throughput was therefore defined as half of its total incident flow:
+For a terminal, monthly node throughput equals the sum of its incoming and outgoing flows. 
+For a chokepoint, the same shipment appears on both an incoming and an outgoing segment as it passes through the node. 
+Let \(V^{\mathrm{CP}}\subseteq V\) denote the set of chokepoint nodes.
+For each \(i\in V^{\mathrm{CP}}\), throughput was defined as half of its total incident flow:
 
 \begin{equation}
 F_{i,t}
@@ -745,8 +750,8 @@ The share of monthly network flow associated with node \(i\) was then calculated
 \begin{equation}
 S_{i,t}
 =
-\frac{F_{i,t}}
-{\displaystyle\sum_{n\in V}F_{n,t}}.
+\frac{F_{i,t}}{\displaystyle\sum_{n\in V}F_{n,t}},
+\qquad i\in V^{\mathrm{CP}}.
 \label{eq:monthly_flow_share}
 \end{equation}
 
@@ -772,7 +777,6 @@ A_{i,t}
 \right\},
 \label{eq:articulation_indicator}
 \end{equation}
-
 where \(\kappa(U_t)\) denotes the number of connected components in \(U_t\), and \(U^{(-i)}_t\) is the graph obtained by removing node \(i\) and its incident edges.
 
 A separate indicator identifies nodes directly connected to an articulation point:
@@ -787,7 +791,6 @@ CA_{i,t}
 \right\},
 \label{eq:connected_articulation}
 \end{equation}
-
 where \(\mathcal{N}_{i,t}\) is the set of immediate neighbours of node \(i\) in \(U_t\). This distinction separates nodes whose own removal could disrupt network connectivity from nodes directly exposed to a structurally critical neighbour.
 
 \subsubsection{Global and local bridges}
@@ -803,7 +806,6 @@ e\in\mathcal{B}^{G}_t
 \right\},
 \label{eq:global_bridge_count}
 \end{equation}
-
 where \(\delta_t(i)\) is the set of edges incident to node \(i\) in month \(t\). The corresponding binary indicator was defined as
 
 \begin{equation}
@@ -843,7 +845,6 @@ LBS_{i,t}
 \qquad d_{i,t}>0,
 \label{eq:bridge_shares}
 \end{equation}
-
 where \(d_{i,t}\) is the degree of node \(i\) in the monthly undirected network. 
 Together, these measures distinguish connections whose removal would disconnect part of the network from connections that locally bridge otherwise weakly connected neighbourhoods.
 
@@ -1441,8 +1442,6 @@ that none of the reconstructed LNG routes in the study period passed within
 25~km of their operational geometries, but it does not imply that the passages
 have no relevance to maritime traffic outside the analysed LNG network.
 
-\section{Selection of the final specification}
-
 The 25-km tolerance was retained because it accommodates spatial
 misalignments between the simplified \texttt{SeaRoute} paths and the
 operational transit geometries while applying a uniform and transparent
@@ -1456,7 +1455,7 @@ procedure did not alter the reconstructed route geometries.
 
 This appendix documents the variables contained in the three model-ready panels described in Section~\ref{sec:model_ready_panels}. 
 Variables are grouped according to their analytical role rather than their physical order in the CSV files. 
-Flow variables are measured monthly, binary indicators take the value one when the stated condition is satisfied, and variables carrying the suffix \texttt{lag1} refer to month (t-1).
+Flow variables are measured monthly, binary indicators take the value one when the stated condition is satisfied, and variables carrying the suffix \texttt{lag1} refer to month \(t-1\).
 Log-transformed variables were calculated using \(\log(1+x)\).
 
 The three panels cover January 2020--December 2024. Consequently, all one-month lagged variables are unavailable in January 2020. 
