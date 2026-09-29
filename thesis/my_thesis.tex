@@ -236,13 +236,14 @@ SeaRoute applies Dijkstra's algorithm \citep{dijkstra1959} to identify the short
 Specifically, the 5-km resolution of the maritime network produced through the \texttt{marnet} module was used: edges shorter than this scale are progressively contracted and geometrically similar connections are removed, reducing network complexity while preserving the principal maritime routes.
 Additionally, in line with the thesis' objectives, transit through both the Suez and Panama canals was enabled, allowing the routing algorithm to include these passages when they formed part of the shortest available maritime path.
 
-Rather than reconstructing the same route separately for every voyage, a route was generated for each unique origin--destination terminal pair and subsequently linked to all voyages associated with that pair. 
-The reconstructed routes were subsequently merged with the chokepoints locations to identify the strategic maritime passages traversed by each trade connection.
+A route was generated for each unique origin--destination terminal pair and linked to all voyages associated with that pair. 
+Afterwards, the reconstructed routes were merged with the chokepoints locations to identify the strategic maritime passages traversed by each trade connection.
 
 \subsubsection{Chokepoints geometries}
 \label{subsubsec:chokepoints_geom}
 The initial set of 28 maritime chokepoints, together with their names, identifiers, and reference coordinates, was obtained from the IMF PortWatch chokepoint database \citep{imf_portwatch}, but because the PortWatch locations are represented primarily as point features, they could not be used directly to determine whether a reconstructed maritime route effectively crossed a passage.
-A geometry registry was therefore compiled to associate each chokepoint with an appropriate spatial representation and to document its source and construction method.
+A geometry registry was therefore compiled to associate each chokepoint with an appropriate spatial representation. 
+The registry, including the source and construction method for each geometry, is provided in Appendix~\ref{app:chokepoint_geometries}.
 
 The final geometries were assembled from several sources. Published polygons for the Suez Canal, Bab el-Mandeb Strait, and Cape of Good Hope were directly obtained from the World Bank Development Data Partnership's Red Sea Monitoring project \citep{worldbank_redsea}. 
 Detailed IHO or SeaVoX geometries for the Malacca, Hormuz, Gibraltar, Dover, and Makassar straits were obtained through the Marine Regions Gazetteer and its geospatial services \citep{marine_regions}. 
@@ -252,15 +253,39 @@ Where no suitable published polygon was available, operational geometries were c
 The placement of these geometries was informed by the reference coordinates provided by PortWatch \citep{imf_portwatch}, geographic information from Marine Regions \citep{marine_regions}, and navigational references from relevant IMO
 documents, the NGA GeoNames database, and NOAA/NCEI hydrographic survey records \citep{imo_msc72_69,nga_geonames,noaa_h01600a}.
 
-As a final step, all geometries were transformed into a common geographic coordinate system and stored in a harmonised geospatial format. 
-To accommodate small discrepancies between the reconstructed \texttt{SeaRoute} paths and the operational chokepoint geometries, a uniform spatial-tolerance buffer of 25~km was applied around each chokepoint geometry. 
-A reconstructed origin--destination route was classified as traversing a chokepoint when it intersected the corresponding buffered geometry.
-Of the 28 candidate chokepoints, 24 were traversed by at least one reconstructed route under the final 25-km specification and were therefore retained as nodes in the monthly network.
+Figure~\ref{fig:chokepoint_geometries} shows the locations of the
+28 candidate chokepoints and 
+representative examples of the four
+types of geometry used to identify route crossings: a published
+polygon, a polygon reconstructed from IMO routeing coordinates,
+an operational crossing gate, and a buffered centreline.
 
-The robustness of the route--chokepoint assignments was assessed by comparing the final 25-km specification with exact geometric intersection and with alternative buffers of 5 and 10~km. 
-The complete sensitivity analysis is reported in Appendix~\ref{app:chokepoint_sensitivity}.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/chokepoint_geometries.pdf}
+    \caption{PortWatch reference locations of the 28 candidate chokepoints and representative
+    route-crossing geometries. The enlarged panels show the Suez Canal
+    (published polygon), Lombok Strait (geometry reconstructed from IMO
+    routeing coordinates), Taiwan Strait (operational crossing gate),
+    and Panama Canal (buffered operational centreline).}
+    \label{fig:chokepoint_geometries}
+\end{figure}
 
-The source, geometry type, construction method, and relevant parameters associated with each of the 28 chokepoints are documented in the geometry registry.
+All geometries were transformed into a common geographic coordinate
+system and stored in a harmonised geospatial format. To accommodate
+small discrepancies between the reconstructed \texttt{SeaRoute} paths
+and the chokepoint geometries, a uniform spatial-tolerance buffer of
+25~km was applied around each geometry. A reconstructed
+origin--destination route was classified as traversing a chokepoint
+when it intersected the corresponding buffered geometry.
+
+Of the 28 candidate chokepoints, 24 were traversed by at least one
+reconstructed route under the final 25-km specification and were
+therefore retained as nodes in the monthly network. The robustness
+of the route--chokepoint assignments was assessed by comparing this
+specification with exact geometric intersection and with alternative
+buffers of 5 and 10~km. The complete sensitivity analysis is
+reported in Appendix~\ref{app:chokepoint_sensitivity}.
 
 Table~\ref{tab:data_sources} summarises the principal data sources, their units of observation, the main variables retained, and their role in the construction of the network.
 
@@ -1206,6 +1231,77 @@ The exact response set, handling of inactive-month zeros, link functions and dep
 % 
 \appendix
 \counterwithin{table}{chapter}
+
+\chapter{Chokepoint geometry registry}
+\label{app:chokepoint_geometries}
+
+Table~\ref{tab:chokepoint_geometry_registry} documents the geometries
+used to assess route crossings for all 28 initial PortWatch
+chokepoints. Published spatial geometries were used directly where
+available. Geometries based on published routeing coordinates were
+reconstructed as polygons. For the remaining passages, operational
+corridors or crossing gates were constructed using the geographic
+and navigational references indicated below. These constructed
+geometries serve to classify route crossings and do not represent
+official maritime boundaries. Four of the 28 passages were not
+traversed under the final route-assignment specification and were
+excluded from the monthly network.
+
+\small
+\begin{longtable}{@{}p{0.10\textwidth}p{0.24\textwidth}p{0.22\textwidth}p{0.35\textwidth}@{}}
+\caption{Geometry registry for the 28 initial chokepoints}
+\label{tab:chokepoint_geometry_registry}\\
+\toprule
+ID & Chokepoint & Geometry source & Geometry used for route classification \\
+\midrule
+\endfirsthead
+\toprule
+ID & Chokepoint & Geometry source & Geometry used for route classification \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+CP001 & Suez Canal & World Bank & Published polygon. \\
+CP002 & Panama Canal & Marine Regions reference & Operational canal centreline with an 8 km buffer. \\
+CP003 & Bosporus Strait$^{*}$ & Marine Regions reference & Operational strait centreline with a 5 km buffer. \\
+CP004 & Bab el-Mandeb Strait & World Bank & Published polygon. \\
+CP005 & Malacca Strait & Marine Regions, IHO & Detailed source MultiPolygon. \\
+CP006 & Strait of Hormuz & Marine Regions, SeaVoX & Detailed source MultiPolygon. \\
+CP007 & Cape of Good Hope & World Bank & Published polygon. \\
+CP008 & Gibraltar Strait & Marine Regions, IHO & Detailed source MultiPolygon. \\
+CP009 & Dover Strait & Marine Regions, SeaVoX & Detailed source MultiPolygon. \\
+CP010 & Oresund Strait & Marine Regions reference & Crossing gate, 45 $\times$ 8 km, oriented east--west. \\
+CP011 & Taiwan Strait & Marine Regions reference & Crossing gate, 220 $\times$ 12 km, oriented northwest--southeast. \\
+CP012 & Korea Strait & Marine Regions reference & Crossing gate, 130 $\times$ 10 km, oriented northwest--southeast. \\
+CP013 & Tsugaru Strait & Marine Regions reference & Crossing gate, 55 $\times$ 8 km, oriented north--south and centred on the Marine Regions location. \\
+CP014 & Luzon Strait & Marine Regions reference & Crossing gate, 220 $\times$ 12 km, oriented north--south. \\
+CP015 & Lombok Strait & IMO routeing coordinates & Polygon reconstructed from three traffic-separation-scheme sections. \\
+CP016 & Ombai Strait & IMO sea-lane reference & Crossing gate, 115 $\times$ 12 km, oriented north--south. \\
+CP017 & Bohai Strait & NGA GeoNames reference & Crossing gate, 120 $\times$ 15 km, oriented north--south. \\
+CP018 & Torres Strait & IMO routeing coordinates & Polygon reconstructed from the Prince of Wales Channel two-way route. \\
+CP019 & Sunda Strait & IMO routeing coordinates & Polygon reconstructed from two traffic-separation-scheme sections. \\
+CP020 & Makassar Strait & Marine Regions, IHO & Detailed source MultiPolygon. \\
+CP021 & Magellan Strait & Marine Regions reference & Crossing gate, 55 $\times$ 8 km, oriented north--south. \\
+CP022 & Yucatan Channel & NOAA/NCEI reference & Crossing gate, 230 $\times$ 15 km, oriented east--west. \\
+CP023 & Windward Passage & Marine Regions reference & Crossing gate, 105 $\times$ 12 km, oriented northwest--southeast. \\
+CP024 & Mona Passage & Marine Regions reference & Crossing gate, 145 $\times$ 12 km, oriented east--west. \\
+CP025 & Balabac Strait$^{*}$ & Marine Regions reference & Crossing gate, 100 $\times$ 10 km, oriented north--south. \\
+CP026 & Bering Strait$^{*}$ & IMO routeing coordinates & Polygon reconstructed from the two-way route through the strait. \\
+CP027 & Mindoro Strait & Marine Regions reference & Crossing gate, 95 $\times$ 10 km, oriented northeast--southwest. \\
+CP028 & Kerch Strait$^{*}$ & Marine Regions reference & Crossing gate, 26 $\times$ 5 km, oriented east--west. \\
+\end{longtable}
+\normalsize
+
+\noindent\footnotesize
+\emph{Notes:} IDs correspond to the study registry; the original
+PortWatch identifiers and reference coordinates are retained in the
+accompanying digital file. Gate dimensions are span $\times$
+thickness. Crossing gates are centred on the PortWatch reference point. 
+The asterisk identifies passages excluded from the final monthly 
+network because no reconstructed route crossed them under the selected 25 km tolerance. 
+The complete geometry registry and the GeoJSON file containing the final geometries 
+are available in the project’s GitHub repository.
+\normalsize
 
 \chapter{Sensitivity analysis of chokepoint assignments}
 \label{app:chokepoint_sensitivity}
