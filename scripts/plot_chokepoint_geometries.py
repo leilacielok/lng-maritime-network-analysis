@@ -1,4 +1,4 @@
-"""Plot the 28 PortWatch locations and four examples of crossing geometries.
+"""Export the PortWatch map and four crossing-geometry examples separately.
 
 Install: python -m pip install openpyxl matplotlib geopandas cartopy
 Run: python plot_chokepoint_geometries.py
@@ -14,6 +14,7 @@ chokepoint (matching the names in the registry). It is never approximated from
 the point coordinates in the Excel file.
 """
 
+import math
 from pathlib import Path
 
 import cartopy.crs as ccrs
@@ -26,7 +27,7 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CURATED = PROJECT_ROOT / "data" / "curated"
 REGISTRY = CURATED / "PortWatch_28_geometry_registry.xlsx"
-OUTPUT = PROJECT_ROOT / "eda_outputs" / "network_level" / "maps" / "chokepoint_geometries.pdf"
+OUTPUT_DIR = PROJECT_ROOT / "eda_outputs" / "network_level" / "maps"
 
 
 def geometry_file():
@@ -97,9 +98,9 @@ def draw_geometry(ax, subset):
 def main():
     registry, shapes = load_data(REGISTRY, geometry_file())
 
-    fig = plt.figure(figsize=(12, 10), layout="constrained")
-    grid = fig.add_gridspec(3, 2, height_ratios=[1.65, 1, 1])
-    world = fig.add_subplot(grid[0, :], projection=ccrs.Robinson())
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    fig = plt.figure(figsize=(7, 3.8), layout="constrained")
+    world = fig.add_subplot(111, projection=ccrs.Robinson())
     basemap(world)
     world.set_global()
     for row in registry.itertuples(index=False):
@@ -124,8 +125,13 @@ def main():
         Line2D([], [], marker="o", linestyle="none", color="#777777", label="Excluded")
     ], loc="lower left", fontsize=8, frameon=True)
 
+    output = OUTPUT_DIR / "chokepoint_geometries_A_locations.pdf"
+    fig.savefig(output, dpi=300, bbox_inches="tight", pad_inches=0.05)
+    plt.close(fig)
+    print(f"Saved {output}")
+
     for index, (node_id, title) in enumerate(EXAMPLES):
-        ax = fig.add_subplot(grid[1 + index // 2, index % 2])
+        fig, ax = plt.subplots(figsize=(3.5, 3.5), layout="constrained")
         subset = shapes.loc[shapes.node_id == node_id]
         bounds = subset.total_bounds
         width = max(bounds[2] - bounds[0], 0.35)
@@ -142,16 +148,16 @@ def main():
                 ax=ax, facecolor="#e9e9e6", edgecolor="#888888", linewidth=0.3, zorder=1
             )
         draw_geometry(ax, subset)
-        ax.set_aspect(1 / max(abs(__import__("math").cos(__import__("math").radians((bounds[1] + bounds[3]) / 2))), 0.25))
+        ax.set_aspect(1 / max(abs(math.cos(math.radians((bounds[1] + bounds[3]) / 2))), 0.25))
         ax.set_title(f"{chr(66 + index)}. {title}", loc="left", fontsize=9)
         ax.tick_params(labelsize=7)
         ax.set_xlabel("Longitude", fontsize=7)
         ax.set_ylabel("Latitude", fontsize=7)
 
-    fig.suptitle("Chokepoint locations and examples of route-crossing geometries", fontsize=13)
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(OUTPUT, dpi=300, bbox_inches="tight")
-    print(f"Saved {OUTPUT}")
+        output = OUTPUT_DIR / f"chokepoint_geometries_{chr(66 + index)}_{node_id}.pdf"
+        fig.savefig(output, dpi=300, bbox_inches="tight", pad_inches=0.05)
+        plt.close(fig)
+        print(f"Saved {output}")
 
 
 if __name__ == "__main__":
