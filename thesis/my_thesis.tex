@@ -1143,19 +1143,43 @@ Active exporter terminal--months involve more terminal counterparties than activ
 
 \subsection{Centrality, concentration and dependence}
 \label{subsec:terminal_criticality_eda}
-The terminal measures discussed below were defined in Section~\ref{subsec:terminal_measures}. Here, their distributions are examined across active terminal--month observations.
+The terminal measures discussed below were defined in Section~\ref{subsec:terminal_measures}. 
+Here, their distributions are examined across active terminal--month observations to explore different aspects of terminals' positions and trade relationships in the observed LNG network.
 
 Role-specific PageRank has a median of 0.0142 and a 95th percentile of 0.0363. 
-Its distribution is clearly right-skewed, as most observations have relatively low values, while a small number attain substantially higher PageRank. 
-Whereas this is a signal of variation in measured network position, a high PageRank alone does not establish a node's criticality in the network. 
-For this reason, the following measures were evaluated to describe other dimensions of its role in the network.
+The latter is approximately 2.6 times the median, indicating substantial variation 
+in the scores assigned to active terminals. A highly right-skewed distribution 
+suggests that relatively few terminal--month observations occupy particularly prominent 
+positions within the monthly trade network, while most receive lower scores. Nevertheless,
+since these statistics pool observations across months, they do not establish whether the same 
+terminals consistently occupy the most prominent positions.
+
+The practical interpretation of PageRank extends beyond the amount of LNG handled 
+by a terminal. Its score also depends on the positions of its trading partners and 
+on how flows are distributed among their connections. Consequently, two terminals 
+handling similar volumes may obtain different scores if they participate in different 
+patterns of trade. PageRank therefore adds information about how a terminal is embedded 
+in the wider network that cannot be inferred from throughput alone.
+
+These scores should nevertheless be interpreted as relative measures within each monthly 
+network. Because PageRank is normalised separately each month, its values are influenced 
+by both the distribution of trade relationships and the number of active terminals. 
+A higher score consequently indicates greater relative prominence in the observed network, 
+rather than an absolute level of importance that is directly comparable across all months.
+
+This prominence is relevant to the assessment of terminal criticality, but does not 
+establish how easily a terminal could be replaced. A well-positioned terminal may trade 
+with partners that have alternative sources or destinations, whereas a less prominent 
+terminal may serve counterparties that rely heavily on its supply or handle a substantial 
+share of its country's LNG receipts. Concentration and dependence are therefore examined 
+alongside PageRank to assess the trade relationships underlying a terminal's network position.
 
 The counterparty concentration measures show substantial variation
 among active terminal--month observations. The median HHI is 0.556
 when counterparties are individual terminals and 0.674 when they
-are aggregated by country. These values correspond to effective
-numbers of approximately 1.8 terminals and 1.5 countries,
-respectively. Thus, even when a terminal trades with several
+are aggregated by country. These median values correspond to approximately 
+1.8 equally weighted terminal counterparties and 1.5 equally weighted 
+country counterparties, respectively. Thus, even when a terminal trades with several
 partners, its observed monthly flow may be concentrated among
 relatively few of them.
 
@@ -1166,30 +1190,48 @@ At the country level, the corresponding share is 47.4\%: all
 role-relevant flow goes to or comes from one country, which may
 contain multiple terminal counterparties.
 
-Role-specific dependence has a median of 0.406 across active
+These findings indicate that in the present network, an interruption involving a major partner could affect a 
+substantial share of the terminal's existing trade. Country-level 
+concentration also distinguishes diversification across terminals 
+from diversification across countries: trading with several terminals 
+in the same country does not provide geographical diversification at 
+the country level. These measures describe observed monthly relationships,
+however, and do not establish whether alternative suppliers or 
+destinations would be available.
+
+Finally, role-specific dependence has a median of 0.406 across active
 terminal--month observations, but this pooled value combines
 different interpretations for the two terminal roles. Among active
 exporter months, the median is 0.495: higher values indicate that
 a larger share of the exporter's flow reaches importing terminals
 that rely heavily on its supply. 
-Among active importer months instead, where higher values indicate that the terminal
-accounts for a larger share of its country's observed LNG receipts, the median is 0.333.
+An exporter can therefore have high dependence even when its shipments 
+are distributed across several destinations, provided that it supplies 
+a substantial share of those destinations' imports. In practical terms, 
+this identifies suppliers whose interruption could affect a large 
+proportion of their counterparties' observed LNG receipts.
 
-The two role-specific values refer to different forms of reliance.
-For an exporter, dependence describes how strongly its importing
-terminal counterparties rely on its supply. For an importer, it
-describes how much of its country's observed LNG receipts pass
-through that terminal. Their numerical values therefore should
-not be interpreted as measuring the same relationship.
+Among active importer months, the median is 0.333. Here, higher values 
+indicate that the terminal accounts for a larger share of its country's 
+observed LNG receipts. A high value therefore identifies a terminal 
+through which a substantial proportion of national LNG imports passes, 
+making its continued operation potentially relevant to the country's 
+ability to receive LNG. However, this interpretation concerns observed LNG 
+receipts rather than the country's overall energy supply, and does not 
+account for the capacity of other terminals to absorb redirected shipments.
 
 Counterparty HHI captures yet another aspect of trade relationships:
 the concentration of a terminal's own trade across its partners.
 An importer may receive all its LNG from one exporter, giving it
 an HHI of one, while handling only a small share of its country's
 total imports and therefore having low role-specific dependence.
-
-Both measures are therefore retained to describe complementary
-aspects of a terminal's role in the trade network.
+Conversely, a terminal may receive LNG from several suppliers while 
+accounting for a large share of national LNG receipts. Concentration 
+and dependence are therefore retained alongside PageRank to distinguish 
+partner concentration, reliance on individual terminals, and prominence 
+within the trade network. Together, they inform the assessment of 
+terminal criticality, without directly quantifying the consequences of 
+a disruption.
 
 \subsection{Structural position}
 \label{subsec:terminal_structure}
