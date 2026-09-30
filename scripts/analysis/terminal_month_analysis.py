@@ -973,6 +973,7 @@ def make_rankings(panel):
     ranking_metrics = [
         "throughput",
         "counterparty_hhi_terminal",
+        "counterparty_hhi_country",
         "weighted_dependence_generated",
         "country_terminal_dependence",
         "role_specific_pagerank",
@@ -996,6 +997,98 @@ def make_rankings(panel):
                     }
                 )
     write_csv(pd.DataFrame(rows), RANKINGS_DIR / "monthly_top_terminals.csv")
+
+
+def make_terminal_position_summaries(panel):
+    """Summarise monthly scores, not scores recomputed on an aggregate network.
+
+    Compare within observed roles, especially because dependence differs by role.
+    Competition ranks include every tie at the TOP_N cutoff (HHI often equals 1).
+    Only PageRank receives an inactivity-adjusted mean; undefined HHI/dependence
+    in inactive months are not replaced with zero.
+    """
+    metrics = [
+        "role_specific_pagerank",
+        "counterparty_hhi_terminal",
+        "counterparty_hhi_country",
+        "role_specific_dependence",
+    ]
+    if panel.duplicated(["terminal_id", "period_month"]).any():
+        raise ValueError("Position summaries require unique terminal-month rows")
+    total_months = panel["period_month"].nunique()
+    counts = panel.groupby("terminal_id")["period_month"].nunique()
+    if not counts.eq(total_months).all():
+        raise ValueError("Position summaries require a balanced monthly panel")
+    active = panel.loc[panel["active"].eq(1)].copy()
+    activity = panel.groupby("terminal_id")["active"].sum()
+    ranked_frames = []
+    summaries = []
+    for metric in metrics:
+        ranked = active.dropna(subset=[metric]).copy()
+        ranked["metric"] = metric
+        ranked["value"] = ranked[metric]
+        groups = ranked.groupby(["period_month", "terminal_role"])["value"]
+        ranked["rank"] = groups.rank(method="min", ascending=False)
+        ranked["eligible_terminals"] = groups.transform("size")
+        ranked["in_top_n"] = ranked["rank"].le(TOP_N)
+        ranked_frames.append(ranked[[
+            "terminal_id", "node_name", "country", "period_month",
+            "terminal_role", "metric", "value", "rank",
+            "eligible_terminals", "in_top_n",
+        ]])
+        for (terminal_id, role), group in ranked.groupby(
+            ["terminal_id", "terminal_role"], sort=True
+        ):
+            values = group["value"]
+            maximum = values.max()
+            peak = group.loc[values.eq(maximum), "period_month"]
+            role_months = len(active.loc[
+                active["terminal_id"].eq(terminal_id)
+                & active["terminal_role"].eq(role)
+            ])
+            record = {
+                "terminal_id": terminal_id,
+                "node_name": group["node_name"].iloc[0],
+                "country": group["country"].iloc[0],
+                "terminal_role": role,
+                "metric": metric,
+                "panel_months": total_months,
+                "active_months": int(activity.loc[terminal_id]),
+                "active_share": activity.loc[terminal_id] / total_months,
+                "active_role_months": role_months,
+                "valid_role_months": len(group),
+                "mean_active": values.mean(),
+                "median_active": values.median(),
+                "min_active": values.min(),
+                "max_active": maximum,
+                "peak_months": ";".join(sorted(peak.dt.strftime("%Y-%m"))),
+                "top_n_months": int(group["in_top_n"].sum()),
+                "top_n_share_valid_role_months": group["in_top_n"].mean(),
+                "top_n_share_panel_months": group["in_top_n"].sum() / total_months,
+                "mean_rank_active": group["rank"].mean(),
+                "mean_pagerank_all_months_zero_outside_role": np.nan,
+            }
+            if metric == "role_specific_pagerank" and len(group) == role_months:
+                record["mean_pagerank_all_months_zero_outside_role"] = (
+                    values.sum() / total_months
+                )
+            summaries.append(record)
+    monthly = pd.concat(ranked_frames, ignore_index=True).sort_values(
+        ["metric", "period_month", "terminal_role", "rank", "terminal_id"]
+    )
+    summary = pd.DataFrame(summaries)
+    summary["rank_mean_active"] = summary.groupby(
+        ["metric", "terminal_role"]
+    )["mean_active"].rank(method="min", ascending=False)
+    summary = summary.sort_values(
+        ["metric", "terminal_role", "rank_mean_active", "terminal_id"]
+    )
+    write_csv(monthly, RANKINGS_DIR / "monthly_position_ranks.csv")
+    write_csv(monthly.loc[monthly["in_top_n"]],
+              RANKINGS_DIR / "monthly_top_positions_with_ties.csv")
+    write_csv(summary, RANKINGS_DIR / "terminal_position_summary.csv")
+    write_csv(summary.loc[summary["rank_mean_active"].le(TOP_N)],
+              RANKINGS_DIR / "full_period_top_mean_positions_with_ties.csv")
 
 
 def make_plots(panel):
@@ -1030,6 +1123,7 @@ def main():
         # Identifiers and metadata
         "terminal_id",
         "node_name",
+        "country",
         "period_month",
         "year",
         "month",
@@ -1130,6 +1224,7 @@ def main():
     make_correlations(panel)
     make_temporal_stability(panel)
     make_rankings(panel)
+    make_terminal_position_summaries(panel)
     make_plots(panel)
 
 
