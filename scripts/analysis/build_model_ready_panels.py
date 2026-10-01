@@ -350,17 +350,13 @@ def build_terminal_panel(terminal_month, activity_panel, structure, nodes):
     terminal = terminal.sort_values(["node_id", "period_month"]).reset_index(drop=True)
     
     grouped = terminal.groupby("node_id", sort=False)
+    
     terminal["mean_voyage_distance_lag1"] = (
         grouped["mean_voyage_distance"].shift(1)
     )
     terminal["log1p_mean_voyage_distance_lag1"] = np.log1p(
         terminal["mean_voyage_distance_lag1"]
     )
-    inactive_lag = terminal["activity_lag1"].eq(0)
-    terminal.loc[
-        inactive_lag,
-        "log1p_mean_voyage_distance_lag1",
-    ] = 0
     terminal["throughput_lag1"] = terminal.groupby("node_id")["throughput"].shift(1)
     terminal["log1p_throughput_lag1"] = np.log1p(terminal["throughput_lag1"])
     capacity = pd.to_numeric(terminal["capacity_mtpa"], errors="coerce")
