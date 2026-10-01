@@ -12,6 +12,7 @@ definition also avoids using edges first observed after the modelled month.
 
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -39,6 +40,9 @@ NODES_FILE = PROCESSED_DIR / "LNG_multilayer_nodes_observed.csv"
 EDGES_FILE = PROCESSED_DIR / "LNG_multilayer_edges_monthly.csv"
 
 OUTPUT_DIR = PROCESSED_DIR / "model_ready"
+MODEL_DIAGNOSTICS_DIR = (
+    BASE_DIR / "eda_outputs" / "model_diagnostics" / "correlations"
+)
 ACTIVITY_OUTPUT = OUTPUT_DIR / "activity_model_panel.csv"
 TERMINAL_OUTPUT = OUTPUT_DIR / "terminal_criticality_model_panel.csv"
 CHOKEPOINT_OUTPUT = OUTPUT_DIR / "chokepoint_criticality_model_panel.csv"
@@ -435,6 +439,228 @@ def build_chokepoint_panel(node_month, activity_panel, structure):
         ["period_month", "node_id"]
     ).reset_index(drop=True)
 
+# ============================================================
+# MODEL CORRELATION DIAGNOSTICS
+# ============================================================
+
+def save_spearman_heatmap(
+    frame,
+    variables,
+    output_stem,
+    title,
+):
+    """
+    Save a Spearman correlation matrix and the corresponding heatmap.
+
+    Only complete pairwise observations are used by pandas when calculating
+    each correlation. Variables that are absent from the supplied frame are
+    ignored.
+    """
+    variables = [
+        variable
+        for variable in variables
+        if variable in frame.columns
+    ]
+
+    if len(variables) < 2:
+        return
+
+    correlation = frame[variables].corr(method="spearman")
+
+    correlation.to_csv(
+        MODEL_DIAGNOSTICS_DIR / f"{output_stem}.csv",
+        float_format="%.4f",
+    )
+
+    fig, ax = plt.subplots(
+        figsize=(
+            max(7, 1.15 * len(variables)),
+            max(6, 0.95 * len(variables)),
+        )
+    )
+
+    image = ax.imshow(
+        correlation.values,
+        vmin=-1,
+        vmax=1,
+        cmap="coolwarm",
+        aspect="auto",
+    )
+
+    ax.set_xticks(range(len(variables)))
+    ax.set_xticklabels(
+        variables,
+        rotation=45,
+        ha="right",
+    )
+
+    ax.set_yticks(range(len(variables)))
+    ax.set_yticklabels(variables)
+
+    # Add correlation coefficients to the cells.
+    for i in range(len(variables)):
+        for j in range(len(variables)):
+            value = correlation.iloc[i, j]
+
+            if pd.notna(value):
+                ax.text(
+                    j,
+                    i,
+                    f"{value:.2f}",
+                    ha="center",
+                    va="center",
+                    fontsize=8,
+                )
+
+    ax.set_title(title)
+
+    fig.colorbar(
+        image,
+        ax=ax,
+        label="Spearman correlation",
+    )
+
+    fig.tight_layout()
+
+    fig.savefig(
+        MODEL_DIAGNOSTICS_DIR / f"{output_stem}.png",
+        dpi=300,
+        bbox_inches="tight",
+    )
+
+    plt.close(fig)
+
+
+def analyze_model_correlations(
+    activity,
+    terminals,
+    chokepoints,
+):
+    """
+    Correlation diagnostics for the candidate predictors and multivariate
+    criticality responses used in the model-ready panels.
+
+    Predictor correlations are calculated only where lagged information is
+    available. Response correlations are restricted to active node-months,
+    because criticality measures are interpreted conditional on observed
+    network participation.
+    """
+    MODEL_DIAGNOSTICS_DIR.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    # --------------------------------------------------------
+    # 1. Activity-model candidate predictors
+    # --------------------------------------------------------
+
+    activity_predictors = [
+        "activity_lag1",
+        "neighbor_activity_lag1",
+        "log1p_throughput_lag1",
+        "log1p_voyage_count_lag1",
+    ]
+
+    activity_valid = activity.loc[
+        activity["lag_available"].eq(1)
+    ].copy()
+
+    save_spearman_heatmap(
+        activity_valid,
+        activity_predictors,
+        "activity_predictor_spearman",
+        "Activity-model candidate predictors",
+    )
+
+    # --------------------------------------------------------
+    # 2. Terminal criticality candidate predictors
+    # --------------------------------------------------------
+
+    terminal_predictors = [
+        "activity_lag1",
+        "neighbor_activity_lag1",
+        "log1p_throughput_lag1",
+        "log1p_voyage_count_lag1",
+        "log1p_capacity_mtpa",
+        "terminal_age",
+        "log1p_mean_voyage_distance_lag1",
+    ]
+
+    terminal_valid = terminals.loc[
+        terminals["lag_available"].eq(1)
+    ].copy()
+
+    save_spearman_heatmap(
+        terminal_valid,
+        terminal_predictors,
+        "terminal_predictor_spearman",
+        "Terminal criticality-model candidate predictors",
+    )
+
+    # --------------------------------------------------------
+    # 3. Chokepoint criticality candidate predictors
+    # --------------------------------------------------------
+
+    chokepoint_predictors = [
+        "activity_lag1",
+        "neighbor_activity_lag1",
+        "log1p_throughput_lag1",
+        "log1p_voyage_count_lag1",
+    ]
+
+    chokepoint_valid = chokepoints.loc[
+        chokepoints["lag_available"].eq(1)
+    ].copy()
+
+    save_spearman_heatmap(
+        chokepoint_valid,
+        chokepoint_predictors,
+        "chokepoint_predictor_spearman",
+        "Chokepoint criticality-model candidate predictors",
+    )
+
+    # --------------------------------------------------------
+    # 4. Terminal criticality responses
+    # --------------------------------------------------------
+
+    terminal_responses = [
+        "role_specific_pagerank",
+        "counterparty_hhi_terminal",
+        "counterparty_hhi_country",
+        "role_specific_dependence",
+    ]
+
+    terminal_active = terminals.loc[
+        terminals["active"].eq(1)
+    ].copy()
+
+    save_spearman_heatmap(
+        terminal_active,
+        terminal_responses,
+        "terminal_response_spearman",
+        "Terminal criticality responses",
+    )
+
+    # --------------------------------------------------------
+    # 5. Chokepoint criticality responses
+    # --------------------------------------------------------
+
+    chokepoint_responses = [
+        "share_monthly_network_flow",
+        "pagerank",
+        "betweenness",
+    ]
+
+    chokepoint_active = chokepoints.loc[
+        chokepoints["active"].eq(1)
+    ].copy()
+
+    save_spearman_heatmap(
+        chokepoint_active,
+        chokepoint_responses,
+        "chokepoint_response_spearman",
+        "Chokepoint criticality responses",
+    )
 
 def validate_outputs(activity, terminals, chokepoints):
     for name, frame, node_column in [
@@ -457,6 +683,12 @@ def main():
     )
     chokepoints = build_chokepoint_panel(node_month, activity, structure)
     validate_outputs(activity, terminals, chokepoints)
+    
+    analyze_model_correlations(
+        activity,
+        terminals,
+        chokepoints,
+    )
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     activity.to_csv(ACTIVITY_OUTPUT, index=False, float_format="%.12g")

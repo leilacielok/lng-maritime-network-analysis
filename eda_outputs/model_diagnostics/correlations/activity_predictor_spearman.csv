@@ -1,0 +1,5 @@
+,activity_lag1,neighbor_activity_lag1,log1p_throughput_lag1,log1p_voyage_count_lag1
+activity_lag1,1.0000,-0.0941,0.9134,0.9158
+neighbor_activity_lag1,-0.0941,1.0000,-0.1810,-0.1957
+log1p_throughput_lag1,0.9134,-0.1810,1.0000,0.9914
+log1p_voyage_count_lag1,0.9158,-0.1957,0.9914,1.0000

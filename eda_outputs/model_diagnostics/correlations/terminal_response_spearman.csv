@@ -1,0 +1,5 @@
+,role_specific_pagerank,counterparty_hhi_terminal,counterparty_hhi_country,role_specific_dependence
+role_specific_pagerank,1.0000,-0.5958,-0.5446,0.2945
+counterparty_hhi_terminal,-0.5958,1.0000,0.9199,-0.1721
+counterparty_hhi_country,-0.5446,0.9199,1.0000,-0.1630
+role_specific_dependence,0.2945,-0.1721,-0.1630,1.0000

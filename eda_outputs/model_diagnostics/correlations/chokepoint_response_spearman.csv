@@ -1,0 +1,4 @@
+,share_monthly_network_flow,pagerank,betweenness
+share_monthly_network_flow,1.0000,0.7036,0.8103
+pagerank,0.7036,1.0000,0.7061
+betweenness,0.8103,0.7061,1.0000
