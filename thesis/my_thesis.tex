@@ -29,6 +29,7 @@
 \usepackage{longtable}
 \usepackage{ragged2e}
 \usepackage{chngcntr}
+\usepackage{subcaption}
 
 
 % ---(Colors)-------------------------------------------------------------
@@ -971,22 +972,17 @@ network activity and estimated route exposure within the study period.
 \chapter{Exploratory network analysis}
 \label{chap:exploratory_analysis}
 
-This chapter explores the structure and evolution of the LNG maritime network from January 2020 to December 2024. 
-It describes monthly trade flows and connectivity, the frequency of node activity, terminal trade roles, and the distributions and associations of the network measures introduced in Chapter 3.
+This chapter examines the structure and evolution of the reconstructed LNG maritime network from January 2020 to December 2024. 
+It describes changes in monthly trade flows and connectivity, patterns of node activity, and the network positions of terminals and chokepoints using the measures introduced in Chapter~\ref{chap:data_network}. 
+The analysis provides a descriptive overview of the main temporal and cross-sectional patterns in the data before the subsequent modelling analysis.
 
-The results are organised by observational unit. Section~\ref{sec:network_evolution}
-describes the monthly graphs, using original-voyage summaries for aggregate
-trade volume and voyage counts. Section~\ref{sec:activity_sparsity}
-examines activity in the balanced node--month dataset.
-Section~\ref{sec:terminal_trade_patterns} explores terminal roles and
-counterparty measures in the terminal--month dataset derived from matched
-voyages. Section~\ref{sec:chokepoint_criticality_measures} then presents
-the network measures for chokepoints, calculated from the monthly graphs and summarised across
-chokepoint--month observations.
+Section~\ref{sec:network_evolution} first examines the evolution and connectivity of the monthly LNG network. Section~\ref{sec:activity_sparsity} then describes node activity and temporal sparsity over the observation period. 
+Section~\ref{sec:terminal_trade_patterns} focuses on terminals, considering their observed trade roles and the centrality, concentration, and dependence measures associated with their network position. 
+Section~\ref{sec:chokepoint_network_position} examines chokepoints through their flow exposure, PageRank, and weighted betweenness. 
+Finally, Section~\ref{sec:network_structure} compares the structural positions of terminals and chokepoints using articulation-point and bridge-based measures.
 
 As described in Section~\ref{subsec:temporal_aggregation}, the node--month and terminal--month
-datasets retain observations for inactive months. Summaries restricted
-to active observations are identified where they appear.
+datasets retain observations for inactive months. When summary statistics are calculated only over active observations, this is explicitly indicated in the text or table notes.
 
 \section{Network evolution and connectivity}
 \label{sec:network_evolution}
@@ -998,7 +994,7 @@ As the set of potential nodes remains fixed, these changes reflect solely monthl
 Table~\ref{tab:eda_monthly_summary} reports the ranges and averages of active nodes, directed edges, distinct export voyages, exported LNG volume, and directed density across the 60 months.
 Directed density is calculated among active nodes, so its changing denominator matters: a month with fewer edges can still have higher density if fewer nodes are active. 
 
-\begin{table}[H]
+\begin{table}[htbp]
   \centering
   \caption{Selected monthly network and node-activity summaries, 2020--2024.}
   \label{tab:eda_monthly_summary}
@@ -1025,7 +1021,7 @@ chokepoints, and directed connections in June 2021. The network
 has 98 active nodes and 138 directed edges in that month, values
 close to the monthly averages reported in Table~\ref{tab:eda_monthly_summary}.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{images/lng_network_2021-06.png}
     \caption{Geographic snapshot of the observed LNG network in June 2021.
@@ -1043,7 +1039,7 @@ the growth in global LNG trade reported by the U.S. Energy Information
 Administration \citep{eia2024lng}. This comparison provides context for
 the overall pattern but does not explain individual monthly fluctuations.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
   \centering
   \includegraphics[width=.82\textwidth]{images/global_lng_export_volume_over_time.png}
   \caption{Monthly LNG export volume based on observed export voyages (cubic metres).}
@@ -1253,17 +1249,109 @@ Both concentration and dependence are therefore retained alongside PageRank to d
 The terminal-level summaries show that these dimensions need not coincide and that high scores must also be interpreted in relation to the frequency of observed activity. 
 Together, the measures inform the assessment of terminal criticality without directly quantifying the consequences of a disruption.
 
-\section{Chokepoint criticality}
-\label{sec:chokepoint_criticality_measures}
+\section{Chokepoint flow exposure and network position}
+\label{sec:chokepoint_network_position}
 
-Chokepoints are transit nodes. Their throughput is calculated as one half of incoming plus outgoing segment flow, so that cargo passing through a chokepoint is counted once. Relative to total \emph{original-voyage} exported volume in a month, this gives the chokepoint's share of monthly network flow. Shares across different chokepoints need not sum to one, because a voyage may cross multiple passages. Across all 1,440 chokepoint-months, including inactive months, the median flow share is 0.0125 and the 95th percentile is 0.0607.
+Unlike terminals, which constitute the origins and destinations of observed LNG voyages, chokepoints enter the reconstructed network as intermediate nodes along maritime routes. 
+Their position can therefore be examined through the amount of LNG passing through them and through centrality measures describing their location within the wider network. 
+This section focuses on flow exposure, PageRank, and betweenness, while structural classifications based on articulation points and bridges are considered separately in Section~\ref{sec:network_structure}.
 
-Weighted betweenness uses shortest paths on the directed monthly graph with edge distance equal to inverse positive LNG flow. It therefore measures intermediation on the graph's flow-weighted shortest paths, not the fraction of actual reconstructed voyages through a passage. Its median across chokepoint-months is 0.0060; zero values can also occur in active months. Chokepoint PageRank, computed on the directed graph with flow weights, has a median of 0.0151. The three quantities describe different facets of passage importance, but their common dependence on observed network use means that empirical association is expected.
+Table~\ref{tab:chokepoint_monthly_measures} provides summary
+statistics for the main flow-exposure and centrality measures considered
+in this section.
 
-The structural bridge and articulation indicators add a different question: whether removal of a node or an incident connection changes local or global connectivity in the undirected projection. These measures are valuable precisely because a passage can have high traffic without being a unique connector, and conversely a lower-volume connection can be structurally important. They should be interpreted with the monthly active graph and its component structure in mind.
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\caption{Summary statistics for flow-exposure and centrality measures across active chokepoint--month observations, 2020--2024.}
+\label{tab:chokepoint_monthly_measures}
+\begin{tabular}{lrrrr}
+\toprule
+Measure & Mean & Median & 95th percentile & Maximum \tabularnewline
+\midrule
+Throughput (MCM) & 2.007 & 1.342 & 5.857 & 10.702 \tabularnewline
+Voyages & 11.08 & 8 & 31 & 55 \tabularnewline
+Route exposure & 8.30 & 7 & 21 & 31 \tabularnewline
+Share of monthly network flow & 0.0225 & 0.0148 & 0.0639 & 0.1132 \tabularnewline
+PageRank & 0.0172 & 0.0163 & 0.0299 & 0.0572 \tabularnewline
+Betweenness & 0.0126 & 0.0072 & 0.0408 & 0.0946 \tabularnewline
+\bottomrule
+\end{tabular}
+
+\medskip
+
+\begin{minipage}{0.95\textwidth}
+\footnotesize
+\textit{Note:} Statistics are calculated across the 1,240 active chokepoint--month observations. Throughput is reported in million cubic metres.
+\end{minipage}
+\end{table}
+
+\subsection{Flow exposure}
+\label{subsec:chokepoint_flow_exposure}
+
+Flow exposure varies substantially across the 24 chokepoints and across months. As shown in Table~\ref{tab:chokepoint_monthly_measures}, the distribution of monthly throughput is strongly right-skewed, with the observed maximum of 10.70 million cubic metres recorded at the Strait of Hormuz in April 2022.
+
+The same heterogeneity appears when flow is expressed relative to the size of the monthly LNG market. Among active observations, the share of monthly network flow passing through a chokepoint has a median of approximately 1.48\%, while the 95th percentile reaches 6.39\%. The maximum is recorded at the Strait of Hormuz in June 2020, when approximately 11.32\% of the month's observed LNG trade passed through the chokepoint.
+
+The flow-share measure complements absolute throughput because monthly LNG trade varies over the observation period. A given throughput may therefore represent different levels of exposure depending on the total volume traded in that month. Expressing chokepoint throughput as a share of monthly network flow provides a relative measure of how much of the observed LNG market is routed through each passage.
+
+Voyage and route counts show a similar concentration of activity. Active chokepoints are traversed by a median of eight voyages per month and are exposed to a median of seven distinct routes, while the corresponding 95th percentiles are 31 voyages and 21 routes. High flow exposure may therefore be accompanied by participation in a comparatively large number of the maritime connections represented in the network.
+
+\subsection{Centrality}
+\label{subsec:chokepoint_centrality}
+
+Flow exposure alone does not describe the position occupied by a chokepoint within the reconstructed network. 
+Two passages carrying similar LNG volumes may connect different parts of the network and may consequently differ in their centrality. 
+PageRank and betweenness are therefore considered alongside flow exposure to distinguish different dimensions of chokepoint network position. 
+
+As defined in Section~\ref{subsec:chokepoint_measures}, PageRank accounts for both the magnitude and direction of LNG flows and the importance of the nodes from which those flows originate.
+It therefore complements flow exposure by capturing a chokepoint's relative position within each monthly network rather than simply the amount of LNG passing through it. To interpret its magnitude relative to the size of each monthly network, observed PageRank was compared with a uniform benchmark of \(1/N_t\), corresponding to an equal distribution of PageRank across the \(N_t\) active nodes. 
+Among active observations, the median PageRank was 1.54 times this monthly benchmark, and 85.6\% of observations exceeded it. 
+Active chokepoints therefore tended to receive a larger share of PageRank than would result from an equal distribution across active nodes.
+
+Betweenness provides yet another perspective, as it is particularly relevant to the intermediary position of chokepoints in the reconstructed maritime network: 
+a passage may carry a large share of observed LNG while occupying a less distinctive intermediary position, whereas another may carry less volume but connect parts of the network in a way that places it on a comparatively large number of shortest paths.
+
+As shown in Table~\ref{tab:chokepoint_monthly_measures}, its distribution is strongly right-skewed, with high levels of shortest-path intermediation concentrated in a comparatively small subset of active chokepoint--month observations.
+
+Notably, positive activity does not necessarily imply positive betweenness: betweenness is equal to zero in 8 of the 1,240 active chokepoint--month observations. A chokepoint may therefore be traversed by observed LNG routes without lying on any of the shortest paths between other node pairs captured by this measure.
+
+The distinction between the three measures is also visible when their average values are compared across individual chokepoints. 
+Table~\ref{tab:selected_chokepoint_positions} reports four passages selected to illustrate contrasting combinations of flow exposure, PageRank, and betweenness. All four are active throughout the 60-month observation period, so differences in their averages are not driven by different frequencies of activity.
+
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\caption{Selected chokepoints illustrating different dimensions of network position, 2020--2024.}
+\label{tab:selected_chokepoint_positions}
+\begin{tabular}{lrrrr}
+\toprule
+Chokepoint & Active months & Mean flow share & Mean PageRank & Mean betweenness \tabularnewline
+\midrule
+Strait of Hormuz & 60 & 0.0766 & 0.0182 & 0.0181 \tabularnewline
+Gibraltar Strait & 60 & 0.0438 & 0.0263 & 0.0360 \tabularnewline
+Taiwan Strait & 60 & 0.0364 & 0.0309 & 0.0287 \tabularnewline
+Suez Canal & 60 & 0.0327 & 0.0211 & 0.0301 \tabularnewline
+\bottomrule
+\end{tabular}
+
+\medskip
+
+\begin{minipage}{0.95\textwidth}
+\footnotesize
+\textit{Note:} Chokepoints are selected to illustrate contrasting relationships among the three measures rather than to provide a ranking. Means are calculated over active months.
+\end{minipage}
+\end{table}
+
+The Strait of Hormuz has the largest mean flow share among the selected passages, at 7.66\%, but substantially lower mean PageRank and betweenness than some passages carrying smaller shares of monthly network flow. 
+The Taiwan Strait, by contrast, has a mean flow share of 3.64\% but the highest mean PageRank of the four, at 0.0309. Gibraltar Strait combines a lower mean flow share than Hormuz, at 4.38\%, with the highest mean betweenness, at 0.0360, while the Suez Canal also exhibits relatively high betweenness despite accounting for a mean 3.27\% of monthly network flow. 
+
+These comparisons show that greater flow exposure does not necessarily correspond to higher PageRank or betweenness. This variation across measures provides the descriptive motivation for representing chokepoint criticality through multiple network characteristics in the subsequent modelling analysis.
 
 \section{Nodes' structural position}
-\label{subsec:network_structure}
+\label{sec:network_structure}
 
 The structural indicators defined in Section~\ref{subsec:structural_indicators} complement the node-type-specific measures by describing connectivity in the monthly undirected projection of the reconstructed transport network. They distinguish nodes whose removal would separate other parts of the network from nodes incident to structurally consequential connections or adjacent to articulation points. Unlike the flow-weighted measures, these indicators depend on the presence of connections rather than on the volume of LNG transported through them.
 
@@ -1325,14 +1413,54 @@ These results distinguish the frequent intermediate connectivity roles of chokep
 \section{Associations and modelling implications}
 \label{sec:associations_variable_selection}
 
-Spearman rank correlations provide a preliminary check for overlap among observed measures. In the all-month terminal node panel, throughput and voyage count correlate at 0.989, throughput and total route exposure at 0.980, and throughput and flow share at 0.992. 
-For chokepoints the corresponding throughput--voyage and throughput--flow-share correlations are 0.995 and 0.972. Shared zero months contribute to these pooled associations; the coefficients are descriptive rather than evidence of a causal relationship or identical information conditional on activity.
+Spearman rank correlations provide a preliminary assessment of the degree of overlap among variables considered for the subsequent modelling analysis. 
 
-Within active terminal roles, throughput is positively associated with voyage count (Spearman $0.922$ for exporters and $0.919$ for importers) and negatively associated with terminal-level counterparty HHI ($-0.913$ and $-0.749$, respectively). The relationship between throughput and role-specific PageRank differs by role ($0.764$ for exporters, $0.267$ for importers). These comparisons reinforce the need to retain role-specific interpretations and to distinguish scale from concentration or centrality. For chokepoints, betweenness and flow share correlate at 0.878, while PageRank and flow share correlate at 0.810; both are associated with, but do not have the same definition as, traffic exposure.
+Among the lagged operational measures, throughput and voyage count are strongly associated across all model panels, with values above 0.98. This indicates that the two variables capture closely related dimensions of recent operational scale, suggesting that their simultaneous inclusion may provide limited additional information.
 
-These patterns suggest a parsimonious preliminary separation of (i) a node-activity response, (ii) terminal criticality responses conditional on their meaningful support, and (iii) chokepoint criticality responses. Potential predictors include suitably lagged activity and operational scale, with $\log(1+x)$ transformations for nonnegative skewed variables. Throughput, voyage count, degree, route exposure and flow share should not all enter an unregularised equation as if they were independent sources of information. Equally, inverse HHI and HHI should not both be used as separate outcomes in the same interpretation. Reduced-rank modelling can capture shared structure across multiple responses, but it does not make duplicate or conceptually overlapping predictors informative.
+Other terminal characteristics exhibit substantially weaker associations with lagged throughput. 
+In particular, the correlation between lagged log-transformed throughput and lagged log-transformed mean voyage distance is 0.223 when the latter is defined, while the corresponding correlation with terminal capacity is 0.423 and that with terminal age is 0.199. 
+Neighbour activity is also only weakly associated with these node-specific characteristics. 
+These patterns suggest that the candidate covariates capture dimensions of terminal activity and characteristics that are not reducible to operational scale alone.
 
-The exact response set, handling of inactive-month zeros, link functions and dependence structure remain modelling decisions for Chapter~\ref{chap:bayesian_framework}. This chapter establishes the empirical reasons to examine separate node types and an activity component; it does not claim that an exploratory association identifies an effect.
+The associations among the criticality measures differ between terminals and chokepoints. 
+Among active terminal--month observations, terminal- and country-level counterparty HHI are strongly correlated ($\rho_S=0.920$), reflecting their related but distinct measures of trade concentration. 
+Their associations with role-specific PageRank are negative and more moderate ($-0.596$ and $-0.545$, respectively), while role-specific dependence is more weakly associated with the other terminal measures. 
+These measures therefore exhibit some shared variation without behaving as interchangeable indicators of network position, concentration, and dependence.
+
+For active chokepoint--month observations, the three continuous measures show stronger positive associations. 
+Flow share correlates with weighted betweenness at 0.810 and with PageRank at 0.704, while the correlation between PageRank and betweenness is 0.706. 
+These associations are consistent with the patterns discussed in Section~\ref{sec:chokepoint_network_position}: passages carrying larger shares of observed LNG flows also tend to exhibit higher PageRank and betweenness values, although the three measures do not vary identically.
+
+Figure~\ref{fig:criticality_correlations} summarises the pairwise associations among the terminal and chokepoint criticality measures. Taken together, these patterns provide descriptive evidence of shared variation across multiple dimensions of node criticality while preserving meaningful differences between the individual measures. They therefore motivate investigating whether part of this joint variation can be represented through a lower-dimensional structure in the subsequent modelling analysis.
+
+\begin{figure}[htbp]
+    \centering
+
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]
+        {images/terminal_response_spearman.png}
+        \caption{Terminal criticality measures}
+        \label{fig:terminal_response_correlations}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]
+        {images/chokepoint_response_spearman.png}
+        \caption{Chokepoint criticality measures}
+        \label{fig:chokepoint_response_correlations}
+    \end{subfigure}
+
+    \caption{Spearman rank correlations among the criticality measures for
+    active node--month observations. Panel (a) reports correlations among
+    terminal measures, while panel (b) reports correlations among chokepoint
+    measures.}
+    \label{fig:criticality_correlations}
+\end{figure}
+
+These exploratory associations are used to inform, rather than determine, the subsequent model specification.
+The final choice of responses and covariates, together with the dynamic and reduced-rank structure of the models, is developed in Chapter~\ref{chap:bayesian_framework}.
 
 %
 %			CHAPTER 5: Bayesian modelling framework
