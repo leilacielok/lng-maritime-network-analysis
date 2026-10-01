@@ -768,6 +768,76 @@ def analyze_distributions(node_month):
 
     return summary
 
+# ============================================================
+# PAGERANK UNIFORM BENCHMARK
+# ============================================================
+
+def analyze_pagerank_uniform_benchmark(node_month):
+    data = node_month.copy()
+
+    # Number of active nodes in each monthly network
+    active_nodes_by_month = (
+        data[data["active"].eq(1)]
+        .groupby("period_month")["node_id"]
+        .nunique()
+        .rename("active_nodes")
+    )
+
+    data = data.merge(
+        active_nodes_by_month,
+        on="period_month",
+        how="left",
+    )
+
+    # PageRank under an equal distribution across active nodes
+    data["uniform_pagerank"] = 1 / data["active_nodes"]
+
+    # Observed PageRank relative to the monthly uniform benchmark
+    data["pagerank_relative_to_uniform"] = (
+        data["pagerank"] / data["uniform_pagerank"]
+    )
+
+    # Restrict the descriptive comparison to active chokepoint-months
+    chokepoints = data[
+        data["node_type"].str.lower().eq("chokepoint")
+        & data["active"].eq(1)
+    ].copy()
+
+    ratio = chokepoints["pagerank_relative_to_uniform"].dropna()
+
+    summary = pd.DataFrame(
+        {
+            "statistic": [
+                "n_active_chokepoint_months",
+                "mean_ratio",
+                "p25_ratio",
+                "median_ratio",
+                "p75_ratio",
+                "p95_ratio",
+                "min_ratio",
+                "max_ratio",
+                "share_above_uniform",
+            ],
+            "value": [
+                len(ratio),
+                ratio.mean(),
+                ratio.quantile(0.25),
+                ratio.median(),
+                ratio.quantile(0.75),
+                ratio.quantile(0.95),
+                ratio.min(),
+                ratio.max(),
+                (ratio > 1).mean(),
+            ],
+        }
+    )
+
+    summary.to_csv(
+        DISTRIBUTIONS_DIR / "chokepoint_pagerank_uniform_benchmark.csv",
+        index=False,
+    )
+
+    return summary
 
 # ============================================================
 # CORRELATIONS AND REDUNDANCY
@@ -1455,6 +1525,8 @@ def main():
     save_qa_summary(node_month)
 
     analyze_distributions(node_month)
+    
+    analyze_pagerank_uniform_benchmark(node_month)
 
     analyze_correlations(node_month)
 
