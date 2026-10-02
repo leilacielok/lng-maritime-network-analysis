@@ -366,6 +366,23 @@ def analyze_temporal_network(edges, monthly_qa):
         )
         .reset_index()
     )
+    
+    monthly_active_nodes = (
+        pd.concat(
+            [
+                edges[["period_month", "from_node_id"]]
+                .rename(columns={"from_node_id": "node_id"}),
+
+                edges[["period_month", "to_node_id"]]
+                .rename(columns={"to_node_id": "node_id"}),
+            ],
+            ignore_index=True,
+        )
+        .drop_duplicates(["period_month", "node_id"])
+        .groupby("period_month")
+        .size()
+        .reset_index(name="active_nodes")
+    )
 
     # ========================================================
     # 2. ORIGINAL LNG TRADE MEASURES
@@ -664,6 +681,11 @@ def analyze_temporal_network(edges, monthly_qa):
     monthly = (
         monthly_edges
         .merge(
+            monthly_active_nodes,
+            on="period_month",
+            how="left"
+        )
+        .merge(
             monthly_trade,
             on="period_month",
             how="left"
@@ -689,6 +711,23 @@ def analyze_temporal_network(edges, monthly_qa):
     monthly["mean_edge_traversals_per_voyage"] = (
         monthly["voyage_edge_traversals"]
         / monthly["unique_export_voyages"]
+    )
+    
+    # INDEXED NETWORK EVOLUTION MEASURES
+
+    monthly["active_nodes_index"] = (
+        100 * monthly["active_nodes"]
+        / monthly["active_nodes"].mean()
+    )
+
+    monthly["active_edges_index"] = (
+        100 * monthly["active_edges"]
+        / monthly["active_edges"].mean()
+    )
+
+    monthly["export_volume_index"] = (
+        100 * monthly["global_export_lng_volume"]
+        / monthly["global_export_lng_volume"].mean()
     )
 
     # ========================================================
@@ -771,33 +810,53 @@ def analyze_temporal_network(edges, monthly_qa):
     )
 
     # ========================================================
-    # PLOT 1 — GLOBAL LNG EXPORT VOLUME
+    # PLOT 1 — NETWORK SIZE AND EXPORT VOLUME
+    # Indexed to January 2020 = 100
     # ========================================================
 
     plt.figure(figsize=(10, 5))
 
     plt.plot(
         monthly["period_month"],
-        monthly["global_export_lng_volume"],
-        marker="o",
-        markersize=3
+        monthly["active_nodes_index"],
+        label="Active nodes",
+        linewidth=1.8
+    )
+
+    plt.plot(
+        monthly["period_month"],
+        monthly["active_edges_index"],
+        label="Directed edges",
+        linewidth=1.8
+    )
+
+    plt.plot(
+        monthly["period_month"],
+        monthly["export_volume_index"],
+        label="Exported LNG volume",
+        linewidth=1.8
+    )
+
+    plt.axhline(
+        100,
+        linestyle="--",
+        linewidth=1
     )
 
     plt.title(
-        "Global LNG export volume over time"
+        "Monthly evolution of network size and LNG export volume"
     )
 
     plt.xlabel("Month")
+    plt.ylabel("Index (period mean = 100)")
 
-    plt.ylabel(
-        "Exported LNG volume (cmb)"
-    )
+    plt.legend()
 
     plt.tight_layout()
 
     plt.savefig(
         TEMPORAL_DIR /
-        "global_lng_export_volume_over_time.png",
+        "network_size_and_export_volume_index.png",
         dpi=300
     )
 

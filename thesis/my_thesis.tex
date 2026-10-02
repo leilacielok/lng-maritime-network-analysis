@@ -976,20 +976,21 @@ This chapter examines the structure and evolution of the reconstructed LNG marit
 It describes changes in monthly trade flows and connectivity, patterns of node activity, and the network positions of terminals and chokepoints using the measures introduced in Chapter~\ref{chap:data_network}. 
 The analysis provides a descriptive overview of the main temporal and cross-sectional patterns in the data and examines the relationships among the candidate variables, with the aim of identifying relevant patterns, potential redundancy, and shared variation that may inform the subsequent modelling analysis.
 
-Section~\ref{sec:network_evolution} first examines the evolution and connectivity of the monthly LNG network. Section~\ref{sec:activity_sparsity} then describes node activity and temporal sparsity over the observation period. 
-Section~\ref{sec:terminal_trade_patterns} focuses on terminals, considering their observed trade roles and the centrality, concentration, and dependence measures associated with their network position. 
-Section~\ref{sec:chokepoint_network_position} examines chokepoints through their flow exposure, PageRank, and weighted betweenness. 
-Finally, Section~\ref{sec:network_structure} compares the structural positions of terminals and chokepoints using articulation-point and bridge-based measures.
+To address these objectives, the chapter is organised as follows. Section~\ref{sec:network_evolution} first examines the evolution and connectivity of the monthly LNG network; Section~\ref{sec:activity_sparsity} then describes node activity and temporal sparsity over the observation period;
+Section~\ref{sec:terminal_trade_patterns} focuses on terminals, considering their observed trade roles and the centrality, concentration, and dependence measures associated with their network position;
+Section~\ref{sec:chokepoint_network_position} examines chokepoints through their flow exposure, PageRank, and weighted betweenness;
+Section~\ref{sec:network_structure} compares the structural positions of terminals and chokepoints using articulation-point and bridge-based measures;
+finally, Section~\ref{sec:associations_variable_selection} examines associations among the candidate variables and discusses their implications for the subsequent modelling analysis.
 
-As described in Section~\ref{subsec:temporal_aggregation}, the node--month and terminal--month
-datasets retain observations for inactive months. When summary statistics are calculated only over active observations, this is explicitly indicated in the text or table notes.
+As described in Section~\ref{subsec:temporal_aggregation}, the node--month and terminal--month datasets retain both active and inactive observations. 
+In this Chapter, summary statistics for network-position measures are generally calculated over active observations, while analyses of node activity and temporal sparsity retain inactive months. 
+The relevant sample is indicated in the text or table notes where necessary.
 
 \section{Network evolution and connectivity}
 \label{sec:network_evolution}
 
 The observed LNG maritime network changes in size over the study period. 
-The numbers of active nodes and directed edges generally increase from 2021 to late 2023, reaching their respective maxima in December 2023, before declining during the second half of 2024. 
-As the set of potential nodes remains fixed, these changes reflect solely monthly participation in the network.
+The numbers of active nodes and directed edges generally increase from 2021 to late 2023, reaching their respective maxima in December 2023, before declining during the second half of 2024.
 
 Table~\ref{tab:eda_monthly_summary} reports the ranges and averages of active nodes, directed edges, distinct export voyages, exported LNG volume, and directed density across the 60 months.
 Directed density is calculated among active nodes, so its changing denominator matters: a month with fewer edges can still have higher density if fewer nodes are active. 
@@ -1005,21 +1006,22 @@ Directed density is calculated among active nodes, so its changing denominator m
     Active nodes & 72 & 96.5 & 126 \\
     Active directed edges & 88 & 136.5 & 192 \\
     Export voyages & 70 & 144.0 & 237 \\
-    Exported volume (million cubic metres) & 11.48 & 24.01 & 38.77 \\
+    Exported volume (MCM) & 11.48 & 24.01 & 38.77 \\
     Directed density among active nodes & 0.0122 & 0.0148 & 0.0180 \\
     \hline
   \end{tabular}
-  \begin{flushleft}
-    \footnotesize Sources: \texttt{monthly\_network\_statistics.csv}
-    and \texttt{monthly\_network\_structure.csv}; rounded descriptive values.
-  \end{flushleft}
+  
+  \par\smallskip
+    {\footnotesize
+    \textit{Note:} Exported volume is expressed in million cubic metres (MCM).
+  \par}
 \end{table}
 
 To illustrate the geographic structure of one monthly network,
 Figure~\ref{fig:lng_network_june2021} shows a snapshot of the active terminals,
-chokepoints, and directed connections in June 2021. The network
-has 98 active nodes and 138 directed edges in that month, values
-close to the monthly averages reported in Table~\ref{tab:eda_monthly_summary}.
+chokepoints, and directed connections in June 2021. In this month, the network
+has 98 active nodes and 138 directed edges, values close to the monthly 
+averages reported in Table~\ref{tab:eda_monthly_summary}.
 
 \begin{figure}[htbp]
     \centering
@@ -1031,19 +1033,14 @@ close to the monthly averages reported in Table~\ref{tab:eda_monthly_summary}.
     \label{fig:lng_network_june2021}
 \end{figure}
 
-Figure~\ref{fig:eda_export_volume} shows how observed LNG export volume
-changes from month to month, complementing the range and average reported
-in the table. 
-The increase in observed export volume through 2023 is consistent with
-the growth in global LNG trade reported by the U.S. Energy Information
-Administration \citep{eia2024lng}. This comparison provides context for
-the overall pattern but does not explain individual monthly fluctuations.
+Figure~\ref{fig:eda_network_evolution} compares the monthly evolution of active nodes, directed edges, and observed LNG export volume, with each series indexed to January 2020. 
+The three measures show broadly similar changes over the study period, but export volume exhibits substantially greater month-to-month variation. Changes in network size therefore do not correspond proportionally to changes in the volume carried by the observed network.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=.82\textwidth]{images/global_lng_export_volume_over_time.png}
+  \includegraphics[width=.82\textwidth]{images/network_size_and_export_volume_index.png}
   \caption{Monthly LNG export volume based on observed export voyages (cubic metres).}
-  \label{fig:eda_export_volume}
+  \label{fig:eda_network_evolution}
 \end{figure}
 
 Changes in the numbers of nodes and edges, and in exported volume, do not
