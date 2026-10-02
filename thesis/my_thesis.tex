@@ -972,11 +972,10 @@ network activity and estimated route exposure within the study period.
 \chapter{Exploratory network analysis}
 \label{chap:exploratory_analysis}
 
-This chapter examines the structure and evolution of the reconstructed LNG maritime network from January 2020 to December 2024. 
-It describes changes in monthly trade flows and connectivity, patterns of node activity, and the network positions of terminals and chokepoints using the measures introduced in Chapter~\ref{chap:data_network}. 
+This chapter examines the structure and evolution of the reconstructed LNG maritime network from January 2020 to December 2024, by describing changes in monthly trade flows and connectivity, patterns of node activity, and the network positions of terminals and chokepoints using the measures introduced in Chapter~\ref{chap:data_network}. 
 The analysis provides a descriptive overview of the main temporal and cross-sectional patterns in the data and examines the relationships among the candidate variables, with the aim of identifying relevant patterns, potential redundancy, and shared variation that may inform the subsequent modelling analysis.
 
-To address these objectives, the chapter is organised as follows. Section~\ref{sec:network_evolution} first examines the evolution and connectivity of the monthly LNG network; Section~\ref{sec:activity_sparsity} then describes node activity and temporal sparsity over the observation period;
+To address these objectives, the chapter is organised as follows. Section~\ref{sec:network_evolution} first examines the temporal evolution of the monthly LNG network; Section~\ref{sec:activity_sparsity} then describes node activity and temporal sparsity over the observation period;
 Section~\ref{sec:terminal_trade_patterns} focuses on terminals, considering their observed trade roles and the centrality, concentration, and dependence measures associated with their network position;
 Section~\ref{sec:chokepoint_network_position} examines chokepoints through their flow exposure, PageRank, and weighted betweenness;
 Section~\ref{sec:network_structure} compares the structural positions of terminals and chokepoints using articulation-point and bridge-based measures;
@@ -986,14 +985,18 @@ As described in Section~\ref{subsec:temporal_aggregation}, the node--month and t
 In this Chapter, summary statistics for network-position measures are generally calculated over active observations, while analyses of node activity and temporal sparsity retain inactive months. 
 The relevant sample is indicated in the text or table notes where necessary.
 
-\section{Network evolution and connectivity}
+\section{Network evolution}
 \label{sec:network_evolution}
 
 The observed LNG maritime network changes in size over the study period. 
 The numbers of active nodes and directed edges generally increase from 2021 to late 2023, reaching their respective maxima in December 2023, before declining during the second half of 2024.
+The ranges and averages of these network characteristics, together with monthly trade activity and directed density, are summarised in Table~\ref{tab:eda_monthly_summary}.
 
-Table~\ref{tab:eda_monthly_summary} reports the ranges and averages of active nodes, directed edges, distinct export voyages, exported LNG volume, and directed density across the 60 months.
+Despite this evolution in network size, directed density remains within a relatively narrow range, between 0.0122 and 0.0180. 
+The monthly LNG network is therefore consistently sparse: only a small fraction of all possible directed connections among active nodes is observed in any given month.
+
 Directed density is calculated among active nodes, so its changing denominator matters: a month with fewer edges can still have higher density if fewer nodes are active. 
+Network expansion or contraction should therefore not be interpreted as a corresponding change in the degree of connectivity among active nodes.
 
 \begin{table}[htbp]
   \centering
@@ -1017,27 +1020,30 @@ Directed density is calculated among active nodes, so its changing denominator m
   \par}
 \end{table}
 
-To illustrate the geographic structure of one monthly network,
-Figure~\ref{fig:lng_network_june2021} shows a snapshot of the active terminals,
-chokepoints, and directed connections in June 2021. In this month, the network
-has 98 active nodes and 138 directed edges, values close to the monthly 
-averages reported in Table~\ref{tab:eda_monthly_summary}.
+While Table~\ref{tab:eda_monthly_summary} summarises the monthly networks quantitatively, Figure~\ref{fig:lng_network_june2021} illustrates the geographic structure of a representative month. 
+June 2021 was chosen as an illustrative snapshot because it includes 98 active nodes and 138 directed edges, values close to the monthly averages reported in Table~\ref{tab:eda_monthly_summary}.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{images/lng_network_2021-06.png}
-    \caption{Geographic snapshot of the observed LNG network in June 2021.
-    Points show active terminals and chokepoints; arrows indicate the
-    direction of observed network connections. 
-    Line width represents monthly LNG volume on each directed edge; connections are schematic rather than sailed routes.}
+
+    \caption{Geographic snapshot of the observed LNG network in June 2021.}
     \label{fig:lng_network_june2021}
+
+    \smallskip
+    {\footnotesize
+    \textit{Note:} Points show active terminals and chokepoints; arrows indicate
+    the direction of observed network connections. Line width represents monthly
+    LNG volume on each directed edge; connections are schematic rather than
+    sailed routes.
+    \par}
 \end{figure}
 
-Figure~\ref{fig:eda_network_evolution} compares the monthly evolution of active
-nodes, directed edges, and observed LNG export volume, with each series indexed
-to its mean over the study period. The three measures show broadly similar
+To examine how the network's size and trade volume evolve over time, Figure~\ref{fig:eda_network_evolution} compares the monthly evolution of active nodes, directed edges, and observed LNG export volume, with each series indexed to its mean over the study period.
+
+The three measures show broadly similar
 changes over time, but export volume exhibits substantially greater
-month-to-month variation. Changes in network size therefore do not correspond
+month-to-month variation, showing that changes in network size do not correspond
 proportionally to changes in the volume carried by the observed network.
 
 \begin{figure}[htbp]
@@ -1054,14 +1060,6 @@ proportionally to changes in the volume carried by the observed network.
     from the observed export voyages.
     \par}
 \end{figure}
-
-These measures describe the size and volume of the observed network, but not
-whether active nodes belong to the same connected part of the network. To
-examine this aspect, the weakly connected components of each monthly graph
-were considered. The monthly graph is not always weakly connected, although
-its largest weakly connected component contains at least 89.8\% of active
-nodes throughout the period. Thus, most active nodes belong to one component
-even when smaller components exist.
 
 \section{Node activity and temporal sparsity}
 \label{sec:activity_sparsity}
@@ -1092,34 +1090,28 @@ examined separately by node type.
 \end{figure}
 
 Inactivity is substantively relevant to the interpretation of centrality: an inactive node may receive a zero in the balanced node-month dataset even though the criticality measure is chiefly meaningful when it participates in trade. 
-A later activity component can therefore address participation separately from the magnitude of criticality conditional on activity.
-The descriptive shares support examining such a specification.
+For this reason, the subsequent analysis of node criticality focuses on active node-month observations, avoiding the conflation of inactivity with low criticality.
 
-\section{Terminal activity and network position}
+\section{Terminal network position}
 \label{sec:terminal_trade_patterns}
 This section examines how terminals participate in observed LNG trade
 and how their positions differ across the monthly networks. It first
-describes terminal roles and operational activity, then considers
-centrality, counterparty concentration, dependence, and structural
-position.
+describes terminal roles and trade activity, then considers
+centrality, counterparty concentration, and dependence.
 
-\subsection{Terminal roles and operational activity}
+\subsection{Terminal roles and trade activity}
 \label{subsec:terminal_roles_eda}
-Terminal participation is uneven across the 60 monthly networks.
-Of the 9,540 terminal--month observations, 3,234 are active importer months, 1,318 are active exporter months, and 4,988 are inactive months.
+Terminal participation is uneven across the 60 monthly networks: of the 4,552 active terminal--month observations, 3,234 are classified as importers and 1,318 as exporters.
 
 Country-level roles were assessed over the full 2020--2024 period using each country's net trade position. 
 Qatar, the United States, and Russia recorded the largest cumulative export volumes, while China, France, and Japan recorded the largest cumulative import volumes. 
-A net role does not imply trade in only one direction: Malaysia was a net importer despite recording exports, and the United States was a net exporter despite recording imports.
+A net role does not imply trade in only one direction. For instance, Malaysia was a net importer despite recording exports, and the United States was a net exporter despite recording imports.
 
-Table~\ref{tab:eda_terminal_activity_by_role} compares throughput, voyage counts, and numbers of terminal counterparties across active importer and exporter months. 
-Exporter observations have higher medians and 95th percentiles for all three measures. 
-For example, median monthly throughput is approximately 0.505 million cubic metres for exporters and 0.328 million cubic metres for importers.
+Table~\ref{tab:eda_terminal_activity_by_role} compares throughput, voyage counts, and numbers of terminal counterparties for active terminal--month observations, distinguished by importer and exporter role.
 
 \begin{table}[htbp]
     \centering
-    \caption{Operational activity of active terminal--month observations
-    by terminal role, 2020--2024.}
+    \caption{Trade activity of active terminal--month observations by terminal role, 2020--2024.}
     \label{tab:eda_terminal_activity_by_role}
     \begin{tabular}{lrrrr}
         \hline
@@ -1134,39 +1126,39 @@ For example, median monthly throughput is approximately 0.505 million cubic metr
         \hline
     \end{tabular}
     \begin{flushleft}
-        \footnotesize Source: calculations from
-        \texttt{terminal\_month\_metrics.csv}, restricted to active
-        terminal--month observations and grouped by terminal role.
+        \footnotesize The analysis is restricted to active terminal--month observations.
         Throughput values are rounded to three decimal places.
     \end{flushleft}
 \end{table}
 
-Across all active terminal--month observations, median throughput
-is 346,000 cubic metres, but its distribution is highly right-skewed: the 95th
-percentile is approximately 1.90 million cubic metres, while Rasgas LNG Terminal 3 reaches the observed maximum of 10.91 million cubic metres in October 2023. 
-This skew motivates considering a transformation of lagged throughput in the subsequent modelling analysis.
+Exporter observations are characterised by higher levels of trade activity across all three measures. 
+Median monthly throughput is 0.505 million cubic metres for exporters, compared with 0.328 million cubic metres for importers, while the corresponding median numbers of voyages are four and two. 
+Exporters also interact with a larger number of terminal counterparties, with a median of three compared with one for importers. 
+These differences are even more pronounced at the 95th percentile, particularly for voyage counts and numbers of counterparties.
 
-The differences in voyage counts and counterparties in Table~\ref{tab:eda_terminal_activity_by_role} also show that monthly terminal activity varies beyond traded volume. 
-Active exporter terminal--months involve more terminal counterparties than active importer terminal--months, with respective medians of three and one, which suggests greater diversification of observed trading connections among exporters. 
+More generally, throughput is strongly right-skewed across active terminal--month observations. 
+Its overall median is 346,000 cubic metres and its 95th percentile approximately 1.90 million cubic metres, while Rasgas LNG Terminal 3 reaches the observed maximum of 10.91 million cubic metres in October 2023. 
 
 \subsection{Centrality, concentration and dependence}
 \label{subsec:terminal_criticality_eda}
 
 The terminal measures discussed below were defined in Section~\ref{subsec:terminal_measures}. Here, their distributions are examined across active terminal--month observations to explore different aspects of terminals' positions and trade relationships in the observed LNG network. 
-These pooled distributions are complemented by terminal-level summaries of the monthly measures over the entire period, which distinguish the positions of individual terminals and help assess whether high scores reflect sustained participation or only a small number of active months.
+These pooled distributions are complemented by terminal-level summaries of the monthly measures over the entire period, which distinguish the positions of individual terminals and help assess whether high scores are sustained over time or occur only occasionally.
 
-Role-specific PageRank has a median of 0.0142 and a 95th percentile of 0.0363. The latter is approximately 2.6 times the median, indicating substantial variation in the scores assigned to active terminals. The highly right-skewed distribution suggests that relatively few terminal--month observations occupy particularly prominent positions within the monthly trade network, while most receive lower scores. Since these statistics pool observations across months, however, they do not establish whether the same terminals consistently occupy the most prominent positions.
-
-The practical interpretation of PageRank extends beyond the amount of LNG handled by a terminal. Its score also depends on the positions of its trading partners and on how flows are distributed among their connections. Consequently, two terminals handling similar volumes may obtain different scores if they participate in different patterns of trade. PageRank therefore adds information about how a terminal is embedded in the wider network that cannot be inferred from throughput alone.
+First, role-specific PageRank has a median of 0.0142 and a 95th percentile of 0.0363. The latter is approximately 2.6 times the median, indicating substantial variation in the scores assigned to active terminals. The highly right-skewed distribution suggests that relatively few terminal--month observations occupy particularly prominent positions within the monthly trade network, while most receive lower scores.
 
 These scores should nevertheless be interpreted as relative measures within each monthly network. Because PageRank is normalised separately each month, its values are influenced by both the distribution of trade relationships and the number of active terminals. Comparisons across months therefore describe changes in relative network prominence rather than changes in an absolute measure of importance.
 
 To examine terminal positions over the full period, two summaries are considered: mean PageRank conditional on activity and mean PageRank across all 60 months, assigning zero to inactive months. 
 The first describes a terminal's average prominence when participating in the network; the second combines that prominence with its frequency of participation. 
 
-Table~\ref{tab:terminal_pagerank_period} reports the three highest full-period mean scores within each terminal role. Rasgas LNG Terminal 3 has the highest mean among exporters, at 0.0912, followed by Sabine Pass and Yamal, at 0.0449 and 0.0418, respectively. All three are active in every month, so their high averages reflect participation throughout the observation period.
+Table~\ref{tab:terminal_pagerank_period} reports the three highest full-period mean scores within each terminal role. Rasgas LNG Terminal 3 has the highest mean among exporters, at 0.0912, followed by Sabine Pass and Yamal, at 0.0449 and 0.0418, respectively. 
+All three are active in every month, so their mean scores reflect sustained network participation over the full observation period.
 
-Among importers, Gate LNG Terminal has the highest full-period mean, at 0.0195, followed by Yung-An and Fos Tonkin. Fos Tonkin has a slightly higher mean during active months than Yung-An, but its lower number of active months reverses their ordering when inactivity is included. The distinction is more pronounced for terminals observed only occasionally: Sepetiba Bay FSRU has an active-month mean of 0.0191, close to Gate's, but is active in only one month. Its mean across the full panel is consequently approximately 0.00032. A high conditional mean alone should therefore not be interpreted as evidence of sustained prominence.
+Among importers, Gate LNG Terminal has the highest full-period mean, at 0.0195, followed by Yung-An and Fos Tonkin. 
+Fos Tonkin has a slightly higher mean during active months than Yung-An, but its lower number of active months reverses their ordering when inactivity is included. 
+The distinction is more pronounced for terminals observed only occasionally: Sepetiba Bay FSRU has an active-month mean of 0.0191, close to Gate's, but is active in only one month. 
+Its mean across the full panel is consequently approximately 0.00032, highlighting how a high conditional mean alone should therefore not be interpreted as evidence of sustained prominence.
 
 \begin{table}[htbp]
 \centering
@@ -1199,12 +1191,11 @@ Fos Tonkin LNG Terminal & France & 55 & 0.0187 & 0.0171 \tabularnewline
 \end{minipage}
 \end{table}
 
-This prominence is relevant to the assessment of terminal criticality, but does not establish how easily a terminal could be replaced. A well-positioned terminal may trade with partners that have alternative sources or destinations, whereas a less prominent terminal may serve counterparties that rely heavily on its supply or handle a substantial share of its country's LNG receipts. Concentration and dependence are therefore examined alongside PageRank to assess the trade relationships underlying a terminal's network position.
+PageRank is relevant to the assessment of terminal prominence, but does not establish how easily a terminal could be replaced. A well-positioned terminal may trade with partners that have alternative sources or destinations, whereas a less prominent terminal may serve counterparties that rely heavily on its supply or handle a substantial share of its country's LNG receipts. Concentration and dependence are therefore examined alongside PageRank to assess the trade relationships underlying a terminal's network position.
 
 The counterparty concentration measures show substantial variation among active terminal--month observations. The median HHI is 0.556 when counterparties are individual terminals and 0.674 when they are aggregated by country. These median values correspond to approximately 1.8 equally weighted terminal counterparties and 1.5 equally weighted country counterparties, respectively. Thus, even when a terminal trades with several partners, its observed monthly flow may be concentrated among relatively few of them.
 
-An HHI of one occurs in 43.5\% of active terminal--month observations at the terminal level, meaning that all role-relevant flow observed in that month involves a single terminal counterparty. 
-At the country level, the corresponding share is 47.4\%: all role-relevant flow goes to or comes from one country, which may contain multiple terminal counterparties.
+An HHI of one occurs in 43.5\% of active terminal--month observations at the terminal level, indicating that the role-relevant flow involves a single terminal counterparty. At the country level, the corresponding share is 47.4\%, indicating concentration in a single country, potentially across multiple terminals.
 
 Terminal-level averages reveal different patterns behind these pooled results. 
 As shown in Table~\ref{tab:terminal_relationship_examples}, Rasgas and Sabine Pass have relatively low mean terminal-level HHIs, at 0.094 and 0.125, respectively, despite their prominent PageRank positions. Their observed monthly exports are therefore distributed more broadly across counterparties than the pooled distribution might suggest. In contrast, Cameroon FLNG has a mean terminal-level HHI of 0.953 across 32 active months, indicating highly concentrated shipments during its observed activity.
@@ -1245,28 +1236,29 @@ Zeebrugge LNG Terminal & 59 & 0.558 & 0.599 & 1.000 \tabularnewline
 \end{minipage}
 \end{table}
 
-Finally, role-specific dependence has a median of 0.406 across active terminal--month observations, but this pooled value combines different interpretations for the two terminal roles. Among active exporter months, the median is 0.495: higher values indicate that a larger share of the exporter's flow reaches importing terminals that rely heavily on its supply.
-
+Finally, role-specific dependence has a median of 0.406 across active terminal--month observations, but this pooled value combines different interpretations for the two terminal roles. 
+For exporters, which have a median of 0.495, higher values indicate that a larger share of their flow reaches importing terminals that rely heavily on its supply.
 An exporter can therefore have high dependence even when its shipments are distributed across several destinations, provided that it supplies a substantial share of those destinations' imports. Rasgas illustrates this combination: its low mean terminal-level HHI of 0.094 coexists with mean dependence of 0.730. Its exports are relatively diversified, yet its receiving terminals tend to rely substantially on its supply when weighted by their shares of its shipments. Cameroon FLNG illustrates the converse: its highly concentrated exports coexist with lower mean dependence of 0.350. Concentration in an exporter's own destinations therefore does not necessarily imply equally strong reliance by those destinations on its supply.
 
-Among active importer months, the median dependence is 0.333. Here, higher values indicate that the terminal accounts for a larger share of its country's observed LNG receipts. A high value therefore identifies a terminal through which a substantial proportion of national LNG imports passes, making its continued operation potentially relevant to the country's ability to receive LNG.
+Among active importer months, the median dependence is 0.333. 
+Here, higher values indicate that the terminal accounts for a larger share of its country's observed LNG receipts. 
+A high value therefore identifies a terminal through which a substantial proportion of national LNG imports passes, making its continued operation potentially relevant to the country's ability to receive LNG.
 
-The terminal-level summaries identify examples of this national role. 
-Gate accounts for an average of 91.0\% of the Netherlands' observed monthly LNG receipts across its 60 active months, and Al Zour and Zeebrugge have dependence equal to one in all their active months, numbering 40 and 59, respectively: in those months, all observed LNG receipts in their respective countries pass through these terminals. 
+The terminal-level summaries illustrate the extent of this concentration at individual terminals. Gate accounts for an average of 91.0\% of the Netherlands' observed monthly LNG receipts across its 60 active months, while Al Zour and Zeebrugge have dependence equal to one in all their active months, numbering 40 and 59, respectively. In those months, all observed LNG receipts in their respective countries pass through these terminals.
 
-In relation to counterparty HHI, the distinction lies in whose reliance is being described: HHI measures the concentration of a terminal's own trade across its partners, whereas role-specific dependence describes its counterparties' reliance on its supply or its country's reliance on that terminal for observed LNG receipts.
-An importer may receive all its LNG from one exporter, giving it an HHI of one, while handling only a small share of its country's total imports and therefore having low role-specific dependence. Conversely, a terminal may receive LNG from several suppliers while accounting for a large share of national LNG receipts. Gate illustrates the latter pattern, combining a mean terminal-level HHI of 0.362 with mean dependence of 0.910.
+The crucial distinction from the counterparty HHI measure described above lies in whose reliance is being described: HHI quantifies the concentration of a terminal's own trade across its partners, whereas role-specific dependence describes its counterparties' reliance on its supply or its country's reliance on that terminal for observed LNG receipts.
+An importer may receive all its LNG from one exporter, giving it an HHI of one, while handling only a small share of its country's total imports and therefore having low role-specific dependence. 
+Conversely, a terminal may receive LNG from several suppliers while accounting for a large share of national LNG receipts. 
+Gate illustrates the latter pattern, combining a mean terminal-level HHI of 0.362 with mean dependence of 0.910.
 
-Both concentration and dependence are therefore retained alongside PageRank to distinguish partner concentration, reliance on individual terminals, and prominence within the trade network. 
-The terminal-level summaries show that these dimensions need not coincide and that high scores must also be interpreted in relation to the frequency of observed activity. 
-Together, the measures inform the assessment of terminal criticality without directly quantifying the consequences of a disruption.
+Concentration and dependence are therefore retained alongside PageRank to capture distinct dimensions of terminal criticality: partner concentration, reliance on individual terminals, and prominence within the trade network. 
+Together, these measures characterise terminal criticality without directly quantifying the consequences of a disruption.
 
-\section{Chokepoint flow exposure and network position}
+\section{Chokepoint network position}
 \label{sec:chokepoint_network_position}
 
 Unlike terminals, which constitute the origins and destinations of observed LNG voyages, chokepoints enter the reconstructed network as intermediate nodes along maritime routes. 
-Their position can therefore be examined through the amount of LNG passing through them and through centrality measures describing their location within the wider network. 
-This section focuses on flow exposure, PageRank, and betweenness, while structural classifications based on articulation points and bridges are considered separately in Section~\ref{sec:network_structure}.
+Their position can therefore be examined through both their exposure to LNG flows and their location within the wider network, captured here by PageRank and betweenness.
 
 Table~\ref{tab:chokepoint_monthly_measures} provides summary
 statistics for the main flow-exposure and centrality measures considered
@@ -1304,26 +1296,32 @@ Betweenness & 0.0126 & 0.0072 & 0.0408 & 0.0946 \tabularnewline
 
 Flow exposure varies substantially across the 24 chokepoints and across months. As shown in Table~\ref{tab:chokepoint_monthly_measures}, the distribution of monthly throughput is strongly right-skewed, with the observed maximum of 10.70 million cubic metres recorded at the Strait of Hormuz in April 2022.
 
-The same heterogeneity appears when flow is expressed relative to the size of the monthly LNG market. Among active observations, the share of monthly network flow passing through a chokepoint has a median of approximately 1.48\%, while the 95th percentile reaches 6.39\%. The maximum is recorded at the Strait of Hormuz in June 2020, when approximately 11.32\% of the month's observed LNG trade passed through the chokepoint.
+The same heterogeneity appears when flow is expressed relative to the total flow observed in the monthly network. 
+Among active observations, the share of monthly network flow passing through a chokepoint has a median of approximately 1.48\%, while the 95th percentile reaches 6.39\%. 
+The maximum is recorded at the Strait of Hormuz in June 2020, when approximately 11.32\% of the month's observed LNG trade passed through the chokepoint.
 
-The flow-share measure complements absolute throughput because monthly LNG trade varies over the observation period. A given throughput may therefore represent different levels of exposure depending on the total volume traded in that month. Expressing chokepoint throughput as a share of monthly network flow provides a relative measure of how much of the observed LNG market is routed through each passage.
+The flow-share measure complements the absolute volume of LNG passing through a chokepoint. 
+Because monthly LNG trade varies over the observation period, a given throughput may represent different levels of exposure depending on the total volume traded in that month. 
+Expressing chokepoint throughput as a share of monthly network flow therefore provides a relative measure of how much of the observed network flow is routed through each passage.
 
-Voyage and route counts show a similar concentration of activity. Active chokepoints are traversed by a median of eight voyages per month and are exposed to a median of seven distinct routes, while the corresponding 95th percentiles are 31 voyages and 21 routes. High flow exposure may therefore be accompanied by participation in a comparatively large number of the maritime connections represented in the network.
+Beyond flow volume, voyage and route counts provide additional information on the frequency and variety of chokepoint use. Active chokepoints are traversed by a median of eight voyages per month and are exposed to a median of seven distinct routes, while the corresponding 95th percentiles are 31 voyages and 21 routes.
 
-\subsection{Centrality}
+\subsection{Centrality measures}
 \label{subsec:chokepoint_centrality}
 
-Flow exposure alone does not describe the position occupied by a chokepoint within the reconstructed network. 
-Two passages carrying similar LNG volumes may connect different parts of the network and may consequently differ in their centrality. 
-PageRank and betweenness are therefore considered alongside flow exposure to distinguish different dimensions of chokepoint network position. 
+Flow exposure alone does not describe the structural location of a chokepoint within the reconstructed network. 
+Two passages carrying similar LNG volumes may connect different parts of the network and consequently differ in their centrality.
+PageRank and betweenness are therefore considered alongside flow exposure to capture these complementary aspects of chokepoint prominence.
 
 As defined in Section~\ref{subsec:chokepoint_measures}, PageRank accounts for both the magnitude and direction of LNG flows and the importance of the nodes from which those flows originate.
-It therefore complements flow exposure by capturing a chokepoint's relative position within each monthly network rather than simply the amount of LNG passing through it. To interpret its magnitude relative to the size of each monthly network, observed PageRank was compared with a uniform benchmark of \(1/N_t\), corresponding to an equal distribution of PageRank across the \(N_t\) active nodes. 
-Among active observations, the median PageRank was 1.54 times this monthly benchmark, and 85.6\% of observations exceeded it. 
-Active chokepoints therefore tended to receive a larger share of PageRank than would result from an equal distribution across active nodes.
 
-Betweenness provides yet another perspective, as it is particularly relevant to the intermediary position of chokepoints in the reconstructed maritime network: 
-a passage may carry a large share of observed LNG while occupying a less distinctive intermediary position, whereas another may carry less volume but connect parts of the network in a way that places it on a comparatively large number of shortest paths.
+It therefore complements flow exposure by capturing a chokepoint's relative position within each monthly network rather than simply the amount of LNG passing through it. 
+The distribution of raw PageRank values indicated relatively prominent positions for some chokepoints, with a median of 0.0163 among active observations and values reaching 0.0572. This motivated a closer examination of their magnitude relative to the size of each monthly network. Observed PageRank was therefore compared with a uniform benchmark of \(1/N_t\), corresponding to an equal distribution of PageRank across the \(N_t\) active nodes.
+
+Among active observations, the median PageRank was 1.54 times this monthly benchmark, and 85.6\% of observations exceeded it. Active chokepoints therefore tended to receive a larger share of PageRank than would result from an equal distribution across active nodes.
+
+While PageRank captures relative prominence within the flow network, betweenness focuses on a different aspect of centrality by indicating the extent to which a chokepoint lies on shortest paths connecting other nodes. 
+A chokepoint may therefore receive a relatively high PageRank without occupying a particularly strong intermediary position, while another may have a lower PageRank but lie on a comparatively large number of shortest paths.
 
 As shown in Table~\ref{tab:chokepoint_monthly_measures}, its distribution is strongly right-skewed, with high levels of shortest-path intermediation concentrated in a comparatively small subset of active chokepoint--month observations.
 
@@ -1360,19 +1358,20 @@ Suez Canal & 60 & 0.0327 & 0.0211 & 0.0301 \tabularnewline
 The Strait of Hormuz has the largest mean flow share among the selected passages, at 7.66\%, but substantially lower mean PageRank and betweenness than some passages carrying smaller shares of monthly network flow. 
 The Taiwan Strait, by contrast, has a mean flow share of 3.64\% but the highest mean PageRank of the four, at 0.0309. Gibraltar Strait combines a lower mean flow share than Hormuz, at 4.38\%, with the highest mean betweenness, at 0.0360, while the Suez Canal also exhibits relatively high betweenness despite accounting for a mean 3.27\% of monthly network flow. 
 
-These comparisons show that greater flow exposure does not necessarily correspond to higher PageRank or betweenness. This variation across measures provides the descriptive motivation for representing chokepoint criticality through multiple network characteristics in the subsequent modelling analysis.
+These comparisons show that greater flow exposure does not necessarily correspond to higher PageRank or betweenness, highlighting the distinct dimensions of chokepoint criticality captured by these measures.
 
 \section{Nodes' structural position}
 \label{sec:network_structure}
 
-The structural indicators defined in Section~\ref{subsec:structural_indicators} complement the node-type-specific measures by describing connectivity in the monthly undirected projection of the reconstructed transport network. They distinguish nodes whose removal would separate other parts of the network from nodes incident to structurally consequential connections or adjacent to articulation points. Unlike the flow-weighted measures, these indicators depend on the presence of connections rather than on the volume of LNG transported through them.
+The structural indicators defined in Section~\ref{subsec:structural_indicators} complement the node-type-specific measures by describing connectivity in the monthly undirected projection of the reconstructed network. 
+They distinguish nodes whose removal would separate other parts of the network from nodes incident to structurally consequential connections or adjacent to articulation points. 
+Rather than reflecting the volume of LNG transported through individual connections, these indicators depend only on their presence in the monthly network.
 
 The distributions differ substantially between terminals and chokepoints. Articulation status occurs in 393 of the 4,552 active terminal--month observations (8.6\%), compared with 902 of the 1,240 active chokepoint--month observations (72.7\%). 
 Incidence to at least one global bridge is common in both groups, occurring in 64.7\% of active terminal months and 72.5\% of active chokepoint months. 
 Local-only bridge incidence is more frequent among chokepoints, at 82.8\%, than among terminals, at 26.1\%.
 
-These differences are consistent with the roles represented in the reconstructed transport network: terminals are voyage origins or destinations, whereas chokepoints are intermediate nodes connecting successive route segments. Chokepoints consequently have more opportunities to connect branches of the observed network, although their classifications depend on the routes used in each month. 
-These structural differences suggest that it may be useful to analyse terminals and chokepoints separately or to account for node type within a common modelling framework, allowing for differences in their roles and in the likelihood of each structural classification.
+These differences are consistent with the roles represented in the network: terminals are voyage origins or destinations, whereas chokepoints are intermediate nodes connecting successive route segments. Chokepoints consequently have more opportunities to connect branches of the observed network, although their classifications depend on the routes used in each month. 
 
 The analysis of articulation points further illustrates this distinction. Among terminals, Vysotsk exhibits a recurrent articulation role, being classified as an articulation point in 49 of its 59 active months. Among chokepoints, Gibraltar Strait, Taiwan Strait and the Strait of Hormuz are articulation points in all 60 months. 
 Their removal therefore separates the monthly undirected network in every observed month.
@@ -1416,34 +1415,40 @@ Conversely, a node can be an articulation point without being incident to a glob
 
 Local-only bridges identify another structural feature. Their endpoints have no common neighbour, but removing the edge does not disconnect the component because a longer alternative path remains. They therefore indicate the absence of an immediate two-edge alternative through a shared neighbour, rather than an edge that is indispensable to overall connectivity.
 
-Nigeria LNG Terminal is incident to at least one local-only bridge in all its 59 active months, and Sabine Pass in 58 of 60. Among chokepoints, Malacca Strait has local-only bridge incidence in every month, while Suez Canal has it in 59 of 60 months (Table~\ref{tab:node_structural_examples}). These classifications can coexist with articulation status or global bridge incidence because a node may have several incident edges with different structural properties.
+Nigeria LNG Terminal is incident to at least one local-only bridge in all its 59 active months, and Sabine Pass in 58 of 60. Among chokepoints, Malacca Strait has local-only bridge incidence in every month, while Suez Canal has it in 59 of 60 months (Table~\ref{tab:node_structural_examples}). 
 
-For example, Malacca Strait is an articulation point and is incident to a global bridge in 54 months, while also being incident to a local-only bridge in all 60 months. This combination indicates that some of its connections have longer topological alternatives, whereas other connections, or the node as a whole, maintain connectivity between otherwise separated parts of the network. It is to be noted that the alternative paths identified in the undirected projection are not necessarily feasible substitutes for the original LNG movements: direction, navigability and transport capacity are not evaluated by these indicators.
+These classifications can coexist with articulation status or global bridge incidence because a node may have several incident edges with different structural properties.
+For instance, Malacca Strait is an articulation point and is incident to a global bridge in 54 months, while also being incident to a local-only bridge in all 60 months. This combination indicates that some of its connections have longer topological alternatives, whereas other connections, or the node as a whole, maintain connectivity between otherwise separated parts of the network. It is to be noted that the alternative paths identified in the undirected projection are not necessarily feasible substitutes for the original LNG movements: direction, navigability and transport capacity are not evaluated by these indicators.
 
-These results distinguish the frequent intermediate connectivity roles of chokepoints from the more varied structural positions of terminals. They also show why the binary indicators should not be treated as interchangeable or interpreted as direct measures of disruption consequences. Their practical meaning depends on the surrounding network structure and on which nodes or connections would be separated.
+These results distinguish the frequent intermediate connectivity roles of chokepoints from the more varied structural positions of terminals. 
 
 \section{Associations and modelling implications}
 \label{sec:associations_variable_selection}
 
 Spearman rank correlations provide a preliminary assessment of the degree of overlap among variables considered for the subsequent modelling analysis. 
 
-Among the lagged operational measures, throughput and voyage count are strongly associated across all model panels, with values above 0.98. This indicates that the two variables capture closely related dimensions of recent operational scale, suggesting that their simultaneous inclusion may provide limited additional information.
-
-Other terminal characteristics exhibit substantially weaker associations with lagged throughput. 
-In particular, the correlation between lagged log-transformed throughput and lagged log-transformed mean voyage distance is 0.223 when the latter is defined, while the corresponding correlation with terminal capacity is 0.423 and that with terminal age is 0.199. 
+Among the terminal covariates, lagged log-transformed throughput is strongly associated with lagged log-transformed voyage count (\(\rho_S=0.989\)), whereas its associations with other terminal characteristics are substantially weaker. 
+Its correlation with lagged log-transformed mean voyage distance is 0.223 when the latter is defined, while the corresponding correlations with terminal capacity and terminal age are 0.423 and 0.199, respectively. 
 Neighbour activity is also only weakly associated with these node-specific characteristics. 
-These patterns suggest that the candidate covariates capture dimensions of terminal activity and characteristics that are not reducible to operational scale alone.
+These patterns suggest that, beyond the close correspondence between throughput and voyage count, the candidate covariates capture dimensions of terminal activity and characteristics that are not reducible to operational scale alone.
+
+A similar pattern is observed among the chokepoint covariates. 
+Lagged log-transformed throughput is strongly associated with lagged log-transformed voyage count (\(\rho_S=0.992\)), whereas its associations with the lagged share of active neighbours (\(\rho_S=0.118\)) and lagged log-transformed mean voyage distance (\(\rho_S=-0.057\)) are substantially weaker. 
+The seasonal terms also show little association with lagged throughput. 
+Beyond the close correspondence between throughput and voyage count, the chokepoint covariates therefore capture distinct aspects of activity, route characteristics, and temporal variation.
 
 The associations among the criticality measures differ between terminals and chokepoints. 
 Among active terminal--month observations, terminal- and country-level counterparty HHI are strongly correlated ($\rho_S=0.920$), reflecting their related but distinct measures of trade concentration. 
 Their associations with role-specific PageRank are negative and more moderate ($-0.596$ and $-0.545$, respectively), while role-specific dependence is more weakly associated with the other terminal measures. 
-These measures therefore exhibit some shared variation without behaving as interchangeable indicators of network position, concentration, and dependence.
 
 For active chokepoint--month observations, the three continuous measures show stronger positive associations. 
 Flow share correlates with weighted betweenness at 0.810 and with PageRank at 0.704, while the correlation between PageRank and betweenness is 0.706. 
-These associations are consistent with the patterns discussed in Section~\ref{sec:chokepoint_network_position}: passages carrying larger shares of observed LNG flows also tend to exhibit higher PageRank and betweenness values, although the three measures do not vary identically.
+Thus, although the individual comparisons in Section~\ref{sec:chokepoint_network_position} show that greater flow exposure does not necessarily correspond to higher centrality, the aggregate associations indicate that chokepoints carrying larger shares of observed LNG flows tend to have higher PageRank and betweenness values. 
+The correlations remain below one, consistent with the measures capturing related but distinct dimensions of chokepoint criticality.
 
-Figure~\ref{fig:criticality_correlations} summarises the pairwise associations among the terminal and chokepoint criticality measures. Taken together, these patterns provide descriptive evidence of shared variation across multiple dimensions of node criticality while preserving meaningful differences between the individual measures. They therefore motivate investigating whether part of this joint variation can be represented through a lower-dimensional structure in the subsequent modelling analysis.
+Figure~\ref{fig:criticality_correlations} summarises the pairwise associations among the terminal and chokepoint criticality measures. 
+Taken together, these patterns provide descriptive evidence of shared variation across multiple dimensions of node criticality while preserving meaningful differences between the individual measures. 
+This provides the empirical motivation for investigating whether their joint variation can be represented through a lower-dimensional structure in the modelling framework developed in Chapter~\ref{chap:bayesian_framework}.
 
 \begin{figure}[htbp]
     \centering
@@ -1470,9 +1475,6 @@ Figure~\ref{fig:criticality_correlations} summarises the pairwise associations a
     measures.}
     \label{fig:criticality_correlations}
 \end{figure}
-
-These exploratory associations are used to inform, rather than determine, the subsequent model specification.
-The final choice of responses and covariates, together with the dynamic and reduced-rank structure of the models, is developed in Chapter~\ref{chap:bayesian_framework}.
 
 %
 %			CHAPTER 5: Bayesian modelling framework
