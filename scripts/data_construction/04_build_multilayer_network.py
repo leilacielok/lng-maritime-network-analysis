@@ -156,6 +156,7 @@ def load_voyages(path: Path) -> tuple[pd.DataFrame, dict[str, int | float]]:
         "IMO",
         "voyage",
         "amount_cmb",
+        "voyage_distance",
         "from_node_id",
         "to_node_id",
         "from_terminal",
@@ -166,7 +167,11 @@ def load_voyages(path: Path) -> tuple[pd.DataFrame, dict[str, int | float]]:
     voyages["start_date"] = pd.to_datetime(voyages["start_date"], errors="coerce")
     voyages["end_date"] = pd.to_datetime(voyages["end_date"], errors="coerce")
     voyages["amount_cmb"] = pd.to_numeric(voyages["amount_cmb"], errors="coerce")
-
+    voyages["voyage_distance"] = pd.to_numeric(
+        voyages["voyage_distance"],
+        errors="coerce",
+    )
+    
     voyages = voyages.loc[
         voyages["voyage"].astype(str).str.lower().eq("export")
         & voyages[DATE_COLUMN].notna()
@@ -351,6 +356,43 @@ def attach_routes(voyages: pd.DataFrame, routes: pd.DataFrame) -> pd.DataFrame:
         raise ValueError(f"Voyages without a reconstructed route: {examples}")
     return merged
 
+def build_chokepoint_voyage_distance(
+    voyages: pd.DataFrame,
+    nodes: pd.DataFrame,
+) -> pd.DataFrame:
+    """Mean total OD voyage distance for voyages traversing each chokepoint-month."""
+
+    node_types = nodes.set_index("node_id")["node_type"].to_dict()
+    records = []
+
+    for voyage in voyages.itertuples(index=False):
+        if pd.isna(voyage.voyage_distance) or voyage.voyage_distance <= 0:
+            continue
+
+        for node_id in voyage.path_nodes:
+            if node_types.get(node_id) == "chokepoint":
+                records.append(
+                    {
+                        "period_month": voyage.period_month,
+                        "node_id": node_id,
+                        "voyage_distance": voyage.voyage_distance,
+                    }
+                )
+
+    traversals = pd.DataFrame(records)
+
+    return (
+        traversals.groupby(
+            ["period_month", "node_id"],
+            as_index=False,
+        )
+        .agg(
+            mean_voyage_distance=("voyage_distance", "mean"),
+            distance_voyage_count=("voyage_distance", "size"),
+        )
+        .sort_values(["period_month", "node_id"])
+        .reset_index(drop=True)
+    )
 
 def expand_voyages(voyages: pd.DataFrame) -> pd.DataFrame:
     records: list[dict] = []
@@ -546,6 +588,10 @@ def main() -> None:
     )
 
     voyages = attach_routes(voyages, routes)
+    chokepoint_distance = build_chokepoint_voyage_distance(
+        voyages,
+        nodes,
+    )
     traversals = expand_voyages(voyages)
     edges = build_edges(traversals, voyages, nodes)
     monthly_qa = build_monthly_qa(voyages, edges, nodes)
@@ -554,7 +600,15 @@ def main() -> None:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     observed_nodes_path = (
         args.output_dir / DEFAULT_OBSERVED_NODES)
+    
+    chokepoint_distance_path = (
+        args.output_dir / "chokepoint_month_voyage_distance.csv"
+    )
 
+    chokepoint_distance.to_csv(
+        chokepoint_distance_path,
+        index=False,
+    )
     edges_path = args.output_dir / DEFAULT_EDGES
     qa_path = args.output_dir / DEFAULT_MONTHLY_QA
 

@@ -22,6 +22,7 @@ PROCESSED_DIR = BASE_DIR / "data" / "processed"
 NODE_MONTH_FILE = (
     BASE_DIR / "eda_outputs" / "node_month" / "data" / "node_month_metrics.csv"
 )
+
 TERMINAL_MONTH_FILE = (
     BASE_DIR
     / "eda_outputs"
@@ -36,8 +37,13 @@ STRUCTURE_FILE = (
     / "data"
     / "node_month_structure_metrics.csv"
 )
+
 NODES_FILE = PROCESSED_DIR / "LNG_multilayer_nodes_observed.csv"
 EDGES_FILE = PROCESSED_DIR / "LNG_multilayer_edges_monthly.csv"
+
+CHOKEPOINT_DISTANCE_FILE = (
+    PROCESSED_DIR / "chokepoint_month_voyage_distance.csv"
+)
 
 OUTPUT_DIR = PROCESSED_DIR / "model_ready"
 MODEL_DIAGNOSTICS_DIR = (
@@ -80,6 +86,11 @@ def load_inputs():
     terminal_month = read_monthly_csv(TERMINAL_MONTH_FILE, ["terminal_id"])
     structure = read_monthly_csv(STRUCTURE_FILE, ["node_id"])
 
+    chokepoint_distance = read_monthly_csv(
+        CHOKEPOINT_DISTANCE_FILE,
+        ["node_id"],
+    )
+    
     nodes = pd.read_csv(NODES_FILE)
     edges = pd.read_csv(EDGES_FILE)
     require_columns(
@@ -98,7 +109,7 @@ def load_inputs():
     edges["to_node_id"] = edges["to_node_id"].astype(str)
     edges["period_month"] = pd.to_datetime(edges["period_month"], errors="raise")
 
-    return node_month, terminal_month, structure, nodes, edges
+    return node_month, terminal_month, structure, nodes, edges, chokepoint_distance
 
 
 def add_seasonality(frame):
@@ -375,7 +386,7 @@ def build_terminal_panel(terminal_month, activity_panel, structure, nodes):
     return terminal.sort_values(["period_month", "terminal_id"]).reset_index(drop=True)
 
 
-def build_chokepoint_panel(node_month, activity_panel, structure):
+def build_chokepoint_panel(node_month, activity_panel, structure, chokepoint_distance):
     require_columns(
         node_month,
         {
@@ -419,10 +430,15 @@ def build_chokepoint_panel(node_month, activity_panel, structure):
         how="left",
         validate="one_to_one",
         suffixes=("", "_structure"),
+    ).merge(
+        chokepoint_distance,
+        on=["node_id", "period_month"],
+        how="left",
+        validate="one_to_one",
     )
     
     chokepoints = add_seasonality(chokepoints)
-
+    
     columns_to_drop = [
         "country",
         "flow_imbalance",
@@ -431,10 +447,23 @@ def build_chokepoint_panel(node_month, activity_panel, structure):
 
     chokepoints = chokepoints.drop(columns_to_drop, errors="ignore",)
 
+    chokepoints = chokepoints.sort_values(
+        ["node_id", "period_month"]
+    ).reset_index(drop=True)
+
+    grouped = chokepoints.groupby("node_id", sort=False)
+
+    chokepoints["mean_voyage_distance_lag1"] = (
+        grouped["mean_voyage_distance"].shift(1)
+    )
+
+    chokepoints["log1p_mean_voyage_distance_lag1"] = np.log1p(
+        chokepoints["mean_voyage_distance_lag1"]
+    )
+
     return chokepoints.sort_values(
         ["period_month", "node_id"]
     ).reset_index(drop=True)
-
 # ============================================================
 # MODEL CORRELATION DIAGNOSTICS
 # ============================================================
@@ -602,6 +631,7 @@ def analyze_model_correlations(
         "neighbor_activity_lag1",
         "log1p_throughput_lag1",
         "log1p_voyage_count_lag1",
+        "log1p_mean_voyage_distance_lag1",
     ]
 
     chokepoint_valid = chokepoints.loc[
@@ -671,13 +701,25 @@ def validate_outputs(activity, terminals, chokepoints):
 
 
 def main():
-    node_month, terminal_month, structure, nodes, edges = load_inputs()
+    (
+        node_month,
+        terminal_month,
+        structure,
+        nodes,
+        edges,
+        chokepoint_distance,
+    ) = load_inputs()
     structure = add_structural_indicators(structure, edges)
     activity = build_activity_panel(node_month, nodes, edges)
     terminals = build_terminal_panel(
         terminal_month, activity, structure, nodes
     )
-    chokepoints = build_chokepoint_panel(node_month, activity, structure)
+    chokepoints = build_chokepoint_panel(
+        node_month,
+        activity,
+        structure,
+        chokepoint_distance,
+    )
     validate_outputs(activity, terminals, chokepoints)
     
     analyze_model_correlations(

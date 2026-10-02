@@ -1,5 +1,6 @@
-,activity_lag1,neighbor_activity_lag1,log1p_throughput_lag1,log1p_voyage_count_lag1
-activity_lag1,1.0000,0.0995,0.5950,0.5956
-neighbor_activity_lag1,0.0995,1.0000,0.1103,0.1074
-log1p_throughput_lag1,0.5950,0.1103,1.0000,0.9946
-log1p_voyage_count_lag1,0.5956,0.1074,0.9946,1.0000
+,activity_lag1,neighbor_activity_lag1,log1p_throughput_lag1,log1p_voyage_count_lag1,log1p_mean_voyage_distance_lag1
+activity_lag1,1.0000,0.0995,0.5950,0.5956,
+neighbor_activity_lag1,0.0995,1.0000,0.1103,0.1074,-0.1700
+log1p_throughput_lag1,0.5950,0.1103,1.0000,0.9946,-0.0210
+log1p_voyage_count_lag1,0.5956,0.1074,0.9946,1.0000,-0.0555
+log1p_mean_voyage_distance_lag1,,-0.1700,-0.0210,-0.0555,1.0000
