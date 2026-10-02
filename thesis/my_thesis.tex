@@ -888,7 +888,7 @@ A complete description of the variables included in each model-ready panel, toge
 The node activity panel contains all 183 network nodes, comprising 159 LNG terminals and 24 maritime chokepoints, observed over 60 months, resulting in \(183 \times 60 = 10{,}980\) node--month observations.
 
 The response variable is the binary indicator of current node activity. 
-The model covariates comprise preceding-month activity, throughput, voyage count, historical-neighbour activity, and the seasonal terms defined above. Time-invariant or slowly varying node characteristics were obtained from the consolidated node inventory and include node type and, where applicable, country, infrastructure type, start year, and annual processing capacity. Months without observed participation were retained with \texttt{active} equal to zero and the corresponding flow and voyage measures set to zero.
+The model covariates comprise preceding-month activity, throughput, voyage count, historical-neighbour activity, mean voyage distance, and the seasonal terms defined above. Time-invariant or slowly varying node characteristics were obtained from the consolidated node inventory and include node type and, where applicable, country, infrastructure type, start year, and annual processing capacity. Months without observed participation were retained with \texttt{active} equal to zero and the corresponding flow and voyage measures set to zero.
 
 \subsection{Terminal criticality panel}
 \label{subsec:terminal_panel}
