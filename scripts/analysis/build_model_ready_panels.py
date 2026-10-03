@@ -306,6 +306,7 @@ def build_terminal_panel(terminal_month, activity_panel, structure, nodes):
             "active",
             "throughput",
             "capacity_mtpa",
+            "terminal_role",
             "role_specific_pagerank",
             "counterparty_hhi_terminal",
             "role_specific_dependence",
@@ -361,6 +362,12 @@ def build_terminal_panel(terminal_month, activity_panel, structure, nodes):
     terminal = terminal.sort_values(["node_id", "period_month"]).reset_index(drop=True)
     
     grouped = terminal.groupby("node_id", sort=False)
+
+    terminal["terminal_role_lag1"] = grouped["terminal_role"].shift(1)
+
+    terminal["mean_voyage_distance_lag1"] = (
+        grouped["mean_voyage_distance"].shift(1)
+    )
     
     terminal["mean_voyage_distance_lag1"] = (
         grouped["mean_voyage_distance"].shift(1)
