@@ -879,7 +879,7 @@ Historical neighbourhoods were used because defining a node's neighbourhood excl
 The cumulative definition instead retains previously observed neighbours regardless of whether they were active in \(t-1\), thereby capturing variation in the recent activity of a node's established connections. 
 Connections first observed after \(t-1\) are excluded to prevent the use of future information: neighbourhood-activity measures remain unavailable until a node has acquired at least one historical neighbour.
 
-Finally, the common set of model covariates included seasonal terms, represented through sine and cosine transformations of the calendar month. This cyclical representation allows to treat December and January as adjacent rather than as the endpoints of a linear sequence.
+Finally, the common set of model covariates included seasonal terms, represented through sine and cosine transformations of the calendar month. This cyclical representation allows December and January to be treated as adjacent rather than as the endpoints of a linear sequence.
 
 A complete description of the variables included in each model-ready panel, together with their transformations and availability, is provided in Appendix~\ref{app:model_ready_variables}.
 
@@ -888,7 +888,9 @@ A complete description of the variables included in each model-ready panel, toge
 The node activity panel contains all 183 network nodes, comprising 159 LNG terminals and 24 maritime chokepoints, observed over 60 months, resulting in \(183 \times 60 = 10{,}980\) node--month observations.
 
 The response variable is the binary indicator of current node activity. 
-The model covariates comprise preceding-month activity, throughput, voyage count, historical-neighbour activity, mean voyage distance, and the seasonal terms defined above. Time-invariant or slowly varying node characteristics were obtained from the consolidated node inventory and include node type and, where applicable, country, infrastructure type, start year, and annual processing capacity. Months without observed participation were retained with \texttt{active} equal to zero and the corresponding flow and voyage measures set to zero.
+The model covariates comprise preceding-month activity, throughput, voyage count, historical-neighbour activity, and the seasonal terms defined above. 
+Time-invariant or slowly varying node characteristics were obtained from the consolidated node inventory and include node type and, where applicable, country, infrastructure type, start year, and annual processing capacity. 
+Months without observed participation were retained with \texttt{active} equal to zero and the corresponding flow and voyage measures set to zero.
 
 \subsection{Terminal criticality panel}
 \label{subsec:terminal_panel}
@@ -898,7 +900,7 @@ Its outcomes comprise the terminal criticality measures defined in Section~\ref{
 
 Criticality measures based on realised commercial activity are defined only for active terminal--months and remain unavailable for inactive observations. Structural indicators, by contrast, are retained for every terminal--month and are equal to zero when the terminal does not belong to the active monthly network.
 
-In addition to the common lagged and seasonal covariates, the terminal panel contains country, infrastructure type, annual processing capacity, number of infrastructure units, start year, and terminal age. The role-relevant mean voyage distance defined in Section~\ref{subsec:terminal_measures} is also included with a one-month lag. 
+The terminal panel additionally includes the preceding-month terminal role and role-relevant mean voyage distance, together with country, infrastructure type, annual processing capacity, number of infrastructure units, start year, and terminal age.
 Continuous covariates are retained in both their original and, where appropriate, log-transformed forms.
 
 \subsection{Chokepoint criticality panel}
@@ -908,7 +910,7 @@ The chokepoint criticality panel contains the 24 chokepoints included in the fin
 The outcomes comprise weighted betweenness centrality, PageRank, and the share of monthly network flow defined in Section~\ref{subsec:chokepoint_measures}, together with the common structural indicators introduced in Section~\ref{subsec:structural_indicators}. 
 Additional measures of degree, route exposure, and voyage traversals were retained as supplementary network characteristics.
 
-Finally, the panel includes the common lagged and seasonal covariates described above.
+Finally, the panel includes the common lagged and seasonal covariates described above, together with lagged mean voyage distance for voyages traversing each chokepoint.
 
 \section{Data and methodological limitations}
 \label{sec:data_limitations}
@@ -1873,17 +1875,18 @@ Commercial criticality measures that require realised trade are defined only for
 \path{local_bridge_only_share} & Share of incident undirected edges classified as local-only bridges. & Structural \\
 \path{has_incident_global_bridge} & Equals one when the terminal is incident to at least one global bridge. & Outcome \\
 \path{connected_to_articulation_point} & Equals one when the terminal is directly connected to an articulation point. & Outcome \\
+\path{terminal_role_lag1} & Observed terminal role in the preceding month: exporter, importer, or inactive. & Covariate \\
 \path{activity_lag1} & Terminal activity status in the preceding month. & Covariate \\
 \path{throughput_lag1} & Terminal throughput in the preceding month. & Covariate \\
 \path{log1p_throughput\_lag1} & Log-transformed terminal throughput in the preceding month. & Covariate \\
 \path{voyage_count_lag1} & Terminal voyage count in the preceding month. & Covariate \\
 \path{log1p_voyage_count_lag1} & Log-transformed terminal voyage count in the preceding month. & Covariate \\
 \path{mean_voyage_distance_lag1} & Role-relevant mean voyage distance in the preceding month; undefined when no applicable voyage was observed. & Covariate \\
-\path{log1p_mean_voyage_distance_lag1} & Log-transformed preceding-month role-relevant mean voyage distance, with structurally absent distances represented by zero. & Covariate \\
+\path{log1p_mean_voyage_distance_lag1} & Log-transformed preceding-month role-relevant mean voyage distance; undefined when no applicable voyage was observed. & Covariate \\
 \path{historical_neighbor_count_lag1} & Number of historical neighbours observed up to (t-1). & Covariate \\
 \path{active_neighbor_count_lag1} & Number of historical neighbours active in (t-1). & Covariate \\
+\path{lag_available} & Equals one when the preceding calendar month is available and zero for January 2020. & Availability \\
 \path{neighbor_activity_lag1} & Share of historical neighbours active in (t-1). & Covariate \\
-\path{lag_available} & Equals one when preceding-month information can be calculated. & Availability \\
 \path{month_sin} & Sine transformation of the calendar month. & Covariate \\
 \path{month_cos} & Cosine transformation of the calendar month. & Covariate \\
 \end{longtable}
@@ -1950,6 +1953,8 @@ Commercial criticality measures that require realised trade are defined only for
 \path{log1p_throughput_lag1} & Log-transformed chokepoint throughput in the preceding month. & Covariate \\
 \path{voyage_count_lag1} & Chokepoint voyage count in the preceding month. & Covariate \\
 \path{log1p_voyage_count_lag1} & Log-transformed chokepoint voyage count in the preceding month. & Covariate \\
+\path{mean_voyage_distance_lag1} & Mean voyage distance for voyages traversing the chokepoint in the preceding month; undefined when no applicable voyage was observed. & Covariate \\
+\path{log1p_mean_voyage_distance_lag1} & Log-transformed preceding-month mean voyage distance. & Covariate \\
 \path{historical_neighbor_count_lag1} & Number of historical neighbours observed up to (t-1). & Covariate \\
 \path{active_neighbor_count_lag1} & Number of historical neighbours active in (t-1). & Covariate \\
 \path{neighbor_activity_lag1} & Share of historical neighbours active in (t-1). & Covariate \\
