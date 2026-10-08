@@ -16,7 +16,6 @@ report these limitations. Repeated node/month dependence is not modelled yet.
 """
 
 import argparse
-from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -279,13 +278,12 @@ def main():
     if args.check_only:
         print(json.dumps({kind: item["audit"] for kind, item in data.items()}, indent=2))
         return
-    # A unique run folder prevents accidental replacement of earlier results.
-    run = args.output_dir / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    run.mkdir(parents=True, exist_ok=False)
+    run = args.output_dir
+    run.mkdir(parents=True, exist_ok=True)
     (run / "run_config.json").write_text(json.dumps(vars(args), default=str, indent=2), encoding="utf-8")
     for kind, item in data.items():
         destination = run / kind
-        destination.mkdir()
+        destination.mkdir(exist_ok=True)
         (destination / "sample_audit.json").write_text(json.dumps(item["audit"], indent=2), encoding="utf-8")
         item["x_scaling"].to_csv(destination / "predictor_scaling.csv")
         item["y_scaling"].to_csv(destination / "response_scaling.csv")
