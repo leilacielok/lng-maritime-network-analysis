@@ -1,0 +1,28 @@
+{
+  "panel_rows": 1440,
+  "panel_nodes": 24,
+  "excluded_inactive_current": 200,
+  "excluded_no_calendar_lag": 21,
+  "excluded_inactive_previous": 56,
+  "consecutive_active_rows": 1163,
+  "excluded_missing_age": 0,
+  "estimation_rows": 1163,
+  "estimation_nodes": 24,
+  "predictors": [
+    "neighbor_activity_lag1",
+    "log1p_mean_voyage_distance_lag1",
+    "month_sin",
+    "month_cos"
+  ],
+  "continuous_responses": [
+    "pagerank",
+    "betweenness",
+    "share_monthly_network_flow"
+  ],
+  "binary_responses": [
+    "is_articulation_point",
+    "has_incident_global_bridge",
+    "connected_to_articulation_point"
+  ],
+  "input_sha256": "a46965c889a8892eb1b8a5c9f9453931effd00a98a364e4496ca28b30d6bcd21"
+}

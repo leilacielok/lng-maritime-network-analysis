@@ -1,0 +1,31 @@
+{
+  "panel_rows": 9540,
+  "panel_nodes": 159,
+  "excluded_inactive_current": 4988,
+  "excluded_no_calendar_lag": 71,
+  "excluded_inactive_previous": 916,
+  "consecutive_active_rows": 3565,
+  "excluded_missing_age": 112,
+  "estimation_rows": 3453,
+  "estimation_nodes": 137,
+  "predictors": [
+    "neighbor_activity_lag1",
+    "log1p_mean_voyage_distance_lag1",
+    "month_sin",
+    "month_cos",
+    "log1p_capacity_mtpa",
+    "terminal_age",
+    "exporter_lag1"
+  ],
+  "continuous_responses": [
+    "role_specific_pagerank",
+    "counterparty_hhi_terminal",
+    "role_specific_dependence"
+  ],
+  "binary_responses": [
+    "is_articulation_point",
+    "has_incident_global_bridge",
+    "connected_to_articulation_point"
+  ],
+  "input_sha256": "acec367148833cef806de7c6b4cdbeacd468510440caeef51d674bd8be66f59a"
+}
