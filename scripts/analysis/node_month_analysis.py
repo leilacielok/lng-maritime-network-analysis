@@ -1430,17 +1430,6 @@ def analyze_temporal_sparsity(node_month):
             label=column.replace("inactive_share_", "").title(),
         )
 
-    flagged = monthly[monthly["high_sparsity_flag"]]
-
-    ax.scatter(
-        flagged["period_month"],
-        flagged["inactive_share"],
-        color="red",
-        s=45,
-        label="High-sparsity month",
-        zorder=5,
-    )
-
     ax.axhline(
         median_sparsity,
         color="black",
