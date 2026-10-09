@@ -1493,12 +1493,99 @@ These findings provide the empirical motivation for investigating whether the me
 \end{figure}
 
 %
-%			CHAPTER 5: Bayesian modelling framework
-%
-\chapter{Bayesian modelling framework}
-\label{chap:bayesian_framework}
-% TODO: Complete after fixing the final model specification, priors, and
-% posterior-computation strategy.
+% Preliminary working draft, 9 October 2026.
+% Insert into the thesis master document; uses amsmath and amssymb.
+% No converged substantive estimates are reported in this draft.
+\chapter{Bayesian modelling of node criticality}
+\label{chap:criticality_modelling}
+
+\section{Modelling objective and scope}
+The objective of this chapter is to investigate whether several measures of network position can be represented through a common latent dimension, and to examine how this dimension relates to node characteristics and lagged network conditions. Terminals and chokepoints are analysed separately because their functions in the reconstructed network and their response measures differ.
+
+The initial specification is deliberately static and conditional on observed activity. It excludes an activity component, country-level effects and lagged throughput. Temporal evolution of the latent factor and hierarchical effects are left for subsequent extensions. Consequently, the preliminary model does not account explicitly for repeated observations of the same node or dependence among nodes within a monthly network. Its coefficients describe conditional associations rather than causal effects. The latent factor is initially a statistical summary of the selected measures; its interpretation as criticality requires assessment of the estimated loadings and model adequacy.
+
+\section{Estimation sample}
+\label{sec:criticality_sample}
+The existing model-ready panels are filtered directly within the estimation script. An observation is retained only if the node is active in month $t$, a lag from the preceding calendar month is available, and the node is also active in that preceding month. Lags are checked against the complete panel before filtering, so that the preceding active observation cannot be mistaken for the preceding calendar month.
+
+For terminals, the original panel contains 9,540 observations for 159 nodes. Excluding 4,988 currently inactive observations, 71 active observations without an available calendar lag and 916 observations preceded by inactivity leaves 3,565 consecutive-active observations. A further 112 observations with missing terminal age are excluded, giving an estimation sample of 3,453 observations for 137 terminals. The original start-year metadata are retained; no opening dates are changed to reconcile them with observed voyages.
+
+For chokepoints, the panel contains 1,440 observations for 24 nodes. Excluding 200 currently inactive observations, 21 observations without a calendar lag and 56 observations preceded by inactivity leaves 1,163 observations for all 24 chokepoints. The results therefore pertain specifically to consecutive-active node-months, rather than to all active observations or to the complete balanced panels.
+
+\section{Responses and covariates}
+The terminal specification initially includes three continuous responses, namely role-specific PageRank, terminal counterparty HHI and role-specific dependence, and two binary responses indicating whether a terminal is an articulation point, or is connected to an articulation point.
+The chokepoint model has five responses, including PageRank, weighted betweenness, share of monthly lng flow, being an articulation point, and being connected to an articulation point.
+
+The terminal covariate vector contains lagged historical-neighbour activity share, the logarithm of one plus lagged role-relevant mean voyage distance, sine and cosine terms for monthly seasonality, the logarithm of one plus terminal capacity, terminal age, and an indicator for exporter status in the preceding month. The chokepoint vector contains the first four of these covariates, with voyage distance defined for chokepoints. Thus there are seven terminal predictors and four chokepoint predictors.
+
+Numeric covariates and continuous responses are centred and scaled using the means and standard deviations of the respective estimation samples. The exporter indicator remains on its original zero--one scale. Scaling parameters are saved with each estimation run. Standardisation facilitates prior specification and computation, but does not remove the original support restrictions of the response measures.
+
+\section{Initial rank-one factor regression}
+For each node type separately, let $\boldsymbol{x}_{i,t}$ denote the covariate vector and $f_{i,t}$ the scalar latent factor. The initial model is
+\begin{align}
+ f_{i,t} \mid \boldsymbol{x}_{i,t},\boldsymbol{\beta}
+ &\sim \mathcal{N}(\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1),
+ \label{eq:initial_factor}\\
+ \widetilde{Y}_{i,t,j}\mid f_{i,t}
+ &\sim \mathcal{N}(\alpha_j+\lambda_j f_{i,t},\sigma_j^2),
+ \qquad j=1,2,3,\\
+ B_{i,t,k}\mid f_{i,t}
+ &\sim \operatorname{Bernoulli}(p_{i,t,k}),\\
+ \operatorname{logit}(p_{i,t,k})
+ &=a_k+\ell_k f_{i,t}.
+\end{align}
+Here $\widetilde{Y}_{i,t,j}$ denotes a standardised continuous response and $B_{i,t,k}$ a binary response. Conditional on the factor and parameters, the responses are assumed independent. The factor residual variance is fixed at one to set its scale, and the PageRank loading is constrained to be positive to orient the factor. Other loadings are unrestricted.
+
+For continuous responses, integrating out the factor gives
+\[
+ \mathbb{E}(\widetilde{\boldsymbol{Y}}_{i,t}\mid\boldsymbol{x}_{i,t})
+ =\boldsymbol{\alpha}+\boldsymbol{\lambda}
+ \boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta}.
+\]
+The associated coefficient matrix $\boldsymbol{\lambda}\boldsymbol{\beta}^{\mathsf T}$ has rank at most one. Binary conditional linear predictors share this reduced-rank structure, but their marginal probabilities, after integrating out the factor, do not generally equal a logistic regression evaluated at the mean factor.
+
+\subsection{Initial prior distributions}
+The preliminary priors are
+\begin{align*}
+ \beta_r&\sim\mathcal{N}(0,0.5^2),&
+ \lambda_{\mathrm{PR}}&\sim\operatorname{HalfNormal}(1),\\
+ \lambda_j&\sim\mathcal{N}(0,1),&
+ \ell_k&\sim\mathcal{N}(0,1),\\
+ \alpha_j&\sim\mathcal{N}(0,1),&
+ a_k&\sim\mathcal{N}(0,2^2),\\
+ \sigma_j&\sim\operatorname{HalfNormal}(1).
+\end{align*}
+These priors are independent. They are provisional modelling choices, rather than an empirically validated final specification.
+
+\section{Predictive checks and preliminary computation}
+Prior predictive checks use 200 simulated draws. The Gaussian specification generates values outside the original interval $[0,1]$, despite response standardisation. In addition, the terminal sample contains substantial masses at one: approximately 34.1\% for counterparty HHI and 20.8\% for dependence. A continuous Gaussian distribution cannot reproduce these point masses. Support violations and boundary frequencies are therefore recorded explicitly, and a suitable likelihood revision remains necessary to assess.
+
+Posterior sampling uses NUTS. The diagnostics include divergences after warm-up, rank-normalised $\widehat{R}$ and bulk and tail effective sample sizes. Checks cover both global parameters and latent factor residuals. The script flags runs with any divergences, maximum $\widehat{R}>1.01$, or minimum bulk or tail ESS below 400. These thresholds are screening criteria, not a guarantee of model adequacy.
+
+\subsection{Sequence of diagnostic runs}
+The following results document model development; none constitute validated substantive estimates.
+\begin{enumerate}
+ \item The initial residual parameterisation writes $f_{i,t}=\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta}+z_{i,t}$, with $z_{i,t}\sim\mathcal{N}(0,1)$. With two chains, 500 warm-up iterations and 500 retained draws per chain, the terminal model has no post-warm-up divergences, but maximum $\widehat{R}=2.03$ and minimum bulk ESS of 3. The initial six-response chokepoint model has 478 post-warm-up divergences, maximum $\widehat{R}=1.90$ and minimum bulk ESS of 3.
+ \item A revision uses PageRank-oriented, data-informed initial values with independent perturbations between chains, and removes the incident-global-bridge response for chokepoints. Initial values affect computation only; the prior distributions are unchanged. A run requesting four chains, 2,000 warm-up iterations and 500 retained draws is interrupted after the first terminal chain completes with 94 post-warm-up divergences. This is an incomplete run and cannot establish convergence.
+ \item A centred parameterisation samples $f_{i,t}$ directly as in Equation~\eqref{eq:initial_factor}; it defines $z_{i,t}$ as a derived quantity. This is probabilistically equivalent to the original parameterisation. A terminal-only run with two chains, 500 warm-up iterations and 300 retained draws per chain has 14 post-warm-up divergences, maximum $\widehat{R}=2.23$ and minimum bulk ESS of 3.
+\end{enumerate}
+
+The last run provides evidence of distinct sampled configurations. In the first chain, the average residual standard deviations are approximately 0.042 for PageRank and 0.855 for HHI. In the second, they are approximately 0.852 and 0.128, respectively. Across observations, the posterior mean factor within the first chain is almost perfectly correlated with PageRank, whereas in the second it is almost perfectly negatively correlated with HHI. The positive PageRank loading does not exclude either configuration. The second chain also exhibits a decreasing HHI residual standard deviation, with divergences occurring at small values. These findings indicate unresolved allocation of response variability between the common factor and response-specific residuals; they do not establish the posterior probabilities of the configurations.
+
+\section{Planned revision and interpretation limits}
+A subsequent diagnostic step will evaluate priors that discourage residual standard deviations arbitrarily close to zero, without imposing a hard lower bound. This revision has not yet been estimated. It represents the substantive assumption that no single observed response is an almost error-free measurement of the latent factor, and requires sensitivity analysis rather than selection solely to eliminate sampling warnings.
+
+Further work must assess continuous-response likelihoods compatible with their supports and boundary masses, the adequacy of a single factor, and the dependence induced by repeated nodes and shared monthly networks. No regression effects, terminal rankings or criticality trajectories are interpreted from the nonconverged runs. Scores from the two separate node-type models are also not directly comparable on a common substantive scale.
+
+\section{Reproducibility and diagnostic archive}
+For every run, the archive should retain the exact estimation script and its version, the command and random seed, package versions, input-file hashes, run configuration, sample-selection audit, scaling parameters, sampling diagnostics, parameter summaries, predictive-check tables and trace plots. The posterior NetCDF file is essential for examining individual chains, divergences and latent quantities; the prior NetCDF file preserves prior predictive simulations. Console output should be retained for warnings, elapsed time and interruptions.
+
+Each run should be archived in a separate, explicitly named folder before subsequent execution overwrites the working output directory. An interrupted run must be labelled incomplete and kept separate from completed runs. Files from different executions must not be treated as one run: in particular, a terminal-only execution leaves any existing chokepoint files untouched. For the thesis, a compact account of the diagnostic findings belongs in this chapter, while detailed unsuccessful-run diagnostics can be placed in an appendix or retained in the reproducibility archive.
+
+% Before final submission: add verified bibliography entries for NUTS,
+% rank-normalised R-hat/ESS and Bayesian factor-model residual regularisation.
+% Update this development narrative after a validated final specification exists.
+
 
 %
 %			CHAPTER 6: Results and discussion
