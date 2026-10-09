@@ -1,0 +1,7 @@
+{
+  "divergences": 14,
+  "max_rhat": 2.23,
+  "min_ess_bulk": 3.0,
+  "min_ess_tail": 12.0,
+  "passes_basic_checks": false
+}

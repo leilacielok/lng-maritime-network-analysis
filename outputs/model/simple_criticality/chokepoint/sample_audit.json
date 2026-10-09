@@ -21,7 +21,6 @@
   ],
   "binary_responses": [
     "is_articulation_point",
-    "has_incident_global_bridge",
     "connected_to_articulation_point"
   ],
   "input_sha256": "a46965c889a8892eb1b8a5c9f9453931effd00a98a364e4496ca28b30d6bcd21"

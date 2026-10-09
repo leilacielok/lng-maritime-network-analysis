@@ -3,12 +3,14 @@
 Read existing panels; filter only in memory. Separate fits for terminals and
 chokepoints. No country effects, throughput predictor, activity model or AR(1).
 
-f_it = X_it beta + z_it, z_it ~ Normal(0, 1)
+f_it ~ Normal(X_it beta, 1) (centered parameterization)
 E[Y_cont,j | f] = alpha_cont,j + lambda_cont,j f (standardized scale)
 logit P(Y_binary,j = 1 | f) = alpha_binary,j + lambda_binary,j f
 
 Thus the covariate coefficient matrix has rank at most one. Unit residual
 factor variance fixes scale; a positive PageRank loading fixes orientation.
+Chains start near a PageRank-oriented configuration with independent perturbations.
+This initialization is not a guarantee of identification or convergence.
 Other loadings are unrestricted: a criticality interpretation requires review.
 Gaussian continuous likelihoods are a preliminary approximation: they do not
 respect [0, 1] bounds or reproduce boundary masses. Predictive checks explicitly
@@ -41,11 +43,13 @@ SPECS = {
         "id": "terminal_id",
         "continuous": ["role_specific_pagerank", "counterparty_hhi_terminal",
                        "role_specific_dependence"],
+        "binary": BINARY_RESPONSES.copy(),
         "predictors": COMMON_PREDICTORS + ["log1p_capacity_mtpa", "terminal_age"],
     },
     "chokepoint": {
         "id": "node_id",
         "continuous": ["pagerank", "betweenness", "share_monthly_network_flow"],
+        "binary": ["is_articulation_point", "connected_to_articulation_point"],
         "predictors": COMMON_PREDICTORS,
     },
 }
@@ -65,7 +69,7 @@ def prepare_panel(path, kind):
     frame = pd.read_csv(path, dtype={spec["id"]: "string"})
     needed = [spec["id"], "node_name", "period_month", "active",
               "activity_lag1", "lag_available", *spec["predictors"],
-              *spec["continuous"], *BINARY_RESPONSES]
+              *spec["continuous"], *spec["binary"]]
     if kind == "terminal":
         needed += ["terminal_role_lag1"]
     missing = sorted(set(needed) - set(frame.columns))
@@ -116,16 +120,16 @@ def prepare_panel(path, kind):
     if selected.empty:
         raise ValueError(f"No observations remain for {kind}")
     predictors = spec["predictors"] + (["exporter_lag1"] if kind == "terminal" else [])
-    model_columns = predictors + spec["continuous"] + BINARY_RESPONSES
+    model_columns = predictors + spec["continuous"] + spec["binary"]
     values = selected[model_columns].to_numpy(dtype=float)
     if not np.isfinite(values).all():
         raise ValueError(f"Unexpected missing/nonfinite model values: "
                          f"{selected[model_columns].isna().sum().to_dict()}")
-    if not selected[BINARY_RESPONSES].isin([0, 1]).all().all():
+    if not selected[spec["binary"]].isin([0, 1]).all().all():
         raise ValueError("Structural responses must be binary")
     if not selected[spec["continuous"]].ge(0).all().all() or not selected[spec["continuous"]].le(1).all().all():
         raise ValueError("Continuous responses must lie in [0, 1]")
-    if selected[BINARY_RESPONSES].nunique().lt(2).any():
+    if selected[spec["binary"]].nunique().lt(2).any():
         raise ValueError("A binary response is constant in the estimation sample")
     # Center/scale numeric covariates; keep role dummy on its 0/1 scale.
     x, x_scaling = standardize(selected[spec["predictors"]])
@@ -135,10 +139,10 @@ def prepare_panel(path, kind):
     yc, y_scaling = standardize(selected[spec["continuous"]])
     audit.update(estimation_rows=len(selected), estimation_nodes=selected[spec["id"]].nunique(),
                  predictors=predictors, continuous_responses=spec["continuous"],
-                 binary_responses=BINARY_RESPONSES,
+                 binary_responses=spec["binary"],
                  input_sha256=hashlib.sha256(path.read_bytes()).hexdigest())
     return {"frame": selected, "x": x, "yc": yc,
-            "yb": selected[BINARY_RESPONSES].to_numpy(dtype=int),
+            "yb": selected[spec["binary"]].to_numpy(dtype=int),
             "x_scaling": x_scaling, "y_scaling": y_scaling, "audit": audit}
 
 
@@ -150,12 +154,12 @@ def build_model(data):
               "predictor": data["audit"]["predictors"],
               "continuous": data["audit"]["continuous_responses"],
               "other_continuous": data["audit"]["continuous_responses"][1:],
-              "binary": BINARY_RESPONSES}
+              "binary": data["audit"]["binary_responses"]}
     with pm.Model(coords=coords) as model:
         beta = pm.Normal("beta", 0, 0.5, dims="predictor")
         factor_mean = pm.Deterministic("factor_mean", pt.dot(data["x"], beta), dims="obs")
-        z = pm.Normal("factor_residual", 0, 1, dims="obs")
-        factor = pm.Deterministic("factor", factor_mean + z, dims="obs")
+        factor = pm.Normal("factor", mu=factor_mean, sigma=1, dims="obs")
+        pm.Deterministic("factor_residual", factor - factor_mean, dims="obs")
         # PageRank is the first response in both specifications.
         anchor = pm.HalfNormal("pagerank_loading", 1)
         other = pm.Normal("other_loadings", 0, 1, dims="other_continuous")
@@ -188,13 +192,48 @@ def predictive_checks(idata, data, group):
                      "observed_zero_share": np.mean(observed == 0),
                      "observed_one_share": np.mean(observed == 1),
                      "replicated_outside_support_share": np.mean((replicated < 0) | (replicated > 1))})
-    for j, col in enumerate(BINARY_RESPONSES):
+    for j, col in enumerate(data["audit"]["binary_responses"]):
         proportions = yb[..., j].mean(axis=-1)
         rows.append({"response": col, "observed_mean": data["yb"][:, j].mean(),
                      "replicated_mean": proportions.mean(),
                      "replicated_mean_q025": np.quantile(proportions, .025),
                      "replicated_mean_q975": np.quantile(proportions, .975)})
     return pd.DataFrame(rows)
+
+
+def initial_values(data, chains, seed):
+    """Data-informed starting points only; priors and likelihoods stay unchanged.
+
+    Orient the initial factor toward PageRank, with small independent chain
+    perturbations. This does not prove that other posterior modes are absent.
+    """
+    rng = np.random.default_rng(seed)
+    factor_start = data["yc"][:, 0].copy()
+    beta_start = np.linalg.lstsq(data["x"], factor_start, rcond=None)[0]
+    loading = data["yc"].T @ factor_start / (factor_start @ factor_start)
+    error = data["yc"] - factor_start[:, None] * loading
+    sigma = np.maximum(error.std(axis=0), 0.5)
+    # PageRank initializes the factor but must not start with zero noise.
+    probability = np.clip(data["yb"].mean(axis=0), 0.01, 0.99)
+    intercept_binary = np.log(probability / (1 - probability))
+    binary_loading = np.array([
+        (np.corrcoef(factor_start, data["yb"][:, j])[0, 1]
+         if data["yb"][:, j].std() > 0 else 0.0)
+        for j in range(data["yb"].shape[1])
+    ])
+    starts = []
+    for _ in range(chains):
+        starts.append({
+            "beta": beta_start + rng.normal(0, 0.03, beta_start.shape),
+            "factor": factor_start + rng.normal(0, 0.05, factor_start.shape),
+            "pagerank_loading": float(rng.uniform(0.6, 0.8)),
+            "other_loadings": loading[1:] + rng.normal(0, 0.03, loading[1:].shape),
+            "loading_binary": binary_loading + rng.normal(0, 0.03, binary_loading.shape),
+            "intercept_cont": rng.normal(0, 0.03, data["yc"].shape[1]),
+            "intercept_binary": intercept_binary + rng.normal(0, 0.03, probability.shape),
+            "sigma_cont": sigma * np.exp(rng.normal(0, 0.03, sigma.shape)),
+        })
+    return starts
 
 
 def fit_model(data, kind, args, destination):
@@ -216,7 +255,14 @@ def fit_model(data, kind, args, destination):
             return
         idata = pm.sample(draws=args.draws, tune=args.tune, chains=args.chains,
                           cores=args.cores, target_accept=args.target_accept,
+                          init="adapt_diag",
+                          initvals=initial_values(data, args.chains, args.seed),
                           random_seed=args.seed, return_inferencedata=True)
+        if (idata.posterior.sizes["chain"] != args.chains
+                or idata.posterior.sizes["draw"] != args.draws):
+            idata.to_netcdf(destination / "interrupted_posterior.nc")
+            raise SystemExit("Incomplete sampling: saved interrupted_posterior.nc; "
+                             "stopping without replacing posterior.nc or fitting another model")
         pm.sample_posterior_predictive(idata, var_names=["y_cont", "y_binary"],
                                        random_seed=args.seed, extend_inferencedata=True)
     idata.to_netcdf(destination / "posterior.nc")
@@ -258,7 +304,7 @@ def main():
     parser.add_argument("--check-only", action="store_true", help="Validate/filter panels without PyMC or writing datasets")
     parser.add_argument("--prior-only", action="store_true", help="Save prior predictive checks without fitting")
     parser.add_argument("--draws", type=int, default=1000)
-    parser.add_argument("--tune", type=int, default=1000)
+    parser.add_argument("--tune", type=int, default=2000)
     parser.add_argument("--chains", type=int, default=4)
     parser.add_argument("--cores", type=int, default=1, help="One core is portable to Windows; increase if desired")
     parser.add_argument("--prior-draws", type=int, default=200)
@@ -287,7 +333,7 @@ def main():
         (destination / "sample_audit.json").write_text(json.dumps(item["audit"], indent=2), encoding="utf-8")
         item["x_scaling"].to_csv(destination / "predictor_scaling.csv")
         item["y_scaling"].to_csv(destination / "response_scaling.csv")
-        item["frame"][BINARY_RESPONSES].corr().to_csv(destination / "binary_correlations.csv")
+        item["frame"][item["audit"]["binary_responses"]].corr().to_csv(destination / "binary_correlations.csv")
         fit_model(item, kind, args, destination)
     print(f"Results saved to {run}")
 
