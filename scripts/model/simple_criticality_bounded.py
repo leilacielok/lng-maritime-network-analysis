@@ -1,4 +1,8 @@
-"""Static rank-one terminal criticality model conditional on consecutive activity.
+"""Static rank-one criticality models conditional on consecutive activity.
+
+Select terminal or chokepoint with --node-type.
+Chokepoints: Beta PageRank/flow share; zero-inflated Beta betweenness.
+Chokepoint bridge indicator omitted (near duplicate of articulation).
 
 PageRank: Beta; HHI and dependence: one-inflated Beta, on original scale.
 Interior means and probabilities of one have distinct factor loadings.
@@ -172,7 +176,7 @@ def one_inflated_beta_random(alpha, beta, boundary_logit, inflated, rng=None, si
     return np.where(rng.uniform(size=np.shape(interior)) < prob, 1.0, interior)
 
 
-def build_model(data):
+def build_terminal_model(data):
     import pymc as pm
     import pytensor.tensor as pt
 
@@ -212,6 +216,84 @@ def build_model(data):
     return model
 
 
+
+def zero_inflated_beta_logp(value, alpha, beta, boundary_logit, inflated):
+    # Reflecting the Beta and boundary gives exactly a zero-inflated Beta.
+    return one_inflated_beta_logp(1 - value, beta, alpha, boundary_logit, inflated)
+
+
+def zero_inflated_beta_random(alpha, beta, boundary_logit, inflated, rng=None, size=None):
+    rng = np.random.default_rng() if rng is None else rng
+    prob = np.exp(-np.logaddexp(0.0, -np.asarray(boundary_logit)))
+    prob = np.where(inflated, prob, 0.0)
+    interior = np.clip(rng.beta(alpha, beta, size=size),
+                       np.nextafter(0.0, 1.0), np.nextafter(1.0, 0.0))
+    return np.where(rng.uniform(size=np.shape(interior)) < prob, 0.0, interior)
+
+
+def build_chokepoint_model(data):
+    import pymc as pm
+    import pytensor.tensor as pt
+    coords = {"obs": np.arange(len(data["frame"])),
+              "predictor": data["audit"]["predictors"],
+              "continuous": data["audit"]["continuous_responses"],
+              "other_continuous": data["audit"]["continuous_responses"][1:],
+              "binary": data["audit"]["binary_responses"],
+              "boundary": ["betweenness"]}
+    with pm.Model(coords=coords) as model:
+        beta = pm.Normal("beta", 0, .5, dims="predictor")
+        mean = pm.Deterministic("factor_mean", pt.dot(data["x"], beta), dims="obs")
+        factor = pm.Normal("factor", mean, 1, dims="obs")
+        pm.Deterministic("factor_residual", factor - mean, dims="obs")
+        anchor = pm.HalfNormal("pagerank_loading", 1)
+        other = pm.Normal("other_loadings", 0, 1, dims="other_continuous")
+        lc = pm.Deterministic("loading_cont", pt.concatenate([anchor[None], other]), dims="continuous")
+        lb = pm.Normal("loading_binary", 0, 1, dims="binary")
+        ac = pm.Normal("intercept_cont", [-4., -5., -4.], 1.5, dims="continuous")
+        ab = pm.Normal("intercept_binary", 0, 2, dims="binary")
+        phi = pm.LogNormal("precision_cont", np.log(10.), data["precision_prior_sd"], dims="continuous")
+        azero = pm.Normal("intercept_zero", -5., 1.5, dims="boundary")
+        lzero = pm.Normal("loading_zero", 0, 1, dims="boundary")
+        eta = azero + factor[:, None] * lzero
+        logits = pt.concatenate([pt.zeros_like(eta), eta, pt.zeros_like(eta)], axis=1)
+        mu = pm.math.sigmoid(ac + factor[:, None] * lc)
+        pm.CustomDist("y_cont", mu * phi, (1-mu)*phi, logits,
+                      np.array([False, True, False]),
+                      logp=zero_inflated_beta_logp, random=zero_inflated_beta_random,
+                      observed=data["frame"][data["audit"]["continuous_responses"]].to_numpy(),
+                      dims=("obs", "continuous"))
+        pm.Bernoulli("y_binary", logit_p=ab + factor[:, None]*lb,
+                     observed=data["yb"], dims=("obs", "binary"))
+    return model
+
+
+def build_model(data):
+    return (build_terminal_model(data) if "exporter_lag1" in data["audit"]["predictors"]
+            else build_chokepoint_model(data))
+
+
+def chokepoint_initial_values(data, chains, seed):
+    rng = np.random.default_rng(seed)
+    f = data["yc"][:, 0]
+    b = np.linalg.lstsq(data["x"], f, rcond=None)[0]
+    y = data["frame"][data["audit"]["continuous_responses"]]
+    means = np.array([y[c].loc[y[c].gt(0)].mean() for c in y])
+    p = np.clip(data["yb"].mean(axis=0), .01, .99)
+    pzero = y["betweenness"].eq(0).mean()
+    starts = []
+    for _ in range(chains):
+        starts.append({"beta": b+rng.normal(0,.03,b.shape),
+                       "factor": f+rng.normal(0,.05,f.shape),
+                       "pagerank_loading": float(rng.uniform(.6,.8)),
+                       "other_loadings": rng.normal(.2,.05,2),
+                       "loading_binary": rng.normal(0,.05,len(p)),
+                       "intercept_cont": np.log(means/(1-means))+rng.normal(0,.03,3),
+                       "intercept_binary": np.log(p/(1-p))+rng.normal(0,.03,len(p)),
+                       "precision_cont": 10*np.exp(rng.normal(0,.03,3)),
+                       "intercept_zero": np.array([np.log(pzero/(1-pzero))])+rng.normal(0,.03,1),
+                       "loading_zero": rng.normal(0,.05,1)})
+    return starts
+
 def predictive_checks(idata, data, group):
     """Compare in-sample replicated distributions, on the original scale."""
     draws = getattr(idata, group)
@@ -236,7 +318,7 @@ def predictive_checks(idata, data, group):
                      "replicated_mean_q975": np.quantile(proportions, .975)})
     # Quantities calculated separately for each replicated dataset, not pooled.
     masks = {"all": np.ones(len(data["frame"]), dtype=bool)}
-    for role in ["importer", "exporter"]:
+    for role in (["importer", "exporter"] if "terminal_role_lag1" in data["frame"] else []):
         masks[role] = data["frame"]["terminal_role_lag1"].eq(role).to_numpy()
     for role, mask in masks.items():
         if not mask.any():
@@ -321,7 +403,8 @@ def fit_model(data, kind, args, destination):
         idata = pm.sample(draws=args.draws, tune=args.tune, chains=args.chains,
                           cores=args.cores, target_accept=args.target_accept,
                           init="adapt_diag",
-                          initvals=initial_values(data, args.chains, args.seed),
+                          initvals=(initial_values(data, args.chains, args.seed) if kind == "terminal"
+                                    else chokepoint_initial_values(data, args.chains, args.seed)),
                           random_seed=args.seed, return_inferencedata=True)
         if (idata.posterior.sizes["chain"] != args.chains
                 or idata.posterior.sizes["draw"] != args.draws):
@@ -334,7 +417,9 @@ def fit_model(data, kind, args, destination):
                                        random_seed=args.seed, extend_inferencedata=True)
     idata.to_netcdf(destination / "posterior.nc")
     parameters = ["beta", "loading_cont", "loading_binary", "intercept_cont",
-                  "intercept_binary", "precision_cont", "intercept_one", "loading_one"]
+                  "intercept_binary", "precision_cont"] + (
+                      ["intercept_one", "loading_one"] if kind == "terminal"
+                      else ["intercept_zero", "loading_zero"])
     summary = az.summary(idata, var_names=parameters, hdi_prob=.95)
     summary.to_csv(destination / "parameter_summary.csv")
     for chain in idata.posterior.coords["chain"].values:
@@ -382,7 +467,7 @@ def main():
     parser.add_argument("--precision-prior-sd", type=float, default=.7,
                         help="Log SD of Beta precision prior (median 10); try 1.0 for sensitivity")
     parser.add_argument("--run-name", help="Optional new subfolder name; existing folders are never overwritten")
-    parser.add_argument("--node-type", choices=["terminal"], default="terminal")
+    parser.add_argument("--node-type", choices=["terminal", "chokepoint"], default="terminal")
     parser.add_argument("--check-only", action="store_true", help="Validate/filter panels without PyMC or writing datasets")
     parser.add_argument("--prior-only", action="store_true", help="Save prior predictive checks without fitting")
     parser.add_argument("--draws", type=int, default=1000)
@@ -402,7 +487,7 @@ def main():
         parser.error("run-name must be a single folder name")
     if not np.isfinite(args.precision_prior_sd) or args.precision_prior_sd <= 0:
         parser.error("precision-prior-sd must be finite and positive")
-    kinds = ["terminal"]
+    kinds = [args.node_type]
     # Validate all selected inputs before starting any potentially expensive fit.
     data = {kind: prepare_panel(getattr(args, f"{kind}_panel"), kind) for kind in kinds}
     for kind, item in data.items():
@@ -410,10 +495,20 @@ def main():
         item["audit"]["response_likelihood_scale"] = "original (0,1]"
         item["audit"]["response_scaling_purpose"] = "initial values only; not used in likelihood"
         y = item["frame"][item["audit"]["continuous_responses"]]
-        if y.eq(0).any().any() or y.iloc[:, 0].ge(1).any():
-            raise ValueError("Bounded terminal model requires positive responses and PageRank below one")
-        if any(not 0 < v < 1 for v in y.iloc[:, 1:].eq(1).mean()):
-            raise ValueError("Each inflated response must contain both boundary and interior observations")
+        if kind == "terminal":
+            if y.eq(0).any().any() or y.iloc[:, 0].ge(1).any():
+                raise ValueError("Terminal model requires positive responses and PageRank below one")
+            if any(not 0 < v < 1 for v in y.iloc[:, 1:].eq(1).mean()):
+                raise ValueError("Each inflated response needs boundary and interior observations")
+        else:
+            item["audit"]["response_likelihood_scale"] = "original [0,1)"
+            if y.ge(1).any().any() or y[["pagerank", "share_monthly_network_flow"]].le(0).any().any():
+                raise ValueError("Chokepoint PageRank/flow must be interior; no response may equal one")
+            if not 0 < y["betweenness"].eq(0).mean() < 1:
+                raise ValueError("Betweenness requires both zeros and interior observations")
+            item["audit"]["excluded_binary_response"] = "has_incident_global_bridge: near duplicate of articulation"
+        item["audit"]["boundary_counts"] = {c: {"zeros": int(y[c].eq(0).sum()),
+                                                       "ones": int(y[c].eq(1).sum())} for c in y}
         print(f"{kind}: {item['audit']['estimation_rows']} observations, "
               f"{item['audit']['estimation_nodes']} nodes")
     if args.check_only:
@@ -431,7 +526,8 @@ def main():
             packages[package] = version(package)
         except PackageNotFoundError:
             packages[package] = None
-    config = {**vars(args), "likelihood": "Beta PageRank; one-inflated Beta HHI/dependence",
+    config = {**vars(args), "likelihood": ("Beta PageRank; one-inflated Beta HHI/dependence" if args.node_type == "terminal"
+                                       else "Beta PageRank/flow; zero-inflated Beta betweenness"),
               "precision_prior": {"distribution": "LogNormal", "median": 10, "log_sd": args.precision_prior_sd},
               "started_utc": stamp, "command_argv": sys.argv,
               "python": platform.python_version(), "packages": packages,
