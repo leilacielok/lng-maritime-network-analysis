@@ -1492,19 +1492,19 @@ These findings provide the empirical motivation for investigating whether the me
     \label{fig:criticality_correlations}
 \end{figure}
 
-%
-% Updated 11 October 2026: completed terminal bounded rank-one model.
-% All reported results refer to the same completed run:
-% 20261011T120422953825Z_terminal_bounded.
+% Updated 11 October 2026: completed terminal and chokepoint bounded models.
+% Terminal run: 20261011T120422953825Z_terminal_bounded.
+% Chokepoint run: 20261011T154621463157Z_chokepoint_bounded.
 \chapter{Bayesian modelling of node criticality}
 \label{chap:criticality_modelling}
 
 \section{Modelling objective and scope}
-The objective of this chapter is to investigate whether several measures of terminal network position can be represented through a common latent dimension, and to examine how this dimension relates to terminal characteristics and lagged network conditions. The model provides an initial Bayesian rank-one specification against which the need for additional structure can be assessed. Its interpretation as a measure of criticality is evaluated from the estimated response relationships and posterior predictive checks, rather than imposed by naming the latent factor.
+The objective of this chapter is to investigate whether several measures of node network position can be represented through a common latent dimension, and to examine how this dimension relates to node characteristics and lagged network conditions. Separate models for terminals and chokepoints provide initial Bayesian rank-one specifications against which the need for additional structure can be assessed. Its interpretation as a measure of criticality is evaluated from the estimated response relationships and posterior predictive checks, rather than imposed by naming the latent factor.
 
-The specification is static and conditional on consecutive observed activity. It includes no model for the probability of activity, country effects, lagged throughput, or autoregressive evolution of the factor. Although observations are indexed by terminal and month, the model does not explicitly account for repeated observations of a terminal or dependence among terminals within a monthly network. Coefficients therefore describe associations under this working specification, rather than causal effects. The analysis reported here concerns terminals only. Chokepoints have different functions and response measures and require a separate specification; no estimated chokepoint model is reported in this chapter.
+The specification is static and conditional on consecutive observed activity. It includes no model for the probability of activity, country effects, lagged throughput, or autoregressive evolution of the factor. Although observations are indexed by node and month, neither model explicitly accounts for repeated observations of a node or dependence among nodes within a monthly network. Coefficients therefore describe associations under this working specification, rather than causal effects. Terminals and chokepoints are estimated separately because their functions and response measures differ. Their factors have separate parameters and are not directly comparable as a common criticality scale.
 
-\section{Estimation sample}
+\section{Estimation samples}
+\subsection{Terminals}
 \label{sec:criticality_sample}
 The terminal model-ready panel contains 9,540 observations for 159 terminals from January 2020 to December 2024. An observation is retained when the terminal is active in month $t$, a lag from the preceding calendar month is available, and the terminal is also active in that month. Calendar lags are checked against the complete panel before filtering. This prevents the preceding selected active observation from being mistaken for the preceding calendar month.
 
@@ -1512,23 +1512,30 @@ Excluding 4,988 currently inactive observations, 71 active observations without 
 
 There are 2,325 observations with importer status in the preceding month and 1,128 with exporter status. Throughout the predictive checks, role groups refer to this lagged status, consistently with the covariate used in estimation. They should not be read as groups defined by the current-month role.
 
+\subsection{Chokepoints}
+The chokepoint panel contains 1,440 observations for 24 nodes. Applying the same calendar-lag and consecutive-activity criteria excludes 200 currently inactive observations, 21 active observations without an available calendar lag, and 56 observations preceded by inactivity. The resulting sample has 1,163 observations for all 24 chokepoints. No terminal-age restriction applies. As for terminals, these results describe consecutive-active node-months rather than the entire balanced panel.
+
 \section{Responses and covariates}
 \label{sec:simple_responses}
-The model includes six responses. The three bounded responses are role-specific PageRank, terminal counterparty HHI, and role-specific dependence. The three binary responses indicate whether a terminal is an articulation point, has an incident global bridge, or is connected to an articulation point. These measures capture different aspects of network position; they need not all increase with the same latent dimension.
+The terminal model includes six responses. The three bounded responses are role-specific PageRank, terminal counterparty HHI, and role-specific dependence. The three binary responses indicate whether a terminal is an articulation point, has an incident global bridge, or is connected to an articulation point. These measures capture different aspects of network position; they need not all increase with the same latent dimension.
 
 The covariate vector contains seven predictors: lagged historical-neighbour activity share; the logarithm of one plus lagged role-relevant mean voyage distance; sine and cosine terms for monthly seasonality; the logarithm of one plus terminal capacity; terminal age; and an indicator for exporter status in the preceding month. Numeric covariates are centred and divided by their estimation-sample standard deviations. The exporter indicator remains on its zero--one scale. Thus a coefficient for a numeric predictor represents a one-standard-deviation difference on the transformed scale where applicable, whereas the role coefficient compares exporter with importer status, holding the other covariates fixed.
 
 The bounded responses are modelled on their original scales. In the estimation sample, PageRank lies strictly between zero and one, while HHI and dependence lie in $(0,1]$. Neither has observed zeros. HHI equals one in 34.09\% of observations and dependence equals one in 20.76\%. These support restrictions and boundary masses motivate a Beta likelihood for PageRank and a one-inflated Beta likelihood for HHI and dependence. The latter combines an interior Beta distribution with a point mass at one, which an ordinary Beta distribution cannot represent. Compatibility with the support is a specification requirement; it does not by itself establish that the model reproduces the observed distributions or associations.
 
+The chokepoint model has five responses: PageRank, betweenness, share of monthly network flow, articulation-point status, and connection to an articulation point. The incident-global-bridge indicator is excluded because it differs from articulation-point status in only three of the 1,163 selected observations; their binary correlation is 0.993. This avoids including two almost duplicate structural responses in the simple specification. Their distinct definitions remain relevant to descriptive analysis.
+
+The four chokepoint predictors are lagged historical-neighbour activity share, the logarithm of one plus lagged mean voyage distance, and the monthly sine and cosine terms. All four are standardised within the chokepoint estimation sample. PageRank and flow share are strictly inside $(0,1)$; betweenness has six zeros (0.516\%) and otherwise lies inside $(0,1)$. None of the three responses equals one. PageRank and flow share therefore use Beta likelihoods, while betweenness uses a zero-inflated Beta likelihood to retain its exact zeros.
+
 \section{Static rank-one factor specification}
 \label{sec:simple_factor_specification}
-Let $\boldsymbol{x}_{i,t}$ be the standardised covariate vector, with the role indicator retained on its original scale, and let $f_{i,t}$ be a scalar latent factor. The factor regression is
+For each node type separately, let $\boldsymbol{x}_{i,t}$ be the standardised covariate vector, with the role indicator retained on its original scale, and let $f_{i,t}$ be a scalar latent factor. The factor regression is
 \begin{equation}
  f_{i,t}\mid\boldsymbol{x}_{i,t},\boldsymbol{\beta}
  \sim\mathcal{N}(\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1).
  \label{eq:simple_factor}
 \end{equation}
-The residual factor variance is fixed at one to define its scale. The PageRank loading is constrained to be positive to orient the factor; the other loadings are unrestricted. Conditional on the factors and parameters, all six responses are assumed independent, and factors for different terminal-months are independent given their covariates and regression coefficients.
+The residual factor variance is fixed at one to define its scale. The PageRank loading is constrained to be positive to orient the factor; the other loadings are unrestricted. Conditional on the factors and parameters, the responses are assumed independent, and factors for different node-months are independent given their covariates and regression coefficients.
 
 For bounded response $j$, define the interior mean and precision as
 \begin{align}
@@ -1536,7 +1543,7 @@ For bounded response $j$, define the interior mean and precision as
  A_{i,t,j}&=\mu_{i,t,j}\phi_j,\qquad
  D_{i,t,j}=(1-\mu_{i,t,j})\phi_j.
 \end{align}
-Here $j=1$ denotes PageRank, $j=2$ HHI, and $j=3$ dependence. PageRank follows
+For terminals, $j=1$ denotes PageRank, $j=2$ HHI, and $j=3$ dependence. PageRank follows
 \begin{equation}
  Y_{i,t,1}\mid f_{i,t}\sim\operatorname{Beta}(A_{i,t,1},D_{i,t,1}).
 \end{equation}
@@ -1556,6 +1563,15 @@ where $\delta_1$ denotes a point mass at one. Interior observations contribute t
 \end{equation}
 Thus the sign of $\lambda_j$ alone does not determine how the overall mean changes with the factor.
 
+For chokepoints, the response order is PageRank, betweenness, and flow share. PageRank and flow share follow the interior Beta specification. For betweenness, let $\rho_{i,t,2}$ denote the probability of zero:
+\begin{align}
+ \operatorname{logit}(\rho_{i,t,2})&=c^{(0)}_2+d^{(0)}_2 f_{i,t},\\
+ Y_{i,t,2}\mid f_{i,t}&\sim \rho_{i,t,2}\delta_0+
+ (1-\rho_{i,t,2})\operatorname{Beta}(A_{i,t,2},D_{i,t,2}).
+ \label{eq:zero_inflated_beta}
+\end{align}
+Here $\delta_0$ is a point mass at zero. The overall conditional mean is $(1-\rho_{i,t,2})\mu_{i,t,2}$. The zero-probability loading is estimated separately from the interior-mean loading.
+
 For binary response $k$,
 \begin{align}
  B_{i,t,k}\mid f_{i,t}&\sim\operatorname{Bernoulli}(p_{i,t,k}),\\
@@ -1564,7 +1580,7 @@ For binary response $k$,
 Writing $f_{i,t}=\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta}+z_{i,t}$ shows that the covariate contributions to the conditional link predictors have coefficient matrices $\boldsymbol{\lambda}\boldsymbol{\beta}^{\mathsf T}$, $\boldsymbol{\ell}\boldsymbol{\beta}^{\mathsf T}$, and $\boldsymbol{d}\boldsymbol{\beta}^{\mathsf T}$, each of rank at most one. All responses therefore share one direction of covariate association. This reduced-rank property concerns the conditional link scale. After integrating over the factor, response means generally do not equal an inverse link evaluated at the mean factor.
 
 \subsection{Prior distributions}
-The independent prior distributions are
+For terminals, the independent prior distributions are
 \begin{align*}
  \beta_r&\sim\mathcal{N}(0,0.5^2),&
  \lambda_1&\sim\operatorname{HalfNormal}(1),\\
@@ -1579,13 +1595,17 @@ The independent prior distributions are
 \end{align*}
 The interior intercept priors operate on the logit scale. In particular, the PageRank intercept is centred at $-4$, allowing a smaller baseline mean than the other bounded responses. The precision prior has median 10 and logarithmic standard deviation 0.7. These are provisional regularising choices. Prior predictive simulations are saved, but a substantive assessment of prior predictive plausibility and robustness to alternative priors remains necessary. No prior-sensitivity comparison is reported here.
 
+For chokepoints, the priors for regression coefficients, loadings, binary intercepts and precisions have the same forms, with parameters estimated independently of the terminal model. The interior intercept centres are $(-4,-5,-4)$ for PageRank, betweenness and flow share, respectively. The betweenness zero-component priors are $c^{(0)}_2\sim\mathcal{N}(-5,1.5^2)$ and $d^{(0)}_2\sim\mathcal{N}(0,1)$. The centre of $-5$ expresses a prior preference for rare zeros at factor value zero. With only six observed zeros, interpretation of this component particularly warrants sensitivity assessment.
+
 \section{Posterior computation and diagnostics}
 \label{sec:simple_computation}
-Posterior sampling uses NUTS with four chains, 1,500 warm-up iterations and 2,000 retained draws per chain, giving 8,000 retained draws. The target acceptance probability is 0.95 and the random seed is 20261008. Chains are sampled sequentially. Initial values orient the factor towards PageRank and include independent perturbations between chains; these values affect computation rather than the likelihood or priors. Similar initialisation does not establish that all possible posterior configurations have been explored.
+Each model uses NUTS with four chains, 1,500 warm-up iterations and 2,000 retained draws per chain, giving 8,000 retained draws. The target acceptance probability is 0.95 and the random seed is 20261008. Chains are sampled sequentially. Initial values orient the factor towards PageRank and include independent perturbations between chains; these values affect computation rather than the likelihood or priors. Similar initialisation does not establish that all possible posterior configurations have been explored.
 
-Diagnostics cover regression coefficients, response parameters, factors, factor means and factor residuals. The completed run has no post-warm-up divergences, a maximum reported rank-normalised $\widehat{R}$ of 1.01, minimum bulk effective sample size of 817, and minimum tail effective sample size of 1,958. The diagnostic summaries report rounded values. The run passes the implemented screening criteria: no divergences, maximum reported $\widehat{R}\leq1.01$, and minimum bulk and tail ESS of at least 400. Trace plots show overlapping chains for the displayed global parameters. These findings support interpretation of this sampled posterior, while statistical adequacy requires separate predictive assessment.
+Diagnostics cover regression coefficients, response parameters, factors, factor means and factor residuals. The completed terminal run has no post-warm-up divergences, a maximum reported rank-normalised $\widehat{R}$ of 1.01, minimum bulk effective sample size of 817, and minimum tail effective sample size of 1,958. The diagnostic summaries report rounded values. The run passes the implemented screening criteria: no divergences, maximum reported $\widehat{R}\leq1.01$, and minimum bulk and tail ESS of at least 400. Trace plots show overlapping chains for the displayed global parameters. These findings support interpretation of this sampled posterior, while statistical adequacy requires separate predictive assessment.
 
-\section{Posterior findings}
+The chokepoint run also has no post-warm-up divergences and maximum reported $\widehat{R}=1.01$. Its minimum bulk ESS is 472 and minimum tail ESS is 905, both for the betweenness precision parameter. Thus both runs pass the same basic diagnostic screening. Passing these criteria does not establish that their predictive distributions are adequate.
+
+\section{Terminal posterior findings}
 \subsection{Covariate associations}
 Table~\ref{tab:simple_beta} reports posterior means and 95\% highest-density intervals (HDIs) for the factor-regression coefficients. Exporter status in the preceding month and terminal capacity have the clearest positive associations with the factor. Neighbour activity and lagged voyage distance also have positive intervals excluding zero. The intervals for terminal age and both seasonal terms include zero. The seasonal terms do not provide clear evidence of a seasonal association in this specification; this is not evidence that the network has no seasonality.
 
@@ -1611,7 +1631,7 @@ Lagged exporter indicator & 1.392 & $[1.296,1.488]$ \\
 These coefficients concern the latent factor, not changes in the original response units. Their interpretation depends on the estimated response loadings and links. Moreover, the lack of explicit terminal or monthly dependence may affect posterior uncertainty, so the intervals should be understood as conditional on the working model.
 
 \subsection{Response relationships and factor interpretation}
-Table~\ref{tab:simple_loadings} distinguishes interior-mean, binary-probability and boundary-probability loadings. Higher factor values correspond to higher PageRank and lower HHI, both within the interior and through a reduced probability of HHI exactly equal to one. They also correspond to a higher probability of being an articulation point and a lower probability of having an incident global bridge. The loading for connection to an articulation point has an interval including zero.
+Table~\ref{tab:simple_loadings} reports the factor loadings for the interior means, binary responses and probabilities of an exact value of one. Higher factor values correspond to higher PageRank and lower HHI, both within the interior and through a reduced probability of HHI exactly equal to one. They also correspond to a higher probability of being an articulation point and a lower probability of having an incident global bridge. The loading for connection to an articulation point has an interval including zero.
 
 \begin{table}[htbp]
 \centering
@@ -1644,7 +1664,7 @@ The factor is provisionally interpreted as a dimension of centrality and counter
 \label{fig:simple_response_curves}
 \end{figure}
 
-\section{Posterior predictive assessment}
+\section{Terminal posterior predictive assessment}
 \label{sec:simple_ppc}
 Replicated responses are generated conditional on the posterior factors for the observed terminal-months. Checks compare observed statistics with their distributions across replicated datasets, both overall and within lagged-role groups. These are conditional, in-sample checks; they do not evaluate prediction for unseen terminals or future months. The 95\% replicated intervals below are equal-tailed intervals for dataset statistics, rather than HDIs for model parameters.
 
@@ -1694,13 +1714,81 @@ PageRank--dependence & All & 0.314 & 0.157 & $[0.113,0.197]$ \\
 
 This mismatch is consistent with the restrictions of the fitted specification. A single factor raises articulation-point probability but lowers incident-bridge probability, while conditional independence supplies no additional association between those responses. The specification consequently struggles to reproduce their positive co-occurrence. The checks identify inadequacy of this fitted rank-one, conditionally independent model; they do not uniquely determine whether another factor, residual response dependence, or a different response specification is the appropriate remedy. The replicated intervals are descriptive diagnostics, not multiple-comparison-adjusted hypothesis tests.
 
-\section{Implications and limitations}
-The bounded model respects the response supports and exact boundary values, and the completed run has satisfactory basic sampling diagnostics. It yields interpretable covariate associations and a factor strongly related to centrality and diversification. However, successful sampling and aggregate predictive agreement do not imply adequate representation of the full response structure. Role-specific distributions and several joint associations remain poorly reproduced.
+\section{Chokepoint posterior findings}
+\label{sec:chokepoint_findings}
+\subsection{Covariate associations and response relationships}
+Table~\ref{tab:chokepoint_parameters} reports the regression coefficients and response loadings. Lagged neighbour activity and lagged voyage distance have positive associations with the factor, although the distance interval is close to zero at its lower endpoint. The cosine coefficient is negative with an interval just excluding zero, whereas the sine interval includes zero. These individual intervals provide limited evidence of a seasonal association; the sine and cosine terms should also be considered jointly before drawing conclusions about a seasonal pattern.
 
-These findings support retaining the model as a documented simple baseline. They do not justify treating its terminal scores as a definitive ranking of overall criticality. Further work should assess prior sensitivity, role-specific response behaviour, and the restrictions imposed by a single factor and conditional independence. Explicit terminal and monthly dependence also remain to be considered. Such extensions concern the conditional criticality specification and can be investigated without adding an activity model. Any future assessment of prediction for new observations must distinguish that objective from the conditional in-sample checks presented here.
+\begin{table}[htbp]
+\centering
+\caption{Selected posterior parameters for the chokepoint model. Numeric predictors are standardised. Loadings operate on logit-linked interior means or probabilities.}
+\label{tab:chokepoint_parameters}
+\begin{tabular}{lrr}
+\hline
+Parameter & Posterior mean & 95\% HDI \\
+\hline
+\multicolumn{3}{l}{Factor-regression coefficients} \\
+Lagged neighbour activity share & 0.103 & $[0.042,0.170]$ \\
+$\log(1+\text{lagged voyage distance})$ & 0.065 & $[0.005,0.128]$ \\
+Month sine & $-0.036$ & $[-0.098,0.023]$ \\
+Month cosine & $-0.064$ & $[-0.128,-0.004]$ \\
+\hline
+\multicolumn{3}{l}{Response loadings} \\
+PageRank interior mean & 0.262 & $[0.244,0.283]$ \\
+Betweenness interior mean & 1.026 & $[0.971,1.085]$ \\
+Flow-share interior mean & 0.618 & $[0.579,0.659]$ \\
+Articulation-point probability & 0.718 & $[0.556,0.871]$ \\
+Connected-to-articulation probability & 1.204 & $[0.952,1.481]$ \\
+Probability of betweenness equal to zero & $-1.659$ & $[-2.574,-0.731]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+All five interior-mean or binary-probability loadings are positive, with 95\% HDIs excluding zero. Higher factor values therefore correspond to higher PageRank, higher positive betweenness, greater expected flow share, and higher probabilities of both structural classifications. The probability of betweenness equal to zero decreases with the factor. Both changes in the betweenness mixture increase its overall conditional expectation. Unlike the terminal result, connection to an articulation point has a clearly positive loading in this specification.
+
+These response directions support a provisional interpretation as a dimension of centrality and exposure to network flows. Descriptive Spearman correlations between posterior mean factor scores and observed responses are 0.755 for PageRank, 0.986 for betweenness, and 0.855 for flow share. The particularly close relation to betweenness suggests that the fitted summary is strongly aligned with this measure. These correlations are calculated using the same outcomes that inform factor estimation and are not independent validation. Neither loading magnitudes across different links nor these descriptive correlations alone quantify each measure's contribution to a substantive criticality index.
+
+The fitted response curves illustrate this common direction of association. Their credible bands describe parameter uncertainty at fixed factor values, rather than variation of individual replicated observations.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/chokepoint_response_curves.png}
+\caption{Fitted response functions against the chokepoint latent factor. Lines are posterior medians and bands are equal-tailed 95\% credible intervals for conditional expected responses or binary probabilities. The betweenness mean includes the mass at zero. The range spans the first to the 99th percentile of posterior mean factor scores. Factor values are specific to this model and are not directly comparable with terminal scores.}
+\label{fig:chokepoint_response_curves}
+\end{figure}
+
+\subsection{Posterior predictive assessment}
+The chokepoint checks use the same conditional, in-sample approach as the terminal checks. Overall means and both binary proportions are reproduced reasonably closely. The observed betweenness zero frequency is 0.516\%, compared with a replicated mean of 0.581\% and a 95\% replicated interval of $[0.086,1.290]\%$. This is compatible with the observed frequency, but the small number of zeros limits information about that component. Most reported PageRank statistics lie within their replicated intervals. For betweenness, the observed fifth percentile is slightly below the corresponding interval.
+
+Flow share shows the clearest marginal discrepancies. Its observed standard deviation is 0.0201. The replicated mean is 0.0182, with interval $[0.0171,0.0194]$. Its observed median is 0.0159, below the replicated mean of 0.0190 and interval $[0.0178,0.0201]$. The observed 95th percentile, 0.0643, is also above the interval $[0.0558,0.0633]$. Thus matching the mean does not imply matching dispersion or distributional shape.
+
+Joint checks use 200 replicated datasets selected evenly across the four chains. Table~\ref{tab:chokepoint_joint_ppc} shows that the model reproduces the PageRank--betweenness association reasonably closely, but understates associations involving flow share and the PageRank--articulation association. No sign reversal comparable to the terminal articulation--bridge discrepancy appears in these selected checks.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Selected joint predictive checks for chokepoints. Entries are Spearman correlations; intervals use 200 conditional in-sample replicates.}
+\label{tab:chokepoint_joint_ppc}
+\begin{tabular}{lrrr}
+\hline
+Response pair & Observed & Rep. median & 95\% interval \\
+\hline
+PageRank--betweenness & 0.685 & 0.656 & $[0.611,0.690]$ \\
+PageRank--flow share & 0.672 & 0.530 & $[0.479,0.579]$ \\
+Betweenness--flow share & 0.800 & 0.717 & $[0.688,0.750]$ \\
+PageRank--articulation & 0.287 & 0.205 & $[0.145,0.256]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+The fitted factor has coherent response directions, but the discrepancies indicate that one common factor with conditional independence does not fully capture the joint response distribution. This supports a cautious interpretation of the chokepoint scores as summaries under a simple baseline. It does not establish their predictive performance on future months or unseen nodes.
+
+\section{Implications and limitations}
+Both bounded models respect the response supports and observed boundary values, and both completed runs have satisfactory basic sampling diagnostics. The terminal factor is associated with centrality and counterparty diversification, while the chokepoint factor is associated with centrality and exposure to network flows. However, successful sampling and aggregate predictive agreement do not establish adequate representation of the full response structure. The terminal model misses role-specific distributions and structural associations; the chokepoint model understates flow-share dispersion and several response associations.
+
+These findings support retaining both models as documented simple baselines. They do not justify treating either set of scores as a definitive ranking of overall criticality, or comparing scores directly across node types. Further work should assess prior sensitivity, role-specific response behaviour, and the restrictions imposed by a single factor and conditional independence. Explicit node and monthly dependence also remain to be considered. Such extensions concern the conditional criticality specification and can be investigated without adding an activity model. Any future assessment of prediction for new observations must distinguish that objective from the conditional in-sample checks presented here.
 
 \section{Reproducibility}
-The reported results all refer to the completed run with four chains and 2,000 retained draws per chain. Its archive retains the exact estimation script, run configuration, random seed, package versions, input-file hash, sample-selection audit, scaling parameters, parameter summaries, diagnostics and predictive checks. The posterior NetCDF file preserves draws for further analysis; the prior NetCDF file preserves prior predictive simulations. A separate export script reads the existing posterior without refitting and produces factor summaries, response curves and joint predictive checks. Full trace plots and detailed diagnostic tables can remain in the accompanying reproducibility materials rather than occupy the main chapter.
+The results refer to two separate completed runs, each with four chains and 2,000 retained draws per chain. Each archive retains the exact estimation script, run configuration, random seed, package versions, input-file hash, sample-selection audit, scaling parameters, parameter summaries, diagnostics and predictive checks. The posterior NetCDF file preserves draws for further analysis; the prior NetCDF file preserves prior predictive simulations. A separate export script reads the existing posterior without refitting and produces factor summaries, response curves and joint predictive checks. Full trace plots and detailed diagnostic tables can remain in the accompanying reproducibility materials rather than occupy the main chapter.
 
 % Final bibliography: add verified methodological references for Bayesian
 % factor models, Beta mixtures, NUTS, and rank-normalised R-hat/ESS.
