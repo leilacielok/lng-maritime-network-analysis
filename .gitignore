@@ -19,8 +19,11 @@ data/processed/*
 # GENERATED OUTPUTS
 # ==========================================
 
-# Generated HTML visualizations / dashboards
+# HTML visualizations / dashboards
 *.html
+
+# .nc files
+outputs/model/simple_criticality/**/*.nc
 
 # ==========================================
 # PYTHON

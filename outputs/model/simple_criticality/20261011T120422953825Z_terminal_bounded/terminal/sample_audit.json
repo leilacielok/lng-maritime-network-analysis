@@ -27,5 +27,7 @@
     "has_incident_global_bridge",
     "connected_to_articulation_point"
   ],
-  "input_sha256": "acec367148833cef806de7c6b4cdbeacd468510440caeef51d674bd8be66f59a"
+  "input_sha256": "acec367148833cef806de7c6b4cdbeacd468510440caeef51d674bd8be66f59a",
+  "response_likelihood_scale": "original (0,1]",
+  "response_scaling_purpose": "initial values only; not used in likelihood"
 }

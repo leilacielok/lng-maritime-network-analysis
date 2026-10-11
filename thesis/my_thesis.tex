@@ -1493,100 +1493,218 @@ These findings provide the empirical motivation for investigating whether the me
 \end{figure}
 
 %
-% Preliminary working draft, 9 October 2026.
-% Insert into the thesis master document; uses amsmath and amssymb.
-% No converged substantive estimates are reported in this draft.
+% Updated 11 October 2026: completed terminal bounded rank-one model.
+% All reported results refer to the same completed run:
+% 20261011T120422953825Z_terminal_bounded.
 \chapter{Bayesian modelling of node criticality}
 \label{chap:criticality_modelling}
 
 \section{Modelling objective and scope}
-The objective of this chapter is to investigate whether several measures of network position can be represented through a common latent dimension, and to examine how this dimension relates to node characteristics and lagged network conditions. Terminals and chokepoints are analysed separately because their functions in the reconstructed network and their response measures differ.
+The objective of this chapter is to investigate whether several measures of terminal network position can be represented through a common latent dimension, and to examine how this dimension relates to terminal characteristics and lagged network conditions. The model provides an initial Bayesian rank-one specification against which the need for additional structure can be assessed. Its interpretation as a measure of criticality is evaluated from the estimated response relationships and posterior predictive checks, rather than imposed by naming the latent factor.
 
-The initial specification is deliberately static and conditional on observed activity. It excludes an activity component, country-level effects and lagged throughput. Temporal evolution of the latent factor and hierarchical effects are left for subsequent extensions. Consequently, the preliminary model does not account explicitly for repeated observations of the same node or dependence among nodes within a monthly network. Its coefficients describe conditional associations rather than causal effects. The latent factor is initially a statistical summary of the selected measures; its interpretation as criticality requires assessment of the estimated loadings and model adequacy.
+The specification is static and conditional on consecutive observed activity. It includes no model for the probability of activity, country effects, lagged throughput, or autoregressive evolution of the factor. Although observations are indexed by terminal and month, the model does not explicitly account for repeated observations of a terminal or dependence among terminals within a monthly network. Coefficients therefore describe associations under this working specification, rather than causal effects. The analysis reported here concerns terminals only. Chokepoints have different functions and response measures and require a separate specification; no estimated chokepoint model is reported in this chapter.
 
 \section{Estimation sample}
 \label{sec:criticality_sample}
-The existing model-ready panels are filtered directly within the estimation script. An observation is retained only if the node is active in month $t$, a lag from the preceding calendar month is available, and the node is also active in that preceding month. Lags are checked against the complete panel before filtering, so that the preceding active observation cannot be mistaken for the preceding calendar month.
+The terminal model-ready panel contains 9,540 observations for 159 terminals from January 2020 to December 2024. An observation is retained when the terminal is active in month $t$, a lag from the preceding calendar month is available, and the terminal is also active in that month. Calendar lags are checked against the complete panel before filtering. This prevents the preceding selected active observation from being mistaken for the preceding calendar month.
 
-For terminals, the original panel contains 9,540 observations for 159 nodes. Excluding 4,988 currently inactive observations, 71 active observations without an available calendar lag and 916 observations preceded by inactivity leaves 3,565 consecutive-active observations. A further 112 observations with missing terminal age are excluded, giving an estimation sample of 3,453 observations for 137 terminals. The original start-year metadata are retained; no opening dates are changed to reconcile them with observed voyages.
+Excluding 4,988 currently inactive observations, 71 active observations without an available calendar lag, and 916 observations preceded by inactivity leaves 3,565 observations active in consecutive months. A further 112 observations with missing terminal age are excluded, producing an estimation sample of 3,453 observations for 137 terminals. The original start-year metadata are retained. Consequently, the findings concern this selected sample, rather than all active terminal-months or the complete balanced panel.
 
-For chokepoints, the panel contains 1,440 observations for 24 nodes. Excluding 200 currently inactive observations, 21 observations without a calendar lag and 56 observations preceded by inactivity leaves 1,163 observations for all 24 chokepoints. The results therefore pertain specifically to consecutive-active node-months, rather than to all active observations or to the complete balanced panels.
+There are 2,325 observations with importer status in the preceding month and 1,128 with exporter status. Throughout the predictive checks, role groups refer to this lagged status, consistently with the covariate used in estimation. They should not be read as groups defined by the current-month role.
 
 \section{Responses and covariates}
-The terminal specification initially includes three continuous responses, namely role-specific PageRank, terminal counterparty HHI and role-specific dependence, and two binary responses indicating whether a terminal is an articulation point, or is connected to an articulation point.
-The chokepoint model has five responses, including PageRank, weighted betweenness, share of monthly lng flow, being an articulation point, and being connected to an articulation point.
+\label{sec:simple_responses}
+The model includes six responses. The three bounded responses are role-specific PageRank, terminal counterparty HHI, and role-specific dependence. The three binary responses indicate whether a terminal is an articulation point, has an incident global bridge, or is connected to an articulation point. These measures capture different aspects of network position; they need not all increase with the same latent dimension.
 
-The terminal covariate vector contains lagged historical-neighbour activity share, the logarithm of one plus lagged role-relevant mean voyage distance, sine and cosine terms for monthly seasonality, the logarithm of one plus terminal capacity, terminal age, and an indicator for exporter status in the preceding month. The chokepoint vector contains the first four of these covariates, with voyage distance defined for chokepoints. Thus there are seven terminal predictors and four chokepoint predictors.
+The covariate vector contains seven predictors: lagged historical-neighbour activity share; the logarithm of one plus lagged role-relevant mean voyage distance; sine and cosine terms for monthly seasonality; the logarithm of one plus terminal capacity; terminal age; and an indicator for exporter status in the preceding month. Numeric covariates are centred and divided by their estimation-sample standard deviations. The exporter indicator remains on its zero--one scale. Thus a coefficient for a numeric predictor represents a one-standard-deviation difference on the transformed scale where applicable, whereas the role coefficient compares exporter with importer status, holding the other covariates fixed.
 
-Numeric covariates and continuous responses are centred and scaled using the means and standard deviations of the respective estimation samples. The exporter indicator remains on its original zero--one scale. Scaling parameters are saved with each estimation run. Standardisation facilitates prior specification and computation, but does not remove the original support restrictions of the response measures.
+The bounded responses are modelled on their original scales. In the estimation sample, PageRank lies strictly between zero and one, while HHI and dependence lie in $(0,1]$. Neither has observed zeros. HHI equals one in 34.09\% of observations and dependence equals one in 20.76\%. These support restrictions and boundary masses motivate a Beta likelihood for PageRank and a one-inflated Beta likelihood for HHI and dependence. The latter combines an interior Beta distribution with a point mass at one, which an ordinary Beta distribution cannot represent. Compatibility with the support is a specification requirement; it does not by itself establish that the model reproduces the observed distributions or associations.
 
-\section{Initial rank-one factor regression}
-For each node type separately, let $\boldsymbol{x}_{i,t}$ denote the covariate vector and $f_{i,t}$ the scalar latent factor. The initial model is
+\section{Static rank-one factor specification}
+\label{sec:simple_factor_specification}
+Let $\boldsymbol{x}_{i,t}$ be the standardised covariate vector, with the role indicator retained on its original scale, and let $f_{i,t}$ be a scalar latent factor. The factor regression is
+\begin{equation}
+ f_{i,t}\mid\boldsymbol{x}_{i,t},\boldsymbol{\beta}
+ \sim\mathcal{N}(\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1).
+ \label{eq:simple_factor}
+\end{equation}
+The residual factor variance is fixed at one to define its scale. The PageRank loading is constrained to be positive to orient the factor; the other loadings are unrestricted. Conditional on the factors and parameters, all six responses are assumed independent, and factors for different terminal-months are independent given their covariates and regression coefficients.
+
+For bounded response $j$, define the interior mean and precision as
 \begin{align}
- f_{i,t} \mid \boldsymbol{x}_{i,t},\boldsymbol{\beta}
- &\sim \mathcal{N}(\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1),
- \label{eq:initial_factor}\\
- \widetilde{Y}_{i,t,j}\mid f_{i,t}
- &\sim \mathcal{N}(\alpha_j+\lambda_j f_{i,t},\sigma_j^2),
- \qquad j=1,2,3,\\
- B_{i,t,k}\mid f_{i,t}
- &\sim \operatorname{Bernoulli}(p_{i,t,k}),\\
- \operatorname{logit}(p_{i,t,k})
- &=a_k+\ell_k f_{i,t}.
+ \operatorname{logit}(\mu_{i,t,j})&=\alpha_j+\lambda_j f_{i,t},\\
+ A_{i,t,j}&=\mu_{i,t,j}\phi_j,\qquad
+ D_{i,t,j}=(1-\mu_{i,t,j})\phi_j.
 \end{align}
-Here $\widetilde{Y}_{i,t,j}$ denotes a standardised continuous response and $B_{i,t,k}$ a binary response. Conditional on the factor and parameters, the responses are assumed independent. The factor residual variance is fixed at one to set its scale, and the PageRank loading is constrained to be positive to orient the factor. Other loadings are unrestricted.
+Here $j=1$ denotes PageRank, $j=2$ HHI, and $j=3$ dependence. PageRank follows
+\begin{equation}
+ Y_{i,t,1}\mid f_{i,t}\sim\operatorname{Beta}(A_{i,t,1},D_{i,t,1}).
+\end{equation}
+For HHI and dependence, the boundary probability has a separate loading:
+\begin{align}
+ \operatorname{logit}(\pi_{i,t,j})&=c_j+d_j f_{i,t},\qquad j=2,3,\\
+ Y_{i,t,j}\mid f_{i,t}&\sim
+ \pi_{i,t,j}\delta_1+(1-\pi_{i,t,j})
+ \operatorname{Beta}(A_{i,t,j},D_{i,t,j}),
+ \label{eq:one_inflated_beta}
+\end{align}
+where $\delta_1$ denotes a point mass at one. Interior observations contribute the Beta density multiplied by $1-\pi_{i,t,j}$, while exact ones contribute the probability $\pi_{i,t,j}$. Observed values are not clipped or displaced from the boundary. The overall conditional mean is
+\begin{equation}
+ \mathbb{E}(Y_{i,t,j}\mid f_{i,t})=
+ \pi_{i,t,j}+(1-\pi_{i,t,j})\mu_{i,t,j}.
+ \label{eq:inflated_mean}
+\end{equation}
+Thus the sign of $\lambda_j$ alone does not determine how the overall mean changes with the factor.
 
-For continuous responses, integrating out the factor gives
-\[
- \mathbb{E}(\widetilde{\boldsymbol{Y}}_{i,t}\mid\boldsymbol{x}_{i,t})
- =\boldsymbol{\alpha}+\boldsymbol{\lambda}
- \boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta}.
-\]
-The associated coefficient matrix $\boldsymbol{\lambda}\boldsymbol{\beta}^{\mathsf T}$ has rank at most one. Binary conditional linear predictors share this reduced-rank structure, but their marginal probabilities, after integrating out the factor, do not generally equal a logistic regression evaluated at the mean factor.
+For binary response $k$,
+\begin{align}
+ B_{i,t,k}\mid f_{i,t}&\sim\operatorname{Bernoulli}(p_{i,t,k}),\\
+ \operatorname{logit}(p_{i,t,k})&=a_k+\ell_k f_{i,t}.
+\end{align}
+Writing $f_{i,t}=\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta}+z_{i,t}$ shows that the covariate contributions to the conditional link predictors have coefficient matrices $\boldsymbol{\lambda}\boldsymbol{\beta}^{\mathsf T}$, $\boldsymbol{\ell}\boldsymbol{\beta}^{\mathsf T}$, and $\boldsymbol{d}\boldsymbol{\beta}^{\mathsf T}$, each of rank at most one. All responses therefore share one direction of covariate association. This reduced-rank property concerns the conditional link scale. After integrating over the factor, response means generally do not equal an inverse link evaluated at the mean factor.
 
-\subsection{Initial prior distributions}
-The preliminary priors are
+\subsection{Prior distributions}
+The independent prior distributions are
 \begin{align*}
  \beta_r&\sim\mathcal{N}(0,0.5^2),&
- \lambda_{\mathrm{PR}}&\sim\operatorname{HalfNormal}(1),\\
- \lambda_j&\sim\mathcal{N}(0,1),&
+ \lambda_1&\sim\operatorname{HalfNormal}(1),\\
+ \lambda_j&\sim\mathcal{N}(0,1),\ j=2,3,&
  \ell_k&\sim\mathcal{N}(0,1),\\
- \alpha_j&\sim\mathcal{N}(0,1),&
- a_k&\sim\mathcal{N}(0,2^2),\\
- \sigma_j&\sim\operatorname{HalfNormal}(1).
+ \alpha_j&\sim\mathcal{N}(m_j,1.5^2),&
+ (m_1,m_2,m_3)&=(-4,0,0),\\
+ a_k&\sim\mathcal{N}(0,2^2),&
+ \log\phi_j&\sim\mathcal{N}(\log 10,0.7^2),\\
+ c_j&\sim\mathcal{N}(0,1.5^2),&
+ d_j&\sim\mathcal{N}(0,1),\ j=2,3.
 \end{align*}
-These priors are independent. They are provisional modelling choices, rather than an empirically validated final specification.
+The interior intercept priors operate on the logit scale. In particular, the PageRank intercept is centred at $-4$, allowing a smaller baseline mean than the other bounded responses. The precision prior has median 10 and logarithmic standard deviation 0.7. These are provisional regularising choices. Prior predictive simulations are saved, but a substantive assessment of prior predictive plausibility and robustness to alternative priors remains necessary. No prior-sensitivity comparison is reported here.
 
-\section{Predictive checks and preliminary computation}
-Prior predictive checks use 200 simulated draws. The Gaussian specification generates values outside the original interval $[0,1]$, despite response standardisation. In addition, the terminal sample contains substantial masses at one: approximately 34.1\% for counterparty HHI and 20.8\% for dependence. A continuous Gaussian distribution cannot reproduce these point masses. Support violations and boundary frequencies are therefore recorded explicitly, and a suitable likelihood revision remains necessary to assess.
+\section{Posterior computation and diagnostics}
+\label{sec:simple_computation}
+Posterior sampling uses NUTS with four chains, 1,500 warm-up iterations and 2,000 retained draws per chain, giving 8,000 retained draws. The target acceptance probability is 0.95 and the random seed is 20261008. Chains are sampled sequentially. Initial values orient the factor towards PageRank and include independent perturbations between chains; these values affect computation rather than the likelihood or priors. Similar initialisation does not establish that all possible posterior configurations have been explored.
 
-Posterior sampling uses NUTS. The diagnostics include divergences after warm-up, rank-normalised $\widehat{R}$ and bulk and tail effective sample sizes. Checks cover both global parameters and latent factor residuals. The script flags runs with any divergences, maximum $\widehat{R}>1.01$, or minimum bulk or tail ESS below 400. These thresholds are screening criteria, not a guarantee of model adequacy.
+Diagnostics cover regression coefficients, response parameters, factors, factor means and factor residuals. The completed run has no post-warm-up divergences, a maximum reported rank-normalised $\widehat{R}$ of 1.01, minimum bulk effective sample size of 817, and minimum tail effective sample size of 1,958. The diagnostic summaries report rounded values. The run passes the implemented screening criteria: no divergences, maximum reported $\widehat{R}\leq1.01$, and minimum bulk and tail ESS of at least 400. Trace plots show overlapping chains for the displayed global parameters. These findings support interpretation of this sampled posterior, while statistical adequacy requires separate predictive assessment.
 
-\subsection{Sequence of diagnostic runs}
-The following results document model development; none constitute validated substantive estimates.
-\begin{enumerate}
- \item The initial residual parameterisation writes $f_{i,t}=\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta}+z_{i,t}$, with $z_{i,t}\sim\mathcal{N}(0,1)$. With two chains, 500 warm-up iterations and 500 retained draws per chain, the terminal model has no post-warm-up divergences, but maximum $\widehat{R}=2.03$ and minimum bulk ESS of 3. The initial six-response chokepoint model has 478 post-warm-up divergences, maximum $\widehat{R}=1.90$ and minimum bulk ESS of 3.
- \item A revision uses PageRank-oriented, data-informed initial values with independent perturbations between chains, and removes the incident-global-bridge response for chokepoints. Initial values affect computation only; the prior distributions are unchanged. A run requesting four chains, 2,000 warm-up iterations and 500 retained draws is interrupted after the first terminal chain completes with 94 post-warm-up divergences. This is an incomplete run and cannot establish convergence.
- \item A centred parameterisation samples $f_{i,t}$ directly as in Equation~\eqref{eq:initial_factor}; it defines $z_{i,t}$ as a derived quantity. This is probabilistically equivalent to the original parameterisation. A terminal-only run with two chains, 500 warm-up iterations and 300 retained draws per chain has 14 post-warm-up divergences, maximum $\widehat{R}=2.23$ and minimum bulk ESS of 3.
-\end{enumerate}
+\section{Posterior findings}
+\subsection{Covariate associations}
+Table~\ref{tab:simple_beta} reports posterior means and 95\% highest-density intervals (HDIs) for the factor-regression coefficients. Exporter status in the preceding month and terminal capacity have the clearest positive associations with the factor. Neighbour activity and lagged voyage distance also have positive intervals excluding zero. The intervals for terminal age and both seasonal terms include zero. The seasonal terms do not provide clear evidence of a seasonal association in this specification; this is not evidence that the network has no seasonality.
 
-The last run provides evidence of distinct sampled configurations. In the first chain, the average residual standard deviations are approximately 0.042 for PageRank and 0.855 for HHI. In the second, they are approximately 0.852 and 0.128, respectively. Across observations, the posterior mean factor within the first chain is almost perfectly correlated with PageRank, whereas in the second it is almost perfectly negatively correlated with HHI. The positive PageRank loading does not exclude either configuration. The second chain also exhibits a decreasing HHI residual standard deviation, with divergences occurring at small values. These findings indicate unresolved allocation of response variability between the common factor and response-specific residuals; they do not establish the posterior probabilities of the configurations.
+\begin{table}[htbp]
+\centering
+\caption{Factor-regression coefficients for the terminal model. Numeric predictors are standardised; exporter status is a zero--one indicator.}
+\label{tab:simple_beta}
+\begin{tabular}{lrr}
+\hline
+Predictor & Posterior mean & 95\% HDI \\
+\hline
+Lagged neighbour activity share & 0.096 & $[0.057,0.137]$ \\
+$\log(1+\text{lagged voyage distance})$ & 0.062 & $[0.020,0.105]$ \\
+Month sine & $-0.032$ & $[-0.070,0.004]$ \\
+Month cosine & $-0.004$ & $[-0.042,0.032]$ \\
+$\log(1+\text{capacity})$ & 0.409 & $[0.363,0.453]$ \\
+Terminal age & $-0.019$ & $[-0.057,0.021]$ \\
+Lagged exporter indicator & 1.392 & $[1.296,1.488]$ \\
+\hline
+\end{tabular}
+\end{table}
 
-\section{Planned revision and interpretation limits}
-A subsequent diagnostic step will evaluate priors that discourage residual standard deviations arbitrarily close to zero, without imposing a hard lower bound. This revision has not yet been estimated. It represents the substantive assumption that no single observed response is an almost error-free measurement of the latent factor, and requires sensitivity analysis rather than selection solely to eliminate sampling warnings.
+These coefficients concern the latent factor, not changes in the original response units. Their interpretation depends on the estimated response loadings and links. Moreover, the lack of explicit terminal or monthly dependence may affect posterior uncertainty, so the intervals should be understood as conditional on the working model.
 
-Further work must assess continuous-response likelihoods compatible with their supports and boundary masses, the adequacy of a single factor, and the dependence induced by repeated nodes and shared monthly networks. No regression effects, terminal rankings or criticality trajectories are interpreted from the nonconverged runs. Scores from the two separate node-type models are also not directly comparable on a common substantive scale.
+\subsection{Response relationships and factor interpretation}
+Table~\ref{tab:simple_loadings} distinguishes interior-mean, binary-probability and boundary-probability loadings. Higher factor values correspond to higher PageRank and lower HHI, both within the interior and through a reduced probability of HHI exactly equal to one. They also correspond to a higher probability of being an articulation point and a lower probability of having an incident global bridge. The loading for connection to an articulation point has an interval including zero.
 
-\section{Reproducibility and diagnostic archive}
-For every run, the archive should retain the exact estimation script and its version, the command and random seed, package versions, input-file hashes, run configuration, sample-selection audit, scaling parameters, sampling diagnostics, parameter summaries, predictive-check tables and trace plots. The posterior NetCDF file is essential for examining individual chains, divergences and latent quantities; the prior NetCDF file preserves prior predictive simulations. Console output should be retained for warnings, elapsed time and interruptions.
+\begin{table}[htbp]
+\centering
+\caption{Loadings on the latent factor. Bounded interior means and all probabilities use logit links.}
+\label{tab:simple_loadings}
+\begin{tabular}{lrr}
+\hline
+Response component & Posterior mean & 95\% HDI \\
+\hline
+PageRank interior mean & 0.359 & $[0.348,0.370]$ \\
+HHI interior mean & $-0.535$ & $[-0.570,-0.502]$ \\
+Dependence interior mean & 0.420 & $[0.392,0.445]$ \\
+Articulation-point probability & 0.771 & $[0.682,0.860]$ \\
+Incident-global-bridge probability & $-0.637$ & $[-0.714,-0.560]$ \\
+Connected-to-articulation probability & 0.110 & $[-0.015,0.244]$ \\
+Probability of HHI equal to one & $-3.982$ & $[-4.718,-3.266]$ \\
+Probability of dependence equal to one & $-0.545$ & $[-0.638,-0.445]$ \\
+\hline
+\end{tabular}
+\end{table}
 
-Each run should be archived in a separate, explicitly named folder before subsequent execution overwrites the working output directory. An interrupted run must be labelled incomplete and kept separate from completed runs. Files from different executions must not be treated as one run: in particular, a terminal-only execution leaves any existing chokepoint files untouched. For the thesis, a compact account of the diagnostic findings belongs in this chapter, while detailed unsuccessful-run diagnostics can be placed in an appendix or retained in the reproducibility archive.
+For dependence, the interior mean increases with the factor while the probability of an exact one decreases. Their combination in Equation~\eqref{eq:inflated_mean} produces a mildly U-shaped overall response curve over the displayed factor range. It is therefore inappropriate to summarise the result as an unqualified increase in dependence with criticality.
 
-% Before final submission: add verified bibliography entries for NUTS,
-% rank-normalised R-hat/ESS and Bayesian factor-model residual regularisation.
-% Update this development narrative after a validated final specification exists.
+The factor is provisionally interpreted as a dimension of centrality and counterparty diversification. Descriptively, its posterior mean scores have Spearman correlations of 0.821 with PageRank and $-0.925$ with HHI. These associations use the same responses that inform the scores, so they are descriptions of the fitted factor rather than independent validation. The factor is not yet established as a comprehensive criticality index, particularly because some structural associations are poorly reproduced, as discussed below.
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/response_curves.png}
+\caption{Fitted response functions against the terminal latent factor. Lines are posterior medians and bands are equal-tailed 95\% credible intervals for conditional expected responses or probabilities. HHI and dependence means include the point mass at one. The range spans the first to the 99th percentile of posterior mean factor scores. These bands describe parameter uncertainty, not prediction intervals for individual observations.}
+\label{fig:simple_response_curves}
+\end{figure}
 
+\section{Posterior predictive assessment}
+\label{sec:simple_ppc}
+Replicated responses are generated conditional on the posterior factors for the observed terminal-months. Checks compare observed statistics with their distributions across replicated datasets, both overall and within lagged-role groups. These are conditional, in-sample checks; they do not evaluate prediction for unseen terminals or future months. The 95\% replicated intervals below are equal-tailed intervals for dataset statistics, rather than HDIs for model parameters.
+
+\subsection{Marginal distributions and boundary frequencies}
+The model closely reproduces the overall response means and the overall frequencies of HHI and dependence equal to one. The observed overall binary proportions also lie within their replicated intervals. Nevertheless, discrepancies appear in dispersion, quantiles and role-specific boundary frequencies. For example, PageRank dispersion is overestimated for lagged importers and underestimated for lagged exporters. For exporters, the observed 95th percentile of PageRank is 0.0714, compared with a replicated mean of 0.0621 and a 95\% replicated interval of $[0.0588,0.0654]$.
+
+\begin{table}[htbp]
+\centering
+\caption{Selected checks of the proportion of bounded responses equal to one, by lagged role. All entries are percentages.}
+\label{tab:simple_boundary_ppc}
+\begin{tabular}{llrrr}
+\hline
+Response & Lagged role & Observed & Replicated mean & 95\% interval \\
+\hline
+HHI & All & 34.09 & 34.09 & $[32.73,35.45]$ \\
+HHI & Importer & 41.89 & 43.41 & $[41.59,45.20]$ \\
+HHI & Exporter & 18.00 & 14.89 & $[13.39,16.40]$ \\
+Dependence & All & 20.76 & 20.77 & $[18.97,22.62]$ \\
+Dependence & Importer & 26.45 & 23.94 & $[21.68,26.28]$ \\
+Dependence & Exporter & 9.04 & 14.23 & $[11.97,16.67]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:simple_boundary_ppc} shows that agreement in the aggregate can conceal differences between roles. The model underestimates the frequency of HHI equal to one among exporters and overestimates the frequency of dependence equal to one in that group. The importer dependence boundary frequency is also slightly above its replicated interval. These results suggest that a shared factor with common response functions does not fully represent role-specific response behaviour.
+
+\subsection{Associations between responses}
+An additional check compares pairwise Spearman correlations using 200 replicates selected evenly across the four chains. Table~\ref{tab:simple_joint_ppc} reports selected discrepancies. In particular, articulation-point status and an incident global bridge are positively associated in the data, whereas their replicated association is negative. This discrepancy remains within each lagged-role group and is especially pronounced among exporters.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Selected joint posterior predictive checks. Entries are Spearman correlations. Replicated intervals use 200 conditional in-sample replicates.}
+\label{tab:simple_joint_ppc}
+\begin{tabular}{llrrr}
+\hline
+Response pair & Lagged role & Observed & Rep. median & 95\% interval \\
+\hline
+Articulation--bridge & All & 0.290 & $-0.122$ & $[-0.156,-0.088]$ \\
+Articulation--bridge & Importer & 0.137 & $-0.037$ & $[-0.073,0.007]$ \\
+Articulation--bridge & Exporter & 0.546 & $-0.154$ & $[-0.212,-0.103]$ \\
+HHI--bridge & All & 0.533 & 0.293 & $[0.251,0.328]$ \\
+PageRank--dependence & All & 0.314 & 0.157 & $[0.113,0.197]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+This mismatch is consistent with the restrictions of the fitted specification. A single factor raises articulation-point probability but lowers incident-bridge probability, while conditional independence supplies no additional association between those responses. The specification consequently struggles to reproduce their positive co-occurrence. The checks identify inadequacy of this fitted rank-one, conditionally independent model; they do not uniquely determine whether another factor, residual response dependence, or a different response specification is the appropriate remedy. The replicated intervals are descriptive diagnostics, not multiple-comparison-adjusted hypothesis tests.
+
+\section{Implications and limitations}
+The bounded model respects the response supports and exact boundary values, and the completed run has satisfactory basic sampling diagnostics. It yields interpretable covariate associations and a factor strongly related to centrality and diversification. However, successful sampling and aggregate predictive agreement do not imply adequate representation of the full response structure. Role-specific distributions and several joint associations remain poorly reproduced.
+
+These findings support retaining the model as a documented simple baseline. They do not justify treating its terminal scores as a definitive ranking of overall criticality. Further work should assess prior sensitivity, role-specific response behaviour, and the restrictions imposed by a single factor and conditional independence. Explicit terminal and monthly dependence also remain to be considered. Such extensions concern the conditional criticality specification and can be investigated without adding an activity model. Any future assessment of prediction for new observations must distinguish that objective from the conditional in-sample checks presented here.
+
+\section{Reproducibility}
+The reported results all refer to the completed run with four chains and 2,000 retained draws per chain. Its archive retains the exact estimation script, run configuration, random seed, package versions, input-file hash, sample-selection audit, scaling parameters, parameter summaries, diagnostics and predictive checks. The posterior NetCDF file preserves draws for further analysis; the prior NetCDF file preserves prior predictive simulations. A separate export script reads the existing posterior without refitting and produces factor summaries, response curves and joint predictive checks. Full trace plots and detailed diagnostic tables can remain in the accompanying reproducibility materials rather than occupy the main chapter.
+
+% Final bibliography: add verified methodological references for Bayesian
+% factor models, Beta mixtures, NUTS, and rank-normalised R-hat/ESS.
+% The chapter reports no prior-sensitivity or out-of-sample validation results.
 %
 %			CHAPTER 6: Results and discussion
 %
