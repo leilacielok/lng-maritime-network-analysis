@@ -8,7 +8,11 @@ PageRank: Beta; HHI and dependence: one-inflated Beta, on original scale.
 Interior means and probabilities of one have distinct factor loadings.
 Structural responses: Bernoulli. Factor variance is one; PageRank loading positive.
 No activity component, country, throughput, AR(1), or repeated-node effects.
-Priors are provisional and must be checked through predictive/sensitivity analysis.
+Default priors use the regularized profile; --prior-profile original reproduces
+the previous priors. Both profiles are provisional: check prior predictions
+and posterior sensitivity before interpreting scores.
+--prior-profile response_precision keeps regularized priors but uses
+response-specific Beta precision medians as a third sensitivity candidate.
 Place this file in scripts/model/ to resolve the existing default panel paths.
 """
 
@@ -54,6 +58,46 @@ SPECS = {
         "predictors": COMMON_PREDICTORS,
     },
 }
+
+
+def prior_specification(kind, profile="regularized"):
+    """Fixed candidate priors, not fitted to empirical response frequencies.
+
+    Keep the original intercept centres. Concentrate
+    small-response intercepts/loadings and boundary logits to reduce extreme
+    prior predictions. This is a sensitivity candidate, not a validated prior.
+    All scales below are standard deviations (HalfNormal: scale).
+    """
+    if kind not in SPECS or profile not in ("original", "regularized", "response_precision"):
+        raise ValueError("Unknown node type or prior profile")
+    original = profile == "original"
+    return {
+        "profile": profile,
+        "beta_sd": 0.5,
+        "pagerank_loading_sd": 1.0 if original else 0.5,
+        "other_loading_sd": ([1.0, 1.0] if original or kind == "terminal"
+                             else [0.5, 0.5]),
+        "binary_loading_sd": 1.0,
+        "interior_intercept_mean": ([-4.0, 0.0, 0.0] if kind == "terminal"
+                                    else [-4.0, -5.0, -4.0]),
+        "interior_intercept_sd": ([1.5, 1.5, 1.5] if original else
+                                  ([0.7, 1.5, 1.5] if kind == "terminal"
+                                   else [0.7, 0.7, 0.7])),
+        "binary_intercept_sd": 2.0,
+        "boundary_intercept_mean": 0.0 if kind == "terminal" else -5.0,
+        "boundary_intercept_sd": 1.5 if original else 1.0,
+        "boundary_loading_sd": 1.0 if original else 0.5,
+        # Candidate scales: at mu=.018, phi=300/500 gives conditional
+        # Beta SD approximately .0077/.0059. At mu=.01/.02, phi=100
+        # gives SD approximately .0099/.0139. These are illustrative
+        # conditional scales, not matches to marginal empirical SDs.
+        # Keep HHI/dependence unchanged to isolate small-response precision.
+        "precision_median": (([300.0, 10.0, 10.0] if kind == "terminal"
+                              else [500.0, 100.0, 100.0])
+                             if profile == "response_precision"
+                             else [10.0, 10.0, 10.0]),
+        "precision_response_order": SPECS[kind]["continuous"].copy(),
+    }
 
 
 def standardize(frame):
@@ -180,6 +224,7 @@ def build_terminal_model(data):
     import pymc as pm
     import pytensor.tensor as pt
 
+    priors = prior_specification("terminal", data.get("prior_profile", "regularized"))
     coords = {"obs": np.arange(len(data["frame"])),
               "predictor": data["audit"]["predictors"],
               "continuous": data["audit"]["continuous_responses"],
@@ -187,22 +232,22 @@ def build_terminal_model(data):
               "binary": data["audit"]["binary_responses"],
               "boundary": data["audit"]["continuous_responses"][1:]}
     with pm.Model(coords=coords) as model:
-        beta = pm.Normal("beta", 0, 0.5, dims="predictor")
+        beta = pm.Normal("beta", 0, priors["beta_sd"], dims="predictor")
         factor_mean = pm.Deterministic("factor_mean", pt.dot(data["x"], beta), dims="obs")
         factor = pm.Normal("factor", mu=factor_mean, sigma=1, dims="obs")
         pm.Deterministic("factor_residual", factor - factor_mean, dims="obs")
         # PageRank is the first response in both specifications.
-        anchor = pm.HalfNormal("pagerank_loading", 1)
-        other = pm.Normal("other_loadings", 0, 1, dims="other_continuous")
+        anchor = pm.HalfNormal("pagerank_loading", priors["pagerank_loading_sd"])
+        other = pm.Normal("other_loadings", 0, priors["other_loading_sd"], dims="other_continuous")
         lc = pm.Deterministic("loading_cont", pt.concatenate([anchor[None], other]), dims="continuous")
-        lb = pm.Normal("loading_binary", 0, 1, dims="binary")
-        ac = pm.Normal("intercept_cont", mu=[-4.0, 0.0, 0.0], sigma=1.5, dims="continuous")
-        ab = pm.Normal("intercept_binary", 0, 2, dims="binary")
-        # Fixed-response precision prior: median 10, log SD .7 by default.
-        phi = pm.LogNormal("precision_cont", mu=np.log(10.0),
+        lb = pm.Normal("loading_binary", 0, priors["binary_loading_sd"], dims="binary")
+        ac = pm.Normal("intercept_cont", mu=priors["interior_intercept_mean"], sigma=priors["interior_intercept_sd"], dims="continuous")
+        ab = pm.Normal("intercept_binary", 0, priors["binary_intercept_sd"], dims="binary")
+        # Each response has its own precision; profile determines its prior median.
+        phi = pm.LogNormal("precision_cont", mu=np.log(priors["precision_median"]),
                            sigma=data["precision_prior_sd"], dims="continuous")
-        boundary_intercept = pm.Normal("intercept_one", 0, 1.5, dims="boundary")
-        boundary_loading = pm.Normal("loading_one", 0, 1, dims="boundary")
+        boundary_intercept = pm.Normal("intercept_one", priors["boundary_intercept_mean"], priors["boundary_intercept_sd"], dims="boundary")
+        boundary_loading = pm.Normal("loading_one", 0, priors["boundary_loading_sd"], dims="boundary")
         eta_one = boundary_intercept + factor[:, None] * boundary_loading
         logits = pt.concatenate([pt.zeros_like(factor[:, None]), eta_one], axis=1)
         mu = pm.math.sigmoid(ac + factor[:, None] * lc)
@@ -234,6 +279,7 @@ def zero_inflated_beta_random(alpha, beta, boundary_logit, inflated, rng=None, s
 def build_chokepoint_model(data):
     import pymc as pm
     import pytensor.tensor as pt
+    priors = prior_specification("chokepoint", data.get("prior_profile", "regularized"))
     coords = {"obs": np.arange(len(data["frame"])),
               "predictor": data["audit"]["predictors"],
               "continuous": data["audit"]["continuous_responses"],
@@ -241,19 +287,19 @@ def build_chokepoint_model(data):
               "binary": data["audit"]["binary_responses"],
               "boundary": ["betweenness"]}
     with pm.Model(coords=coords) as model:
-        beta = pm.Normal("beta", 0, .5, dims="predictor")
+        beta = pm.Normal("beta", 0, priors["beta_sd"], dims="predictor")
         mean = pm.Deterministic("factor_mean", pt.dot(data["x"], beta), dims="obs")
         factor = pm.Normal("factor", mean, 1, dims="obs")
         pm.Deterministic("factor_residual", factor - mean, dims="obs")
-        anchor = pm.HalfNormal("pagerank_loading", 1)
-        other = pm.Normal("other_loadings", 0, 1, dims="other_continuous")
+        anchor = pm.HalfNormal("pagerank_loading", priors["pagerank_loading_sd"])
+        other = pm.Normal("other_loadings", 0, priors["other_loading_sd"], dims="other_continuous")
         lc = pm.Deterministic("loading_cont", pt.concatenate([anchor[None], other]), dims="continuous")
-        lb = pm.Normal("loading_binary", 0, 1, dims="binary")
-        ac = pm.Normal("intercept_cont", [-4., -5., -4.], 1.5, dims="continuous")
-        ab = pm.Normal("intercept_binary", 0, 2, dims="binary")
-        phi = pm.LogNormal("precision_cont", np.log(10.), data["precision_prior_sd"], dims="continuous")
-        azero = pm.Normal("intercept_zero", -5., 1.5, dims="boundary")
-        lzero = pm.Normal("loading_zero", 0, 1, dims="boundary")
+        lb = pm.Normal("loading_binary", 0, priors["binary_loading_sd"], dims="binary")
+        ac = pm.Normal("intercept_cont", priors["interior_intercept_mean"], priors["interior_intercept_sd"], dims="continuous")
+        ab = pm.Normal("intercept_binary", 0, priors["binary_intercept_sd"], dims="binary")
+        phi = pm.LogNormal("precision_cont", np.log(priors["precision_median"]), data["precision_prior_sd"], dims="continuous")
+        azero = pm.Normal("intercept_zero", priors["boundary_intercept_mean"], priors["boundary_intercept_sd"], dims="boundary")
+        lzero = pm.Normal("loading_zero", 0, priors["boundary_loading_sd"], dims="boundary")
         eta = azero + factor[:, None] * lzero
         logits = pt.concatenate([pt.zeros_like(eta), eta, pt.zeros_like(eta)], axis=1)
         mu = pm.math.sigmoid(ac + factor[:, None] * lc)
@@ -289,7 +335,7 @@ def chokepoint_initial_values(data, chains, seed):
                        "loading_binary": rng.normal(0,.05,len(p)),
                        "intercept_cont": np.log(means/(1-means))+rng.normal(0,.03,3),
                        "intercept_binary": np.log(p/(1-p))+rng.normal(0,.03,len(p)),
-                       "precision_cont": 10*np.exp(rng.normal(0,.03,3)),
+                       "precision_cont": np.asarray(prior_specification("chokepoint", data.get("prior_profile", "regularized"))["precision_median"])*np.exp(rng.normal(0,.03,3)),
                        "intercept_zero": np.array([np.log(pzero/(1-pzero))])+rng.normal(0,.03,1),
                        "loading_zero": rng.normal(0,.05,1)})
     return starts
@@ -376,7 +422,7 @@ def initial_values(data, chains, seed):
             ]) + rng.normal(0, .03, 2),
             "loading_one": rng.normal(0, .05, 2),
             "intercept_binary": intercept_binary + rng.normal(0, 0.03, probability.shape),
-            "precision_cont": 10 * np.exp(rng.normal(0, .03, 3)),
+            "precision_cont": np.asarray(prior_specification("terminal", data.get("prior_profile", "regularized"))["precision_median"]) * np.exp(rng.normal(0, .03, 3)),
         })
     return starts
 
@@ -464,8 +510,10 @@ def main():
     parser.add_argument("--terminal-panel", type=Path, default=PANEL_DIR / "terminal_criticality_model_panel.csv")
     parser.add_argument("--chokepoint-panel", type=Path, default=PANEL_DIR / "chokepoint_criticality_model_panel.csv")
     parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
+    parser.add_argument("--prior-profile", choices=["original", "regularized", "response_precision"],
+                        default="regularized", help="Original, regularized, or regularized with response-specific precision priors")
     parser.add_argument("--precision-prior-sd", type=float, default=.7,
-                        help="Log SD of Beta precision prior (median 10); try 1.0 for sensitivity")
+                        help="Common log SD of Beta precision priors (medians depend on profile); try 1.0 for sensitivity")
     parser.add_argument("--run-name", help="Optional new subfolder name; existing folders are never overwritten")
     parser.add_argument("--node-type", choices=["terminal", "chokepoint"], default="terminal")
     parser.add_argument("--check-only", action="store_true", help="Validate/filter panels without PyMC or writing datasets")
@@ -492,6 +540,9 @@ def main():
     data = {kind: prepare_panel(getattr(args, f"{kind}_panel"), kind) for kind in kinds}
     for kind, item in data.items():
         item["precision_prior_sd"] = args.precision_prior_sd
+        item["prior_profile"] = args.prior_profile
+        item["audit"]["prior_specification"] = {**prior_specification(kind, args.prior_profile),
+                                                  "precision_log_sd": args.precision_prior_sd}
         item["audit"]["response_likelihood_scale"] = "original (0,1]"
         item["audit"]["response_scaling_purpose"] = "initial values only; not used in likelihood"
         y = item["frame"][item["audit"]["continuous_responses"]]
@@ -515,7 +566,7 @@ def main():
         print(json.dumps({kind: item["audit"] for kind, item in data.items()}, indent=2))
         return
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    run = args.output_dir / (args.run_name or f"{stamp}_{args.node_type}_bounded")
+    run = args.output_dir / (args.run_name or f"{stamp}_{args.node_type}_bounded_{args.prior_profile}")
     run.mkdir(parents=True, exist_ok=False)
     print(f"Run directory: {run.resolve()}", flush=True)
     script_path = Path(__file__).resolve()
@@ -528,7 +579,11 @@ def main():
             packages[package] = None
     config = {**vars(args), "likelihood": ("Beta PageRank; one-inflated Beta HHI/dependence" if args.node_type == "terminal"
                                        else "Beta PageRank/flow; zero-inflated Beta betweenness"),
-              "precision_prior": {"distribution": "LogNormal", "median": 10, "log_sd": args.precision_prior_sd},
+              "prior_specification": prior_specification(args.node_type, args.prior_profile),
+              "precision_prior": {"distribution": "LogNormal",
+                                  "median_by_response": dict(zip(SPECS[args.node_type]["continuous"],
+                                      prior_specification(args.node_type, args.prior_profile)["precision_median"])),
+                                  "log_sd": args.precision_prior_sd},
               "started_utc": stamp, "command_argv": sys.argv,
               "python": platform.python_version(), "packages": packages,
               "script_sha256": hashlib.sha256(script_path.read_bytes()).hexdigest()}

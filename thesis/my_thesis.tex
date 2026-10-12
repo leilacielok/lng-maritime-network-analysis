@@ -1492,7 +1492,7 @@ These findings provide the empirical motivation for investigating whether the me
     \label{fig:criticality_correlations}
 \end{figure}
 
-% Updated 11 October 2026: completed terminal and chokepoint bounded models.
+% Updated 12 October 2026: original baseline plus prior sensitivity fits.
 % Terminal run: 20261011T120422953825Z_terminal_bounded.
 % Chokepoint run: 20261011T154621463157Z_chokepoint_bounded.
 \chapter{Bayesian modelling of node criticality}
@@ -1782,17 +1782,56 @@ PageRank--articulation & 0.287 & 0.205 & $[0.145,0.256]$ \\
 
 The fitted factor has coherent response directions, but the discrepancies indicate that one common factor with conditional independence does not fully capture the joint response distribution. This supports a cautious interpretation of the chokepoint scores as summaries under a simple baseline. It does not establish their predictive performance on future months or unseen nodes.
 
-\section{Implications and limitations}
-Both bounded models respect the response supports and observed boundary values, and both completed runs have satisfactory basic sampling diagnostics. The terminal factor is associated with centrality and counterparty diversification, while the chokepoint factor is associated with centrality and exposure to network flows. However, successful sampling and aggregate predictive agreement do not establish adequate representation of the full response structure. The terminal model misses role-specific distributions and structural associations; the chokepoint model understates flow-share dispersion and several response associations.
 
-These findings support retaining both models as documented simple baselines. They do not justify treating either set of scores as a definitive ranking of overall criticality, or comparing scores directly across node types. Further work should assess prior sensitivity, role-specific response behaviour, and the restrictions imposed by a single factor and conditional independence. Explicit node and monthly dependence also remain to be considered. Such extensions concern the conditional criticality specification and can be investigated without adding an activity model. Any future assessment of prediction for new observations must distinguish that objective from the conditional in-sample checks presented here.
+\section{Prior predictive assessment and sensitivity analysis}
+\label{sec:prior_sensitivity}
+The preceding posterior findings refer to the original prior specification. Two additional prior profiles were investigated on the same estimation samples. Prior predictive checks of the original specification suggested broad distributions for the small-valued network measures. In a regularised profile, the standard deviations of their logit intercept priors were reduced from 1.5 to 0.7, the PageRank loading scale from 1 to 0.5, and the betweenness and flow-share loading standard deviations from 1 to 0.5. Boundary-intercept standard deviations were reduced from 1.5 to 1 and boundary-loading standard deviations from 1 to 0.5. Intercept centres were retained. The terminal interior HHI and dependence priors, regression-coefficient priors and binary-response priors retained their original forms.
+
+A third profile, termed \texttt{response\_precision}, retained these regularised priors and changed the Beta precision-prior medians to $(300,10,10)$ for terminal PageRank, HHI and dependence, and $(500,100,100)$ for chokepoint PageRank, betweenness and flow share. Logarithmic standard deviations remained 0.7. These are prior medians, not fixed precisions. The candidate choices were informed by examination of the observed data and prior predictive simulations and should not be presented as independently elicited prior information. The comparison with the original specification changes several prior families simultaneously; it does not isolate the effect of precision alone.
+
+Prior predictive simulations showed a marked reduction in dispersion under the response-specific precision profile. The mean replicated standard deviations decreased from 0.0584 to 0.0289 for terminal PageRank, from 0.0542 to 0.0228 for chokepoint PageRank, from 0.0329 to 0.0154 for betweenness, and from 0.0546 to 0.0278 for flow share. Observed standard deviations and fifth percentiles of these measures fell within their respective 95\% replicated intervals under the new profile. Nevertheless, PageRank tails remained broad, and inclusion within these intervals does not establish prior adequacy. The terminal HHI and dependence boundary components were unchanged between the two candidate profiles, with mean prior predictive frequencies of one around 50\%.
+
+Full posterior fits were subsequently obtained for the \texttt{response\_precision} profile. The terminal fit had no divergences, maximum reported $\widehat R=1.01$, minimum bulk ESS of 782 and minimum tail ESS of 2,037, passing the implemented screening. The chokepoint fit had no divergences and maximum reported $\widehat R=1.01$, but minimum bulk ESS was 359 for the betweenness precision, below the threshold of 400; minimum tail ESS was 780. Chokepoint sensitivity findings are therefore provisional pending further assessment of mixing. A low ESS indicates reduced Monte Carlo precision and should not by itself be interpreted as evidence that all posterior estimates are invalid.
+
+\begin{table}[htbp]
+\centering
+\caption{Selected posterior mean coefficients under the original and response-specific precision prior profiles. Chokepoint sensitivity estimates are provisional because basic ESS screening was not fully passed.}
+\label{tab:prior_sensitivity_coefficients}
+\begin{tabular}{llrr}
+\hline
+Model & Covariate & Original & Sensitivity \\
+\hline
+Terminal & Lagged neighbour activity & 0.096 & 0.093 \\
+Terminal & Log lagged voyage distance & 0.062 & 0.058 \\
+Terminal & Log capacity & 0.409 & 0.408 \\
+Terminal & Lagged exporter indicator & 1.392 & 1.407 \\
+Chokepoint & Lagged neighbour activity & 0.103 & 0.103 \\
+Chokepoint & Log lagged voyage distance & 0.065 & 0.066 \\
+\hline
+\end{tabular}
+\end{table}
+
+The principal covariate associations were stable across the compared specifications (Table~\ref{tab:prior_sensitivity_coefficients}), with the same positive associations retaining 95\% HDIs excluding zero. Terminal age and seasonal-term intervals continued to include zero. The chokepoint cosine coefficient remained negative with an interval just excluding zero, but the seasonal terms require joint assessment. Stability of these coefficients does not establish stability of node rankings, which was not directly evaluated across runs.
+
+Some boundary relationships were more sensitive. The terminal HHI-one loading changed from $-3.982$ to $-3.116$, with sensitivity HDI $[-3.561,-2.707]$. The incident-bridge loading changed from $-0.637$ to $-0.596$. The chokepoint betweenness-zero loading changed from $-1.659$ to $-0.980$, with sensitivity HDI $[-1.615,-0.300]$. Directions remained negative, but magnitudes changed; the betweenness-zero component is informed by only six observed zeros. These differences cannot be attributed solely to precision-prior changes, since loading priors were also regularised.
+
+The selected conditional, in-sample posterior predictive checks showed no substantial resolution of the baseline discrepancies. Terminal articulation--bridge correlation remained negative in the replicates: the sensitivity median was $-0.121$ with interval $[-0.153,-0.077]$, against observed correlation 0.290 and original replicated median $-0.122$. Among lagged exporters, HHI-one frequency was 18.00\% observed versus 14.92\% replicated, while dependence-one frequency was 9.04\% versus 14.31\%. The observed exporter PageRank 95th percentile of 0.0714 remained above the sensitivity interval $[0.0595,0.0662]$.
+
+For chokepoints, flow-share dispersion and median discrepancies persisted: observed standard deviation 0.0201 versus replicated mean 0.0182 and interval $[0.0171,0.0193]$; observed median 0.0159 versus replicated mean 0.0190 and interval $[0.0179,0.0201]$. Replicated median correlations were 0.532 for PageRank--flow share and 0.722 for betweenness--flow share, compared with observed values 0.672 and 0.800. Joint checks used 200 replicated datasets. Given the incomplete ESS screening, these chokepoint comparisons remain preliminary.
+
+The sensitivity exercise thus improved the scale of prior predictive simulations and supported stability of the principal covariate associations, while identifying sensitivity in boundary components. It did not demonstrate a substantial improvement in the selected posterior predictive checks. Persistent discrepancies are consistent with limitations of the shared rank-one, conditionally independent specification and common response functions across terminal roles; the exercise does not uniquely determine an appropriate structural extension. The original fits are retained as the documented baseline.
+
+\section{Implications and limitations}
+Both bounded models respect the response supports and observed boundary values, and both original baseline runs have satisfactory basic sampling diagnostics. The terminal factor is associated with centrality and counterparty diversification, while the chokepoint factor is associated with centrality and exposure to network flows. However, successful sampling and aggregate predictive agreement do not establish adequate representation of the full response structure. The terminal model misses role-specific distributions and structural associations; the chokepoint model understates flow-share dispersion and several response associations.
+
+These findings support retaining both models as documented simple baselines. They do not justify treating either set of scores as a definitive ranking of overall criticality, or comparing scores directly across node types. The initial prior-sensitivity comparison above should be complemented by further assessment of boundary components and chokepoint mixing. Further work should assess role-specific response behaviour, and the restrictions imposed by a single factor and conditional independence. Explicit node and monthly dependence also remain to be considered. Such extensions concern the conditional criticality specification and can be investigated without adding an activity model. Any future assessment of prediction for new observations must distinguish that objective from the conditional in-sample checks presented here.
 
 \section{Reproducibility}
-The results refer to two separate completed runs, each with four chains and 2,000 retained draws per chain. Each archive retains the exact estimation script, run configuration, random seed, package versions, input-file hash, sample-selection audit, scaling parameters, parameter summaries, diagnostics and predictive checks. The posterior NetCDF file preserves draws for further analysis; the prior NetCDF file preserves prior predictive simulations. A separate export script reads the existing posterior without refitting and produces factor summaries, response curves and joint predictive checks. Full trace plots and detailed diagnostic tables can remain in the accompanying reproducibility materials rather than occupy the main chapter.
+The baseline results refer to two separate completed runs, each with four chains and 2,000 retained draws per chain. The sensitivity exports refer to runs \texttt{20261012T163523899635Z} (terminals) and \texttt{20261012T180225613229Z} (chokepoints), both under the \texttt{response\_precision} profile; their sample audits record the exact prior specifications. The review exports do not contain full sampling configuration files, which should be retained with the original run archives. Each archive retains the exact estimation script, run configuration, random seed, package versions, input-file hash, sample-selection audit, scaling parameters, parameter summaries, diagnostics and predictive checks. The posterior NetCDF file preserves draws for further analysis; the prior NetCDF file preserves prior predictive simulations. A separate export script reads the existing posterior without refitting and produces factor summaries, response curves and joint predictive checks. Full trace plots and detailed diagnostic tables can remain in the accompanying reproducibility materials rather than occupy the main chapter.
 
 % Final bibliography: add verified methodological references for Bayesian
 % factor models, Beta mixtures, NUTS, and rank-normalised R-hat/ESS.
-% The chapter reports no prior-sensitivity or out-of-sample validation results.
+% Initial prior sensitivity reported; no out-of-sample validation results.
 %
 %			CHAPTER 6: Results and discussion
 %

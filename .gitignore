@@ -22,8 +22,9 @@ data/processed/*
 # HTML visualizations / dashboards
 *.html
 
-# .nc files
-outputs/model/simple_criticality/**/*.nc
+# big files
+*.nc
+outputs/model/simple_criticality/**/*.zip
 
 # ==========================================
 # PYTHON
