@@ -25,6 +25,78 @@ import matplotlib.pyplot as plt
 def samples(ds, name, dimension):
     return ds[name].transpose('chain', 'draw', dimension).values.reshape(-1, ds.sizes[dimension])
 
+def export_trace_pages(post, out, node_type):
+    import arviz as az
+
+    names = [
+        'beta', 'loading_cont', 'loading_binary',
+        'intercept_cont', 'intercept_binary', 'precision_cont',
+        'intercept_one', 'loading_one',
+        'intercept_zero', 'loading_zero',
+    ]
+
+    # Una variabile scalare per ciascun parametro.
+    variables = {}
+
+    for name in names:
+        if name not in post:
+            continue
+
+        array = post[name]
+        extra_dims = [
+            dim for dim in array.dims
+            if dim not in ('chain', 'draw')
+        ]
+        shape = tuple(array.sizes[dim] for dim in extra_dims)
+
+        for index in np.ndindex(shape):
+            selection = dict(zip(extra_dims, index))
+            scalar = array.isel(selection).transpose('chain', 'draw')
+
+            labels = [
+                str(array.coords[dim].values[i])
+                for dim, i in selection.items()
+            ]
+            title = name
+            if labels:
+                title += '\n' + ', '.join(labels)
+
+            variables[title] = xr.DataArray(
+                scalar.values, dims=('chain', 'draw')
+            )
+
+    dataset = xr.Dataset(variables)
+    labels = list(variables)
+    rows_per_page = 4
+
+    for start in range(0, len(labels), rows_per_page):
+        selected = labels[start:start + rows_per_page]
+        page = start // rows_per_page + 1
+
+        with az.rc_context({'plot.max_subplots': 100}):
+            axes = az.plot_trace(
+                dataset[selected],
+                compact=False,
+                figsize=(11, 2.3 * len(selected)),
+            )
+
+        fig = np.asarray(axes).ravel()[0].figure
+
+        for row, title in enumerate(selected):
+            for column in range(2):
+                ax = axes[row, column]
+                ax.set_title(title, fontsize=9, pad=10)
+                ax.tick_params(axis='both', labelsize=8)
+
+        fig.subplots_adjust(
+            hspace=1.05, wspace=0.30,
+            top=0.94, bottom=0.07
+        )
+
+        filename = f'{node_type}_trace_{page:02d}'
+        fig.savefig(out / f'{filename}.png', dpi=180)
+        plt.close(fig)
+        
 def export_selected_acf(post, out):
     import arviz as az
 
@@ -167,7 +239,8 @@ def main():
         out.mkdir()
         print(f'Exporting to {out}', flush=True)
         export_selected_acf(post, out)
-                
+        export_trace_pages(post, out, args.node_type)
+        
         key_columns = [model.SPECS[args.node_type]['id'], 'node_name', 'period_month']
         if args.node_type == 'terminal':
             key_columns += ['terminal_role_lag1']

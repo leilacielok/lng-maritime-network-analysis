@@ -1717,13 +1717,36 @@ The diagnostic summaries report rounded values.
 The run passes the implemented screening criteria: no divergences, maximum reported $\widehat{R}\leq1.01$, and minimum bulk and tail ESS of at least 400.
 
 Trace plots for the global parameters are provided in Appendix~\ref{app:mcmc_diagnostics} (Figure~\ref{fig:terminal_trace_appendix}).
-Together, the numerical diagnostics reported here provide encouraging evidence of satisfactory MCMC mixing, although they do not guarantee complete exploration of the posterior.
 
 The baseline chokepoint run also has no post-warm-up divergences
 and maximum reported $\widehat{R}=1.01$.
 Its minimum bulk ESS is 472 and minimum tail ESS is 905,
 both for the betweenness precision parameter (Appendix~\ref{app:mcmc_diagnostics}, Figure~\ref{fig:chokepoint_trace_appendix}).
 Therefore, both runs pass the same basic screening.
+
+Together, the numerical diagnostics reported here provide encouraging evidence of satisfactory MCMC mixing, although they do not guarantee complete exploration of the posterior.
+
+Within-chain autocorrelation functions for selected global
+parameters are also provided in
+Appendix~\ref{app:mcmc_diagnostics}
+(Figures~\ref{fig:terminal_acf_appendix}
+and~\ref{fig:terminal_acf_additional} for terminals;
+Figures~\ref{fig:chokepoint_acf_appendix}
+and~\ref{fig:chokepoint_acf_additional} for chokepoints).
+The selection includes parameters with the lowest effective
+sample sizes and the PageRank anchor loading, with duplicate
+selections removed. These plots complement the trace plots
+and numerical diagnostics by showing autocorrelation
+within each chain.
+The plots show positive autocorrelation at short lags,
+with a decay that varies across parameters and chains.
+Autocorrelation is more persistent for the betweenness
+loading and precision in the chokepoint model, whereas
+the voyage-distance coefficient and PageRank loading
+decay more rapidly. These patterns are consistent with
+differences in sampling efficiency across parameters
+and should be interpreted alongside the reported ESS
+and $\widehat{R}$ diagnostics.
 
 \section{Terminal posterior analysis}
 \label{sec:terminal_results}
@@ -2891,11 +2914,15 @@ Commercial criticality measures that require realised trade are defined only for
 Figure~\ref{fig:terminal_trace_appendix} shows the
 trace plots of the global parameters in the terminal model.
 
-\begin{figure}[htbp]
+\begin{figure}[p]
     \centering
-    \includegraphics[width=\textwidth]{images/terminal_trace.png}
-    \caption{MCMC trace plots for the global parameters
-    of the terminal criticality model.}
+    \includegraphics[
+        width=\textwidth,
+        height=0.85\textheight,
+        keepaspectratio
+    ]{images/terminal_trace_01.pdf}
+    \caption{Posterior densities and MCMC trace plots for selected global parameters of the terminal model
+    (part 1).}
     \label{fig:terminal_trace_appendix}
 \end{figure}
 
@@ -2909,6 +2936,107 @@ the corresponding diagnostics for the chokepoint model.
     of the chokepoint criticality model.}
     \label{fig:chokepoint_trace_appendix}
 \end{figure}
+
+\subsection{Autocorrelation diagnostics}
+\label{app:acf_diagnostics}
+
+The following figures show within-chain autocorrelation
+functions for selected global parameters. Parameters were
+selected using the lowest bulk ESS among regression
+coefficients and response loadings, the lowest bulk and
+tail ESS among all global parameters, and the PageRank
+anchor loading. Duplicate selections were removed.
+
+For terminals, the selected parameters are the lagged
+exporter coefficient, the loading for the probability
+of HHI equal to one, and the PageRank loading.
+Their autocorrelation decreases over the initial lags,
+with small fluctuations at longer lags.
+
+For chokepoints, the selected parameters are the lagged
+voyage-distance coefficient, the betweenness loading
+and precision, and the PageRank loading.
+The betweenness parameters show a more gradual decay,
+particularly in some chains, while the other two
+parameters exhibit relatively little autocorrelation
+beyond the first few lags.
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/terminal_acf_01.png}
+
+    \medskip
+
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/terminal_acf_02.png}
+
+    \caption{Within-chain autocorrelation functions
+    for selected parameters of the terminal model.}
+    \label{fig:terminal_acf_appendix}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.65\textheight,
+        keepaspectratio
+    ]{images/terminal_acf_03.png}
+
+    \caption{Additional autocorrelation diagnostics
+    for the terminal model.}
+    \label{fig:terminal_acf_additional}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/chokepoint_acf_01.png}
+
+    \medskip
+
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/chokepoint_acf_02.png}
+
+    \caption{Within-chain autocorrelation functions
+    for selected parameters of the chokepoint model.}
+    \label{fig:chokepoint_acf_appendix}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/chokepoint_acf_03.png}
+
+    \medskip
+
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/chokepoint_acf_04.png}
+
+    \caption{Additional autocorrelation diagnostics
+    for the chokepoint model.}
+    \label{fig:chokepoint_acf_additional}
+\end{figure}
+
 %
 %			BIBLIOGRAPHY
 %
