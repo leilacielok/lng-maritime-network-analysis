@@ -90,7 +90,7 @@ def export_trace_pages(post, out, node_type):
 
         fig.subplots_adjust(
             hspace=1.05, wspace=0.30,
-            top=0.94, bottom=0.07
+            top=0.86, bottom=0.10
         )
 
         filename = f'{node_type}_trace_{page:02d}'

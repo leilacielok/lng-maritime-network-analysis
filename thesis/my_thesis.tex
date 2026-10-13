@@ -2911,31 +2911,98 @@ Commercial criticality measures that require realised trade are defined only for
 \section{MCMC convergence diagnostics}
 \label{app:mcmc_diagnostics}
 
-Figure~\ref{fig:terminal_trace_appendix} shows the
-trace plots of the global parameters in the terminal model.
+\subsection{Trace plots}
+
+The following figures present posterior densities and
+trace plots for selected global parameters of the baseline
+terminal and chokepoint models. The displayed pages include
+all parameters selected for the autocorrelation diagnostics,
+together with additional global parameters appearing on
+the same plotting pages. Complete plots are retained in
+the accompanying model outputs.
+
+For terminals, the selection covers the lagged exporter
+coefficient, the PageRank loading, and the loading for
+the probability of counterparty HHI equal to one.
+For chokepoints, it covers the lagged voyage-distance
+coefficient, the PageRank and betweenness loadings,
+and the betweenness precision.
+
+The displayed chains occupy broadly overlapping ranges,
+and their estimated posterior densities are similar.
+These visual checks complement the numerical diagnostics
+reported in Chapter~\ref{chap:criticality_modelling};
+they do not by themselves establish convergence.
 
 \begin{figure}[p]
     \centering
     \includegraphics[
         width=\textwidth,
-        height=0.85\textheight,
+        height=0.82\textheight,
         keepaspectratio
-    ]{images/terminal_trace_01.pdf}
-    \caption{Posterior densities and MCMC trace plots for selected global parameters of the terminal model
-    (part 1).}
+    ]{images/terminal_trace_02.png}
+    \caption{Posterior densities and trace plots for
+    terminal capacity, terminal age, lagged exporter status,
+    and the PageRank loading in the baseline terminal model.}
     \label{fig:terminal_trace_appendix}
 \end{figure}
 
-Figure~\ref{fig:chokepoint_trace_appendix} presents
-the corresponding diagnostics for the chokepoint model.
-
-\begin{figure}[htbp]
+\begin{figure}[p]
     \centering
-    \includegraphics[width=\textwidth]{images/chokepoint_trace.png}
-    \caption{MCMC trace plots for the global parameters
-    of the chokepoint criticality model.}
+    \includegraphics[
+        width=\textwidth,
+        height=0.82\textheight,
+        keepaspectratio
+    ]{images/terminal_trace_07.png}
+    \caption{Posterior densities and trace plots for
+    the loadings of the probabilities of HHI and dependence
+    equal to one in the baseline terminal model.}
+    \label{fig:terminal_trace_additional}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.82\textheight,
+        keepaspectratio
+    ]{images/chokepoint_trace_01.png}
+    \caption{Posterior densities and trace plots for
+    the regression coefficients in the baseline
+    chokepoint model.}
     \label{fig:chokepoint_trace_appendix}
 \end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.82\textheight,
+        keepaspectratio
+    ]{images/chokepoint_trace_02.png}
+    \caption{Posterior densities and trace plots for
+    the PageRank, betweenness and flow-share loadings,
+    and the articulation-point loading in the baseline
+    chokepoint model.}
+    \label{fig:chokepoint_trace_loadings}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.82\textheight,
+        keepaspectratio
+    ]{images/chokepoint_trace_04.png}
+    \caption{Posterior densities and trace plots for
+    the binary-response intercepts and the PageRank
+    and betweenness precisions in the baseline
+    chokepoint model.}
+    \label{fig:chokepoint_trace_precision}
+\end{figure}
+
+\clearpage
+
 
 \subsection{Autocorrelation diagnostics}
 \label{app:acf_diagnostics}
