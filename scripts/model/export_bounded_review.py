@@ -25,6 +25,108 @@ import matplotlib.pyplot as plt
 def samples(ds, name, dimension):
     return ds[name].transpose('chain', 'draw', dimension).values.reshape(-1, ds.sizes[dimension])
 
+def export_selected_acf(post, out):
+    import arviz as az
+
+    # Solo parametri globali: esclude i fattori nodo-mese.
+    names = [
+        'beta', 'loading_cont', 'loading_binary',
+        'intercept_cont', 'intercept_binary', 'precision_cont',
+        'intercept_one', 'loading_one',
+        'intercept_zero', 'loading_zero',
+    ]
+
+    variables = {}
+    families = {}
+
+    for name in names:
+        if name not in post:
+            continue
+
+        array = post[name]
+        extra_dims = [
+            dim for dim in array.dims if dim not in ('chain', 'draw')
+        ]
+
+        shape = tuple(array.sizes[dim] for dim in extra_dims)
+        for index in np.ndindex(shape):
+            selection = dict(zip(extra_dims, index))
+            scalar = array.isel(selection).transpose('chain', 'draw')
+
+            labels = [
+                str(array.coords[dim].values[i])
+                for dim, i in selection.items()
+            ]
+            label = name + (
+                '[' + ', '.join(labels) + ']' if labels else ''
+            )
+
+            variables[label] = xr.DataArray(
+                scalar.values, dims=('chain', 'draw')
+            )
+            families[label] = name
+
+    dataset = xr.Dataset(variables)
+    diagnostics = az.summary(dataset, kind='diagnostics')
+
+    selected = {}
+
+    def select_lowest(labels, column, reason):
+        values = diagnostics.loc[labels, column].dropna()
+        if not values.empty:
+            label = values.idxmin()
+            selected.setdefault(label, []).append(reason)
+
+    select_lowest(
+        [label for label in variables if families[label] == 'beta'],
+        'ess_bulk', 'Lowest bulk ESS among regression coefficients'
+    )
+    select_lowest(
+        [label for label in variables
+         if families[label].startswith('loading_')],
+        'ess_bulk', 'Lowest bulk ESS among response loadings'
+    )
+    select_lowest(
+        list(variables), 'ess_bulk',
+        'Lowest bulk ESS among global parameters'
+    )
+    select_lowest(
+        list(variables), 'ess_tail',
+        'Lowest tail ESS among global parameters'
+    )
+
+    for label in variables:
+        if families[label] == 'loading_cont' and 'pagerank' in label:
+            selected.setdefault(label, []).append('PageRank anchor loading')
+
+    selection_table = diagnostics.loc[list(selected)].copy()
+    selection_table['selection_reason'] = [
+        '; '.join(selected[label]) for label in selection_table.index
+    ]
+    selection_table.to_csv(out / 'acf_selection.csv')
+
+    max_lag = min(100, post.sizes['draw'] - 1)
+
+    for number, label in enumerate(selected, start=1):
+        values = variables[label].values
+        fig, axes = plt.subplots(
+            values.shape[0], 1,
+            figsize=(8, 2 * values.shape[0]),
+            sharex=True, sharey=True, squeeze=False
+        )
+
+        for chain, ax in enumerate(axes[:, 0]):
+            acf = az.autocorr(values[chain])[:max_lag + 1]
+            ax.vlines(np.arange(len(acf)), 0, acf, linewidth=1)
+            ax.axhline(0, color='black', linewidth=0.6)
+            ax.set_ylim(-1, 1)
+            ax.set_ylabel(f'Chain {post.chain.values[chain]}\nACF')
+
+        axes[-1, 0].set_xlabel('Lag')
+        fig.suptitle(label, fontsize=10)
+        fig.tight_layout(rect=(0, 0, 1, 0.95))
+        fig.savefig(out / f'acf_{number:02d}.png', dpi=150)
+        plt.close(fig)
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -64,6 +166,8 @@ def main():
         out = terminal / ('review_' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
         out.mkdir()
         print(f'Exporting to {out}', flush=True)
+        export_selected_acf(post, out)
+                
         key_columns = [model.SPECS[args.node_type]['id'], 'node_name', 'period_month']
         if args.node_type == 'terminal':
             key_columns += ['terminal_role_lag1']
