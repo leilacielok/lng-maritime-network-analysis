@@ -1,0 +1,4 @@
+,is_articulation_point,has_incident_global_bridge,connected_to_articulation_point
+is_articulation_point,1.0,0.2895710873177308,-0.06279947362176061
+has_incident_global_bridge,0.2895710873177308,1.0,0.05952811911480886
+connected_to_articulation_point,-0.06279947362176061,0.05952811911480886,1.0

@@ -56,8 +56,10 @@ terminal and chokepoint scores are not directly comparable across models.
 
 ## Outputs and validation
 
-Each invocation creates a new timestamped directory under
-`outputs/model/simple_criticality/`. Outputs include exclusion counts, input
+Results are written directly under `outputs/model/simple_criticality/`,
+with `terminal/` and `chokepoint/` subdirectories. Re-running overwrites files
+produced by the selected mode; prior-only runs leave earlier posterior files
+untouched, so those files still refer to the earlier fit. Outputs include exclusion counts, input
 hashes, scaling constants, prior/posterior NetCDF draws, parameter summaries,
 sampling diagnostics, trace plots and predictive checks. `factor_scores.csv`
 contains node/month keys, posterior factor scores, covariate-explained factor

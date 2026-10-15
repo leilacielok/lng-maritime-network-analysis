@@ -1492,14 +1492,1072 @@ These findings provide the empirical motivation for investigating whether the me
     \label{fig:criticality_correlations}
 \end{figure}
 
-%
-%			CHAPTER 5: Bayesian modelling framework
-%
-\chapter{Bayesian modelling framework}
-\label{chap:bayesian_framework}
-% TODO: Complete after fixing the final model specification, priors, and
-% posterior-computation strategy.
+% Updated 12 October 2026: original baseline plus prior sensitivity fits.
+% Terminal run: 20261011T120422953825Z_terminal_bounded.
+% Chokepoint run: 20261011T154621463157Z_chokepoint_bounded.
+\chapter{Bayesian Reduced-Rank Model for Network Measures}
+\label{chap:criticality_modelling}
 
+\section{Modelling objective and scope}
+The objective of this chapter is to investigate whether several measures of node network position can be represented through a common latent dimension, and to examine how this dimension relates to node characteristics and lagged network conditions. Separate models for terminals and chokepoints provide initial Bayesian rank-one specifications against which the need for additional structure can be assessed. 
+
+The specification is static and conditional on consecutive observed activity. 
+It includes no model for the probability of activity, nor an autoregressive evolution of the factor. 
+Although observations are indexed by node and month, the model does not explicitly accounts for repeated observations of a node or dependence among nodes within a monthly network. 
+Coefficients therefore describe associations under this working specification, rather than causal effects. Terminals and chokepoints are estimated separately because their functions and response measures differ:
+their factors have separate parameters and are not directly comparable as a common criticality scale.
+
+\section{Estimation samples}
+\subsection{Terminals}
+\label{sec:criticality_sample}
+The terminal model-ready panel contains 9,540 observations for 159 terminals from January 2020 to December 2024. 
+In the current specification, an observation is retained when the terminal is active in month $t$, a lag from the preceding calendar month is available, and the terminal is also active in that month. 
+Calendar lags are checked against the complete panel before filtering. This prevents the preceding selected active observation from being mistaken for the preceding calendar month.
+
+Excluding 4,988 currently inactive observations, 71 active observations without an available calendar lag, and 916 observations preceded by inactivity leaves 3,565 observations active in consecutive months. 
+A further 112 observations with missing terminal age are excluded, producing an estimation sample of 3,453 observations for 137 terminals, of which 2,325 observations with lagged importer status and 1,128 with lagged exporter status.
+Consequently, the findings concern this selected sample, rather than all active terminal-months or the complete balanced panel.
+
+\subsection{Chokepoints}
+The chokepoint panel contains 1,440 observations for 24 nodes.
+Applying the same calendar-lag and consecutive-activity criteria excludes 200 currently inactive observations, 21 active observations without an available calendar lag, and 56 observations preceded by inactivity. 
+The resulting sample has 1,163 observations for all 24 chokepoints. As for terminals, these results describe consecutive-active node-months rather than the entire balanced panel.
+
+\section{Responses and covariates}
+\label{sec:simple_responses}
+The terminal model includes six responses. The three bounded responses are role-specific PageRank, terminal counterparty HHI, and role-specific dependence. 
+The three binary responses indicate whether a terminal is an articulation point, has an incident global bridge, or is connected to an articulation point. 
+These measures capture different aspects of network position, therefore they need not all increase with the same latent dimension.
+
+The covariate vector contains seven predictors: lagged historical-neighbour activity share, the transformed role-relevant mean voyage distance and terminal capacity, sine and cosine terms for monthly seasonality, terminal age, and an indicator for exporter status in the preceding month. 
+Numeric covariates are centred and divided by their estimation-sample standard deviations. 
+The exporter indicator remains on its zero--one scale. Thus a coefficient for a numeric predictor represents a one-standard-deviation difference on the transformed scale where applicable, whereas the role coefficient compares exporter with importer status, holding the other covariates fixed.
+
+The bounded responses are modelled on their original scales. 
+In the estimation sample, PageRank lies strictly between zero and one, while HHI and dependence lie in $(0,1]$. 
+Neither has observed zeros. HHI equals one in 34.09\% of observations and dependence equals one in 20.76\%. 
+These support restrictions and boundary masses motivate a Beta likelihood for PageRank and a one-inflated Beta likelihood for HHI and dependence, which combines an interior Beta distribution with a point mass at one. 
+
+The chokepoint model has five responses: PageRank, betweenness, share of monthly network flow, articulation-point status, and connection to an articulation point. 
+The incident-global-bridge indicator is excluded because it differs from articulation-point status in only three of the 1,163 selected observations, and their binary correlation is 0.993. 
+
+The four chokepoint predictors are lagged historical-neighbour activity share, the transformed mean voyage distance, and the monthly sine and cosine terms. 
+All four are standardised within the chokepoint estimation sample. PageRank and flow share are strictly inside $(0,1)$, while betweenness has six zeros (0.516\%) and otherwise lies inside $(0,1)$. 
+None of the three responses equals one. PageRank and flow share therefore use Beta likelihoods, while betweenness uses a zero-inflated Beta likelihood to retain its exact zeros.
+
+\section{Static rank-one factor specification}
+\label{sec:simple_factor_specification}
+For each node type separately, let $\boldsymbol{x}_{i,t}$ be the standardised covariate vector, with the role indicator retained on its original scale, and let $f_{i,t}$ be a scalar latent factor. The factor regression is
+\begin{equation}
+ f_{i,t}\mid\boldsymbol{x}_{i,t},\boldsymbol{\beta}
+ \sim\mathcal{N}(\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1).
+ \label{eq:simple_factor}
+\end{equation}
+The residual factor variance is fixed at one to define its scale. 
+The PageRank loading is constrained to be positive to orient the factor, while the other loadings are unrestricted. 
+Conditional on the factors and parameters, the responses are assumed independent, and factors for different node-months are independent given their covariates and regression coefficients.
+
+For bounded response $j$, the interior mean and precision are defined as
+\begin{align}
+ \operatorname{logit}(\mu_{i,t,j})&=\alpha_j+\lambda_j f_{i,t},\\
+ A_{i,t,j}&=\mu_{i,t,j}\phi_j,\qquad
+ D_{i,t,j}=(1-\mu_{i,t,j})\phi_j.
+\end{align}
+For terminals, $j=1$ denotes PageRank, $j=2$ HHI, and $j=3$ dependence. PageRank follows
+\begin{equation}
+ Y_{i,t,1}\mid f_{i,t}\sim\operatorname{Beta}(A_{i,t,1},D_{i,t,1}).
+\end{equation}
+For HHI and dependence, the boundary probability has a separate loading:
+\begin{align}
+ \operatorname{logit}(\pi_{i,t,j})&=c_j+d_j f_{i,t},\qquad j=2,3,\\
+ Y_{i,t,j}\mid f_{i,t}&\sim
+ \pi_{i,t,j}\delta_1+(1-\pi_{i,t,j})
+ \operatorname{Beta}(A_{i,t,j},D_{i,t,j}),
+ \label{eq:one_inflated_beta}
+\end{align}
+where $\delta_1$ denotes a point mass at one. Interior observations contribute the Beta density multiplied by $1-\pi_{i,t,j}$, while exact ones contribute the probability $\pi_{i,t,j}$. Observed values are not clipped or displaced from the boundary. The overall conditional mean is
+\begin{equation}
+ \mathbb{E}(Y_{i,t,j}\mid f_{i,t})=
+ \pi_{i,t,j}+(1-\pi_{i,t,j})\mu_{i,t,j}.
+ \label{eq:inflated_mean}
+\end{equation}
+Thus the sign of $\lambda_j$ alone does not determine how the overall mean changes with the factor.
+
+For chokepoints, PageRank and flow share follow the interior Beta specification. 
+For betweenness, let $\rho_{i,t,2}$ denote the probability of zero:
+\begin{align}
+ \operatorname{logit}(\rho_{i,t,2})&=c^{(0)}_2+d^{(0)}_2 f_{i,t},\\
+ Y_{i,t,2}\mid f_{i,t}&\sim \rho_{i,t,2}\delta_0+
+ (1-\rho_{i,t,2})\operatorname{Beta}(A_{i,t,2},D_{i,t,2}).
+ \label{eq:zero_inflated_beta}
+\end{align}
+Here $\delta_0$ is a point mass at zero. The overall conditional mean is $(1-\rho_{i,t,2})\mu_{i,t,2}$. 
+The zero-probability loading is estimated separately from the interior-mean loading.
+
+For binary response $k$,
+\begin{align}
+ B_{i,t,k}\mid f_{i,t}&\sim\operatorname{Bernoulli}(p_{i,t,k}),\\
+ \operatorname{logit}(p_{i,t,k})&=a_k+\ell_k f_{i,t}.
+\end{align}
+Writing
+$f_{i,t}=\boldsymbol{x}_{i,t}^{\mathsf T}
+\boldsymbol{\beta}+z_{i,t}$
+shows that the covariate coefficients in the conditional
+response predictors are given by the products of the
+response-specific loadings and the factor-regression
+coefficients.
+Consequently, the corresponding coefficient matrices
+have rank at most one. This reduced-rank structure
+restricts the covariate associations to a common
+direction, while allowing their magnitude and sign
+to differ across responses.
+
+\subsection{Prior distributions}
+\label{subsec:prior_distributions}
+The prior distributions were chosen to provide regularisation
+while allowing sufficient flexibility in the relationships
+between the latent factor and the observed responses.
+
+For terminals, the independent prior distributions are
+specified below. The indices $r=1,\ldots,7$, $j=1,2,3$,
+and $k=1,2,3$ refer to the predictors, bounded responses,
+and binary responses, respectively. The loading $\lambda_1$
+corresponds to PageRank, while $\lambda_j$ for $j=2,3$
+refers to HHI and dependence. The boundary-component
+parameters $c_j$ and $d_j$ are defined only for $j=2,3$.
+\[
+\begin{array}{@{}l@{\qquad\qquad}l@{}}
+\beta_r \sim \mathcal{N}(0,0.5^2),
+& \lambda_1 \sim \operatorname{HalfNormal}(1), \\[4pt]
+
+\lambda_j \sim \mathcal{N}(0,1),\quad j=2,3,
+& \ell_k \sim \mathcal{N}(0,1), \\[4pt]
+
+\alpha_j \sim \mathcal{N}(m_j,1.5^2),
+& (m_1,m_2,m_3)=(-4,0,0), \\[4pt]
+
+a_k \sim \mathcal{N}(0,2^2),
+& \log\phi_j \sim \mathcal{N}(\log 10,0.7^2), \\[4pt]
+
+c_j \sim \mathcal{N}(0,1.5^2),
+& d_j \sim \mathcal{N}(0,1).
+\end{array}
+\]
+
+Regression coefficients were assigned zero-centred Normal
+priors with standard deviation 0.5, favouring moderate
+covariate associations on the scale of the latent factor.
+The first continuous-response loading was constrained to
+be positive through a Half-Normal prior, fixing the
+orientation of the latent factor. The remaining loadings
+were assigned zero-centred Normal priors, allowing both
+positive and negative associations with the factor.
+
+For the interior components of the bounded responses,
+intercept priors were specified on the logit scale, and their centres were chosen to reflect differences in the
+empirical scales of the corresponding network measures.
+In particular, PageRank typically takes values close to
+zero, making a zero-centred intercept prior, corresponding
+to an inverse-logit value of 0.5, inappropriate.
+Its intercept prior was therefore centred at $-4$,
+corresponding to an inverse-logit value of approximately
+0.018. The intercept priors for HHI and dependence were
+instead centred at zero, allowing their interior means
+to vary around a less restrictive reference value of 0.5.
+
+Binary-response intercepts were assigned $\mathcal{N}(0,2^2)$ priors, allowing a relatively broad
+range of baseline probabilities. The intercepts governing
+boundary inflation were assigned $\mathcal{N}(0,1.5^2)$ priors, while their factor
+loadings followed $\mathcal{N}(0,1)$ distributions.
+
+The precision parameters of the bounded continuous
+components were assigned log-Normal priors, with
+$\log\phi_j\sim\mathcal{N}(\log 10,0.7^2)$.
+This specification ensures positive precision values,
+with prior median 10 and an approximate central 95\%
+interval of $[2.54,39.44]$, allowing different degrees
+of dispersion around the conditional means.
+
+For chokepoints, the same prior families were adopted,
+with parameters estimated independently from the
+terminal model. The interior intercept centres were
+set to $(-4,-5,-4)$ for PageRank, betweenness, and
+flow share, respectively, reflecting the relatively
+small values typically observed for these measures.
+In particular, the inverse-logit of $-5$ is
+approximately 0.0067, comparable to the empirical
+median of chokepoint betweenness.
+
+The betweenness zero-component intercept was assigned
+a $\mathcal{N}(-5,1.5^2)$ prior, expressing a prior
+preference for a low probability of exact zeros at
+factor value zero. Its factor loading followed a
+$\mathcal{N}(0,1)$ prior. Given the small number of
+observed zeros, inference on this component may be
+particularly sensitive to the prior specification.
+
+These distributions were adopted as initial regularising
+priors rather than independently elicited prior information.
+Their prior predictive implications and the sensitivity of
+the posterior findings to alternative specifications are
+examined in Section~\ref{sec:prior_sensitivity}.
+
+
+\subsection{Posterior sampling and diagnostics}
+\label{subsec:simple_computation}
+
+The models were implemented in Python 3.12.15 using
+PyMC 5.20.1, with PyTensor 2.27.1 as the computational
+backend. Posterior inference was performed using the
+No-U-Turn Sampler (NUTS), an adaptive variant of
+Hamiltonian Monte Carlo.
+
+Posterior summaries and convergence diagnostics were
+computed using ArviZ 0.21.0. Data processing and
+visualisation relied on NumPy 1.26.4, pandas 2.3.3,
+and Matplotlib 3.9.2.
+
+Each model uses NUTS with four chains, 1,500 warm-up
+iterations and 2,000 retained draws per chain, giving
+8,000 retained draws in total. The target acceptance
+probability was set to 0.95 and the random seed was
+20261008. Chains were sampled sequentially.
+
+Diagnostics cover regression coefficients, response parameters,
+factors, factor means and factor residuals.
+
+The baseline terminal run has no post-warm-up divergences,
+a maximum reported rank-normalised $\widehat{R}$ of 1.01,
+a minimum bulk effective sample size of 817, and a minimum
+tail effective sample size of 1,958.
+These results satisfy the implemented convergence screening
+criteria of no divergences, maximum $\widehat{R}\leq 1.01$,
+and minimum bulk and tail ESS of at least 400.
+
+The baseline chokepoint run also presents no post-warm-up
+divergences and a maximum reported $\widehat{R}$ of 1.01.
+Its minimum bulk ESS is 472 and minimum tail ESS is 905,
+both for the betweenness precision parameter.
+Therefore, both runs satisfy the same screening criteria.
+
+Trace plots and autocorrelation functions for selected 
+global parameters are provided in
+Appendix~\ref{app:mcmc_diagnostics}
+(Figures~\ref{fig:terminal_trace_appendix}--
+\ref{fig:terminal_acf_additional}).
+The autocorrelation plots show varying rates of decay,
+with more persistent autocorrelation for the betweenness
+loading and precision in the chokepoint model.
+
+Overall, the numerical and graphical diagnostics provide
+encouraging evidence of satisfactory MCMC mixing,
+although they do not guarantee complete exploration
+of the posterior.
+
+\section{Terminal posterior analysis}
+\label{sec:terminal_results}
+
+This section presents the posterior results for the terminal
+model, focusing on covariate associations, response relationships
+and the interpretation of the latent factor.
+Posterior predictive checks are then used to assess how well
+the model reproduces the observed response distributions
+and associations.
+
+\subsection{Posterior associations and factor interpretation}
+\label{subsec:posterior_associations_terminals}
+
+The posterior estimates of the factor-regression coefficients
+are presented in Table~\ref{tab:simple_beta}, together with
+their 95\% highest-density intervals (HDIs).
+
+The most pronounced positive associations concern lagged
+exporter status and terminal capacity. Conditional on the
+other predictors, having been classified as an exporter
+in the preceding month corresponds to an increase of
+approximately 1.4 units in the expected factor value.
+This is substantial relative to the residual standard
+deviation of the factor, which is fixed at one.
+
+Neighbour activity and voyage distance in the previous
+month are also positively related to the factor, but
+their estimated associations are considerably weaker.
+By contrast, the posterior intervals for terminal age
+and the seasonal terms include zero, leaving their
+individual contributions uncertain.
+
+\begin{table}[htbp]
+\centering
+\caption{Factor-regression coefficients for the terminal model.
+Numeric predictors are standardised; exporter status is a
+zero--one indicator.}
+\label{tab:simple_beta}
+\begin{tabular}{lrr}
+\hline
+Predictor & Posterior mean & 95\% HDI \\
+\hline
+Lagged neighbour activity share & 0.096 & $[0.057,0.137]$ \\
+$\log(1+\text{lagged voyage distance})$ & 0.062 & $[0.020,0.105]$ \\
+Month sine & $-0.032$ & $[-0.070,0.004]$ \\
+Month cosine & $-0.004$ & $[-0.042,0.032]$ \\
+$\log(1+\text{capacity})$ & 0.409 & $[0.363,0.453]$ \\
+Terminal age & $-0.019$ & $[-0.057,0.021]$ \\
+Lagged exporter indicator & 1.392 & $[1.296,1.488]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+The response loadings in Table~\ref{tab:simple_loadings}
+provide further insight into the interpretation of the
+terminal factor, by describing associations with the
+interior means of bounded responses, the probabilities
+of binary outcomes, and the boundary probabilities.
+
+The clearest pattern combines increasing PageRank with
+decreasing counterparty concentration. In particular,
+higher factor values correspond to both a lower interior
+mean for HHI and a reduced probability of HHI being
+exactly one.
+
+The structural indicators show contrasting relationships:
+the probability of being an articulation point increases
+with the factor, while that of having an incident global
+bridge decreases. For connection to an articulation point,
+the posterior interval includes zero, providing no clear
+evidence of an association.
+
+\begin{table}[htbp]
+\centering
+\caption{Loadings on the latent factor. Bounded interior
+means and all probabilities use logit links.}
+\label{tab:simple_loadings}
+\begin{tabular}{lrr}
+\hline
+Response component & Posterior mean & 95\% HDI \\
+\hline
+PageRank interior mean & 0.359 & $[0.348,0.370]$ \\
+HHI interior mean & $-0.535$ & $[-0.570,-0.502]$ \\
+Dependence interior mean & 0.420 & $[0.392,0.445]$ \\
+Articulation-point probability & 0.771 & $[0.682,0.860]$ \\
+Incident-global-bridge probability & $-0.637$ & $[-0.714,-0.560]$ \\
+Connected-to-articulation probability & 0.110 & $[-0.015,0.244]$ \\
+Probability of HHI equal to one & $-3.982$ & $[-4.718,-3.266]$ \\
+Probability of dependence equal to one & $-0.545$ & $[-0.638,-0.445]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+The magnitude of the HHI relationship becomes clearer
+when expressed in the original response units. Moving
+from a factor value of 0 to 1, the posterior median
+expected HHI falls from approximately 0.66 to 0.38, with
+a median difference of $-0.29$ (95\% equal-tailed
+credible interval: $[-0.31,-0.27]$), incorporating
+both the interior Beta component and the point mass at one.
+
+Dependence exhibits a more complex pattern. Its
+interior mean increases with the factor, whereas
+the probability of an exact value of one declines.
+Combining these components, as defined in
+Equation~\eqref{eq:inflated_mean}, yields a mildly
+U-shaped conditional expectation over the displayed
+factor range.
+The fitted response functions are displayed in
+Figure~\ref{fig:simple_response_curves} to allow
+the different response components and their
+combined implications to be examined across
+the estimated factor range.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/terminal_response_curves.png}
+\caption{Fitted response functions against the terminal
+latent factor. Lines are posterior medians and bands
+are equal-tailed 95\% credible intervals for conditional
+expected responses or probabilities. HHI and dependence
+means include the point mass at one. The range spans
+the first to the 99th percentile of posterior mean
+factor scores.}
+\label{fig:simple_response_curves}
+\end{figure}
+
+To relate these posterior patterns to observed network
+positions, two terminal-month observations with posterior mean factor values closest to
+the 5th and 95th percentiles of the estimation sample are considered:
+Zhuhai LNG Terminal in September 2022 has an estimated
+factor value of approximately $-1.0$, compared with
+$2.7$ for Sabine Pass LNG Terminal in June 2024.
+Their observed PageRank values are 0.011 and 0.039,
+respectively, while their HHI values are 1.00 and
+0.17. Zhuhai is classified as an importer and has
+an incident global bridge, whereas Sabine Pass is
+an exporter without one.
+These differences are consistent with the estimated
+relationships between the latent factor and the terminal
+responses, although the two observations also differ
+in commercial role.
+
+While this example provides an illustration of the
+factor's interpretation, the extent to which the model
+reproduces the observed response patterns more generally
+is examined through the posterior predictive checks
+in the following subsection.
+
+\subsection{Posterior predictive assessment}
+\label{sec:simple_ppc}
+Posterior predictive assessment evaluates how well the
+fitted model reproduces the observed response distributions
+and associations by comparing statistics computed from
+the terminal-month observations with those obtained from
+replicated responses conditional on the posterior
+factors. These comparisons are conducted both overall
+and within lagged-role groups, with 95\% equal-tailed
+intervals summarising the variability of the statistics across replications.
+
+The model closely reproduces the overall response means and the overall frequencies of HHI and dependence equal to one. 
+The observed overall binary proportions also lie within their replicated intervals. 
+Nevertheless, discrepancies appear in dispersion, quantiles and role-specific boundary frequencies. 
+For instance, PageRank dispersion is overestimated for lagged importers and underestimated for lagged
+exporters. For exporters, the observed 95th percentile
+of PageRank is 0.0714, compared with a replicated mean
+of 0.0621 and a 95\% replicated interval of $[0.0588,0.0654]$.
+
+\begin{table}[htbp]
+\centering
+\caption{Selected checks of the proportion of bounded responses equal to one, by lagged role. All entries are percentages.}
+\label{tab:simple_boundary_ppc}
+\begin{tabular}{llrrr}
+\hline
+Response & Lagged role & Observed & Replicated mean & 95\% interval \\
+\hline
+HHI & All & 34.09 & 34.09 & $[32.73,35.45]$ \\
+HHI & Importer & 41.89 & 43.41 & $[41.59,45.20]$ \\
+HHI & Exporter & 18.00 & 14.89 & $[13.39,16.40]$ \\
+Dependence & All & 20.76 & 20.77 & $[18.97,22.62]$ \\
+Dependence & Importer & 26.45 & 23.94 & $[21.68,26.28]$ \\
+Dependence & Exporter & 9.04 & 14.23 & $[11.97,16.67]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+As shown in Table~\ref{tab:simple_boundary_ppc}, among exporters,
+the model also underestimates the frequency of HHI equal
+to one and overestimates the frequency of dependence equal to one. The importer
+dependence boundary frequency is also slightly above its replicated interval.
+These discrepancies suggest that a shared factor
+with common response functions does not fully
+capture role-specific response behaviour.
+
+The assessment then turns to associations between
+responses, comparing observed pairwise Spearman
+correlations with those obtained from 200 replicated
+datasets selected evenly across the four chains.
+
+Table~\ref{tab:simple_joint_ppc} reports selected
+results. The most pronounced discrepancy concerns
+articulation-point and incident-global-bridge status,
+which are positively associated in the observed data
+but negatively associated in the replications.
+This pattern is particularly evident among exporters.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Selected joint posterior predictive checks. Entries are Spearman correlations. Replicated intervals use 200 conditional in-sample replicates.}
+\label{tab:simple_joint_ppc}
+\begin{tabular}{llrrr}
+\hline
+Response pair & Lagged role & Observed & Rep. median & 95\% interval \\
+\hline
+Articulation--bridge & All & 0.290 & $-0.122$ & $[-0.156,-0.088]$ \\
+Articulation--bridge & Importer & 0.137 & $-0.037$ & $[-0.073,0.007]$ \\
+Articulation--bridge & Exporter & 0.546 & $-0.154$ & $[-0.212,-0.103]$ \\
+HHI--bridge & All & 0.533 & 0.293 & $[0.251,0.328]$ \\
+PageRank--dependence & All & 0.314 & 0.157 & $[0.113,0.197]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+This mismatch is consistent with restrictions of the fitted
+specification. The single factor has opposite loadings on
+articulation-point and incident-bridge probabilities, while
+conditional independence allows no additional residual
+association between these responses. The model therefore
+struggles to reproduce their positive observed co-occurrence;
+these checks alone do not establish which restriction is
+primarily responsible. 
+
+\section{Chokepoint posterior analysis}
+\label{sec:chokepoint_findings}
+The current section examines how the latent factor relates
+to network characteristics and measures of centrality,
+flow exposure and structural importance for the chokepoint specification.
+The adequacy of the fitted model is subsequently evaluated
+through posterior predictive checks.
+
+\subsection{Posterior associations and factor interpretation}
+\label{posterior_associations_chokepoints}
+For chokepoints, the factor-regression results in
+Table~\ref{tab:chokepoint_beta} indicate relatively
+modest associations with the available predictors.
+
+Greater neighbour activity and longer average voyage
+distances in the preceding month are associated with
+higher factor values. However, the posterior interval
+for voyage distance has a lower endpoint close to zero,
+suggesting that this association is less clearly
+established.
+
+The seasonal coefficients provide limited evidence of
+seasonal variation in the conditional factor mean:
+the 95\% HDI for the negative cosine coefficient
+narrowly excludes zero, whereas the corresponding
+interval for the sine coefficient includes zero.
+
+\begin{table}[htbp]
+\centering
+\caption{Factor-regression coefficients for the chokepoint
+model. Numeric predictors are standardised.}
+\label{tab:chokepoint_beta}
+
+\begin{tabular}{lrr}
+\hline
+Predictor & Posterior mean & 95\% HDI \\
+\hline
+Lagged neighbour activity share & 0.103 & $[0.042,0.170]$ \\
+$\log(1+\text{lagged voyage distance})$ & 0.065 & $[0.005,0.128]$ \\
+Month sine & $-0.036$ & $[-0.098,0.023]$ \\
+Month cosine & $-0.064$ & $[-0.128,-0.004]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+Turning to the responses, Table~\ref{tab:chokepoint_loadings}
+shows a consistent pattern of positive loadings across
+the interior means and binary structural probabilities,
+with all 95\% HDIs excluding zero.
+These relationships are also illustrated by the fitted
+response curves in Figure~\ref{fig:simple_response_curves}.
+
+The factor is positively related to PageRank,
+betweenness and flow share, indicating that higher
+scores correspond to chokepoints occupying more
+central positions and carrying larger proportions
+of the network's LNG flows.
+Moreover, both articulation-point status and connection to
+an articulation point become more probable as the
+factor increases, a finding that differs from the terminal
+specification, where the latter association is
+not clearly established.
+The negative loading on the probability of an exact
+zero in betweenness is consistent with this pattern,
+as higher factor values are associated with a lower
+probability of zero betweenness, further reinforcing
+the positive relationship between the factor and
+its overall conditional expectation.
+
+\begin{table}[htbp]
+\centering
+\caption{Loadings on the latent factor for the chokepoint
+model. Bounded interior means and all probabilities
+use logit links.}
+\label{tab:chokepoint_loadings}
+
+\begin{tabular}{lrr}
+\hline
+Response component & Posterior mean & 95\% HDI \\
+\hline
+PageRank interior mean & 0.262 & $[0.244,0.283]$ \\
+Betweenness interior mean & 1.026 & $[0.971,1.085]$ \\
+Flow-share interior mean & 0.618 & $[0.579,0.659]$ \\
+Articulation-point probability & 0.718 & $[0.556,0.871]$ \\
+Connected-to-articulation probability & 1.204 & $[0.952,1.481]$ \\
+Probability of betweenness equal to zero & $-1.659$ & $[-2.574,-0.731]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/chokepoint_response_curves.png}
+\caption{Fitted response functions against the chokepoint
+latent factor. Lines are posterior medians and bands
+are equal-tailed 95\% credible intervals for conditional
+expected responses or binary probabilities. The betweenness
+mean includes the mass at zero. The range spans the first
+to the 99th percentile of posterior mean factor scores.}
+\label{fig:chokepoint_response_curves}
+\end{figure}
+
+To illustrate how these relationships are reflected
+in individual observations, consider Cape of Good Hope
+in May 2021 and Taiwan Strait in October 2021.
+Their posterior mean factor values, located near
+the 5th and 95th percentiles of the estimation sample,
+are approximately $-1.6$ and $1.6$, respectively.
+Taiwan Strait has substantially higher observed
+PageRank (0.035 versus 0.007), betweenness
+(0.040 versus 0.0006) and flow share
+(3.6\% versus 0.3\%)
+Nevertheless, both chokepoint-month observations
+are classified as articulation points and are
+connected to articulation points. Their different
+factor values therefore reflect variation in
+the continuous measures even though these binary
+structural indicators coincide.
+
+This comparison illustrates how the estimated
+factor can summarise different aspects of
+chokepoint centrality, flow exposure and
+structural position.
+
+\subsection{Posterior predictive assessment}
+Following the same conditional, in-sample approach used
+for terminals, the chokepoint posterior predictive checks
+indicate that the model reproduces the overall response
+means and binary proportions reasonably closely.
+
+Most reported PageRank statistics fall within their
+replicated intervals and the model also adequately
+reproduces the low frequency of zero betweenness
+(0.516\% in the observed data), even though the observed
+fifth percentile of betweenness lies slightly below
+its corresponding replicated interval.
+
+The largest marginal discrepancies concern flow share.
+The observed standard deviation (0.0201) exceeds the
+95\% replicated interval of $[0.0171,0.0194]$,
+indicating that the model underestimates its dispersion.
+The observed median (0.0159) falls below its replicated
+interval of $[0.0178,0.0201]$, whereas the observed
+95th percentile (0.0643) exceeds the corresponding
+interval of $[0.0558,0.0633]$.
+These discrepancies indicate that, despite reproducing
+the overall mean, the model does not fully capture
+the observed distribution of the measure.
+
+Beyond the marginal distributions, posterior predictive
+checks also examine whether the model reproduces the
+observed associations between responses. Pairwise
+Spearman correlations are compared with those obtained
+from 200 replicated datasets selected evenly across
+the four chains.
+As shown in Table~\ref{tab:chokepoint_joint_ppc},
+the model reproduces the PageRank--betweenness
+association reasonably closely, but underestimates
+the associations involving flow share and the
+PageRank--articulation association.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Selected joint predictive checks for chokepoints. Entries are Spearman correlations; intervals use 200 conditional in-sample replicates.}
+\label{tab:chokepoint_joint_ppc}
+\begin{tabular}{lrrr}
+\hline
+Response pair & Observed & Rep. median & 95\% interval \\
+\hline
+PageRank--betweenness & 0.685 & 0.656 & $[0.611,0.690]$ \\
+PageRank--flow share & 0.672 & 0.530 & $[0.479,0.579]$ \\
+Betweenness--flow share & 0.800 & 0.717 & $[0.688,0.750]$ \\
+PageRank--articulation & 0.287 & 0.205 & $[0.145,0.256]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Prior assessment and sensitivity analysis}
+\label{sec:prior_sensitivity}
+
+To assess the implications of the prior assumptions and the
+sensitivity of posterior findings, two alternative prior
+profiles were investigated on the same estimation samples.
+The analysis considers both the prior predictive distributions
+and the sensitivity of posterior inference to these modifications.
+
+\subsection{Alternative prior specifications}
+\label{subsec:alternative_priors}
+Three prior specifications were considered: the baseline
+described above, an alternative with more concentrated
+priors for selected parameters, and a third specification
+with response-specific priors for the Beta precision parameters.
+The alternative specifications were informed by the
+observed response distributions and prior predictive
+simulations, rather than independently elicited prior
+information. 
+
+Under the baseline priors, prior predictive simulations
+generated relatively broad distributions for several
+network measures, particularly those characterised by
+small observed values, such as PageRank, betweenness
+and flow share.
+
+In response to these findings, the second specification
+introduced more concentrated prior distributions for
+selected intercepts and factor loadings.
+Specifically, the standard deviations of the
+logit-intercept priors for the small-valued continuous
+responses were reduced from 1.5 to 0.7, while the
+PageRank loading scale and the loading standard
+deviations for betweenness and flow share were reduced
+from 1 to 0.5.
+For the boundary components, intercept prior standard
+deviations were reduced from 1.5 to 1, and
+boundary-loading standard deviations from 1 to 0.5.
+The prior centres were retained, as were the original
+priors for the terminal HHI and dependence interior
+components, regression coefficients, and
+binary-response parameters.
+
+The third specification retained the modifications
+introduced in the second specification and additionally
+introduced response-specific priors for the Beta
+precision parameters.
+
+The corresponding prior medians were set to $ (\widetilde{\phi}_1,\widetilde{\phi}_2,\widetilde{\phi}_3) = (300,10,10)$
+for terminal PageRank, HHI, and dependence,
+respectively, and to $(\widetilde{\phi}_1,\widetilde{\phi}_2,\widetilde{\phi}_3)=(500,100,100)$
+for chokepoint PageRank, betweenness, and flow share, respectively.
+For each precision prior, the log-scale standard
+deviation was fixed at 0.7.
+
+\subsection{Prior predictive assessment}
+
+Prior predictive simulations were used to examine
+the response distributions implied by the three
+prior specifications before conditioning on the
+observed responses. Table~\ref{tab:prior_predictive_comparison}
+compares the observed standard deviations with
+the mean standard deviations across prior predictive
+replications under each specification.
+
+\begin{table}[htbp]
+\centering
+\caption{Observed standard deviations and mean prior
+predictive standard deviations under the three prior
+specifications.}
+\label{tab:prior_predictive_comparison}
+\begin{tabular}{llrrrr}
+\hline
+Node type & Response & Observed & Baseline & Second & Third \\
+\hline
+Terminal & PageRank    & 0.0133 & 0.1065 & 0.0584 & 0.0289 \\
+\hline
+Chokepoint & PageRank   & 0.0069 & 0.0959 & 0.0542 & 0.0228 \\
+           & Betweenness & 0.0135 & 0.0599 & 0.0329 & 0.0154 \\
+           & Flow share  & 0.0201 & 0.0870 & 0.0546 & 0.0278 \\
+\hline
+\end{tabular}
+\end{table}
+
+Under the baseline specification, several continuous
+responses exhibited substantially greater prior
+predictive dispersion than observed in the data.
+
+The second specification reduced the simulated
+dispersion of PageRank, betweenness and flow share,
+with further reductions under the third specification.
+The latter produced standard deviations closer to
+the observed values, particularly for chokepoint
+betweenness, although substantial differences
+remained for PageRank.
+
+The modifications had a more limited effect on
+the terminal HHI and dependence distributions,
+whose prior predictive boundary frequencies
+remained relatively high.
+
+These results indicate that the alternative
+specifications imply less dispersed prior
+predictive distributions for several responses,
+without eliminating all differences from the
+empirical distributions. 
+
+\subsection{Posterior sensitivity and predictive robustness}
+\label{subsec:posterior_sensitivity}
+
+To assess the sensitivity of posterior inference
+to more concentrated priors, the models were
+re-estimated under the third specification and
+compared with the baseline results.
+
+The alternative terminal fit produced no divergent
+transitions, a maximum reported $\widehat{R}$ of 1.01,
+a minimum bulk effective sample size (ESS) of 782,
+and a minimum tail ESS of 2,037.
+For chokepoints, no divergences were observed and
+the maximum reported $\widehat{R}$ was 1.01, with a minimum tail ESS of 780.
+However, the minimum bulk ESS was 359 for the
+betweenness precision parameter, below the
+screening threshold of 400.
+Estimates involving this parameter should therefore be interpreted with some caution
+due to reduced Monte Carlo precision.
+
+Table~\ref{tab:prior_sensitivity_coefficients}
+compares the posterior means and 95\% HDIs
+of all regression coefficients under the
+two specifications.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Posterior means and 95\% highest-density intervals
+(HDIs) for regression coefficients under the baseline
+and alternative prior specifications.}
+\label{tab:prior_sensitivity_coefficients}
+
+\begin{tabular}{lcc}
+\hline
+Covariate & Baseline & Alternative \\
+\hline
+\multicolumn{3}{l}{\textit{Terminals}} \\
+\hline
+Lagged neighbour activity
+& 0.096 [0.057, 0.137]
+& 0.093 [0.055, 0.132] \\
+
+Log lagged voyage distance
+& 0.062 [0.020, 0.105]
+& 0.058 [0.015, 0.099] \\
+
+Month sine
+& -0.032 [-0.070, 0.004]
+& -0.036 [-0.071, 0.003] \\
+
+Month cosine
+& -0.004 [-0.042, 0.032]
+& -0.005 [-0.042, 0.032] \\
+
+Log capacity
+& 0.409 [0.363, 0.453]
+& 0.408 [0.363, 0.453] \\
+
+Terminal age
+& -0.019 [-0.057, 0.021]
+& -0.022 [-0.061, 0.019] \\
+
+Lagged exporter indicator
+& 1.392 [1.296, 1.488]
+& 1.407 [1.311, 1.504] \\
+
+\hline
+\multicolumn{3}{l}{\textit{Chokepoints}} \\
+\hline
+Lagged neighbour activity
+& 0.103 [0.042, 0.170]
+& 0.103 [0.040, 0.168] \\
+
+Log lagged voyage distance
+& 0.065 [0.005, 0.128]
+& 0.066 [0.007, 0.131] \\
+
+Month sine
+& -0.036 [-0.098, 0.023]
+& -0.035 [-0.098, 0.028] \\
+
+Month cosine
+& -0.064 [-0.128, -0.004]
+& -0.065 [-0.125, -0.004] \\
+
+\hline
+\end{tabular}
+\end{table}
+
+The regression coefficients remained relatively stable
+across the two specifications, with similar posterior
+means and credible intervals.
+
+For terminals, the positive associations with lagged
+neighbour activity, voyage distance, capacity and
+lagged exporter status were preserved, while the
+intervals for terminal age and the seasonal terms
+continued to include zero.
+For chokepoints, the positive associations with
+lagged neighbour activity and voyage distance
+were also preserved, and the cosine coefficient
+remained negative, with its interval just
+excluding zero.
+
+Greater sensitivity emerged for selected
+response-specific parameters. In particular, the terminal loading
+on the probability of HHI equal to one changed
+from $-3.982$ to $-3.116$, while the chokepoint
+loading on the probability of zero betweenness
+changed from $-1.659$ to $-0.980$.
+Both retained their negative directions, although
+their magnitudes changed.
+
+Posterior predictive checks were also compared
+to examine whether the alternative specification
+improved the reproduction of selected observed
+statistics. These checks were conditional and
+in-sample, as in the preceding analyses.
+Table~\ref{tab:prior_sensitivity_ppc}
+reports the corresponding replicated statistics
+under both specifications.
+
+\begin{table}[htbp]
+\centering
+\caption{Selected posterior predictive statistics
+under the baseline and alternative prior specifications.
+Replicated values are posterior predictive means,
+except for correlations, for which medians are reported.
+Checks were based on 200 replicated datasets.}
+\label{tab:prior_sensitivity_ppc}
+
+\begin{tabular}{llrrr}
+\hline
+Model & Statistic & Observed & Baseline & Alternative \\
+\hline
+Terminal
+& Articulation--bridge correlation
+& 0.290 & -0.122 & -0.121 \\
+
+Terminal
+& Exporter HHI = 1 (\%)
+& 18.00 & 14.89 & 14.92 \\
+
+Terminal
+& Exporter dependence = 1 (\%)
+& 9.04 & 14.23 & 14.31 \\
+
+Chokepoint
+& Flow-share standard deviation
+& 0.0201 & 0.0182 & 0.0182 \\
+
+Chokepoint
+& Flow-share median
+& 0.0159 & 0.0190 & 0.0190 \\
+\hline
+\end{tabular}
+\end{table}
+
+Findings show that the alternative specification produced little
+change in the reported posterior predictive
+statistics, leaving the main discrepancies
+largely unresolved: for terminals, the replicated association between
+articulation-point and incident-global-bridge status
+remained negative, despite its positive observed
+correlation, and the boundary frequencies of HHI and
+dependence among exporters remained
+inaccurately reproduced; for chokepoints, both specifications underestimated
+the observed dispersion of flow share and
+overestimated its median.
+
+Given the limited changes in posterior inference
+and predictive performance, together with the
+lower bulk ESS in the alternative chokepoint fit,
+the baseline specification was retained for the
+main analysis, while the alternative provides a
+sensitivity assessment of the results under
+more concentrated priors.
+
+\section{Model limitations and implications}
+\label{sec:limitations}
+
+The bounded rank-one models provide an initial Bayesian
+framework for examining common patterns across multiple
+measures of node importance in the LNG maritime network.
+Both models accommodate the bounded nature of the responses
+and their observed boundary values, while the
+posterior estimates satisfy the implemented MCMC diagnostic
+screening criteria.
+
+The terminal latent factor is associated with network
+centrality and counterparty diversification, whereas the
+chokepoint factor reflects centrality, flow exposure and
+structural position. These interpretations suggest that
+a shared latent dimension can summarise several aspects
+of network position, although its meaning differs
+between the two node types.
+
+Nevertheless, satisfactory sampling diagnostics do not
+guarantee an adequate representation of the observed
+response distributions. The posterior predictive checks
+identified limitations in the ability of the terminal
+model to reproduce role-specific distributions and
+associations between structural indicators. For
+chokepoints, the main discrepancies concern the
+distribution of flow share and its relationships
+with other centrality measures.
+
+The prior sensitivity analysis further showed that,
+although the main regression coefficients were relatively
+stable, some response-specific parameters were more
+sensitive to prior choices. Moreover, the alternative
+specification did not substantially improve the
+posterior predictive results, highlighting that the limitations 
+identified remain relevant under the considered prior
+modifications.
+
+These findings motivate several possible extensions.
+For terminals, allowing response-specific intercepts
+or factor loadings to vary by terminal role could help
+capture differences between importers and exporters
+that are not fully represented by the current model.
+This distinction may be particularly relevant for
+counterparty concentration: for importing terminals,
+a high HHI indicates dependence on a limited number
+of LNG suppliers, potentially increasing vulnerability
+to supply disruptions; for exporting terminals,
+by contrast, a low HHI indicates a more diversified
+set of destinations, potentially reflecting broader
+commercial reach within international LNG trade.
+The current specification imposes a common relationship between
+HHI and the latent factor across terminal roles,
+potentially overlooking such differences.
+
+Another possible extension would be to relax the
+assumption of conditional independence between
+responses given the latent factor. This could allow
+the model to capture residual associations that
+are not adequately represented by the shared
+factor alone.
+
+More flexible likelihood specifications could also
+improve the representation of bounded responses,
+especially where the observed dispersion or
+distributional shape is not adequately reproduced,
+as in the case of chokepoint flow share.
+
+Finally, node-specific random effects could account for
+persistent heterogeneity across terminals or
+chokepoints and introduce dependence among
+repeated observations of the same node.
+A further extension would be to develop a joint
+model for terminals and chokepoints, which are
+currently analysed separately despite belonging
+to the same maritime network. Such a framework
+could allow for dependencies between the two node
+types while retaining response specifications
+appropriate to their different characteristics.
+
+These extensions are not mutually exclusive, and
+the posterior predictive discrepancies do not
+establish which modelling assumptions are primarily
+responsible for the observed shortcomings.
+Their adequacy would therefore need to be evaluated
+through further model comparisons and predictive
+assessments.
+
+An additional limitation concerns the estimation
+sample. The models are fitted only to node-month
+observations corresponding to consecutive active
+months. Consequently, the latent factors describe
+network position conditional on sustained observed
+activity, without modelling the process determining
+whether a node is active. Incorporating an activity
+component would extend the analysis to both network
+participation and node importance conditional on
+participation.
+
+Taken together, these limitations suggest that the
+estimated latent factors should be interpreted as
+preliminary summaries of network position rather
+than comprehensive measures of node criticality.
+The present models therefore provide a baseline
+for subsequent methodological developments.
+% Final bibliography: add verified methodological references for Bayesian
+% factor models, Beta mixtures, NUTS, and rank-normalised R-hat/ESS.
 %
 %			CHAPTER 6: Results and discussion
 %
@@ -1981,15 +3039,204 @@ Commercial criticality measures that require realised trade are defined only for
 \endgroup
 
 
-
-\chapter{Data dictionary and supplementary descriptive results}
-\label{app:data_dictionary}
-% TODO: Add complete variable definitions and supplementary tables/figures.
-
 \chapter{Model specification and diagnostics}
 \label{app:model_diagnostics}
-% TODO: Add priors, computational details, MCMC diagnostics, posterior
-% predictive checks, and robustness analyses.
+
+\section{MCMC convergence diagnostics}
+\label{app:mcmc_diagnostics}
+
+\subsection{Trace plots}
+
+The following figures present posterior densities and
+trace plots for selected global parameters of the baseline
+terminal and chokepoint models. The displayed pages include
+all parameters selected for the autocorrelation diagnostics,
+together with additional global parameters appearing on
+the same plotting pages. Complete plots are retained in
+the accompanying model outputs.
+
+For terminals, the selection covers the lagged exporter
+coefficient, the PageRank loading, and the loading for
+the probability of counterparty HHI equal to one.
+For chokepoints, it covers the lagged voyage-distance
+coefficient, the PageRank and betweenness loadings,
+and the betweenness precision.
+
+The displayed chains occupy broadly overlapping ranges,
+and their estimated posterior densities are similar.
+These visual checks complement the numerical diagnostics
+reported in Chapter~\ref{chap:criticality_modelling};
+they do not by themselves establish convergence.
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.82\textheight,
+        keepaspectratio
+    ]{images/terminal_trace_02.png}
+    \caption{Posterior densities and trace plots for
+    terminal capacity, terminal age, lagged exporter status,
+    and the PageRank loading in the baseline terminal model.}
+    \label{fig:terminal_trace_appendix}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.82\textheight,
+        keepaspectratio
+    ]{images/terminal_trace_07.png}
+    \caption{Posterior densities and trace plots for
+    the loadings of the probabilities of HHI and dependence
+    equal to one in the baseline terminal model.}
+    \label{fig:terminal_trace_additional}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.82\textheight,
+        keepaspectratio
+    ]{images/chokepoint_trace_01.png}
+    \caption{Posterior densities and trace plots for
+    the regression coefficients in the baseline
+    chokepoint model.}
+    \label{fig:chokepoint_trace_appendix}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.82\textheight,
+        keepaspectratio
+    ]{images/chokepoint_trace_02.png}
+    \caption{Posterior densities and trace plots for
+    the PageRank, betweenness and flow-share loadings,
+    and the articulation-point loading in the baseline
+    chokepoint model.}
+    \label{fig:chokepoint_trace_loadings}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=\textwidth,
+        height=0.82\textheight,
+        keepaspectratio
+    ]{images/chokepoint_trace_04.png}
+    \caption{Posterior densities and trace plots for
+    the binary-response intercepts and the PageRank
+    and betweenness precisions in the baseline
+    chokepoint model.}
+    \label{fig:chokepoint_trace_precision}
+\end{figure}
+
+\clearpage
+
+
+\subsection{Autocorrelation diagnostics}
+\label{app:acf_diagnostics}
+
+The following figures show within-chain autocorrelation
+functions for selected global parameters. Parameters were
+selected using the lowest bulk ESS among regression
+coefficients and response loadings, the lowest bulk and
+tail ESS among all global parameters, and the PageRank
+anchor loading. Duplicate selections were removed.
+
+For terminals, the selected parameters are the lagged
+exporter coefficient, the loading for the probability
+of HHI equal to one, and the PageRank loading.
+Their autocorrelation decreases over the initial lags,
+with small fluctuations at longer lags.
+
+For chokepoints, the selected parameters are the lagged
+voyage-distance coefficient, the betweenness loading
+and precision, and the PageRank loading.
+The betweenness parameters show a more gradual decay,
+particularly in some chains, while the other two
+parameters exhibit relatively little autocorrelation
+beyond the first few lags.
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/terminal_acf_01.png}
+
+    \medskip
+
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/terminal_acf_02.png}
+
+    \caption{Within-chain autocorrelation functions
+    for selected parameters of the terminal model.}
+    \label{fig:terminal_acf_appendix}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.65\textheight,
+        keepaspectratio
+    ]{images/terminal_acf_03.png}
+
+    \caption{Additional autocorrelation diagnostics
+    for the terminal model.}
+    \label{fig:terminal_acf_additional}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/chokepoint_acf_01.png}
+
+    \medskip
+
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/chokepoint_acf_02.png}
+
+    \caption{Within-chain autocorrelation functions
+    for selected parameters of the chokepoint model.}
+    \label{fig:chokepoint_acf_appendix}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/chokepoint_acf_03.png}
+
+    \medskip
+
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/chokepoint_acf_04.png}
+
+    \caption{Additional autocorrelation diagnostics
+    for the chokepoint model.}
+    \label{fig:chokepoint_acf_additional}
+\end{figure}
 
 %
 %			BIBLIOGRAPHY

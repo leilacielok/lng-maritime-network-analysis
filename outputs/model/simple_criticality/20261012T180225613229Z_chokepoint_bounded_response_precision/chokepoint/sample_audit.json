@@ -1,0 +1,79 @@
+{
+  "panel_rows": 1440,
+  "panel_nodes": 24,
+  "excluded_inactive_current": 200,
+  "excluded_no_calendar_lag": 21,
+  "excluded_inactive_previous": 56,
+  "consecutive_active_rows": 1163,
+  "excluded_missing_age": 0,
+  "estimation_rows": 1163,
+  "estimation_nodes": 24,
+  "predictors": [
+    "neighbor_activity_lag1",
+    "log1p_mean_voyage_distance_lag1",
+    "month_sin",
+    "month_cos"
+  ],
+  "continuous_responses": [
+    "pagerank",
+    "betweenness",
+    "share_monthly_network_flow"
+  ],
+  "binary_responses": [
+    "is_articulation_point",
+    "connected_to_articulation_point"
+  ],
+  "input_sha256": "a46965c889a8892eb1b8a5c9f9453931effd00a98a364e4496ca28b30d6bcd21",
+  "prior_specification": {
+    "profile": "response_precision",
+    "beta_sd": 0.5,
+    "pagerank_loading_sd": 0.5,
+    "other_loading_sd": [
+      0.5,
+      0.5
+    ],
+    "binary_loading_sd": 1.0,
+    "interior_intercept_mean": [
+      -4.0,
+      -5.0,
+      -4.0
+    ],
+    "interior_intercept_sd": [
+      0.7,
+      0.7,
+      0.7
+    ],
+    "binary_intercept_sd": 2.0,
+    "boundary_intercept_mean": -5.0,
+    "boundary_intercept_sd": 1.0,
+    "boundary_loading_sd": 0.5,
+    "precision_median": [
+      500.0,
+      100.0,
+      100.0
+    ],
+    "precision_response_order": [
+      "pagerank",
+      "betweenness",
+      "share_monthly_network_flow"
+    ],
+    "precision_log_sd": 0.7
+  },
+  "response_likelihood_scale": "original [0,1)",
+  "response_scaling_purpose": "initial values only; not used in likelihood",
+  "excluded_binary_response": "has_incident_global_bridge: near duplicate of articulation",
+  "boundary_counts": {
+    "pagerank": {
+      "zeros": 0,
+      "ones": 0
+    },
+    "betweenness": {
+      "zeros": 6,
+      "ones": 0
+    },
+    "share_monthly_network_flow": {
+      "zeros": 0,
+      "ones": 0
+    }
+  }
+}
