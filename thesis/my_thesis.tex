@@ -1498,52 +1498,124 @@ These findings provide the empirical motivation for investigating whether the me
 \chapter{Bayesian Reduced-Rank Model for Network Measures}
 \label{chap:criticality_modelling}
 
-\section{Modelling objective and scope}
-The objective of this chapter is to investigate whether several measures of node network position can be represented through a common latent dimension, and to examine how this dimension relates to node characteristics and lagged network conditions. Separate models for terminals and chokepoints provide initial Bayesian rank-one specifications against which the need for additional structure can be assessed. 
+This chapter develops a Bayesian reduced-rank
+framework to investigate common patterns across
+multiple measures of node network position and
+their associations with node characteristics and
+lagged network conditions.
 
-The specification is static and conditional on consecutive observed activity. 
-It includes no model for the probability of activity, nor an autoregressive evolution of the factor. 
-Although observations are indexed by node and month, the model does not explicitly accounts for repeated observations of a node or dependence among nodes within a monthly network. 
-Coefficients therefore describe associations under this working specification, rather than causal effects. Terminals and chokepoints are estimated separately because their functions and response measures differ:
-their factors have separate parameters and are not directly comparable as a common criticality scale.
+Separate rank-one latent factor models are
+estimated for terminals and chokepoints,
+reflecting their different functions and response
+measures within the LNG maritime network.
+Each model represents the observed responses
+through a shared latent factor, whose conditional
+mean is related to a set of covariates.
 
-\section{Estimation samples}
-\subsection{Terminals}
+The analysis focuses on node-month observations
+with consecutive observed activity, using a
+static specification to examine associations
+between network position and the selected
+covariates. The resulting latent factors provide
+model-specific summaries of network position,
+whose interpretation and adequacy are evaluated
+through posterior inference, predictive checks
+and prior sensitivity analysis.
+
+\section{Estimation samples, responses and covariates}
 \label{sec:criticality_sample}
-The terminal model-ready panel contains 9,540 observations for 159 terminals from January 2020 to December 2024. 
-In the current specification, an observation is retained when the terminal is active in month $t$, a lag from the preceding calendar month is available, and the terminal is also active in that month. 
-Calendar lags are checked against the complete panel before filtering. This prevents the preceding selected active observation from being mistaken for the preceding calendar month.
-
-Excluding 4,988 currently inactive observations, 71 active observations without an available calendar lag, and 916 observations preceded by inactivity leaves 3,565 observations active in consecutive months. 
-A further 112 observations with missing terminal age are excluded, producing an estimation sample of 3,453 observations for 137 terminals, of which 2,325 observations with lagged importer status and 1,128 with lagged exporter status.
-Consequently, the findings concern this selected sample, rather than all active terminal-months or the complete balanced panel.
-
-\subsection{Chokepoints}
-The chokepoint panel contains 1,440 observations for 24 nodes.
-Applying the same calendar-lag and consecutive-activity criteria excludes 200 currently inactive observations, 21 active observations without an available calendar lag, and 56 observations preceded by inactivity. 
-The resulting sample has 1,163 observations for all 24 chokepoints. As for terminals, these results describe consecutive-active node-months rather than the entire balanced panel.
-
-\section{Responses and covariates}
 \label{sec:simple_responses}
-The terminal model includes six responses. The three bounded responses are role-specific PageRank, terminal counterparty HHI, and role-specific dependence. 
-The three binary responses indicate whether a terminal is an articulation point, has an incident global bridge, or is connected to an articulation point. 
-These measures capture different aspects of network position, therefore they need not all increase with the same latent dimension.
 
-The covariate vector contains seven predictors: lagged historical-neighbour activity share, the transformed role-relevant mean voyage distance and terminal capacity, sine and cosine terms for monthly seasonality, terminal age, and an indicator for exporter status in the preceding month. 
-Numeric covariates are centred and divided by their estimation-sample standard deviations. 
-The exporter indicator remains on its zero--one scale. Thus a coefficient for a numeric predictor represents a one-standard-deviation difference on the transformed scale where applicable, whereas the role coefficient compares exporter with importer status, holding the other covariates fixed.
+The terminal model-ready panel contains 9,540 observations
+for 159 terminals from January 2020 to December 2024.
 
-The bounded responses are modelled on their original scales. 
-In the estimation sample, PageRank lies strictly between zero and one, while HHI and dependence lie in $(0,1]$. 
-Neither has observed zeros. HHI equals one in 34.09\% of observations and dependence equals one in 20.76\%. 
-These support restrictions and boundary masses motivate a Beta likelihood for PageRank and a one-inflated Beta likelihood for HHI and dependence, which combines an interior Beta distribution with a point mass at one. 
+For the current specification, an observation is retained
+when the terminal is active in month $t$, a lag from the
+preceding calendar month is available, and the terminal
+was also active in that month. This restriction allows
+the analysis to focus on network position among
+consecutively active terminals, using information
+from the preceding month without modelling transitions
+between active and inactive states. 
+Calendar lags are checked against the
+complete panel before filtering, preventing the
+preceding selected active observation from being
+mistaken for the preceding calendar month.
 
-The chokepoint model has five responses: PageRank, betweenness, share of monthly network flow, articulation-point status, and connection to an articulation point. 
-The incident-global-bridge indicator is excluded because it differs from articulation-point status in only three of the 1,163 selected observations, and their binary correlation is 0.993. 
+Excluding 4,988 currently inactive observations,
+71 active observations without an available calendar
+lag, and 916 observations preceded by inactivity
+leaves 3,565 observations active in consecutive
+months. A further 112 observations with missing
+terminal age are excluded, resulting in an estimation
+sample of 3,453 observations for 137 terminals.
+Of these, 2,325 have lagged importer status and
+1,128 have lagged exporter status.
 
-The four chokepoint predictors are lagged historical-neighbour activity share, the transformed mean voyage distance, and the monthly sine and cosine terms. 
-All four are standardised within the chokepoint estimation sample. PageRank and flow share are strictly inside $(0,1)$, while betweenness has six zeros (0.516\%) and otherwise lies inside $(0,1)$. 
-None of the three responses equals one. PageRank and flow share therefore use Beta likelihoods, while betweenness uses a zero-inflated Beta likelihood to retain its exact zeros.
+The terminal model includes six responses:
+three bounded measures (role-specific PageRank,
+terminal counterparty HHI and role-specific dependence)
+and three binary indicators (articulation-point status,
+incident-global-bridge status and connection to an
+articulation point). These measures are expected to capture different
+aspects of network position and need not all increase
+with the same latent dimension.
+
+Seven predictors are included: lagged
+historical-neighbour activity share, log-transformed
+lagged mean voyage distance, log-transformed
+lagged terminal capacity, monthly sine and cosine terms,
+terminal age, and an indicator for exporter status
+in the preceding month. Numeric covariates are
+centred and divided by their estimation-sample
+standard deviations, while the exporter indicator
+remains on its zero--one scale. Accordingly,
+coefficients for numeric predictors correspond
+to one-standard-deviation differences, whereas
+the role coefficient compares lagged exporters
+with lagged importers, holding other covariates fixed.
+
+The bounded responses are modelled on their original
+scales. PageRank lies strictly within $(0,1)$,
+whereas HHI and dependence take values in $(0,1]$.
+Neither HHI nor dependence has observed zeros,
+but HHI equals one in 34.09\% of observations
+and dependence equals one in 20.76\%.
+These features motivate a Beta likelihood for
+PageRank and one-inflated Beta likelihoods for
+HHI and dependence, as specified in
+Section~\ref{sec:simple_factor_specification}.
+
+The chokepoint panel contains 1,440 observations
+for 24 nodes. Applying the same calendar-lag
+and consecutive-activity criteria excludes
+200 currently inactive observations, 21 active
+observations without an available calendar lag,
+and 56 observations preceded by inactivity.
+The resulting estimation sample contains
+1,163 observations for all 24 chokepoints.
+
+The chokepoint model includes five responses:
+PageRank, betweenness, share of monthly network
+flow, articulation-point status, and connection
+to an articulation point. The incident-global-bridge
+indicator is excluded because it differs from
+articulation-point status in only three observations
+and their binary correlation is 0.993.
+
+Four predictors are included: lagged
+historical-neighbour activity share, log-transformed
+lagged mean voyage distance, and monthly sine and cosine
+terms. All four are standardised within the
+chokepoint estimation sample.
+
+PageRank and flow share lie strictly within
+$(0,1)$, while betweenness has six exact zeros
+(0.516\%) and otherwise takes values in $(0,1)$.
+None of these responses equals one. Consequently,
+PageRank and flow share are modelled using Beta
+likelihoods, while betweenness uses a zero-inflated
+Beta likelihood.
 
 \section{Static rank-one factor specification}
 \label{sec:simple_factor_specification}
@@ -1702,7 +1774,6 @@ Their prior predictive implications and the sensitivity of
 the posterior findings to alternative specifications are
 examined in Section~\ref{sec:prior_sensitivity}.
 
-
 \subsection{Posterior sampling and diagnostics}
 \label{subsec:simple_computation}
 
@@ -1726,7 +1797,7 @@ probability was set to 0.95 and the random seed was
 Diagnostics cover regression coefficients, response parameters,
 factors, factor means and factor residuals.
 
-The baseline terminal run has no post-warm-up divergences,
+The terminal run has no post-warm-up divergences,
 a maximum reported rank-normalised $\widehat{R}$ of 1.01,
 a minimum bulk effective sample size of 817, and a minimum
 tail effective sample size of 1,958.
@@ -1734,7 +1805,7 @@ These results satisfy the implemented convergence screening
 criteria of no divergences, maximum $\widehat{R}\leq 1.01$,
 and minimum bulk and tail ESS of at least 400.
 
-The baseline chokepoint run also presents no post-warm-up
+The chokepoint run also presents no post-warm-up
 divergences and a maximum reported $\widehat{R}$ of 1.01.
 Its minimum bulk ESS is 472 and minimum tail ESS is 905,
 both for the betweenness precision parameter.
