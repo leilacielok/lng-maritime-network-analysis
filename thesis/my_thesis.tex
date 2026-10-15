@@ -1773,12 +1773,29 @@ factor-regression coefficients.
 
 Lagged exporter status and terminal capacity show the
 strongest positive associations with the latent factor.
-Lagged neighbour activity and voyage distance are also
-positively associated with the factor, although their
-estimated coefficients are smaller. In contrast, the
-intervals for terminal age and both seasonal terms
-include zero, providing no clear evidence of associations
-for these predictors in this specification.
+Holding the other covariates constant, terminals classified
+as exporters in the preceding month have an estimated
+conditional factor mean 1.392 units higher than terminals
+without that classification (95\% HDI: [1.296, 1.488]).
+Since the residual variance of the factor is fixed at one,
+this difference is approximately 1.4 residual standard
+deviations on the latent-factor scale.
+
+A one-standard-deviation increase in log-transformed
+terminal capacity is associated with an increase of
+0.409 units in the conditional factor mean
+(95\% HDI: [0.363, 0.453]).
+
+Lagged neighbour activity and voyage distance also show
+positive, although smaller, associations. A one-standard-
+deviation increase in either standardised predictor is
+associated with an increase of approximately 0.096 and
+0.062 factor units, respectively.
+
+In contrast, the intervals for terminal age and both
+seasonal terms include zero, providing no clear evidence
+of individual associations for these predictors in
+this specification.
 
 \begin{table}[htbp]
 \centering
@@ -1940,12 +1957,20 @@ and 95\% highest-density intervals (HDIs) for the
 factor-regression coefficients.
 
 Lagged neighbour activity and voyage distance are
-positively associated with the factor, although the
-lower endpoint of the distance interval is close to zero.
+positively associated with the factor. Holding the
+other covariates constant, a one-standard-deviation
+increase in lagged neighbour activity is associated
+with an increase of 0.103 units in the conditional
+factor mean (95\% HDI: [0.042, 0.170]).
+The corresponding increase for log-transformed
+lagged voyage distance is 0.065 units
+(95\% HDI: [0.005, 0.128]), although the lower
+endpoint of its interval is close to zero.
+
 The cosine coefficient is negative, with an interval
-just excluding zero, whereas the sine interval includes
-zero, providing limited evidence of a
-seasonal association in the current specification.
+just excluding zero, while the sine interval
+includes zero, an insight providing only limited information about the joint
+seasonal association in this specification.
 
 \begin{table}[htbp]
 \centering
@@ -2006,6 +2031,14 @@ Probability of betweenness equal to zero & $-1.659$ & $[-2.574,-0.731]$ \\
 \hline
 \end{tabular}
 \end{table}
+
+On the logit scale, a one-unit increase in the
+factor multiplies the odds of the interior
+betweenness mean by approximately 2.79 and
+those of the flow-share mean by approximately
+1.86. These changes concern the conditional
+interior means rather than proportional changes
+in the observed measures.
 
 Overall, these results suggest that the latent
 factor captures a dimension of network centrality and

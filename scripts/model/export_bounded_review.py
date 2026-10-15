@@ -269,6 +269,39 @@ def main():
         lo = samples(post, 'loading_' + boundary_suffix, 'boundary')
         ab = samples(post, 'intercept_binary', 'binary')
         lb = samples(post, 'loading_binary', 'binary')
+        # Paired posterior contrasts on the original response scale.
+        # These include the point mass at one (terminal HHI/dependence)
+        # or zero (chokepoint betweenness), rather than only the Beta mean.
+        factor_low = float(keys.factor_mean.quantile(.01))
+        factor_high = float(keys.factor_mean.quantile(.99))
+        if not (factor_low <= 0.0 and 1.0 <= factor_high):
+            print(f'WARNING: factor values 0 and 1 are not both within '
+                  f'the plotted 1%-99% range [{factor_low:.3f}, {factor_high:.3f}]')
+        contrast_rows = []
+        for j, response in enumerate(audit['continuous_responses']):
+            def expected_at(f):
+                mu = expit(ac[:, j] + lc[:, j] * f)
+                if args.node_type == 'terminal':
+                    p = (np.zeros_like(mu) if j == 0 else
+                         expit(ao[:, j-1] + lo[:, j-1] * f))
+                    return p + (1.0 - p) * mu
+                p = (expit(ao[:, 0] + lo[:, 0] * f)
+                     if response == 'betweenness' else np.zeros_like(mu))
+                return (1.0 - p) * mu
+
+            at_zero = expected_at(0.0)
+            at_one = expected_at(1.0)
+            difference = at_one - at_zero  # paired draws, not differences of quantiles
+            row = {'response': response, 'factor_from': 0.0, 'factor_to': 1.0,
+                   'scale': 'original_response', 'draws': len(difference),
+                   'within_plotted_factor_range': factor_low <= 0.0 and 1.0 <= factor_high}
+            for label, values in [('expected_f0', at_zero), ('expected_f1', at_one),
+                                  ('difference', difference)]:
+                row[f'{label}_median'] = float(np.median(values))
+                row[f'{label}_q025'] = float(np.quantile(values, .025))
+                row[f'{label}_q975'] = float(np.quantile(values, .975))
+            contrast_rows.append(row)
+        pd.DataFrame(contrast_rows).to_csv(out / 'factor_response_contrasts.csv', index=False)
         grid = np.linspace(keys.factor_mean.quantile(.01), keys.factor_mean.quantile(.99), 101)
         rows = []
         fig, axes = plt.subplots(2, 3, figsize=(13, 7))
@@ -326,7 +359,7 @@ def main():
     for name in ['parameter_summary.csv','sampling_diagnostics.json','posterior_checks.csv','sample_audit.json','predictor_scaling.csv']:
         if (terminal / name).exists():
             shutil.copy2(terminal / name, out / name)
-    (out / 'README.txt').write_text('Existing posterior only: no refitting.\nPredictive checks are conditional and in-sample, not out-of-sample validation.\nTerminal role groups use LAGGED role; chokepoints use the full sample.\nFactor associations use posterior mean scores informed by these same responses; they are descriptive, not independent validation or causal effects.\nCurve bands are equal-tailed 95% parameter uncertainty, not predictive intervals.\nCurves span the 1st-99th percentiles of posterior mean latent scores.\nNode/month scores are conditional on consecutive activity (and available age for terminals); interpret alongside sampling diagnostics and model limitations.\n', encoding='utf-8')
+    (out / 'README.txt').write_text('factor_response_contrasts.csv: paired posterior comparisons of expected bounded responses at factor 0 vs 1; intervals are equal-tailed 95% credible intervals for the difference, not predictive intervals.\nExisting posterior only: no refitting.\nPredictive checks are conditional and in-sample, not out-of-sample validation.\nTerminal role groups use LAGGED role; chokepoints use the full sample.\nFactor associations use posterior mean scores informed by these same responses; they are descriptive, not independent validation or causal effects.\nCurve bands are equal-tailed 95% parameter uncertainty, not predictive intervals.\nCurves span the 1st-99th percentiles of posterior mean latent scores.\nNode/month scores are conditional on consecutive activity (and available age for terminals); interpret alongside sampling diagnostics and model limitations.\n', encoding='utf-8')
     (out / 'export_metadata.json').write_text(json.dumps(dict(source=str(nc), node_type=args.node_type, predictive_replicates=actual_draws, panel_sha256=audit['input_sha256']), indent=2))
     archive = shutil.make_archive(str(out), 'zip', out)
     print(f'Done. Send this small ZIP: {archive}', flush=True)

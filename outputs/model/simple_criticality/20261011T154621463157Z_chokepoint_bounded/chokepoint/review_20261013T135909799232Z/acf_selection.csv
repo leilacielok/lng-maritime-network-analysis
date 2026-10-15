@@ -1,5 +1,0 @@
-,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat,selection_reason
-beta[log1p_mean_voyage_distance_lag1],0.0,0.0,7851.0,5392.0,1.0,Lowest bulk ESS among regression coefficients
-loading_cont[betweenness],0.001,0.001,608.0,1136.0,1.01,Lowest bulk ESS among response loadings
-precision_cont[betweenness],7.279,4.412,472.0,905.0,1.0,Lowest bulk ESS among global parameters; Lowest tail ESS among global parameters
-loading_cont[pagerank],0.0,0.0,2083.0,3877.0,1.0,PageRank anchor loading
