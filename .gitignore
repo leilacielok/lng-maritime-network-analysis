@@ -25,6 +25,7 @@ data/processed/*
 # big files
 *.nc
 outputs/model/simple_criticality/**/*.zip
+archive/runs_original_model/
 
 # ==========================================
 # PYTHON

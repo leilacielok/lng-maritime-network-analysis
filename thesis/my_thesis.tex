@@ -1508,9 +1508,8 @@ Separate rank-one latent factor models are
 estimated for terminals and chokepoints,
 reflecting their different functions and response
 measures within the LNG maritime network.
-Each model represents the observed responses
-through a shared latent factor, whose conditional
-mean is related to a set of covariates.
+Each model represents its own set of responses variables,
+through a shared latent factor, related to the corresponding set of covariates.
 
 The analysis focuses on node-month observations
 with consecutive observed activity, using a
@@ -1520,7 +1519,7 @@ covariates. The resulting latent factors provide
 model-specific summaries of network position,
 whose interpretation and adequacy are evaluated
 through posterior inference, predictive checks
-and prior sensitivity analysis.
+and a prior sensitivity analysis.
 
 \section{Estimation samples, responses and covariates}
 \label{sec:criticality_sample}
@@ -1537,19 +1536,15 @@ the analysis to focus on network position among
 consecutively active terminals, using information
 from the preceding month without modelling transitions
 between active and inactive states. 
-Calendar lags are checked against the
-complete panel before filtering, preventing the
-preceding selected active observation from being
-mistaken for the preceding calendar month.
 
-Excluding 4,988 currently inactive observations,
+Excluding 4,988 inactive observations,
 71 active observations without an available calendar
 lag, and 916 observations preceded by inactivity
-leaves 3,565 observations active in consecutive
+results in 3,565 observations active in consecutive
 months. A further 112 observations with missing
 terminal age are excluded, resulting in an estimation
-sample of 3,453 observations for 137 terminals.
-Of these, 2,325 have lagged importer status and
+sample of size 3,453 data points for 137 terminals.
+Of these observations, 2,325 have lagged importer status and
 1,128 have lagged exporter status.
 
 The terminal model includes six responses:
@@ -1567,8 +1562,7 @@ lagged mean voyage distance, log-transformed
 lagged terminal capacity, monthly sine and cosine terms,
 terminal age, and an indicator for exporter status
 in the preceding month. Numeric covariates are
-centred and divided by their estimation-sample
-standard deviations, while the exporter indicator
+standardised, while the exporter indicator
 remains on its zero--one scale. Accordingly,
 coefficients for numeric predictors correspond
 to one-standard-deviation differences, whereas
@@ -1684,95 +1678,60 @@ restricts the covariate associations to a common
 direction, while allowing their magnitude and sign
 to differ across responses.
 
-\subsection{Prior distributions}
+\subsection{Prior specification}
 \label{subsec:prior_distributions}
-The prior distributions were chosen to provide regularisation
-while allowing sufficient flexibility in the relationships
-between the latent factor and the observed responses.
 
-For terminals, the independent prior distributions are
-specified below. The indices $r=1,\ldots,7$, $j=1,2,3$,
-and $k=1,2,3$ refer to the predictors, bounded responses,
-and binary responses, respectively. The loading $\lambda_1$
-corresponds to PageRank, while $\lambda_j$ for $j=2,3$
-refers to HHI and dependence. The boundary-component
-parameters $c_j$ and $d_j$ are defined only for $j=2,3$.
-\[
-\begin{array}{@{}l@{\qquad\qquad}l@{}}
-\beta_r \sim \mathcal{N}(0,0.5^2),
-& \lambda_1 \sim \operatorname{HalfNormal}(1), \\[4pt]
-
-\lambda_j \sim \mathcal{N}(0,1),\quad j=2,3,
-& \ell_k \sim \mathcal{N}(0,1), \\[4pt]
-
-\alpha_j \sim \mathcal{N}(m_j,1.5^2),
-& (m_1,m_2,m_3)=(-4,0,0), \\[4pt]
-
-a_k \sim \mathcal{N}(0,2^2),
-& \log\phi_j \sim \mathcal{N}(\log 10,0.7^2), \\[4pt]
-
-c_j \sim \mathcal{N}(0,1.5^2),
-& d_j \sim \mathcal{N}(0,1).
-\end{array}
-\]
-
-Regression coefficients were assigned zero-centred Normal
-priors with standard deviation 0.5, favouring moderate
+The prior distributions were chosen to provide regularisation while allowing 
+sufficient flexibility in the relationships between the latent factor and 
+the observed responses. For terminals, the regression coefficients were 
+assigned independent zero-centred Normal priors with standard deviation 0.5, 
+$\beta_r \sim \mathcal{N}(0,0.5^2)$ for $r=1,\ldots,7$, favouring moderate 
 covariate associations on the scale of the latent factor.
-The first continuous-response loading was constrained to
-be positive through a Half-Normal prior, fixing the
-orientation of the latent factor. The remaining loadings
-were assigned zero-centred Normal priors, allowing both
-positive and negative associations with the factor.
 
-For the interior components of the bounded responses,
-intercept priors were specified on the logit scale, and their centres were chosen to reflect differences in the
-empirical scales of the corresponding network measures.
-In particular, PageRank typically takes values close to
-zero, making a zero-centred intercept prior, corresponding
-to an inverse-logit value of 0.5, inappropriate.
-Its intercept prior was therefore centred at $-4$,
-corresponding to an inverse-logit value of approximately
-0.018. The intercept priors for HHI and dependence were
-instead centred at zero, allowing their interior means
-to vary around a less restrictive reference value of 0.5.
+The loading associated with PageRank was constrained to be positive to fix the 
+orientation of the latent factor, while the remaining loadings were allowed to 
+take either sign. This resulted in the following prior specifications for the 
+loadings: $\lambda_1 \sim \operatorname{HalfNormal}(1)$ and $\lambda_j \sim 
+\mathcal{N}(0,1)$ for $j=2,\ldots,p$, where $p=6$ denotes the number of responses.
 
-Binary-response intercepts were assigned $\mathcal{N}(0,2^2)$ priors, allowing a relatively broad
-range of baseline probabilities. The intercepts governing
-boundary inflation were assigned $\mathcal{N}(0,1.5^2)$ priors, while their factor
-loadings followed $\mathcal{N}(0,1)$ distributions.
+For the interior components of the bounded responses, intercept priors were specified 
+on the logit scale, with centres chosen to reflect differences in the empirical scales 
+of the corresponding network measures. In particular, PageRank typically takes values 
+close to zero, making a zero-centred intercept prior, corresponding to an inverse-logit 
+value of 0.5, inappropriate. Its intercept prior was therefore centred at $-4$, 
+corresponding to an inverse-logit value of approximately 0.018. The intercept priors 
+for HHI and dependence were instead centred at zero, allowing their interior means to 
+vary around a reference value of 0.5. These choices correspond to $\alpha_j 
+\sim \mathcal{N}(m_j,1.5^2)$ for $j=1,2,3$, with $(m_1,m_2,m_3)=(-4,0,0)$. 
 
-The precision parameters of the bounded continuous
-components were assigned log-Normal priors, with
-$\log\phi_j\sim\mathcal{N}(\log 10,0.7^2)$.
-This specification ensures positive precision values,
-with prior median 10 and an approximate central 95\%
-interval of $[2.54,39.44]$, allowing different degrees
-of dispersion around the conditional means.
+Binary-response intercepts were assigned $\mathcal{N}(0,2^2)$ priors, allowing a 
+relatively broad range of baseline probabilities. The intercepts governing boundary 
+inflation for HHI and dependence were assigned $\mathcal{N}(0,1.5^2)$ priors, while 
+their factor loadings followed $\mathcal{N}(0,1)$ distributions. 
 
-For chokepoints, the same prior families were adopted,
-with parameters estimated independently from the
-terminal model. The interior intercept centres were
-set to $(-4,-5,-4)$ for PageRank, betweenness, and
-flow share, respectively, reflecting the relatively
-small values typically observed for these measures.
-In particular, the inverse-logit of $-5$ is
-approximately 0.0067, comparable to the empirical
-median of chokepoint betweenness.
+The precision parameters of the bounded continuous components were assigned log-Normal 
+priors, with $\log\phi_j\sim\mathcal{N}(\log 10,0.7^2)$ for $j=1,2,3$. This 
+specification ensures positive precision values, with prior median 10 and an 
+approximate central 95\% interval of $[2.54,39.44]$, allowing different degrees 
+of dispersion around the conditional means. 
 
-The betweenness zero-component intercept was assigned
-a $\mathcal{N}(-5,1.5^2)$ prior, expressing a prior
-preference for a low probability of exact zeros at
-factor value zero. Its factor loading followed a
-$\mathcal{N}(0,1)$ prior. Given the small number of
-observed zeros, inference on this component may be
-particularly sensitive to the prior specification.
+For chokepoints, the same prior families were adopted, with parameters estimated 
+independently from the terminal model. The interior intercept centres were set to 
+$(-4,-5,-4)$ for PageRank, betweenness, and flow share, respectively, reflecting 
+the relatively small values typically observed for these measures. In particular, 
+the inverse-logit of $-5$ is approximately 0.0067, comparable to the empirical 
+median of chokepoint betweenness. 
 
-These distributions were adopted as initial regularising
-priors rather than independently elicited prior information.
-Their prior predictive implications and the sensitivity of
-the posterior findings to alternative specifications are
-examined in Section~\ref{sec:prior_sensitivity}.
+The betweenness zero-component intercept was assigned a $\mathcal{N}(-5,1.5^2)$ prior, 
+expressing a prior preference for a low probability of exact zeros at factor value zero. 
+Its factor loading followed a $\mathcal{N}(0,1)$ prior. Given the small number of 
+observed zeros, inference on this component may be particularly sensitive to the prior 
+specification. 
+
+These distributions were adopted as initial regularising priors rather than 
+independently elicited prior information. Their prior predictive implications and the 
+sensitivity of the posterior findings to alternative specifications are examined in 
+Section~\ref{sec:prior_sensitivity}.
 
 \subsection{Posterior sampling and diagnostics}
 \label{subsec:simple_computation}
@@ -1835,7 +1794,7 @@ Posterior predictive checks are then used to assess how well
 the model reproduces the observed response distributions
 and associations.
 
-\subsection{Posterior associations and factor interpretation}
+\subsection{Terminal posterior associations and factor interpretation}
 \label{subsec:posterior_associations_terminals}
 
 The posterior estimates of the factor-regression coefficients
@@ -1974,7 +1933,7 @@ reproduces the observed response patterns more generally
 is examined through the posterior predictive checks
 in the following subsection.
 
-\subsection{Posterior predictive assessment}
+\subsection{Terminal posterior predictive assessment}
 \label{sec:simple_ppc}
 Posterior predictive assessment evaluates how well the
 fitted model reproduces the observed response distributions
@@ -2066,7 +2025,7 @@ flow exposure and structural importance for the chokepoint specification.
 The adequacy of the fitted model is subsequently evaluated
 through posterior predictive checks.
 
-\subsection{Posterior associations and factor interpretation}
+\subsection{Chokepoint posterior associations and factor interpretation}
 \label{posterior_associations_chokepoints}
 For chokepoints, the factor-regression results in
 Table~\ref{tab:chokepoint_beta} indicate relatively
@@ -2182,7 +2141,8 @@ factor can summarise different aspects of
 chokepoint centrality, flow exposure and
 structural position.
 
-\subsection{Posterior predictive assessment}
+\subsection{Chokepoint posterior predictive assessment}
+
 Following the same conditional, in-sample approach used
 for terminals, the chokepoint posterior predictive checks
 indicate that the model reproduces the overall response
