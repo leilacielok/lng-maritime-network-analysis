@@ -126,7 +126,7 @@ def main():
     parser.add_argument("--chains", type=int, default=4)
     parser.add_argument("--cores", type=int, default=1, help="One core is portable to Windows; increase if desired")
     parser.add_argument("--prior-draws", type=int, default=200)
-    parser.add_argument("--target-accept", type=float, default=.95)
+    parser.add_argument("--target-accept", type=float, default=.80)
     parser.add_argument("--seed", type=int, default=20261008)
     args = parser.parse_args()
     profiles = {"baseline": "original", "CON": "regularized", "RS": "response_precision"}
