@@ -1,7 +1,7 @@
 import arviz as az
 import pandas as pd
 
-idata = az.from_netcdf(r"C:\Users\Leila\OneDrive\Desktop\Thesis\code\outputs\model\baseline\terminal\20261022T142047738901Z_terminal_bounded_original\terminal\posterior.nc")
+idata = az.from_netcdf(r"C:\Users\Leila\OneDrive\Desktop\Thesis\code\outputs\model\baseline\terminal\20261022T161648240223Z_terminal_bounded_original\terminal\posterior.nc")
 
 stats = idata.sample_stats
 
