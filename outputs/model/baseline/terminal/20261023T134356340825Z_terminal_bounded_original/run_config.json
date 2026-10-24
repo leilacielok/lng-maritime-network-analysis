@@ -1,0 +1,91 @@
+{
+  "terminal_panel": "C:\\Users\\Leila\\OneDrive\\Desktop\\Thesis\\code\\data\\processed\\model_ready\\terminal_criticality_model_panel.csv",
+  "chokepoint_panel": "C:\\Users\\Leila\\OneDrive\\Desktop\\Thesis\\code\\data\\processed\\model_ready\\chokepoint_criticality_model_panel.csv",
+  "output_dir": "C:\\Users\\Leila\\OneDrive\\Desktop\\Thesis\\code\\outputs\\model",
+  "prior_profile": "original",
+  "model_group": "baseline",
+  "precision_prior_sd": 0.7,
+  "run_name": null,
+  "node_type": "terminal",
+  "check_only": false,
+  "prior_only": false,
+  "draws": 10000,
+  "tune": 5000,
+  "chains": 4,
+  "cores": 4,
+  "prior_draws": 200,
+  "target_accept": 0.8,
+  "seed": 20261008,
+  "likelihood": "Beta PageRank; one-inflated Beta HHI/dependence",
+  "prior_specification": {
+    "profile": "original",
+    "beta_sd": 0.5,
+    "pagerank_loading_sd": 1.0,
+    "other_loading_sd": [
+      1.0,
+      1.0
+    ],
+    "binary_loading_sd": 1.0,
+    "interior_intercept_mean": [
+      -4.0,
+      0.0,
+      0.0
+    ],
+    "interior_intercept_sd": [
+      1.5,
+      1.5,
+      1.5
+    ],
+    "binary_intercept_sd": 2.0,
+    "boundary_intercept_mean": 0.0,
+    "boundary_intercept_sd": 1.5,
+    "boundary_loading_sd": 1.0,
+    "precision_median": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "precision_response_order": [
+      "role_specific_pagerank",
+      "counterparty_hhi_terminal",
+      "role_specific_dependence"
+    ]
+  },
+  "precision_prior": {
+    "distribution": "LogNormal",
+    "median_by_response": {
+      "role_specific_pagerank": 10.0,
+      "counterparty_hhi_terminal": 10.0,
+      "role_specific_dependence": 10.0
+    },
+    "log_sd": 0.7
+  },
+  "started_utc": "20261023T134356340825Z",
+  "command_argv": [
+    "scripts/models/estimation.py",
+    "--node-type",
+    "terminal",
+    "--prior-profile",
+    "original",
+    "--draws",
+    "10000",
+    "--tune",
+    "5000",
+    "--chains",
+    "4",
+    "--cores",
+    "4",
+    "--target-accept",
+    "0.80"
+  ],
+  "python": "3.12.15",
+  "packages": {
+    "numpy": "1.26.4",
+    "pandas": "2.3.3",
+    "pymc": "5.20.1",
+    "pytensor": "2.27.1",
+    "arviz": "0.21.0",
+    "matplotlib": "3.9.2"
+  },
+  "script_sha256": "994fc5868cf510b579a89c136f469e5d7785f74bb26988edaa460cb60b84eb83"
+}
