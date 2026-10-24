@@ -1524,7 +1524,7 @@ and a prior sensitivity analysis.
 
 % TODO: Update introductory description after Models 2 and 3 are specified.
 \section{General modelling framework}
-% Shared estimation samples, responses, and likelihoods.
+% Shared estimation samples, responses, likelihoods, and baseline priors.
 \subsection{Estimation samples, responses and covariates}
 \label{sec:criticality_sample}
 \label{sec:simple_responses}
@@ -1580,9 +1580,9 @@ Neither HHI nor dependence has observed zeros,
 but HHI equals one in 34.09\% of observations
 and dependence equals one in 20.76\%.
 These features motivate a Beta likelihood for
-PageRank and one-and zero-inflated Beta likelihoods for
+PageRank and one-inflated Beta likelihoods for
 HHI and dependence, as specified in
-Section~\ref{sec:simple_factor_specification}.
+Section~\ref{subsec:shared_response_likelihoods}.
 
 The chokepoint panel contains 1,440 observations
 for 24 nodes. Applying the same calendar-lag
@@ -1616,24 +1616,9 @@ likelihoods, while betweenness uses a zero-inflated
 Beta likelihood.
 
 
-\section{Model 1: Baseline rank-one specification}
-\label{sec:simple_factor_specification}
-For each node type separately, let $\boldsymbol{x}_{i,t}$ be the standardised covariate vector, with the role indicator retained on its original scale, and let $f_{i,t}$ be a scalar latent factor. The factor regression is
-\begin{equation}
- f_{i,t}\mid\boldsymbol{x}_{i,t},\boldsymbol{\beta}
- \sim\mathcal{N}(\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1).
- \label{eq:simple_factor}
-\end{equation}
-The residual factor variance is fixed at one to define its scale. 
-The PageRank loading is constrained to be positive to orient the factor, while the other loadings are unrestricted. 
-Conditional on the factors and parameters, the responses are assumed independent, and factors for different node-months are independent given their covariates and regression coefficients.
-
-
-% TODO: Describe the longer-chain sampling check in Section~\ref{subsec:simple_computation}.
-
-\subsection{Response likelihoods and reduced-rank structure}
-% TODO: These likelihoods are shared by Models 1--3; consider moving them
-% to the general framework once the extensions are specified.
+\subsection{Response likelihoods}
+\label{subsec:shared_response_likelihoods}
+The following response families are used for the baseline model and provide the likelihood framework for the proposed extensions. The expressions below use a scalar factor $f_{i,t}$ and its response-specific loading, as in Model~1; their latent linear predictors will require extension for the rank-two model.
 For bounded response $j$, the interior mean and precision are defined as
 \begin{align}
  \operatorname{logit}(\mu_{i,t,j})&=\alpha_j+\lambda_j f_{i,t},\\
@@ -1676,21 +1661,10 @@ For binary response $k$,
  B_{i,t,k}\mid f_{i,t}&\sim\operatorname{Bernoulli}(p_{i,t,k}),\\
  \operatorname{logit}(p_{i,t,k})&=a_k+\ell_k f_{i,t}.
 \end{align}
-Writing
-$f_{i,t}=\boldsymbol{x}_{i,t}^{\mathsf T}
-\boldsymbol{\beta}+z_{i,t}$
-shows that the covariate coefficients in the conditional
-response predictors are given by the products of the
-response-specific loadings and the factor-regression
-coefficients.
-Consequently, the corresponding coefficient matrices
-have rank at most one. This reduced-rank structure
-restricts the covariate associations to a common
-direction, while allowing their magnitude and sign
-to differ across responses.
 
 \subsection{Prior specification}
 \label{subsec:prior_distributions}
+The following priors specify the shared response parameters and the rank-one baseline factor regression. Additional priors and identification constraints required by Models~2 and~3 will be stated with those extensions.
 
 The prior distributions were chosen to provide regularisation while allowing 
 sufficient flexibility in the relationships between the latent factor and 
@@ -1744,6 +1718,30 @@ independently elicited prior information. Their prior predictive implications an
 sensitivity of the posterior findings to alternative specifications are examined in 
 Section~\ref{sec:prior_sensitivity}.
 
+\section{Model 1: Baseline rank-one specification}
+\label{sec:simple_factor_specification}
+For each node type separately, let $\boldsymbol{x}_{i,t}$ be the standardised covariate vector, with the role indicator retained on its original scale, and let $f_{i,t}$ be a scalar latent factor. The factor regression is
+\begin{equation}
+ f_{i,t}\mid\boldsymbol{x}_{i,t},\boldsymbol{\beta}
+ \sim\mathcal{N}(\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1).
+ \label{eq:simple_factor}
+\end{equation}
+The residual factor variance is fixed at one to define its scale. 
+The PageRank loading is constrained to be positive to orient the factor, while the other loadings are unrestricted. 
+Conditional on the factors and parameters, the responses are assumed independent, and factors for different node-months are independent given their covariates and regression coefficients.
+
+Writing
+$f_{i,t}=\boldsymbol{x}_{i,t}^{\mathsf T}
+\boldsymbol{\beta}+z_{i,t}$
+shows that the covariate coefficients in the conditional
+response predictors are given by the products of the
+response-specific loadings and the factor-regression
+coefficients.
+Consequently, the corresponding coefficient matrices
+have rank at most one. This reduced-rank structure
+restricts the covariate associations to a common
+direction, while allowing their magnitude and sign
+to differ across responses.
 
 \section{Model 2: Node-specific intercepts}
 % TODO: Insert the model specification and the prior for node-specific intercepts.
@@ -1773,9 +1771,14 @@ computed using ArviZ 0.21.0. Data processing and
 visualisation relied on NumPy 1.26.4, pandas 2.3.3,
 and Matplotlib 3.9.2.
 
-Each model was estimated using four chains, with
-1,500 warm-up iterations and 2,000 retained draws per
-chain, yielding 8,000 posterior draws in total.
+For the principal baseline results, each model was estimated using four
+parallel chains, with 5,000 warm-up iterations and 10,000 retained draws per
+chain, yielding 40,000 posterior draws in total.
+Earlier runs with 1,500 warm-up iterations and 2,000 retained draws per
+chain were used for initial estimation and comparison.
+The use of multiple chains allows convergence to be assessed by
+comparing within-chain and between-chain variability
+\citep{gelman2013bayesian}.
 The target acceptance probability was set to 0.80,
 corresponding to the target acceptance rate used
 during step-size adaptation in the warm-up phase
@@ -1801,11 +1804,26 @@ Diagnostics were evaluated for regression coefficients,
 response parameters, latent factors, factor means,
 and factor residuals.
 
+For the longer-chain baseline runs, both node-type models passed the
+predefined sampling checks: no post-warm-up divergences, maximum
+$\widehat{R}\leq 1.01$, and minimum bulk and tail ESS of at least 400.
+For terminals, the minimum bulk and tail ESS were 2,931 and 6,726,
+respectively; for chokepoints, they were 1,693 and 3,698.
+The maximum reported $\widehat{R}$ was 1.00 for both models
+(rounded to two decimal places). These results support the numerical
+reliability of the posterior summaries but do not, by themselves,
+establish model adequacy.
+
 Trace plots and autocorrelation functions for selected
 global parameters are provided in
-Appendix~\ref{app:mcmc_diagnostics}
-(Figures~\ref{fig:terminal_trace_appendix}--
-\ref{fig:terminal_acf_additional}).
+Appendix~\ref{app:mcmc_diagnostics}.
+The graphical diagnostics focus on the PageRank anchor loading
+and parameters with comparatively low bulk or tail ESS within
+relevant parameter groups. In the terminal model, these include
+the lagged exporter-status coefficient and the HHI one-mass loading;
+in the chokepoint model, they include the betweenness loading and
+Beta precision. This selection provides a targeted visual check
+without reproducing plots for every estimated parameter.
 Trace plots display the sampled parameter values across
 iterations for each chain. Well-mixing chains are
 expected to explore similar regions of the posterior
@@ -1817,8 +1835,8 @@ more efficient sampling and higher effective sample
 sizes \citep{vehtari2021rank}.
 
 
-% TODO: Describe the 5,000 warm-up / 10,000 retained-draw check.
-% TODO: Confirm sampling settings for all final runs.
+% TODO: Confirm sampling settings separately for Models 2 and 3 once estimated.
+% Appendix trace/ACF plots should refer to the longer-chain baseline runs.
 
 \section{Prior sensitivity analysis}
 \label{sec:prior_sensitivity}
@@ -1881,29 +1899,27 @@ deviation was fixed at 0.7.
 % TODO: Revise section introduction and transitions after Models 2 and 3 are fitted.
 
 \section{Sampling diagnostics: baseline results}
-The terminal run presented no post-warm-up divergences,
-a maximum reported rank-normalised $\widehat{R}$ of 1.01,
-a minimum bulk ESS of 817, and a minimum tail ESS
-of 1,958. These results satisfied the implemented
-convergence screening criteria of no divergences,
-maximum $\widehat{R}\leq 1.01$, and minimum bulk and
-tail ESS of at least 400.
+The baseline models were estimated using four chains, each with
+5,000 warm-up iterations and 10,000 retained draws. Neither run
+presented post-warm-up divergences. For the terminal model, the
+maximum reported rank-normalised $\widehat{R}$ was 1.00,
+with minimum bulk and tail effective sample sizes (ESS) of
+2,931 and 6,726, respectively. For the chokepoint model,
+the maximum reported $\widehat{R}$ was also 1.00, with
+minimum bulk and tail ESS of 1,693 and 3,698, respectively.
+The lowest ESS values in the chokepoint model were associated
+with the betweenness precision parameter.
 
-The chokepoint run also presented no post-warm-up
-divergences and a maximum reported $\widehat{R}$ of
-1.01. Its minimum bulk ESS was 472 and minimum
-tail ESS was 905, both associated with the
-betweenness precision parameter. Therefore, both
-runs satisfied the same screening criteria.
-
-The autocorrelation plots show varying rates of decay,
-with more persistent autocorrelation for the betweenness
-loading and precision in the chokepoint model.
-Overall, the numerical and graphical diagnostics provide
-encouraging evidence of satisfactory MCMC mixing,
-although they do not guarantee complete exploration
-of the posterior distribution.
-
+Both models therefore satisfied the prespecified screening
+criteria of no divergences, maximum $\widehat{R}\leq 1.01$,
+and minimum bulk and tail ESS of at least 400. The selected
+trace plots and within-chain autocorrelation functions in
+Appendix~\ref{app:mcmc_diagnostics} complement these numerical
+results. The betweenness loading and precision show relatively
+persistent autocorrelation in the chokepoint model. Overall,
+the diagnostics support satisfactory sampling behaviour,
+although they cannot establish model adequacy or guarantee
+complete exploration of the posterior distribution.
 
 \section{Baseline model results}
 \subsection{Terminal posterior analysis}
@@ -1948,13 +1964,13 @@ zero--one indicator.}
 \hline
 Predictor & Posterior mean & 95\% HDI \\
 \hline
-Lagged neighbour activity share & 0.096 & $[0.057,0.137]$ \\
-$\log(1+\text{lagged voyage distance})$ & 0.062 & $[0.020,0.105]$ \\
-Month sine & $-0.032$ & $[-0.070,0.004]$ \\
-Month cosine & $-0.004$ & $[-0.042,0.032]$ \\
-$\log(1+\text{capacity})$ & 0.409 & $[0.363,0.453]$ \\
-Terminal age & $-0.019$ & $[-0.057,0.021]$ \\
-Lagged exporter indicator & 1.392 & $[1.296,1.488]$ \\
+Lagged neighbour activity share & 0.097 & $[0.056,0.136]$ \\
+$\log(1+\text{lagged voyage distance})$ & 0.062 & $[0.021,0.106]$ \\
+Month sine & $-0.032$ & $[-0.069,0.005]$ \\
+Month cosine & $-0.003$ & $[-0.041,0.033]$ \\
+$\log(1+\text{capacity})$ & 0.409 & $[0.365,0.454]$ \\
+Terminal age & $-0.019$ & $[-0.059,0.020]$ \\
+Lagged exporter indicator & 1.395 & $[1.296,1.490]$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -1988,13 +2004,13 @@ means and all probabilities use logit links.}
 Response component & Posterior mean & 95\% HDI \\
 \hline
 PageRank interior mean & 0.359 & $[0.348,0.370]$ \\
-HHI interior mean & $-0.535$ & $[-0.570,-0.502]$ \\
-Dependence interior mean & 0.420 & $[0.392,0.445]$ \\
-Articulation-point probability & 0.771 & $[0.682,0.860]$ \\
-Incident-global-bridge probability & $-0.637$ & $[-0.714,-0.560]$ \\
-Connected-to-articulation probability & 0.110 & $[-0.015,0.244]$ \\
-Probability of HHI equal to one & $-3.982$ & $[-4.718,-3.266]$ \\
-Probability of dependence equal to one & $-0.545$ & $[-0.638,-0.445]$ \\
+HHI interior mean & $-0.535$ & $[-0.569,-0.502]$ \\
+Dependence interior mean & 0.420 & $[0.393,0.446]$ \\
+Articulation-point probability & 0.771 & $[0.680,0.860]$ \\
+Incident-global-bridge probability & $-0.638$ & $[-0.719,-0.561]$ \\
+Connected-to-articulation probability & 0.109 & $[-0.017,0.239]$ \\
+Probability of HHI equal to one & $-3.986$ & $[-4.727,-3.258]$ \\
+Probability of dependence equal to one & $-0.545$ & $[-0.642,-0.451]$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -2072,7 +2088,8 @@ Nevertheless, discrepancies appear in dispersion, quantiles and role-specific bo
 For instance, PageRank dispersion is overestimated for lagged importers and underestimated for lagged
 exporters. For exporters, the observed 95th percentile
 of PageRank is 0.0714, compared with a replicated mean
-of 0.0621 and a 95\% replicated interval of $[0.0588,0.0654]$.
+of 0.0620 and a 95\% replicated interval
+of $[0.0587,0.0654]$.
 
 \begin{table}[htbp]
 \centering
@@ -2082,12 +2099,12 @@ of 0.0621 and a 95\% replicated interval of $[0.0588,0.0654]$.
 \hline
 Response & Lagged role & Observed & Replicated mean & 95\% interval \\
 \hline
-HHI & All & 34.09 & 34.09 & $[32.73,35.45]$ \\
-HHI & Importer & 41.89 & 43.41 & $[41.59,45.20]$ \\
-HHI & Exporter & 18.00 & 14.89 & $[13.39,16.40]$ \\
-Dependence & All & 20.76 & 20.77 & $[18.97,22.62]$ \\
-Dependence & Importer & 26.45 & 23.94 & $[21.68,26.28]$ \\
-Dependence & Exporter & 9.04 & 14.23 & $[11.97,16.67]$ \\
+HHI & All & 34.09 & 34.10 & $[32.73,35.48]$ \\
+HHI & Importer & 41.89 & 43.41 & $[41.59,45.25]$ \\
+HHI & Exporter & 18.00 & 14.90 & $[13.39,16.40]$ \\
+Dependence & All & 20.76 & 20.78 & $[18.97,22.68]$ \\
+Dependence & Importer & 26.45 & 23.96 & $[21.72,26.28]$ \\
+Dependence & Exporter & 9.04 & 14.24 & $[11.97,16.58]$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -2121,11 +2138,11 @@ This pattern is particularly evident among exporters.
 \hline
 Response pair & Lagged role & Observed & Rep. median & 95\% interval \\
 \hline
-Articulation--bridge & All & 0.290 & $-0.122$ & $[-0.156,-0.088]$ \\
-Articulation--bridge & Importer & 0.137 & $-0.037$ & $[-0.073,0.007]$ \\
-Articulation--bridge & Exporter & 0.546 & $-0.154$ & $[-0.212,-0.103]$ \\
-HHI--bridge & All & 0.533 & 0.293 & $[0.251,0.328]$ \\
-PageRank--dependence & All & 0.314 & 0.157 & $[0.113,0.197]$ \\
+Articulation--bridge & All & 0.290 & -0.123 & $[-0.162,-0.081]$ \\
+Articulation--bridge & Importer & 0.137 & -0.034 & $[-0.076,0.003]$ \\
+Articulation--bridge & Exporter & 0.546 & -0.155 & $[-0.211,-0.091]$ \\
+HHI--bridge & All & 0.533 & 0.288 & $[0.249,0.340]$ \\
+PageRank--dependence & All & 0.314 & 0.158 & $[0.116,0.195]$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -2189,7 +2206,7 @@ shows a consistent pattern of positive loadings across
 the interior means and binary structural probabilities,
 with all 95\% HDIs excluding zero.
 These relationships are also illustrated by the fitted
-response curves in Figure~\ref{fig:simple_response_curves}.
+response curves in Figure~\ref{fig:chokepoint_response_curves}.
 
 The factor is positively related to PageRank,
 betweenness and flow share, indicating that higher
@@ -2219,12 +2236,12 @@ use logit links.}
 \hline
 Response component & Posterior mean & 95\% HDI \\
 \hline
-PageRank interior mean & 0.262 & $[0.244,0.283]$ \\
-Betweenness interior mean & 1.026 & $[0.971,1.085]$ \\
-Flow-share interior mean & 0.618 & $[0.579,0.659]$ \\
-Articulation-point probability & 0.718 & $[0.556,0.871]$ \\
-Connected-to-articulation probability & 1.204 & $[0.952,1.481]$ \\
-Probability of betweenness equal to zero & $-1.659$ & $[-2.574,-0.731]$ \\
+PageRank interior mean & 0.263 & $[0.243,0.282]$ \\
+Betweenness interior mean & 1.025 & $[0.969,1.081]$ \\
+Flow-share interior mean & 0.619 & $[0.578,0.660]$ \\
+Articulation-point probability & 0.719 & $[0.561,0.884]$ \\
+Connected-to-articulation probability & 1.206 & $[0.939,1.480]$ \\
+Probability of betweenness equal to zero & $-1.656$ & $[-2.556,-0.767]$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -2284,7 +2301,7 @@ indicating that the model underestimates its dispersion.
 The observed median (0.0159) falls below its replicated
 interval of $[0.0178,0.0201]$, whereas the observed
 95th percentile (0.0643) exceeds the corresponding
-interval of $[0.0558,0.0633]$.
+interval of $[0.0558,0.0634]$.
 These discrepancies indicate that, despite reproducing
 the overall mean, the model does not fully capture
 the observed distribution of the measure.
@@ -2310,10 +2327,10 @@ PageRank--articulation association.
 \hline
 Response pair & Observed & Rep. median & 95\% interval \\
 \hline
-PageRank--betweenness & 0.685 & 0.656 & $[0.611,0.690]$ \\
-PageRank--flow share & 0.672 & 0.530 & $[0.479,0.579]$ \\
-Betweenness--flow share & 0.800 & 0.717 & $[0.688,0.750]$ \\
-PageRank--articulation & 0.287 & 0.205 & $[0.145,0.256]$ \\
+PageRank--betweenness & 0.685 & 0.656 & $[0.619,0.692]$ \\
+PageRank--flow share & 0.672 & 0.535 & $[0.494,0.575]$ \\
+Betweenness--flow share & 0.800 & 0.722 & $[0.686,0.752]$ \\
+PageRank--articulation & 0.287 & 0.201 & $[0.139,0.268]$ \\
 \hline
 \end{tabular}
 \end{table}
@@ -3147,18 +3164,19 @@ Commercial criticality measures that require realised trade are defined only for
 
 The following figures present posterior densities and
 trace plots for selected global parameters of the baseline
-terminal and chokepoint models. The displayed pages include
-all parameters selected for the autocorrelation diagnostics,
-together with additional global parameters appearing on
-the same plotting pages. Complete plots are retained in
-the accompanying model outputs.
+terminal and chokepoint models, estimated using four chains
+with 5,000 warm-up iterations and 10,000 retained draws
+per chain. The displayed pages include parameters selected
+for the autocorrelation diagnostics, together with
+additional global parameters appearing on the same
+plotting pages. Complete plots are retained in the
+accompanying model outputs.
 
 For terminals, the selection covers the lagged exporter
 coefficient, the PageRank loading, and the loading for
 the probability of counterparty HHI equal to one.
-For chokepoints, it covers the lagged voyage-distance
-coefficient, the PageRank and betweenness loadings,
-and the betweenness precision.
+For chokepoints, it covers the PageRank and betweenness
+loadings and the betweenness precision.
 
 The displayed chains occupy broadly overlapping ranges,
 and their estimated posterior densities are similar.
@@ -3166,16 +3184,21 @@ These visual checks complement the numerical diagnostics
 reported in Chapter~\ref{chap:criticality_modelling};
 they do not by themselves establish convergence.
 
+
+% ============================================================
+% TERMINAL TRACE PLOTS
+% ============================================================
+
 \begin{figure}[p]
     \centering
     \includegraphics[
         width=\textwidth,
         height=0.82\textheight,
         keepaspectratio
-    ]{images/terminal_trace_02.png}
+    ]{images/terminal_trace_01.png}
     \caption{Posterior densities and trace plots for
-    terminal capacity, terminal age, lagged exporter status,
-    and the PageRank loading in the baseline terminal model.}
+    selected regression coefficients in the baseline
+    terminal model.}
     \label{fig:terminal_trace_appendix}
 \end{figure}
 
@@ -3185,11 +3208,11 @@ they do not by themselves establish convergence.
         width=\textwidth,
         height=0.82\textheight,
         keepaspectratio
-    ]{images/terminal_trace_07.png}
+    ]{images/terminal_trace_02.png}
     \caption{Posterior densities and trace plots for
-    the loadings of the probabilities of HHI and dependence
-    equal to one in the baseline terminal model.}
-    \label{fig:terminal_trace_additional}
+    additional terminal regression coefficients and
+    the PageRank loading in the baseline terminal model.}
+    \label{fig:terminal_trace_regression}
 \end{figure}
 
 \begin{figure}[p]
@@ -3198,12 +3221,18 @@ they do not by themselves establish convergence.
         width=\textwidth,
         height=0.82\textheight,
         keepaspectratio
-    ]{images/chokepoint_trace_01.png}
+    ]{images/terminal_trace_05.png}
     \caption{Posterior densities and trace plots for
-    the regression coefficients in the baseline
-    chokepoint model.}
-    \label{fig:chokepoint_trace_appendix}
+    selected response parameters in the baseline
+    terminal model, including parameters associated
+    with the boundary-inflated components.}
+    \label{fig:terminal_trace_additional}
 \end{figure}
+
+
+% ============================================================
+% CHOKEPOINT TRACE PLOTS
+% ============================================================
 
 \begin{figure}[p]
     \centering
@@ -3227,9 +3256,9 @@ they do not by themselves establish convergence.
         keepaspectratio
     ]{images/chokepoint_trace_04.png}
     \caption{Posterior densities and trace plots for
-    the binary-response intercepts and the PageRank
-    and betweenness precisions in the baseline
-    chokepoint model.}
+    selected response parameters, including the
+    PageRank and betweenness precision parameters,
+    in the baseline chokepoint model.}
     \label{fig:chokepoint_trace_precision}
 \end{figure}
 
@@ -3247,18 +3276,25 @@ tail ESS among all global parameters, and the PageRank
 anchor loading. Duplicate selections were removed.
 
 For terminals, the selected parameters are the lagged
-exporter coefficient, the loading for the probability
-of HHI equal to one, and the PageRank loading.
+exporter coefficient, the PageRank loading, and the loading
+for the probability of HHI equal to one.
 Their autocorrelation decreases over the initial lags,
 with small fluctuations at longer lags.
 
-For chokepoints, the selected parameters are the lagged
-voyage-distance coefficient, the betweenness loading
-and precision, and the PageRank loading.
-The betweenness parameters show a more gradual decay,
-particularly in some chains, while the other two
-parameters exhibit relatively little autocorrelation
-beyond the first few lags.
+For chokepoints, the displayed parameters are the
+betweenness loading and precision, and the PageRank
+loading. The betweenness parameters show a more gradual
+decay, particularly in some chains, while the PageRank
+loading exhibits relatively less persistent autocorrelation.
+The ACF for the lagged neighbour-activity coefficient,
+which was also generated by the selection procedure,
+is omitted from the appendix because of its relatively
+high effective sample size and rapid autocorrelation decay.
+
+
+% ============================================================
+% TERMINAL ACF
+% ============================================================
 
 \begin{figure}[p]
     \centering
@@ -3277,7 +3313,8 @@ beyond the first few lags.
     ]{images/terminal_acf_02.png}
 
     \caption{Within-chain autocorrelation functions
-    for selected parameters of the terminal model.}
+    for the lagged exporter coefficient and PageRank
+    loading in the baseline terminal model.}
     \label{fig:terminal_acf_appendix}
 \end{figure}
 
@@ -3289,10 +3326,17 @@ beyond the first few lags.
         keepaspectratio
     ]{images/terminal_acf_03.png}
 
-    \caption{Additional autocorrelation diagnostics
-    for the terminal model.}
+    \caption{Within-chain autocorrelation functions
+    for the loading governing the probability of
+    counterparty HHI equal to one in the baseline
+    terminal model.}
     \label{fig:terminal_acf_additional}
 \end{figure}
+
+
+% ============================================================
+% CHOKEPOINT ACF
+% ============================================================
 
 \begin{figure}[p]
     \centering
@@ -3300,7 +3344,7 @@ beyond the first few lags.
         width=0.9\textwidth,
         height=0.38\textheight,
         keepaspectratio
-    ]{images/chokepoint_acf_01.png}
+    ]{images/chokepoint_acf_02.png}
 
     \medskip
 
@@ -3308,10 +3352,11 @@ beyond the first few lags.
         width=0.9\textwidth,
         height=0.38\textheight,
         keepaspectratio
-    ]{images/chokepoint_acf_02.png}
+    ]{images/chokepoint_acf_03.png}
 
     \caption{Within-chain autocorrelation functions
-    for selected parameters of the chokepoint model.}
+    for the betweenness loading and Beta precision
+    in the baseline chokepoint model.}
     \label{fig:chokepoint_acf_appendix}
 \end{figure}
 
@@ -3319,31 +3364,22 @@ beyond the first few lags.
     \centering
     \includegraphics[
         width=0.9\textwidth,
-        height=0.38\textheight,
-        keepaspectratio
-    ]{images/chokepoint_acf_03.png}
-
-    \medskip
-
-    \includegraphics[
-        width=0.9\textwidth,
-        height=0.38\textheight,
+        height=0.65\textheight,
         keepaspectratio
     ]{images/chokepoint_acf_04.png}
 
-    \caption{Additional autocorrelation diagnostics
-    for the chokepoint model.}
+    \caption{Within-chain autocorrelation functions
+    for the PageRank loading in the baseline
+    chokepoint model.}
     \label{fig:chokepoint_acf_additional}
 \end{figure}
 
+
 %
-%			BIBLIOGRAPHY
+%           BIBLIOGRAPHY
 %
 \bibliography{references}
-% 
-
+%
 
 \end{document}
 
-
- 
