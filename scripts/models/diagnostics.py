@@ -52,9 +52,6 @@ def predictive_checks(idata, data, group):
 
 def run_diagnostics(idata, data, kind, destination, parameters):
     import arviz as az
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
     # Include latent residual mixing: good global parameters alone are insufficient.
     mixing = az.summary(idata, var_names=parameters + ["factor", "factor_mean", "factor_residual"], kind="diagnostics")
     diagnostic = {"divergences": int(idata.sample_stats["diverging"].sum()),
@@ -72,8 +69,4 @@ def run_diagnostics(idata, data, kind, destination, parameters):
     if not diagnostic["passes_basic_checks"]:
         warnings.warn(f"{kind}: sampling checks did not pass; do not interpret scores yet")
     predictive_checks(idata, data, "posterior_predictive").to_csv(destination / "posterior_checks.csv", index=False)
-    with az.rc_context({"plot.max_subplots": 100}):
-        az.plot_trace(idata, var_names=parameters, compact=False)
-    plt.savefig(destination / "trace.png", dpi=150, bbox_inches="tight")
-    plt.close("all")
     return diagnostic

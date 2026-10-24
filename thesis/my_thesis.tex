@@ -1495,7 +1495,7 @@ These findings provide the empirical motivation for investigating whether the me
 % Updated 12 October 2026: original baseline plus prior sensitivity fits.
 % Terminal run: 20261011T120422953825Z_terminal_bounded.
 % Chokepoint run: 20261011T154621463157Z_chokepoint_bounded.
-\chapter{Bayesian Reduced-Rank Model for Network Measures}
+\chapter{Bayesian Reduced-Rank model for network measures}
 \label{chap:criticality_modelling}
 
 This chapter develops a Bayesian reduced-rank
@@ -1521,7 +1521,11 @@ whose interpretation and adequacy are evaluated
 through posterior inference, predictive checks
 and a prior sensitivity analysis.
 
-\section{Estimation samples, responses and covariates}
+
+% TODO: Update introductory description after Models 2 and 3 are specified.
+\section{General modelling framework}
+% Shared estimation samples, responses, and likelihoods.
+\subsection{Estimation samples, responses and covariates}
 \label{sec:criticality_sample}
 \label{sec:simple_responses}
 
@@ -1576,7 +1580,7 @@ Neither HHI nor dependence has observed zeros,
 but HHI equals one in 34.09\% of observations
 and dependence equals one in 20.76\%.
 These features motivate a Beta likelihood for
-PageRank and one-inflated Beta likelihoods for
+PageRank and one-and zero-inflated Beta likelihoods for
 HHI and dependence, as specified in
 Section~\ref{sec:simple_factor_specification}.
 
@@ -1611,7 +1615,8 @@ PageRank and flow share are modelled using Beta
 likelihoods, while betweenness uses a zero-inflated
 Beta likelihood.
 
-\section{Static rank-one factor specification}
+
+\section{Model 1: Baseline rank-one specification}
 \label{sec:simple_factor_specification}
 For each node type separately, let $\boldsymbol{x}_{i,t}$ be the standardised covariate vector, with the role indicator retained on its original scale, and let $f_{i,t}$ be a scalar latent factor. The factor regression is
 \begin{equation}
@@ -1623,6 +1628,12 @@ The residual factor variance is fixed at one to define its scale.
 The PageRank loading is constrained to be positive to orient the factor, while the other loadings are unrestricted. 
 Conditional on the factors and parameters, the responses are assumed independent, and factors for different node-months are independent given their covariates and regression coefficients.
 
+
+% TODO: Describe the longer-chain sampling check in Section~\ref{subsec:simple_computation}.
+
+\subsection{Response likelihoods and reduced-rank structure}
+% TODO: These likelihoods are shared by Models 1--3; consider moving them
+% to the general framework once the extensions are specified.
 For bounded response $j$, the interior mean and precision are defined as
 \begin{align}
  \operatorname{logit}(\mu_{i,t,j})&=\alpha_j+\lambda_j f_{i,t},\\
@@ -1733,58 +1744,169 @@ independently elicited prior information. Their prior predictive implications an
 sensitivity of the posterior findings to alternative specifications are examined in 
 Section~\ref{sec:prior_sensitivity}.
 
-\subsection{Posterior sampling and diagnostics}
+
+\section{Model 2: Node-specific intercepts}
+% TODO: Insert the model specification and the prior for node-specific intercepts.
+% TODO: Clarify identification relative to any common intercept.
+
+\section{Model 3: Rank-two latent factor model}
+% TODO: Insert rank-two specification, priors, and identification constraints.
+
+\section{Posterior sampling and diagnostics}
 \label{subsec:simple_computation}
 
 The models were implemented in Python 3.12.15 using
-PyMC 5.20.1, with PyTensor 2.27.1 as the computational
-backend. Posterior inference was performed using the
-No-U-Turn Sampler (NUTS), an adaptive variant of
-Hamiltonian Monte Carlo.
+PyMC 5.20.1 \citep{abrilpla2023pymc}, with PyTensor 2.27.1
+as the computational backend. Posterior inference was
+performed using the No-U-Turn Sampler (NUTS)
+\citep{hoffman2014no}, an adaptive variant of Hamiltonian
+Monte Carlo (HMC) \citep{neal2011mcmc}. Unlike traditional
+random-walk MCMC methods, HMC exploits gradient
+information to construct proposals that can explore
+high-dimensional posterior distributions more efficiently.
+NUTS extends HMC by automatically determining the
+trajectory length, avoiding the need to manually specify
+the number of integration steps.
 
 Posterior summaries and convergence diagnostics were
 computed using ArviZ 0.21.0. Data processing and
 visualisation relied on NumPy 1.26.4, pandas 2.3.3,
 and Matplotlib 3.9.2.
 
-Each model uses NUTS with four chains, 1,500 warm-up
-iterations and 2,000 retained draws per chain, giving
-8,000 retained draws in total. The target acceptance
-probability was set to 0.95 and the random seed was
-20261008. Chains were sampled sequentially.
+Each model was estimated using four chains, with
+1,500 warm-up iterations and 2,000 retained draws per
+chain, yielding 8,000 posterior draws in total.
+The target acceptance probability was set to 0.80,
+corresponding to the target acceptance rate used
+during step-size adaptation in the warm-up phase
+\citep{hoffman2014no}. The random seed was 20261008.
 
-Diagnostics cover regression coefficients, response parameters,
-factors, factor means and factor residuals.
+Sampling quality was assessed using rank-normalised
+$\widehat{R}$, bulk and tail effective sample sizes
+(ESS), and post-warm-up divergences. The rank-normalised
+$\widehat{R}$ statistic compares between-chain and
+within-chain variability to assess convergence, with
+values close to one indicating greater consistency
+across chains. Bulk ESS evaluates sampling efficiency
+for the central regions of the posterior distribution,
+while tail ESS assesses the reliability of estimates
+in its tails. Both measures account for dependence
+between successive MCMC draws
+\citep{vehtari2021rank}.
+Divergences indicate numerical difficulties in
+simulating Hamiltonian trajectories and may reveal
+regions of the posterior that are insufficiently
+explored \citep{betancourt2017conceptual}.
+Diagnostics were evaluated for regression coefficients,
+response parameters, latent factors, factor means,
+and factor residuals.
 
-The terminal run has no post-warm-up divergences,
-a maximum reported rank-normalised $\widehat{R}$ of 1.01,
-a minimum bulk effective sample size of 817, and a minimum
-tail effective sample size of 1,958.
-These results satisfy the implemented convergence screening
-criteria of no divergences, maximum $\widehat{R}\leq 1.01$,
-and minimum bulk and tail ESS of at least 400.
-
-The chokepoint run also presents no post-warm-up
-divergences and a maximum reported $\widehat{R}$ of 1.01.
-Its minimum bulk ESS is 472 and minimum tail ESS is 905,
-both for the betweenness precision parameter.
-Therefore, both runs satisfy the same screening criteria.
-
-Trace plots and autocorrelation functions for selected 
+Trace plots and autocorrelation functions for selected
 global parameters are provided in
 Appendix~\ref{app:mcmc_diagnostics}
 (Figures~\ref{fig:terminal_trace_appendix}--
 \ref{fig:terminal_acf_additional}).
+Trace plots display the sampled parameter values across
+iterations for each chain. Well-mixing chains are
+expected to explore similar regions of the posterior
+distribution without persistent trends or systematic
+differences between chains. Autocorrelation functions
+(ACFs) measure the dependence between draws at
+increasing lags, with faster decay generally indicating
+more efficient sampling and higher effective sample
+sizes \citep{vehtari2021rank}.
+
+
+% TODO: Describe the 5,000 warm-up / 10,000 retained-draw check.
+% TODO: Confirm sampling settings for all final runs.
+
+\section{Prior sensitivity analysis}
+\label{sec:prior_sensitivity}
+
+To assess the implications of the prior assumptions and the
+sensitivity of posterior findings, two alternative prior
+profiles were investigated on the same estimation samples.
+The analysis considers both the prior predictive distributions
+and the sensitivity of posterior inference to these modifications.
+
+\subsection{Alternative prior specifications}
+\label{subsec:alternative_priors}
+Three prior specifications were considered: the baseline
+described above, an alternative with more concentrated
+priors for selected parameters, and a third specification
+with response-specific priors for the Beta precision parameters.
+The alternative specifications were informed by the
+observed response distributions and prior predictive
+simulations, rather than independently elicited prior
+information. 
+
+Under the baseline priors, prior predictive simulations
+generated relatively broad distributions for several
+network measures, particularly those characterised by
+small observed values, such as PageRank, betweenness
+and flow share.
+
+In response to these findings, the second specification
+introduced more concentrated prior distributions for
+selected intercepts and factor loadings.
+Specifically, the standard deviations of the
+logit-intercept priors for the small-valued continuous
+responses were reduced from 1.5 to 0.7, while the
+PageRank loading scale and the loading standard
+deviations for betweenness and flow share were reduced
+from 1 to 0.5.
+For the boundary components, intercept prior standard
+deviations were reduced from 1.5 to 1, and
+boundary-loading standard deviations from 1 to 0.5.
+The prior centres were retained, as were the original
+priors for the terminal HHI and dependence interior
+components, regression coefficients, and
+binary-response parameters.
+
+The third specification retained the modifications
+introduced in the second specification and additionally
+introduced response-specific priors for the Beta
+precision parameters.
+
+The corresponding prior medians were set to $ (\widetilde{\phi}_1,\widetilde{\phi}_2,\widetilde{\phi}_3) = (300,10,10)$
+for terminal PageRank, HHI, and dependence,
+respectively, and to $(\widetilde{\phi}_1,\widetilde{\phi}_2,\widetilde{\phi}_3)=(500,100,100)$
+for chokepoint PageRank, betweenness, and flow share, respectively.
+For each precision prior, the log-scale standard
+deviation was fixed at 0.7.
+
+\chapter{Results and discussion}
+\label{chap:results}
+
+% TODO: Revise section introduction and transitions after Models 2 and 3 are fitted.
+
+\section{Sampling diagnostics: baseline results}
+The terminal run presented no post-warm-up divergences,
+a maximum reported rank-normalised $\widehat{R}$ of 1.01,
+a minimum bulk ESS of 817, and a minimum tail ESS
+of 1,958. These results satisfied the implemented
+convergence screening criteria of no divergences,
+maximum $\widehat{R}\leq 1.01$, and minimum bulk and
+tail ESS of at least 400.
+
+The chokepoint run also presented no post-warm-up
+divergences and a maximum reported $\widehat{R}$ of
+1.01. Its minimum bulk ESS was 472 and minimum
+tail ESS was 905, both associated with the
+betweenness precision parameter. Therefore, both
+runs satisfied the same screening criteria.
+
 The autocorrelation plots show varying rates of decay,
 with more persistent autocorrelation for the betweenness
 loading and precision in the chokepoint model.
-
 Overall, the numerical and graphical diagnostics provide
 encouraging evidence of satisfactory MCMC mixing,
 although they do not guarantee complete exploration
-of the posterior.
+of the posterior distribution.
 
-\section{Terminal posterior analysis}
+
+\section{Baseline model results}
+\subsection{Terminal posterior analysis}
 \label{sec:terminal_results}
 
 This section presents the posterior results for the terminal
@@ -1794,7 +1916,7 @@ Posterior predictive checks are then used to assess how well
 the model reproduces the observed response distributions
 and associations.
 
-\subsection{Terminal posterior associations and factor interpretation}
+\subsubsection{Terminal posterior associations and factor interpretation}
 \label{subsec:posterior_associations_terminals}
 
 The posterior estimates of the factor-regression coefficients
@@ -1933,7 +2055,7 @@ reproduces the observed response patterns more generally
 is examined through the posterior predictive checks
 in the following subsection.
 
-\subsection{Terminal posterior predictive assessment}
+\subsubsection{Terminal posterior predictive assessment}
 \label{sec:simple_ppc}
 Posterior predictive assessment evaluates how well the
 fitted model reproduces the observed response distributions
@@ -2017,7 +2139,7 @@ struggles to reproduce their positive observed co-occurrence;
 these checks alone do not establish which restriction is
 primarily responsible. 
 
-\section{Chokepoint posterior analysis}
+\subsection{Chokepoint posterior analysis}
 \label{sec:chokepoint_findings}
 The current section examines how the latent factor relates
 to network characteristics and measures of centrality,
@@ -2025,7 +2147,7 @@ flow exposure and structural importance for the chokepoint specification.
 The adequacy of the fitted model is subsequently evaluated
 through posterior predictive checks.
 
-\subsection{Chokepoint posterior associations and factor interpretation}
+\subsubsection{Chokepoint posterior associations and factor interpretation}
 \label{posterior_associations_chokepoints}
 For chokepoints, the factor-regression results in
 Table~\ref{tab:chokepoint_beta} indicate relatively
@@ -2141,7 +2263,7 @@ factor can summarise different aspects of
 chokepoint centrality, flow exposure and
 structural position.
 
-\subsection{Chokepoint posterior predictive assessment}
+\subsubsection{Chokepoint posterior predictive assessment}
 
 Following the same conditional, in-sample approach used
 for terminals, the chokepoint posterior predictive checks
@@ -2196,61 +2318,8 @@ PageRank--articulation & 0.287 & 0.205 & $[0.145,0.256]$ \\
 \end{tabular}
 \end{table}
 
-\section{Prior assessment and sensitivity analysis}
-\label{sec:prior_sensitivity}
 
-To assess the implications of the prior assumptions and the
-sensitivity of posterior findings, two alternative prior
-profiles were investigated on the same estimation samples.
-The analysis considers both the prior predictive distributions
-and the sensitivity of posterior inference to these modifications.
-
-\subsection{Alternative prior specifications}
-\label{subsec:alternative_priors}
-Three prior specifications were considered: the baseline
-described above, an alternative with more concentrated
-priors for selected parameters, and a third specification
-with response-specific priors for the Beta precision parameters.
-The alternative specifications were informed by the
-observed response distributions and prior predictive
-simulations, rather than independently elicited prior
-information. 
-
-Under the baseline priors, prior predictive simulations
-generated relatively broad distributions for several
-network measures, particularly those characterised by
-small observed values, such as PageRank, betweenness
-and flow share.
-
-In response to these findings, the second specification
-introduced more concentrated prior distributions for
-selected intercepts and factor loadings.
-Specifically, the standard deviations of the
-logit-intercept priors for the small-valued continuous
-responses were reduced from 1.5 to 0.7, while the
-PageRank loading scale and the loading standard
-deviations for betweenness and flow share were reduced
-from 1 to 0.5.
-For the boundary components, intercept prior standard
-deviations were reduced from 1.5 to 1, and
-boundary-loading standard deviations from 1 to 0.5.
-The prior centres were retained, as were the original
-priors for the terminal HHI and dependence interior
-components, regression coefficients, and
-binary-response parameters.
-
-The third specification retained the modifications
-introduced in the second specification and additionally
-introduced response-specific priors for the Beta
-precision parameters.
-
-The corresponding prior medians were set to $ (\widetilde{\phi}_1,\widetilde{\phi}_2,\widetilde{\phi}_3) = (300,10,10)$
-for terminal PageRank, HHI, and dependence,
-respectively, and to $(\widetilde{\phi}_1,\widetilde{\phi}_2,\widetilde{\phi}_3)=(500,100,100)$
-for chokepoint PageRank, betweenness, and flow share, respectively.
-For each precision prior, the log-scale standard
-deviation was fixed at 0.7.
-
+\section{Prior sensitivity results}
 \subsection{Prior predictive assessment}
 
 Prior predictive simulations were used to examine
@@ -2482,7 +2551,15 @@ main analysis, while the alternative provides a
 sensitivity assessment of the results under
 more concentrated priors.
 
-\section{Model limitations and implications}
+
+\section{Model 2: Node-specific intercept results}
+% TODO: Insert results and posterior predictive assessment.
+
+\section{Model 3: Rank-two results}
+% TODO: Insert results and posterior predictive assessment.
+
+\section{Comparative discussion and limitations}
+\subsection{Model limitations and implications}
 \label{sec:limitations}
 
 The bounded rank-one models provide an initial Bayesian
@@ -2587,16 +2664,6 @@ preliminary summaries of network position rather
 than comprehensive measures of node criticality.
 The present models therefore provide a baseline
 for subsequent methodological developments.
-% Final bibliography: add verified methodological references for Bayesian
-% factor models, Beta mixtures, NUTS, and rank-normalised R-hat/ESS.
-%
-%			CHAPTER 6: Results and discussion
-%
-\chapter{Results and discussion}
-\label{chap:results}
-% TODO: Present activity, terminal-criticality, and chokepoint-criticality
-% results, posterior diagnostics, sensitivity analyses, and discussion.
-
 %
 %			CHAPTER 7: Conclusions and future work
 %

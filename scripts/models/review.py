@@ -22,6 +22,45 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
+
+# Display labels shared by posterior traces, ACFs and response curves.
+DISPLAY_NAMES = {
+    'terminal_age': 'Terminal age',
+    'exporter_lag1': 'Lagged exporter status',
+    'log1p_capacity_mtpa': 'Terminal capacity',
+    'log1p_mean_voyage_distance_lag1': 'Lagged voyage distance',
+    'neighbor_activity_lag1': 'Lagged neighbour activity',
+    'month_sin': 'Seasonality (sine)', 'month_cos': 'Seasonality (cosine)',
+    'role_specific_pagerank': 'PageRank', 'pagerank': 'PageRank',
+    'role_specific_hhi_terminal': 'HHI', 'hhi_terminal': 'HHI',
+    'role_specific_dependence': 'Dependence', 'dependence': 'Dependence',
+    'betweenness': 'Betweenness centrality',
+    'share_monthly_network_flow': 'Monthly flow share',
+    'articulation_point': 'Articulation point',
+    'incident_global_bridge': 'Incident global bridge',
+    'connected_to_articulation_point': 'Adjacent to articulation point',
+    'exporter_current': 'Current exporter status',
+}
+PARAMETER_FAMILIES = {
+    'beta': 'Regression coefficient', 'loading_cont': 'Continuous-response loading',
+    'loading_binary': 'Binary-response loading', 'loading_one': 'One-mass loading',
+    'loading_zero': 'Zero-mass loading', 'intercept_cont': 'Continuous-response intercept',
+    'intercept_binary': 'Binary-response intercept', 'intercept_one': 'One-mass intercept',
+    'intercept_zero': 'Zero-mass intercept', 'precision_cont': 'Beta precision',
+}
+CHAIN_COLORS = plt.rcParams['axes.prop_cycle'].by_key()['color'][:4]
+
+def pretty_parameter(family, labels):
+    subject = ', '.join(DISPLAY_NAMES.get(str(x), str(x).replace('_', ' ').title()) for x in labels)
+    return f'{subject} — {PARAMETER_FAMILIES.get(family, family)}' if subject else PARAMETER_FAMILIES.get(family, family)
+
+def add_chain_legend(fig, chain_values):
+    from matplotlib.lines import Line2D
+    handles = [Line2D([0], [0], color=CHAIN_COLORS[i % len(CHAIN_COLORS)], lw=1.7,
+                      label=f'Chain {i + 1}') for i, _ in enumerate(chain_values)]
+    fig.legend(handles=handles, loc='lower center', ncol=len(handles),
+               frameon=False, fontsize=9, bbox_to_anchor=(0.5, 0.005))
+
 def samples(ds, name, dimension):
     return ds[name].transpose('chain', 'draw', dimension).values.reshape(-1, ds.sizes[dimension])
 
@@ -57,9 +96,7 @@ def export_trace_pages(post, out, node_type):
                 str(array.coords[dim].values[i])
                 for dim, i in selection.items()
             ]
-            title = name
-            if labels:
-                title += '\n' + ', '.join(labels)
+            title = pretty_parameter(name, labels)
 
             variables[title] = xr.DataArray(
                 scalar.values, dims=('chain', 'draw')
@@ -88,10 +125,11 @@ def export_trace_pages(post, out, node_type):
                 ax.set_title(title, fontsize=9, pad=10)
                 ax.tick_params(axis='both', labelsize=8)
 
-        fig.subplots_adjust(
-            hspace=1.05, wspace=0.30,
-            top=0.86, bottom=0.10
-        )
+        # ArviZ colors chains consistently across density and trace panels.
+        for ax in np.asarray(axes).ravel():
+            ax.set_xlabel('Iteration' if ax in np.asarray(axes)[:, 1] else 'Parameter value', fontsize=9)
+        add_chain_legend(fig, post.chain.values)
+        fig.subplots_adjust(hspace=0.85, wspace=0.30, top=0.96, bottom=0.12)
 
         filename = f'{node_type}_trace_{page:02d}'
         fig.savefig(out / f'{filename}.png', dpi=180)
@@ -181,23 +219,24 @@ def export_selected_acf(post, out):
 
     for number, label in enumerate(selected, start=1):
         values = variables[label].values
-        fig, axes = plt.subplots(
-            values.shape[0], 1,
-            figsize=(8, 2 * values.shape[0]),
-            sharex=True, sharey=True, squeeze=False
-        )
-
-        for chain, ax in enumerate(axes[:, 0]):
+        fig, ax = plt.subplots(figsize=(8.5, 3.0))
+        lags = np.arange(max_lag + 1)
+        for chain in range(values.shape[0]):
             acf = az.autocorr(values[chain])[:max_lag + 1]
-            ax.vlines(np.arange(len(acf)), 0, acf, linewidth=1)
-            ax.axhline(0, color='black', linewidth=0.6)
-            ax.set_ylim(-1, 1)
-            ax.set_ylabel(f'Chain {post.chain.values[chain]}\nACF')
-
-        axes[-1, 0].set_xlabel('Lag')
-        fig.suptitle(label, fontsize=10)
-        fig.tight_layout(rect=(0, 0, 1, 0.95))
-        fig.savefig(out / f'acf_{number:02d}.png', dpi=150)
+            ax.plot(lags, acf, color=CHAIN_COLORS[chain % len(CHAIN_COLORS)],
+                    linewidth=1.25, alpha=0.85, label=f'Chain {chain + 1}')
+        ax.axhline(0, color='black', linewidth=0.7)
+        ax.set_xlim(0, max_lag)
+        ax.set_ylim(-0.25, 1.0)
+        ax.set_xlabel('Lag')
+        ax.set_ylabel('Autocorrelation')
+        # Recover original parameter family and coordinate labels.
+        family = families[label]
+        coordinate_labels = label[len(family):].strip('[]').split(', ') if label != family else []
+        ax.set_title(pretty_parameter(family, coordinate_labels), fontsize=11, pad=10)
+        ax.legend(loc='upper right', ncol=min(4, values.shape[0]), frameon=False, fontsize=8)
+        fig.tight_layout()
+        fig.savefig(out / f'acf_{number:02d}.png', dpi=180, bbox_inches='tight')
         plt.close(fig)
 
 def main():
@@ -324,19 +363,22 @@ def main():
                 if quantity == 'marginal_mean':
                     axes.flat[j].plot(grid, mid)
                     axes.flat[j].fill_between(grid, low, high, alpha=.25)
-            axes.flat[j].set_title(response, fontsize=9)
+            axes.flat[j].set_title(DISPLAY_NAMES.get(response, response.replace('_', ' ').title()), fontsize=11)
         for j, response in enumerate(audit['binary_responses']):
             v = expit(ab[:, j, None] + lb[:, j, None] * grid)
             low, mid, high = np.quantile(v, [.025, .5, .975], axis=0)
             rows.extend(dict(response=response, quantity='probability', factor=f, median=m, q025=l, q975=h) for f,m,l,h in zip(grid,mid,low,high))
             axes.flat[j+3].plot(grid, mid)
             axes.flat[j+3].fill_between(grid, low, high, alpha=.25)
-            axes.flat[j+3].set_title(response, fontsize=9)
+            axes.flat[j+3].set_title(DISPLAY_NAMES.get(response, response.replace('_', ' ').title()), fontsize=11)
         for ax in list(axes.flat)[3 + len(audit['binary_responses']):]:
             ax.set_visible(False)
-        for ax in axes.flat:
+        for j, ax in enumerate(axes.flat):
+            if not ax.get_visible():
+                continue
             ax.set_xlabel('Latent factor')
-            ax.set_ylabel('Expected response / probability')
+            ax.set_ylabel('Expected response' if j < len(audit['continuous_responses'])
+                          else 'Probability')
         fig.tight_layout()
         fig.savefig(out / 'response_curves.png', dpi=130)
         plt.close(fig)
