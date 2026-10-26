@@ -53,7 +53,14 @@ def predictive_checks(idata, data, group):
 def run_diagnostics(idata, data, kind, destination, parameters):
     import arviz as az
     # Include latent residual mixing: good global parameters alone are insufficient.
-    mixing = az.summary(idata, var_names=parameters + ["factor", "factor_mean", "factor_residual"], kind="diagnostics")
+    latent_names = ["factor", "factor_mean", "factor_residual"]
+    latent_names += [name for name in ["mu_node", "mu_raw", "factor_covariate_mean"]
+                     if name in idata.posterior]
+    mixing = az.summary(idata, var_names=parameters + latent_names,
+                        kind="diagnostics", round_to="none")
+    if "mu_node" in idata.posterior:
+        az.summary(idata, var_names=["mu_node", "mu_raw"], kind="diagnostics",
+                   round_to="none").to_csv(destination / "node_effect_diagnostics.csv")
     diagnostic = {"divergences": int(idata.sample_stats["diverging"].sum()),
                   "max_rhat": float(mixing["r_hat"].max()),
                   "min_ess_bulk": float(mixing["ess_bulk"].min()),

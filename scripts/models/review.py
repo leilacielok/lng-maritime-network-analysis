@@ -1,6 +1,6 @@
 """Export a small review ZIP from an existing bounded-model run; never refit.
 
-Place in scripts/model. Requires the existing lng-model environment.
+Place in scripts/models/. Requires the existing lng-model environment.
 Posterior predictive checks are conditional, in-sample checks, not validation
 on unseen nodes/months. Role groups always refer to terminal_role_lag1.
 """
@@ -42,6 +42,7 @@ DISPLAY_NAMES = {
     'exporter_current': 'Current exporter status',
 }
 PARAMETER_FAMILIES = {
+    'sigma_mu': 'Between-node standard deviation', 'mu_node': 'Node effect',
     'beta': 'Regression coefficient', 'loading_cont': 'Continuous-response loading',
     'loading_binary': 'Binary-response loading', 'loading_one': 'One-mass loading',
     'loading_zero': 'Zero-mass loading', 'intercept_cont': 'Continuous-response intercept',
@@ -71,7 +72,7 @@ def export_trace_pages(post, out, node_type):
         'beta', 'loading_cont', 'loading_binary',
         'intercept_cont', 'intercept_binary', 'precision_cont',
         'intercept_one', 'loading_one',
-        'intercept_zero', 'loading_zero',
+        'intercept_zero', 'loading_zero', 'sigma_mu',
     ]
 
     # Una variabile scalare per ciascun parametro.
@@ -143,7 +144,7 @@ def export_selected_acf(post, out):
         'beta', 'loading_cont', 'loading_binary',
         'intercept_cont', 'intercept_binary', 'precision_cont',
         'intercept_one', 'loading_one',
-        'intercept_zero', 'loading_zero',
+        'intercept_zero', 'loading_zero', 'sigma_mu',
     ]
 
     variables = {}
@@ -239,6 +240,30 @@ def export_selected_acf(post, out):
         fig.savefig(out / f'acf_{number:02d}.png', dpi=180, bbox_inches='tight')
         plt.close(fig)
 
+def export_node_effects(post, data, out):
+    values = samples(post, 'mu_node', 'node')
+    low, median, high = np.quantile(values, [.025, .5, .975], axis=0)
+    table = pd.DataFrame({'node_id': data['node_ids'], 'node_name': data['node_names'],
+                          'mean': values.mean(axis=0), 'median': median,
+                          'q025': low, 'q975': high})
+    table = table.sort_values('median').reset_index(drop=True)
+    table.to_csv(out / 'node_effect_intervals.csv', index=False)
+    for start in range(0, len(table), 30):
+        page = table.iloc[start:start + 30]
+        fig, ax = plt.subplots(figsize=(9, max(3, len(page) * .27 + 1.3)))
+        y = np.arange(len(page))
+        ax.errorbar(page['median'], y,
+                    xerr=np.vstack([page['median']-page['q025'], page['q975']-page['median']]),
+                    fmt='o', markersize=3, capsize=2)
+        ax.set_yticks(y, [f"{r.node_name} ({r.node_id})" for r in page.itertuples()])
+        ax.axvline(0, color='grey', linestyle='--', linewidth=1)
+        ax.set_xlabel('Node effect: posterior median and equal-tailed 95% interval')
+        ax.set_title('Persistent component of the latent factor')
+        fig.tight_layout()
+        fig.savefig(out / f'node_effects_{start // 30 + 1:02d}.png', dpi=180)
+        plt.close(fig)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-dir', type=Path, required=True)
@@ -274,23 +299,32 @@ def main():
     masks = [('all', np.ones(len(frame), bool))]
     if args.node_type == 'terminal':
         masks += [(r, frame.terminal_role_lag1.eq(r).to_numpy()) for r in ['importer', 'exporter']]
+    if 'node_effect_specification' in audit:
+        from node_effects import prepare_node_effects
+        prepare_node_effects(data, args.node_type, audit['node_effect_specification']['sigma_mu']['scale'])
     if data['audit']['continuous_responses'] != audit['continuous_responses'] or data['audit']['binary_responses'] != audit['binary_responses']:
         raise ValueError('Response specification differs from the archived run.')
     with xr.open_dataset(nc, group='posterior') as post:
         if len(frame) != post.sizes['obs'] or not np.array_equal(post.obs.values, np.arange(len(frame))):
             raise ValueError('Observation coordinates do not match the estimation sample.')
+        if 'mu_node' in post and post.node.values.astype(str).tolist() != data.get('node_ids'):
+            raise ValueError('Posterior node coordinates do not match the estimation sample.')
         out = terminal / ('review_' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
         out.mkdir()
         print(f'Exporting to {out}', flush=True)
         export_selected_acf(post, out)
         export_trace_pages(post, out, args.node_type)
+        if 'mu_node' in post:
+            export_node_effects(post, data, out)
         
         key_columns = [model.SPECS[args.node_type]['id'], 'node_name', 'period_month']
         if args.node_type == 'terminal':
             key_columns += ['terminal_role_lag1']
         keys = frame[key_columns].copy()
         # Load one latent array at a time, rather than the whole NetCDF.
-        for name in ['factor', 'factor_mean', 'factor_residual']:
+        for name in ['factor', 'factor_mean', 'factor_residual', 'factor_covariate_mean']:
+            if name not in post:
+                continue
             values = samples(post, name, 'obs')
             keys[name + '_mean'] = values.mean(axis=0)
             keys[name + '_q025'] = np.quantile(values, .025, axis=0)
@@ -300,7 +334,7 @@ def main():
         associations = []
         for role, mask in masks:
             for response in audit['continuous_responses'] + audit['binary_responses']:
-                a = keys.loc[mask, 'factor_mean'].to_numpy()
+                a = keys.loc[mask, 'factor_mean_mean'].to_numpy()
                 b = frame.loc[mask, response].to_numpy()
                 rho = np.corrcoef(rankdata(a), rankdata(b))[0, 1] if np.std(b) else np.nan
                 associations.append(dict(role_lag1=role, response=response, spearman_with_posterior_factor_mean=rho))
@@ -316,8 +350,8 @@ def main():
         # Paired posterior contrasts on the original response scale.
         # These include the point mass at one (terminal HHI/dependence)
         # or zero (chokepoint betweenness), rather than only the Beta mean.
-        factor_low = float(keys.factor_mean.quantile(.01))
-        factor_high = float(keys.factor_mean.quantile(.99))
+        factor_low = float(keys.factor_mean_mean.quantile(.01))
+        factor_high = float(keys.factor_mean_mean.quantile(.99))
         if not (factor_low <= 0.0 and 1.0 <= factor_high):
             print(f'WARNING: factor values 0 and 1 are not both within '
                   f'the plotted 1%-99% range [{factor_low:.3f}, {factor_high:.3f}]')
@@ -346,7 +380,7 @@ def main():
                 row[f'{label}_q975'] = float(np.quantile(values, .975))
             contrast_rows.append(row)
         pd.DataFrame(contrast_rows).to_csv(out / 'factor_response_contrasts.csv', index=False)
-        grid = np.linspace(keys.factor_mean.quantile(.01), keys.factor_mean.quantile(.99), 101)
+        grid = np.linspace(keys.factor_mean_mean.quantile(.01), keys.factor_mean_mean.quantile(.99), 101)
         rows = []
         fig, axes = plt.subplots(2, 3, figsize=(13, 7))
         for j, response in enumerate(audit['continuous_responses']):
@@ -403,9 +437,14 @@ def main():
                 low, mid, high = np.quantile(valid, [.025,.5,.975]) if len(valid) else [np.nan]*3
                 rows.append(dict(role_lag1=role, response_a=names[i], response_b=names[j], observed=obs_corr[i,j], replicated_median=mid, replicated_q025=low, replicated_q975=high, valid_replicates=len(valid)))
     pd.DataFrame(rows).to_csv(out / 'joint_predictive_checks.csv', index=False)
-    for name in ['parameter_summary.csv','sampling_diagnostics.json','posterior_checks.csv','sample_audit.json','predictor_scaling.csv']:
+    for name in ['parameter_summary.csv','sampling_diagnostics.json','posterior_checks.csv','sample_audit.json','predictor_scaling.csv',
+                 'node_index.csv', 'node_effects.csv', 'node_effects_UNVALIDATED.csv',
+                 'node_effect_diagnostics.csv', 'run_status.json']:
         if (terminal / name).exists():
             shutil.copy2(terminal / name, out / name)
+    config = terminal.parent / 'run_config.json'
+    if config.exists():
+        shutil.copy2(config, out / 'run_config.json')
     (out / 'README.txt').write_text('factor_response_contrasts.csv: paired posterior comparisons of expected bounded responses at factor 0 vs 1; intervals are equal-tailed 95% credible intervals for the difference, not predictive intervals.\nExisting posterior only: no refitting.\nPredictive checks are conditional and in-sample, not out-of-sample validation.\nTerminal role groups use LAGGED role; chokepoints use the full sample.\nFactor associations use posterior mean scores informed by these same responses; they are descriptive, not independent validation or causal effects.\nCurve bands are equal-tailed 95% parameter uncertainty, not predictive intervals.\nCurves span the 1st-99th percentiles of posterior mean latent scores.\nNode/month scores are conditional on consecutive activity (and available age for terminals); interpret alongside sampling diagnostics and model limitations.\n', encoding='utf-8')
     (out / 'export_metadata.json').write_text(json.dumps(dict(source=str(nc), node_type=args.node_type, predictive_replicates=actual_draws, panel_sha256=audit['input_sha256']), indent=2))
     archive = shutil.make_archive(str(out), 'zip', out)
