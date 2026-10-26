@@ -1,0 +1,25 @@
+node_index,node_id,node_name
+0,CP001,Suez Canal
+1,CP002,Panama Canal
+2,CP004,Bab el-Mandeb Strait
+3,CP005,Malacca Strait
+4,CP006,Strait of Hormuz
+5,CP007,Cape of Good Hope
+6,CP008,Gibraltar Strait
+7,CP009,Dover Strait
+8,CP010,Oresund Strait
+9,CP011,Taiwan Strait
+10,CP012,Korea Strait
+11,CP013,Tsugaru Strait
+12,CP014,Luzon Strait
+13,CP015,Lombok Strait
+14,CP016,Ombai Strait
+15,CP017,Bohai Strait
+16,CP018,Torres Strait
+17,CP019,Sunda Strait
+18,CP020,Makassar Strait
+19,CP021,Magellan Strait
+20,CP022,Yucatan Channel
+21,CP023,Windward Passage
+22,CP024,Mona Passage
+23,CP027,Mindoro Strait

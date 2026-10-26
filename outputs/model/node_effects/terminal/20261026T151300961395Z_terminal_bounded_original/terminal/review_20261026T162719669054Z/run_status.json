@@ -1,0 +1,5 @@
+{
+  "status": "sampling_complete",
+  "passes_basic_sampling_checks": false,
+  "note": "Passing sampling checks does not establish model adequacy."
+}

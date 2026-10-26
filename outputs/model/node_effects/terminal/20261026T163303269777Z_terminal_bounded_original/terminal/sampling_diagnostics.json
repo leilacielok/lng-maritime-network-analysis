@@ -1,0 +1,8 @@
+{
+  "divergences": 0,
+  "max_rhat": 1.0244851538954654,
+  "min_ess_bulk": 245.34823849542553,
+  "min_ess_tail": 498.1530488614818,
+  "nonfinite_diagnostic_entries": 0,
+  "passes_basic_checks": false
+}
