@@ -30,6 +30,8 @@
 \usepackage{ragged2e}
 \usepackage{chngcntr}
 \usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 
 % ---(Colors)-------------------------------------------------------------
@@ -1464,7 +1466,7 @@ The correlations remain below one, consistent with the measures capturing relate
 
 Figure~\ref{fig:criticality_correlations} summarises the pairwise associations among the terminal and chokepoint criticality measures. 
 Taken together, these patterns provide descriptive evidence of shared variation across multiple dimensions of node criticality while preserving meaningful differences between the individual measures. 
-These findings provide the empirical motivation for investigating whether the measures' joint variation can be represented by a lower-dimensional structure in the modelling framework developed in Chapter~\ref{chap:bayesian_framework}.
+These findings provide the empirical motivation for investigating whether the measures' joint variation can be represented by a lower-dimensional structure in the modelling framework developed in Chapter~\ref{chap:criticality_modelling}.
 
 \begin{figure}[htbp]
     \centering
@@ -1630,13 +1632,18 @@ For terminals, $j=1$ denotes PageRank, $j=2$ HHI, and $j=3$ dependence. PageRank
  Y_{i,t,1}\mid f_{i,t}\sim\operatorname{Beta}(A_{i,t,1},D_{i,t,1}).
 \end{equation}
 For HHI and dependence, the boundary probability has a separate loading:
-\begin{align}
- \operatorname{logit}(\pi_{i,t,j})&=c_j+d_j f_{i,t},\qquad j=2,3,\\
- Y_{i,t,j}\mid f_{i,t}&\sim
- \pi_{i,t,j}\delta_1+(1-\pi_{i,t,j})
- \operatorname{Beta}(A_{i,t,j},D_{i,t,j}),
- \label{eq:one_inflated_beta}
-\end{align}
+\begin{equation}
+\begin{aligned}
+ \operatorname{logit}(\pi_{i,t,j})
+ &= c^{T}_j+d^{T}_j f_{i,t},
+ \qquad j=2,3,\\
+ Y_{i,t,j}\mid f_{i,t}
+ &\sim \pi_{i,t,j}\delta_1
+ +(1-\pi_{i,t,j})
+ \operatorname{Beta}(A_{i,t,j},D_{i,t,j}).
+\end{aligned}
+\label{eq:one_inflated_beta}
+\end{equation}
 where $\delta_1$ denotes a point mass at one. Interior observations contribute the Beta density multiplied by $1-\pi_{i,t,j}$, while exact ones contribute the probability $\pi_{i,t,j}$. Observed values are not clipped or displaced from the boundary. The overall conditional mean is
 \begin{equation}
  \mathbb{E}(Y_{i,t,j}\mid f_{i,t})=
@@ -1647,12 +1654,17 @@ Thus the sign of $\lambda_j$ alone does not determine how the overall mean chang
 
 For chokepoints, PageRank and flow share follow the interior Beta specification. 
 For betweenness, let $\rho_{i,t,2}$ denote the probability of zero:
-\begin{align}
- \operatorname{logit}(\rho_{i,t,2})&=c^{(0)}_2+d^{(0)}_2 f_{i,t},\\
- Y_{i,t,2}\mid f_{i,t}&\sim \rho_{i,t,2}\delta_0+
- (1-\rho_{i,t,2})\operatorname{Beta}(A_{i,t,2},D_{i,t,2}).
- \label{eq:zero_inflated_beta}
-\end{align}
+\begin{equation}
+\begin{aligned}
+ \operatorname{logit}(\rho_{i,t,2})
+ &= c^{C}_2+d^{C}_2 f_{i,t},\\
+ Y_{i,t,2}\mid f_{i,t}
+ &\sim \rho_{i,t,2}\delta_0
+ +(1-\rho_{i,t,2})
+ \operatorname{Beta}(A_{i,t,2},D_{i,t,2}).
+\end{aligned}
+\label{eq:zero_inflated_beta}
+\end{equation}
 Here $\delta_0$ is a point mass at zero. The overall conditional mean is $(1-\rho_{i,t,2})\mu_{i,t,2}$. 
 The zero-probability loading is estimated separately from the interior-mean loading.
 
@@ -1718,8 +1730,92 @@ independently elicited prior information. Their prior predictive implications an
 sensitivity of the posterior findings to alternative specifications are examined in 
 Section~\ref{sec:prior_sensitivity}.
 
-\section{Model 1: Baseline rank-one specification}
-\label{sec:simple_factor_specification}
+\subsection{Posterior distribution}
+\label{subsec:posterior_distribution}
+
+The joint posterior distribution of the model parameters and
+latent factors is obtained by combining the response likelihoods
+with the prior distributions specified above through Bayes' theorem \citep{gelman2013bayesian}.
+The formulation below describes the rank-one baseline model,
+which is estimated separately for terminals and chokepoints.
+
+Let $\mathcal{O}$ denote the set of node--month observations
+included in estimation. The observed responses are
+$Y_{i,t,j}$ for the three bounded measures, $j=1,2,3$, and
+$B_{i,t,k}$ for the binary measures, $k=1,\ldots,K$, where
+$K=3$ for terminals and $K=2$ for chokepoints.
+
+Let $\mathbf{\theta}$ collect the response-specific
+parameters: the bounded-response intercepts $\alpha_j$,
+loadings $\lambda_j$, and precisions $\phi_j$; the
+binary-response intercepts $a_k$ and loadings $\ell_k$;
+and the boundary-component parameters.
+For terminals, these additionally include $c^T_j$ and $d^T_j$
+for $j=2,3$, while for chokepoints they include
+$c^{C}_2$ and $d^{C}_2$.
+
+Conditional on the latent factor $f_{i,t}$ and $\theta$,
+the responses are assumed to be independent. Their joint
+conditional density or probability contribution therefore
+factorises as
+\begin{equation}
+ p(\mathbf{Y}_{i,t},\mathbf{B}_{i,t}
+ \mid f_{i,t},\boldsymbol{\theta})
+ =
+ \prod_{j=1}^{3}
+ g_j(Y_{i,t,j}\mid f_{i,t},\boldsymbol{\theta})
+ \prod_{k=1}^{K}
+ p_{i,t,k}^{B_{i,t,k}}
+ (1-p_{i,t,k})^{1-B_{i,t,k}}.
+\end{equation}
+where
+$p_{i,t,k}=\operatorname{logit}^{-1}(a_k+\ell_k f_{i,t})$.
+The contribution $g_j$ is the Beta density for an interior
+Beta response, the one-inflated Beta contribution for
+terminal HHI and dependence, or the zero-inflated Beta
+contribution for chokepoint betweenness, as specified in
+Section~\ref{subsec:shared_response_likelihoods}.
+
+By Bayes' theorem, the joint posterior density satisfies
+\begin{align}
+ &p(\boldsymbol{\theta},\boldsymbol{\beta},\mathbf{f}
+ \mid\mathcal{D})
+ \notag\\
+ &\quad\propto
+ L(\boldsymbol{\theta},\mathbf{f})
+ \left[
+ \prod_{(i,t)\in\mathcal{O}}
+ \mathcal{N}\!\left(
+ f_{i,t};
+ \mathbf{x}_{i,t}^{\top}\boldsymbol{\beta},1
+ \right)
+ \right]
+ p(\boldsymbol{\theta})p(\boldsymbol{\beta}),
+ \label{eq:joint_posterior}
+\end{align}
+where $\mathcal{D}$ denotes the observed bounded and binary
+responses together with the covariates, and
+$p(\boldsymbol{\theta})$ and $p(\boldsymbol{\beta})$
+are the products of the independent prior densities
+introduced in Section~\ref{subsec:prior_distributions}.
+
+The logistic links and the dependence of the Beta shape
+parameters on the latent factors make this specification
+non-conjugate. Consequently, the marginal posterior
+distributions do not generally belong to standard
+parametric families, and their parameters cannot be
+obtained through analytical prior-to-posterior updates.
+Since the joint posterior distribution is not available
+in closed form, inference is based on numerical sampling
+using the No-U-Turn Sampler (NUTS). The computational
+procedure and diagnostic criteria are described in
+Section~\ref{sec:posterior_computation}.
+
+\section{Model specifications} 
+\label{sec:models}
+
+\subsection{Baseline rank-one specification}
+\label{subsec:simple_factor_specification}
 For each node type separately, let $\boldsymbol{x}_{i,t}$ be the standardised covariate vector, with the role indicator retained on its original scale, and let $f_{i,t}$ be a scalar latent factor. The factor regression is
 \begin{equation}
  f_{i,t}\mid\boldsymbol{x}_{i,t},\boldsymbol{\beta}
@@ -1743,15 +1839,18 @@ restricts the covariate associations to a common
 direction, while allowing their magnitude and sign
 to differ across responses.
 
-\section{Model 2: Node-specific intercepts}
+\subsection{Node-specific intercepts}
 % TODO: Insert the model specification and the prior for node-specific intercepts.
 % TODO: Clarify identification relative to any common intercept.
 
-\section{Model 3: Rank-two latent factor model}
+\subsection{Rank-two latent factor model}
 % TODO: Insert rank-two specification, priors, and identification constraints.
 
-\section{Posterior sampling and diagnostics}
-\label{subsec:simple_computation}
+\section{Posterior computation}
+\label{sec:posterior_computation}
+
+\subsection{Sampling algorithm and implementation}
+\label{subsec:posterior_sampling}
 
 The models were implemented in Python 3.12.15 using
 PyMC 5.20.1 \citep{abrilpla2023pymc}, with PyTensor 2.27.1
@@ -1766,74 +1865,191 @@ NUTS extends HMC by automatically determining the
 trajectory length, avoiding the need to manually specify
 the number of integration steps.
 
+Algorithm~\ref{alg:baseline_sampling} summarises posterior
+sampling for the rank-one baseline model. Let
+$\boldsymbol{\eta}=(\boldsymbol{\theta},
+\boldsymbol{\beta},\mathbf{f})$ collect all unknown
+response parameters, regression coefficients, and latent
+factors. The sampler operates on an unconstrained
+representation $\mathbf{q}=T(\boldsymbol{\eta})$.
+The transformed log-posterior density is
+\begin{equation}
+ \mathcal{L}(\mathbf{q})
+ =
+ \log p\!\left(T^{-1}(\mathbf{q})\mid\mathcal{D}\right)
+ +
+ \log\left|
+ \det\frac{\partial T^{-1}(\mathbf{q})}
+          {\partial\mathbf{q}}
+ \right|.
+\end{equation}
+The Jacobian term accounts for transformations of
+parameters with restricted support. Its inclusion
+ensures that sampling on the unconstrained scale
+targets the intended posterior distribution.
+
+\begin{algorithm}[tbp]
+\caption{NUTS posterior sampling for the baseline model}
+\label{alg:baseline_sampling}
+\begin{algorithmic}[1]
+\Require Data $\mathcal{D}$; log-density $\mathcal{L}$
+and its gradient; chains $C=4$;
+warm-up iterations $W=5000$;
+retained draws $S=10000$;
+target acceptance $\delta=0.80$.
+\Ensure Posterior draws
+$\{\boldsymbol{\eta}^{(c,s)}\}_{c=1,s=1}^{C,S}$.
+
+\For{$c=1,\ldots,C$}
+    \State Construct data-informed initial values
+    $\boldsymbol{\eta}^{(c,0)}$ with chain-specific perturbations.
+    \State Set $\mathbf{q}\gets
+    T(\boldsymbol{\eta}^{(c,0)})$.
+    \State Initialise step size $\epsilon$
+    and diagonal mass matrix $\mathbf{M}$.
+
+    \For{$m=1,\ldots,W+S$}
+        \State Sample momentum
+        $\mathbf{v}\sim
+        \mathcal{N}(\mathbf{0},\mathbf{M})$.
+        \State Initialise a trajectory tree at
+        $(\mathbf{q},\mathbf{v})$.
+        \While{no stopping criterion is met}
+            \State Sample direction
+            $d\sim\operatorname{Uniform}\{-1,+1\}$.
+            \State Extend the tree in direction $d$
+            by doubling its trajectory length.
+            \State Compute new states by leapfrog
+            integration using $\nabla\mathcal{L}$.
+            \State Update the candidate state
+            using the PyMC NUTS selection rule.
+            \State Check the no-U-turn criterion,
+            divergence criterion, and maximum tree depth.
+        \EndWhile
+        \State Set $\mathbf{q}$ to the selected state.
+
+        \If{$m\leq W$}
+            \State Adapt $\epsilon$ towards
+            target acceptance $\delta$.
+            \State Update the diagonal mass matrix
+            according to the warm-up adaptation schedule.
+            \State Discard the warm-up draw.
+        \Else
+            \State Store
+            $\boldsymbol{\eta}^{(c,m-W)}
+            \gets T^{-1}(\mathbf{q})$.
+            \State Evaluate factor means, factor
+            residuals, and other deterministic quantities.
+        \EndIf
+    \EndFor
+\EndFor
+\State \Return $C\times S$ posterior draws,
+retaining chain identifiers.
+\end{algorithmic}
+\end{algorithm}
+
+During warm-up, the integration step size and diagonal
+mass matrix are adapted. These settings are fixed
+during the retained sampling phase, while trajectory
+length continues to be selected dynamically at each
+iteration. All unknown quantities are updated jointly:
+at each iteration, the sampler constructs a trajectory in the joint unconstrained
+parameter space and selects the next state of the entire vector;
+factor means and residuals are deterministic functions
+of the sampled quantities.
+
 Posterior summaries and convergence diagnostics were
 computed using ArviZ 0.21.0. Data processing and
 visualisation relied on NumPy 1.26.4, pandas 2.3.3,
 and Matplotlib 3.9.2.
 
-For the main results, each model was estimated using four
-parallel chains, with 5,000 warm-up iterations and 10,000 retained draws per
-chain, yielding 40,000 posterior draws in total.
-Earlier runs with 1,500 warm-up iterations and 2,000 retained draws per
-chain were used for initial estimation and comparison.
-The use of multiple chains allows convergence to be assessed by
-comparing within-chain and between-chain variability
-\citep{gelman2013bayesian}.
+For the main results, each node-type model was
+estimated using four parallel chains, with 5,000 warm-up
+iterations and 10,000 retained draws per chain, yielding
+40,000 posterior draws per node-type model.
+Earlier runs with 1,500 warm-up iterations and 2,000
+retained draws per chain were used for initial estimation
+and comparison. The use of multiple chains allows convergence to be assessed
+by comparing within-chain and between-chain variability
+\citep{gelman2013bayesian}, while the number of iterations
+was increased to allow more extensive sampler adaptation
+during warm-up and improve the Monte Carlo precision of
+posterior summaries through a larger number of retained draws.
+
 The target acceptance probability was set to 0.80,
-corresponding to the target acceptance rate used
-during step-size adaptation in the warm-up phase
+corresponding to the target acceptance rate used during
+step-size adaptation in the warm-up phase
 \citep{hoffman2014no}. The random seed was 20261008.
+
+\subsection{Sampling diagnostics}
+\label{subsec:sampling_diagnostics}
 
 Sampling quality was assessed using rank-normalised
 $\widehat{R}$, bulk and tail effective sample sizes
-(ESS), and post-warm-up divergences. The rank-normalised
-$\widehat{R}$ statistic compares between-chain and
-within-chain variability to assess convergence, with
+(ESS), post-warm-up divergences, and the Geweke and
+Heidelberger--Welch diagnostics. Together, these
+measures assess consistency across chains, sampling
+efficiency, within-chain stationarity, and Monte Carlo
+precision.
+
+The rank-normalised $\widehat{R}$ statistic compares
+between-chain and within-chain variability, with
 values close to one indicating greater consistency
 across chains. Bulk ESS evaluates sampling efficiency
 for the central regions of the posterior distribution,
-while tail ESS assesses the reliability of estimates
-in its tails. Both measures account for dependence
-between successive MCMC draws
-\citep{vehtari2021rank}.
-Divergences indicate numerical difficulties in
-simulating Hamiltonian trajectories and may reveal
+while tail ESS assesses sampling efficiency for its
+tails. Both measures account for dependence between
+successive MCMC draws \citep{vehtari2021rank}.
+
+Post-warm-up divergences indicate numerical difficulties
+in simulating Hamiltonian trajectories and may reveal
 regions of the posterior that are insufficiently
 explored \citep{betancourt2017conceptual}.
+
+Within-chain stationarity and the precision of estimated
+posterior means were examined using the diagnostics
+proposed by Geweke \citep{geweke1992evaluating} and
+Heidelberger and Welch \citep{heidelberger1983simulation}.
+
+The Geweke diagnostic compares the means of an early
+and a late segment of a chain. Their difference is
+standardised using an estimated standard error based
+on spectral density estimates, accounting for
+autocorrelation. Under suitable stationarity conditions,
+the resulting statistic follows an asymptotic standard
+Normal distribution. Large absolute values indicate
+potential inconsistencies between the two segments.
+
+The Heidelberger--Welch diagnostic combines a
+stationarity test based on the Cramér--von Mises
+statistic with a half-width test for the estimated
+posterior mean. The stationarity test is applied
+sequentially, discarding an initial portion of the
+chain when necessary, up to half of the available
+draws. For the portion passing this test, the
+half-width criterion assesses whether the Monte Carlo
+confidence interval for the posterior mean is
+sufficiently narrow relative to the magnitude of
+the estimated mean.
+
 Diagnostics were evaluated for regression coefficients,
 response parameters, latent factors, factor means,
-and factor residuals.
+and factor residuals. Numerical results were interpreted
+jointly, since no individual diagnostic can establish
+convergence or guarantee complete exploration of the
+posterior distribution.
 
-For the longer-chain baseline runs, both node-type models passed the
-predefined sampling checks: no post-warm-up divergences, maximum
-$\widehat{R}\leq 1.01$, and minimum bulk and tail ESS of at least 400.
-For terminals, the minimum bulk and tail ESS were 2,931 and 6,726,
-respectively; for chokepoints, they were 1,693 and 3,698.
-The maximum reported $\widehat{R}$ was 1.00 for both models
-(rounded to two decimal places). These results support the numerical
-reliability of the posterior summaries but do not, by themselves,
-establish model adequacy.
-
-Trace plots and autocorrelation functions for selected
-global parameters are provided in
-Appendix~\ref{app:mcmc_diagnostics}.
-The graphical diagnostics focus on the PageRank anchor loading
-and parameters with comparatively low bulk or tail ESS within
-relevant parameter groups. In the terminal model, these include
-the lagged exporter-status coefficient and the HHI one-mass loading;
-in the chokepoint model, they include the betweenness loading and
-Beta precision. This selection provides a targeted visual check
-without reproducing plots for every estimated parameter.
-Trace plots display the sampled parameter values across
-iterations for each chain. Well-mixing chains are
-expected to explore similar regions of the posterior
-distribution without persistent trends or systematic
-differences between chains. Autocorrelation functions
-(ACFs) measure the dependence between draws at
-increasing lags, with faster decay generally indicating
-more efficient sampling and higher effective sample
-sizes \citep{vehtari2021rank}.
-
+Numerical diagnostics were complemented by trace plots
+and autocorrelation functions (ACFs) for selected
+parameters. Trace plots display the sampled parameter
+values across iterations for each chain. Well-mixing
+chains are expected to explore similar regions of the
+posterior distribution without persistent trends or
+systematic differences between chains. ACFs measure
+the dependence between draws at increasing lags, with
+faster decay generally indicating more efficient
+sampling and higher effective sample sizes
+\citep{vehtari2021rank}.
 
 % TODO: Confirm sampling settings separately for Models 2 and 3 once estimated.
 % Appendix trace/ACF plots should refer to the longer-chain baseline runs.
@@ -1902,7 +2118,7 @@ deviation was fixed at 0.7.
 The baseline models were estimated using four chains, each with
 5,000 warm-up iterations and 10,000 retained draws. Neither run
 presented post-warm-up divergences. For the terminal model, the
-maximum reported rank-normalised $\widehat{R}$ was 1.00,
+maximum reported rank-normalised $\widehat{R}$ was 1.00 rounded to two decimal points,
 with minimum bulk and tail effective sample sizes (ESS) of
 2,931 and 6,726, respectively. For the chokepoint model,
 the maximum reported $\widehat{R}$ was also 1.00, with
