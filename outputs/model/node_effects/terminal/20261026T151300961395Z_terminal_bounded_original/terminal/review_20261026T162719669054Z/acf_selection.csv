@@ -1,0 +1,4 @@
+,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat,selection_reason
+beta[exporter_lag1],0.015,0.005,282.0,955.0,1.02,Lowest bulk ESS among regression coefficients
+loading_cont[role_specific_pagerank],0.0,0.0,346.0,667.0,1.02,Lowest bulk ESS among response loadings; PageRank anchor loading
+intercept_cont[role_specific_pagerank],0.004,0.002,66.0,131.0,1.07,Lowest bulk ESS among global parameters; Lowest tail ESS among global parameters

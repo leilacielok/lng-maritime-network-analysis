@@ -42,7 +42,7 @@ def prior_specification(kind, profile="regularized"):
     }
 
 
-def build_terminal_model(data):
+def build_terminal_model(data, factor_builder=None):
     import pymc as pm
     import pytensor.tensor as pt
 
@@ -55,7 +55,8 @@ def build_terminal_model(data):
               "boundary": data["audit"]["continuous_responses"][1:]}
     with pm.Model(coords=coords) as model:
         beta = pm.Normal("beta", 0, priors["beta_sd"], dims="predictor")
-        factor_mean = pm.Deterministic("factor_mean", pt.dot(data["x"], beta), dims="obs")
+        factor_mean = (pm.Deterministic("factor_mean", pt.dot(data["x"], beta), dims="obs")
+                       if factor_builder is None else factor_builder(data, beta))
         factor = pm.Normal("factor", mu=factor_mean, sigma=1, dims="obs")
         pm.Deterministic("factor_residual", factor - factor_mean, dims="obs")
         # PageRank is the first response in both specifications.
@@ -83,7 +84,7 @@ def build_terminal_model(data):
     return model
 
 
-def build_chokepoint_model(data):
+def build_chokepoint_model(data, factor_builder=None):
     import pymc as pm
     import pytensor.tensor as pt
     priors = prior_specification("chokepoint", data.get("prior_profile", "regularized"))
@@ -95,7 +96,8 @@ def build_chokepoint_model(data):
               "boundary": ["betweenness"]}
     with pm.Model(coords=coords) as model:
         beta = pm.Normal("beta", 0, priors["beta_sd"], dims="predictor")
-        mean = pm.Deterministic("factor_mean", pt.dot(data["x"], beta), dims="obs")
+        mean = (pm.Deterministic("factor_mean", pt.dot(data["x"], beta), dims="obs")
+                if factor_builder is None else factor_builder(data, beta))
         factor = pm.Normal("factor", mean, 1, dims="obs")
         pm.Deterministic("factor_residual", factor - mean, dims="obs")
         anchor = pm.HalfNormal("pagerank_loading", priors["pagerank_loading_sd"])
@@ -120,9 +122,10 @@ def build_chokepoint_model(data):
     return model
 
 
-def build_model(data):
-    return (build_terminal_model(data) if "exporter_lag1" in data["audit"]["predictors"]
-            else build_chokepoint_model(data))
+def build_model(data, factor_builder=None):
+    return (build_terminal_model(data, factor_builder)
+            if "exporter_lag1" in data["audit"]["predictors"]
+            else build_chokepoint_model(data, factor_builder))
 
 
 def chokepoint_initial_values(data, chains, seed):

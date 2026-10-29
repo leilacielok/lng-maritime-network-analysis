@@ -1,0 +1,138 @@
+{
+  "model": "node_effects",
+  "node_sd_prior": 1.0,
+  "terminal_panel": "C:\\Users\\Leila\\OneDrive\\Desktop\\Thesis\\code\\data\\processed\\model_ready\\terminal_criticality_model_panel.csv",
+  "chokepoint_panel": "C:\\Users\\Leila\\OneDrive\\Desktop\\Thesis\\code\\data\\processed\\model_ready\\chokepoint_criticality_model_panel.csv",
+  "output_dir": "C:\\Users\\Leila\\OneDrive\\Desktop\\Thesis\\code\\outputs\\model",
+  "prior_profile": "original",
+  "model_group": "baseline",
+  "precision_prior_sd": 0.7,
+  "run_name": null,
+  "node_type": "chokepoint",
+  "check_only": false,
+  "prior_only": false,
+  "draws": 10000,
+  "tune": 5000,
+  "chains": 4,
+  "cores": 4,
+  "prior_draws": 200,
+  "target_accept": 0.8,
+  "seed": 20261008,
+  "likelihood": "Beta PageRank/flow; zero-inflated Beta betweenness",
+  "prior_specification": {
+    "profile": "original",
+    "beta_sd": 0.5,
+    "pagerank_loading_sd": 1.0,
+    "other_loading_sd": [
+      1.0,
+      1.0
+    ],
+    "binary_loading_sd": 1.0,
+    "interior_intercept_mean": [
+      -4.0,
+      -5.0,
+      -4.0
+    ],
+    "interior_intercept_sd": [
+      1.5,
+      1.5,
+      1.5
+    ],
+    "binary_intercept_sd": 2.0,
+    "boundary_intercept_mean": -5.0,
+    "boundary_intercept_sd": 1.5,
+    "boundary_loading_sd": 1.0,
+    "precision_median": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "precision_response_order": [
+      "pagerank",
+      "betweenness",
+      "share_monthly_network_flow"
+    ]
+  },
+  "precision_prior": {
+    "distribution": "LogNormal",
+    "median_by_response": {
+      "pagerank": 10.0,
+      "betweenness": 10.0,
+      "share_monthly_network_flow": 10.0
+    },
+    "log_sd": 0.7
+  },
+  "node_effect_specification": {
+    "factor": "Normal(X beta + mu_node[node_index], 1)",
+    "mu_raw": "Normal(0, 1)",
+    "mu_node": "sigma_mu * mu_raw (non-centred)",
+    "sigma_mu": {
+      "distribution": "HalfNormal",
+      "scale": 1.0
+    },
+    "population_mean": 0.0,
+    "sum_to_zero_constraint": false,
+    "estimation_nodes": 24,
+    "node_id_column": "node_id",
+    "node_id_order": [
+      "CP001",
+      "CP002",
+      "CP004",
+      "CP005",
+      "CP006",
+      "CP007",
+      "CP008",
+      "CP009",
+      "CP010",
+      "CP011",
+      "CP012",
+      "CP013",
+      "CP014",
+      "CP015",
+      "CP016",
+      "CP017",
+      "CP018",
+      "CP019",
+      "CP020",
+      "CP021",
+      "CP022",
+      "CP023",
+      "CP024",
+      "CP027"
+    ]
+  },
+  "source_sha256": {
+    "common.py": "b8f5942320bbfcb78cbc2d5835224a5115b4078294427b2464b9afae3726589e",
+    "baseline.py": "a2137c2c34a7a9d9673a223ac2401057f8187470c2ee5b347361bc7e4a32a00d",
+    "estimation.py": "b66ca7b5e2610e9161bd73b44af1506db0ac112bbf76ede5b58a7b4700f802a8",
+    "node_effects.py": "e7b9b26ddf31459d4eddcc2459dd90bfe6ddab1706a3ca98784db43896cb8978",
+    "diagnostics.py": "3ea0b8050b47f086d3055503f5f2c7e5513a79474ca902b3d7bff342cd01f7de",
+    "findings.py": "d917883f93fbc376716d02b0c04e164e401d8134d5af3278b94fd6c76822eb94"
+  },
+  "started_utc": "20261026T193244465913Z",
+  "command_argv": [
+    "scripts/models/node_effects.py",
+    "--node-type",
+    "chokepoint",
+    "--tune",
+    "5000",
+    "--draws",
+    "10000",
+    "--chains",
+    "4",
+    "--cores",
+    "4",
+    "--target-accept",
+    "0.80"
+  ],
+  "python": "3.12.15",
+  "packages": {
+    "numpy": "1.26.4",
+    "pandas": "2.3.3",
+    "pymc": "5.20.1",
+    "pytensor": "2.27.1",
+    "arviz": "0.21.0",
+    "matplotlib": "3.9.2"
+  },
+  "script_sha256": "b66ca7b5e2610e9161bd73b44af1506db0ac112bbf76ede5b58a7b4700f802a8"
+}

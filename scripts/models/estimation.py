@@ -7,9 +7,10 @@ Chokepoint bridge indicator omitted (near duplicate of articulation).
 PageRank: Beta; HHI and dependence: one-inflated Beta, on original scale.
 Interior means and probabilities of one have distinct factor loadings.
 Structural responses: Bernoulli. Factor variance is one; PageRank loading positive.
-No activity component, country, throughput, AR(1), or repeated-node effects.
-Default priors use the regularized profile; --prior-profile original reproduces
-the previous priors. Both profiles are provisional: check prior predictions
+No activity component, country, throughput or AR(1).
+Optional --model node_effects adds hierarchical repeated-node intercepts.
+Default --model-group baseline uses the original priors; CON and RS select
+the alternative sensitivity profiles. Both profiles are provisional: check prior predictions
 and posterior sensitivity before interpreting scores.
 --prior-profile response_precision keeps regularized priors but uses
 response-specific Beta precision medians as a third sensitivity candidate.
@@ -32,47 +33,22 @@ from baseline import prior_specification, build_model, initial_values, chokepoin
 import numpy as np
 import pandas as pd
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-from diagnostics import predictive_checks
-
-
-
-
 def fit_model(data, kind, args, destination):
     try:
         import pymc as pm
         import arviz as az
     except ImportError as exc:
-        raise RuntimeError("Install scripts/model/requirements.txt to estimate the model") from exc
+        raise RuntimeError("Install scripts/models/requirements.txt to estimate the model") from exc
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    model = build_model(data)
+    from diagnostics import predictive_checks
+    if args.model == "node_effects":
+        from node_effects import build_factor_mean
+        model = build_model(data, factor_builder=build_factor_mean)
+    else:
+        model = build_model(data)
     with model:
         prior_count_key = ("draws" if "draws" in inspect.signature(pm.sample_prior_predictive).parameters
                            else "samples")
@@ -103,12 +79,16 @@ def fit_model(data, kind, args, destination):
                   "intercept_binary", "precision_cont"] + (
                   ["intercept_one", "loading_one"] if kind == "terminal"
                   else ["intercept_zero", "loading_zero"])
+    if args.model == "node_effects":
+        parameters += ["sigma_mu"]
     diagnostic = run_diagnostics(idata, data, kind, destination, parameters)
     export_findings(idata, data, kind, destination, parameters, diagnostic, SPECS)
 
-
-def main():
+def main(default_model="baseline"):
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--model", choices=["baseline", "node_effects"], default=default_model)
+    parser.add_argument("--node-sd-prior", type=float, default=1.0,
+                        help="HalfNormal scale for sigma_mu in node_effects model")
     parser.add_argument("--terminal-panel", type=Path, default=PANEL_DIR / "terminal_criticality_model_panel.csv")
     parser.add_argument("--chokepoint-panel", type=Path, default=PANEL_DIR / "chokepoint_criticality_model_panel.csv")
     parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
@@ -143,10 +123,15 @@ def main():
         parser.error("run-name must be a single folder name")
     if not np.isfinite(args.precision_prior_sd) or args.precision_prior_sd <= 0:
         parser.error("precision-prior-sd must be finite and positive")
+    if not np.isfinite(args.node_sd_prior) or args.node_sd_prior <= 0:
+        parser.error("node-sd-prior must be finite and positive")
     kinds = [args.node_type]
     # Validate all selected inputs before starting any potentially expensive fit.
     data = {kind: prepare_panel(getattr(args, f"{kind}_panel"), kind) for kind in kinds}
     for kind, item in data.items():
+        if args.model == "node_effects":
+            from node_effects import prepare_node_effects
+            prepare_node_effects(item, kind, args.node_sd_prior)
         item["precision_prior_sd"] = args.precision_prior_sd
         item["prior_profile"] = args.prior_profile
         item["audit"]["prior_specification"] = {**prior_specification(kind, args.prior_profile),
@@ -176,6 +161,9 @@ def main():
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     group_dir = (args.output_dir / "baseline" if args.model_group == "baseline"
                  else args.output_dir / "sensitivity_analysis" / args.model_group)
+    if args.model == "node_effects":
+        group_dir = (args.output_dir / "node_effects" if args.model_group == "baseline"
+                     else args.output_dir / "node_effects" / "sensitivity_analysis" / args.model_group)
     run = group_dir / args.node_type / (args.run_name or f"{stamp}_{args.node_type}_bounded_{args.prior_profile}")
     run.mkdir(parents=True, exist_ok=False)
     print(f"Run directory: {run.resolve()}", flush=True)
@@ -193,6 +181,11 @@ def main():
                                   "median_by_response": dict(zip(SPECS[args.node_type]["continuous"],
                                       prior_specification(args.node_type, args.prior_profile)["precision_median"])),
                                   "log_sd": args.precision_prior_sd},
+              "node_effect_specification": data[args.node_type]["audit"].get("node_effect_specification"),
+              "source_sha256": {name: hashlib.sha256((script_path.parent / name).read_bytes()).hexdigest()
+                                for name in ["common.py", "baseline.py", "estimation.py", "node_effects.py",
+                                             "diagnostics.py", "findings.py"]
+                                if (script_path.parent / name).is_file()},
               "started_utc": stamp, "command_argv": sys.argv,
               "python": platform.python_version(), "packages": packages,
               "script_sha256": hashlib.sha256(script_path.read_bytes()).hexdigest()}
@@ -201,6 +194,10 @@ def main():
         destination = run / kind
         destination.mkdir(exist_ok=True)
         (destination / "sample_audit.json").write_text(json.dumps(item["audit"], indent=2), encoding="utf-8")
+        if args.model == "node_effects":
+            pd.DataFrame({"node_index": np.arange(len(item["node_ids"])),
+                          "node_id": item["node_ids"], "node_name": item["node_names"]}).to_csv(
+                              destination / "node_index.csv", index=False)
         item["x_scaling"].to_csv(destination / "predictor_scaling.csv")
         item["y_scaling"].to_csv(destination / "response_scaling.csv")
         item["frame"][item["audit"]["binary_responses"]].corr().to_csv(destination / "binary_correlations.csv")
@@ -220,7 +217,6 @@ def main():
             write_status("sampling_complete", passes_basic_sampling_checks=diagnostics["passes_basic_checks"],
                          note="Passing sampling checks does not establish model adequacy.")
     print(f"Results saved to {run}")
-
 
 if __name__ == "__main__":
     main()
