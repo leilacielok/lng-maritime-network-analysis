@@ -1764,7 +1764,7 @@ examined in Section~\ref{sec:prior_sensitivity}.
 
 \subsection{Rank-one specification and posterior distribution}
 \label{subsec:simple_factor_specification}
-For each node type separately, let $\boldsymbol{x}_{i,t}$ be the standardised covariate vector, with the role indicator retained on its original scale, and let $f_{i,t}$ be a scalar latent factor. The factor regression is
+For each node type separately, let $\boldsymbol{x}_{i,t}$ be the standardised covariate vector and $f_{i,t}$ be a scalar latent factor. The factor regression is
 \begin{equation}
  f_{i,t}\mid\boldsymbol{x}_{i,t},\boldsymbol{\beta}
  \sim\mathcal{N}(\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1).
@@ -1774,176 +1774,554 @@ The residual factor variance is fixed at one to define its scale.
 The PageRank loading is constrained to be positive to orient the factor, while the other loadings are unrestricted. 
 Conditional on the factors and parameters, the responses are assumed independent, and factors for different node-months are independent given their covariates and regression coefficients.
 
-Writing 
+Let $\boldsymbol{\gamma}$ collect the loadings of all
+response components:
+\begin{equation*}
+\boldsymbol{\gamma}
+=
+\begin{cases}
+(\lambda_1,\lambda_2,\lambda_3,
+ \ell_1,\ell_2,\ell_3,d_2^T,d_3^T)^{\mathsf T},
+& \text{for terminals},\\
+(\lambda_1,\lambda_2,\lambda_3,
+ \ell_1,\ell_2,d_2^C)^{\mathsf T},
+& \text{for chokepoints}.
+\end{cases}
+\end{equation*}
+For component $m=1,\ldots,M$, let $\eta_{i,t,m}$ denote
+the linear predictor on the logit scale: the logit of
+the interior Beta mean, the binary-response probability,
+or the boundary probability, according to the component.
+It can be written as
+$\eta_{i,t,m}=\xi_m+\gamma_m f_{i,t}$,
+where $\xi_m$ and $\gamma_m$ denote the corresponding
+intercept and loading, respectively, with $M=8$ for
+terminals and $M=6$ for chokepoints.
+
+Substituting
 $f_{i,t}=\boldsymbol{x}_{i,t}^{\mathsf T}
 \boldsymbol{\beta}+z_{i,t}$,
 where $z_{i,t}\sim\mathcal{N}(0,1)$ independently across
-node--month observations, shows that the covariate
-coefficients in the conditional response predictors
-are given by the products of the response-specific
-loadings and the factor-regression coefficients.
-Consequently, the corresponding coefficient matrices
-have rank at most one. This reduced-rank structure
-restricts the covariate associations to a common
-direction, while allowing their magnitude and sign
-to differ across responses.
+node--month observations, gives
+\begin{equation}
+\eta_{i,t,m}
+=
+\xi_m+
+\boldsymbol{x}_{i,t}^{\mathsf T}
+(\gamma_m\boldsymbol{\beta})
++\gamma_m z_{i,t}.
+\end{equation}
+Thus, the covariate coefficient vector for component
+$m$ is $\gamma_m\boldsymbol{\beta}$.
+Stacking these vectors as rows gives
+\begin{equation*}
+\begin{pmatrix}
+\gamma_1\beta_1 & \cdots & \gamma_1\beta_q\\
+\vdots & \ddots & \vdots\\
+\gamma_M\beta_1 & \cdots & \gamma_M\beta_q
+\end{pmatrix}
+=
+\boldsymbol{\gamma}\boldsymbol{\beta}^{\mathsf T},
+\end{equation*}
+where $q$ denotes the number of covariates.
+Every row is a scalar multiple of
+$\boldsymbol{\beta}^{\mathsf T}$, so the matrix has
+rank at most one.
+This structure provides a parsimonious summary of how
+the covariates are associated with multiple network
+measures through a shared latent dimension, while
+allowing each response component to relate to that
+dimension with a different strength and sign.
 
-The joint posterior distribution of the model parameters and
-latent factors is obtained by combining the response
-likelihoods with the prior distributions through Bayes'
-theorem \citep{gelman2013bayesian}.
-Derivations of the full conditional posterior distributions
-for the rank-one baseline model are provided in
+Inference for this model is based on the joint posterior
+distribution of both the parameters and latent factors,
+which describes their uncertainty conditional on the
+observed responses and covariates. By Bayes' theorem,
+this distribution is proportional to the product of
+the response likelihood, the conditional distribution
+of the latent factors given the covariates and regression
+coefficients, and the parameter prior densities
+\citep{gelman2013bayesian}.
+These components are specified below, followed by the
+joint posterior distribution and the full conditional
+posterior kernels. Detailed derivations are provided in
 Appendix~\ref{app:baseline_full_conditionals}.
 
 Let $\mathcal{O}$ denote the set of node--month observations
-included in estimation, and let
-$\mathbf{f}=(f_{i,t})_{(i,t)\in\mathcal{O}}$ collect their
-latent factors. The observed responses are $Y_{i,t,j}$ for
-the three bounded measures, $j=1,2,3$, and $B_{i,t,k}$ for
-the binary measures, $k=1,\ldots,K$, where $K=3$ for
-terminals and $K=2$ for chokepoints.
+included in estimation. To simplify the subscripts, each
+observation $(i,t)\in\mathcal{O}$ is indexed by $n$, so that
+$f_n$, $\boldsymbol{x}_n$, $Y_{nj}$, and $B_{nk}$ correspond
+to $f_{i,t}$, $\boldsymbol{x}_{i,t}$, $Y_{i,t,j}$, and
+$B_{i,t,k}$, respectively. 
+
+Let $\mathbf{f}=(f_n)_{n\in\mathcal{O}}$ collect the latent
+factors. The observed responses are $Y_{nj}$ for the three
+bounded measures, $j=1,2,3$, and $B_{nk}$ for the binary
+measures, $k=1,\ldots,K$, where $K=3$ for terminals and
+$K=2$ for chokepoints.
 
 Let $\boldsymbol{\theta}$ collect the response-specific
 parameters: the bounded-response intercepts $\alpha_j$,
 loadings $\lambda_j$, and precisions $\phi_j$; the
 binary-response intercepts $a_k$ and loadings $\ell_k$;
-and the boundary-component parameters. For terminals,
-the latter comprise $c_j^T$ and $d_j^T$ for $j=2,3$,
-while for chokepoints they comprise $c_2^C$ and $d_2^C$.
+and the boundary-component parameters $c_j$ and $d_j$.
+The latter denote $c_j^T,d_j^T$ for terminal HHI and
+dependence, $j=2,3$, or $c_2^C,d_2^C$ for chokepoint
+betweenness.
 
 Under the conditional-independence assumption stated above,
 the joint contribution of the responses for a single
-node--month factorises as
-\begin{equation}
+node--month is the product of the contributions of each
+bounded response, denoted here by
+$g_j(Y_{nj}\mid f_n,\boldsymbol{\theta})$,
+and the Bernoulli probabilities of the binary responses:
+\begin{equation*}
 \begin{aligned}
-&p(\mathbf{Y}_{i,t},\mathbf{B}_{i,t}
-  \mid f_{i,t},\boldsymbol{\theta})
+&p(\mathbf{Y}_n,\mathbf{B}_n
+  \mid f_n,\boldsymbol{\theta})
 \\
 &\quad=
 \prod_{j=1}^{3}
-g_j(Y_{i,t,j}\mid f_{i,t},\boldsymbol{\theta})
+g_j(Y_{nj}\mid f_n,\boldsymbol{\theta})
 \prod_{k=1}^{K}
-p_{i,t,k}^{B_{i,t,k}}
-(1-p_{i,t,k})^{1-B_{i,t,k}},
+p_{nk}^{B_{nk}}
+(1-p_{nk})^{1-B_{nk}}.
 \end{aligned}
-\end{equation}
-where
-$\operatorname{logit}(p_{i,t,k})=a_k+\ell_k f_{i,t}$.
-The contribution $g_j$ is the ordinary Beta density for
-terminal PageRank and chokepoint PageRank and flow share;
-the one-inflated Beta contribution for terminal HHI and
-dependence; or the zero-inflated Beta contribution for
-chokepoint betweenness, as specified in
-Section~\ref{subsec:shared_response_likelihoods}.
-
-Conditional independence across node--month observations
-gives the response likelihood
+\end{equation*}
+Combining the response contributions over all observations
+in $\mathcal{O}$ gives the likelihood
 \begin{equation}
 \begin{aligned}
 L(\boldsymbol{\theta},\mathbf{f})
 &=
-\prod_{(i,t)\in\mathcal{O}}
-p(\mathbf{Y}_{i,t},\mathbf{B}_{i,t}
-  \mid f_{i,t},\boldsymbol{\theta})
+\prod_{n\in\mathcal{O}}
+p(\mathbf{Y}_n,\mathbf{B}_n
+  \mid f_n,\boldsymbol{\theta})
 \\
 &=
-\prod_{(i,t)\in\mathcal{O}}
+\prod_{n\in\mathcal{O}}
 \left[
 \prod_{j=1}^{3}
-g_j(Y_{i,t,j}\mid f_{i,t},\boldsymbol{\theta})
+g_j(Y_{nj}\mid f_n,\boldsymbol{\theta})
 \prod_{k=1}^{K}
-p_{i,t,k}^{B_{i,t,k}}
-(1-p_{i,t,k})^{1-B_{i,t,k}}
+p_{nk}^{B_{nk}}
+(1-p_{nk})^{1-B_{nk}}
 \right].
 \end{aligned}
 \label{eq:baseline_response_likelihood}
 \end{equation}
 
-The factor-regression specification in
-Equation~\ref{eq:simple_factor} implies
+The factor regression in Equation~\ref{eq:simple_factor}
+gives the joint conditional density of the latent factors:
 \begin{equation}
 p(\mathbf{f}\mid\boldsymbol{\beta},\mathbf{X})
 =
-\prod_{(i,t)\in\mathcal{O}}
+\prod_{n\in\mathcal{O}}
 \mathcal{N}\!\left(
-f_{i,t};
-\mathbf{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1
+f_n;
+\boldsymbol{x}_n^{\mathsf T}\boldsymbol{\beta},1
 \right),
 \end{equation}
-where $\mathbf{X}$ is the covariate design matrix and
-$\mathcal{N}(u;m,v)$ denotes the Normal density evaluated
-at $u$, with mean $m$ and variance $v$.
+where $\mathbf{X}$ is the covariate design matrix,
+with row $\boldsymbol{x}_n^{\mathsf T}$ for observation $n$.
 
-Let $\mathcal{D}$ denote the observed bounded and binary
-responses together with the covariates. By Bayes' theorem,
-the joint posterior density satisfies
+Combining these components and denoting the observed
+responses and covariates by $\mathcal{D}$, the joint
+posterior density is therefore proportional to
 \begin{equation}
-\begin{aligned}
-&p(\boldsymbol{\theta},\boldsymbol{\beta},\mathbf{f}
-  \mid\mathcal{D})
-\\
-&\quad\propto
+p(\boldsymbol{\theta},\boldsymbol{\beta},\mathbf{f}
+\mid\mathcal{D})
+\propto
 L(\boldsymbol{\theta},\mathbf{f})
 \,p(\mathbf{f}\mid\boldsymbol{\beta},\mathbf{X})
-\,p(\boldsymbol{\theta})p(\boldsymbol{\beta})
-\\
-&\quad=
-L(\boldsymbol{\theta},\mathbf{f})
-\left[
-\prod_{(i,t)\in\mathcal{O}}
-\mathcal{N}\!\left(
-f_{i,t};
-\mathbf{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1
-\right)
-\right]
-p(\boldsymbol{\theta})p(\boldsymbol{\beta}),
-\end{aligned}
+\,p(\boldsymbol{\theta})p(\boldsymbol{\beta}).
 \label{eq:joint_posterior}
 \end{equation}
 where $p(\boldsymbol{\theta})$ and
 $p(\boldsymbol{\beta})$ are the products of the independent
 prior densities introduced in
-Section~\ref{subsec:prior_distributions}. The prior density
-$p(\boldsymbol{\theta})$ includes the positive-support
-restriction on the PageRank loading.
+Section~\ref{subsec:prior_distributions}.
 
-Equation~\ref{eq:joint_posterior} combines the information
-provided by the response likelihoods, the Gaussian
-factor regression, and the parameter priors. Although
-the Gaussian factor regression and Normal coefficient
-priors yield a Normal full conditional distribution for
-$\boldsymbol{\beta}$ given $\mathbf{f}$, the logistic
-response links and the dependence of the Beta shape
-parameters on the latent factors make the overall model
-non-conjugate. The marginal posterior distributions
-therefore do not generally belong to standard
-parametric families.
+The full conditional posterior kernels follow by retaining
+the factors of Equation~\ref{eq:joint_posterior} that depend
+on the quantity under consideration, with all remaining
+unknown quantities held fixed. In the expressions below,
+$\textit{rest}$ denotes these remaining quantities together
+with the observed data and covariates.
 
-The joint posterior density is available up to a
-normalising constant, but posterior normalisation and
-marginalisation are analytically intractable. Inference
-is therefore based on numerical sampling using the
-No-U-Turn Sampler (NUTS). Derivations of the full
-conditional posterior distributions are provided in
-the appendix to document the posterior structure;
-these expressions do not imply that sampling proceeds
-through separate Gibbs updates. The computational
-procedure and diagnostic criteria are described in
+Define
+$\mathcal{I}_j=\{n\in\mathcal{O}:0<Y_{nj}<1\}$, so that 
+for ordinary Beta responses, $\mathcal{I}_j=\mathcal{O}$, while
+for boundary-inflated responses it contains only the
+interior observations.
+
+\paragraph{Binary-response loadings.}
+
+For each binary-response loading, the
+$\mathcal{N}(0,1)$ prior gives
+\begin{equation}
+\begin{aligned}
+p(\ell_k\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\exp\{B_{nk}(a_k+\ell_k f_n)\}
+}{
+1+\exp(a_k+\ell_k f_n)
+}
+\right]
+\\
+&\times
+\exp\left(-\frac{\ell_k^2}{2}\right),
+\qquad k=1,\ldots,K.
+\end{aligned}
+\label{eq:fc_binary_loading}
+\end{equation}
+
+\paragraph{Bounded-response interior loadings.}
+
+For the unrestricted interior-mean loadings
+$\lambda_j$, $j=2,3$, corresponding to terminal HHI
+and dependence or chokepoint betweenness and flow share,
+the full conditional kernels are
+\begin{equation}
+\begin{aligned}
+p(\lambda_j\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{I}_j}
+\frac{
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}
+}{
+\Gamma(\mu_{nj}\phi_j)
+\Gamma((1-\mu_{nj})\phi_j)
+}
+\right]
+\\
+&\times
+\exp\left(-\frac{\lambda_j^2}{2}\right),
+\qquad j=2,3,
+\end{aligned}
+\label{eq:fc_beta_loading}
+\end{equation}
+For PageRank, the HalfNormal prior imposes the
+positive-support restriction:
+\begin{equation}
+\begin{aligned}
+p(\lambda_1\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+Y_{n1}^{\mu_{n1}\phi_1-1}
+(1-Y_{n1})^{(1-\mu_{n1})\phi_1-1}
+}{
+\Gamma(\mu_{n1}\phi_1)
+\Gamma((1-\mu_{n1})\phi_1)
+}
+\right]
+\\
+&\times
+\exp\left(-\frac{\lambda_1^2}{2}\right)
+\mathbb{1}(\lambda_1>0).
+\end{aligned}
+\label{eq:fc_pagerank_loading}
+\end{equation}
+
+\paragraph{Boundary-probability loadings.}
+
+For terminal HHI and dependence, define
+$Z_{nj}=\mathbb{1}(Y_{nj}=1)$, $j=2,3$.
+The full conditional kernels are
+\begin{equation}
+\begin{aligned}
+p(d_j^T\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\exp\{Z_{nj}(c_j^T+d_j^T f_n)\}
+}{
+1+\exp(c_j^T+d_j^T f_n)
+}
+\right]
+\\
+&\times
+\exp\left[-\frac{(d_j^T)^2}{2}\right],
+\qquad j=2,3.
+\end{aligned}
+\label{eq:fc_one_loading}
+\end{equation}
+For chokepoint betweenness, let
+$Z_{n2}=\mathbb{1}(Y_{n2}=0)$.
+The full conditional kernel is
+\begin{equation}
+\begin{aligned}
+p(d_2^C\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\exp\{Z_{n2}(c_2^C+d_2^C f_n)\}
+}{
+1+\exp(c_2^C+d_2^C f_n)
+}
+\right]
+\\
+&\times
+\exp\left[-\frac{(d_2^C)^2}{2}\right].
+\end{aligned}
+\label{eq:fc_zero_loading}
+\end{equation}
+
+\paragraph{Factor-regression coefficients.}
+
+The Gaussian factor regression and the independent
+$\mathcal{N}(0,0.5^2)$ coefficient priors give the
+full conditional kernel
+\begin{equation}
+\begin{aligned}
+p(\boldsymbol{\beta}\mid\mathrm{rest})
+\propto
+\exp\Bigg\{-\frac12\Big[
+&
+\boldsymbol{\beta}^{\mathsf T}
+(\mathbf{X}^{\mathsf T}\mathbf{X}+4\mathbf{I}_q)
+\boldsymbol{\beta}
+\\
+&-
+2\boldsymbol{\beta}^{\mathsf T}
+\mathbf{X}^{\mathsf T}\mathbf{f}
+\Big]\Bigg\}.
+\end{aligned}
+\label{eq:fc_beta_kernel}
+\end{equation}
+Recognising the kernel of a multivariate Normal
+distribution gives the conjugate full conditional
+\begin{equation}
+\begin{aligned}
+\boldsymbol{\beta}\mid\mathrm{rest}
+\sim\mathcal{N}_q\Big(
+&
+(\mathbf{X}^{\mathsf T}\mathbf{X}+4\mathbf{I}_q)^{-1}
+\mathbf{X}^{\mathsf T}\mathbf{f},
+\\
+&
+(\mathbf{X}^{\mathsf T}\mathbf{X}+4\mathbf{I}_q)^{-1}
+\Big).
+\end{aligned}
+\label{eq:fc_beta_normal}
+\end{equation}
+Matrix notation is used here for compactness, with
+$\mathbf{I}_q$ denoting the $q\times q$ identity matrix.
+
+\paragraph{Latent factors.}
+
+For each node--month observation, the full conditional
+of the factor combines its Gaussian regression density
+with all response contributions for that observation:
+\begin{equation}
+p(f_n\mid\mathrm{rest})
+\propto
+L_n(f_n)
+\exp\left[
+-\frac12
+(f_n-\boldsymbol{x}_n^{\mathsf T}\boldsymbol{\beta})^2
+\right].
+\label{eq:fc_factor}
+\end{equation}
+
+For terminals, the observation-specific likelihood is
+\begin{equation*}
+\begin{aligned}
+L_n^T(f_n)
+={}&
+p(Y_{n1}\mid f_n,\alpha_1,\lambda_1,\phi_1)
+\\
+&\times
+\prod_{j=2}^{3}
+p(Y_{nj}\mid
+f_n,\alpha_j,\lambda_j,\phi_j,c_j^T,d_j^T)
+\\
+&\times
+\prod_{k=1}^{3}
+p(B_{nk}\mid f_n,a_k,\ell_k).
+\end{aligned}
+\label{eq:terminal_factor_likelihood}
+\end{equation*}
+
+For chokepoints, it is
+\begin{equation*}
+\begin{aligned}
+L_n^C(f_n)
+={}&
+p(Y_{n1}\mid f_n,\alpha_1,\lambda_1,\phi_1)
+\\
+&\times
+p(Y_{n2}\mid
+f_n,\alpha_2,\lambda_2,\phi_2,c_2^C,d_2^C)
+\\
+&\times
+p(Y_{n3}\mid f_n,\alpha_3,\lambda_3,\phi_3)
+\\
+&\times
+\prod_{k=1}^{2}
+p(B_{nk}\mid f_n,a_k,\ell_k).
+\end{aligned}
+\label{eq:chokepoint_factor_likelihood}
+\end{equation*}
+The inflated-response terms in these expressions denote
+the complete mixture contributions, including the
+boundary probabilities and, for interior observations,
+the Beta densities.
+
+\paragraph{Binary-response intercepts.}
+
+Under the prior $a_k\sim\mathcal{N}(0,2^2)$,
+\begin{equation}
+\begin{aligned}
+p(a_k\mid\mathrm{rest})
+\propto
+\exp\Bigg\{
+&-\frac{a_k^2}{8}
++a_k\sum_{n\in\mathcal{O}}B_{nk}
+\\
+&-
+\sum_{n\in\mathcal{O}}
+\log\left[1+\exp(a_k+\ell_k f_n)\right]
+\Bigg\}.
+\end{aligned}
+\label{eq:fc_binary_intercept_log}
+\end{equation}
+
+\paragraph{Bounded-response interior intercepts.}
+
+For $\alpha_j\sim\mathcal{N}(m_j,1.5^2)$,
+the full conditional kernels are
+\begin{equation}
+\begin{aligned}
+p(\alpha_j\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{I}_j}
+\frac{
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}
+}{
+\Gamma(\mu_{nj}\phi_j)
+\Gamma((1-\mu_{nj})\phi_j)
+}
+\right]
+\\
+&\times
+\exp\left[
+-\frac{(\alpha_j-m_j)^2}{2(1.5)^2}
+\right],
+\qquad j=1,2,3.
+\end{aligned}
+\label{eq:fc_beta_intercept}
+\end{equation}
+
+\paragraph{Boundary-probability intercepts.}
+
+For terminal HHI and dependence,
+$c_j^T\sim\mathcal{N}(0,1.5^2)$ gives
+\begin{equation}
+\begin{aligned}
+p(c_j^T\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\exp\{Z_{nj}(c_j^T+d_j^T f_n)\}
+}{
+1+\exp(c_j^T+d_j^T f_n)
+}
+\right]
+\\
+&\times
+\exp\left[
+-\frac{(c_j^T)^2}{2(1.5)^2}
+\right],
+\qquad j=2,3.
+\end{aligned}
+\label{eq:fc_one_intercept}
+\end{equation}
+For chokepoint betweenness,
+$c_2^C\sim\mathcal{N}(-5,1.5^2)$ gives
+\begin{equation}
+\begin{aligned}
+p(c_2^C\mid\mathrm{rest})
+\propto
+\exp\Bigg\{
+&-\frac{(c_2^C+5)^2}{2(1.5)^2}
++c_2^C\sum_{n\in\mathcal{O}}Z_{n2}
+\\
+&-
+\sum_{n\in\mathcal{O}}
+\log\left[1+\exp(c_2^C+d_2^C f_n)\right]
+\Bigg\}.
+\end{aligned}
+\label{eq:fc_zero_intercept}
+\end{equation}
+
+\paragraph{Beta precision parameters.}
+
+For each bounded-response component, under the prior
+$\log\phi_j\sim\mathcal{N}(\log10,0.7^2)$,
+the full conditional kernel is
+\begin{equation}
+\begin{aligned}
+p(\phi_j\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{I}_j}
+\frac{
+\Gamma(\phi_j)
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}
+}{
+\Gamma(\mu_{nj}\phi_j)
+\Gamma((1-\mu_{nj})\phi_j)
+}
+\right]
+\\
+&\times
+\frac{1}{\phi_j}
+\exp\left[
+-\frac{(\log\phi_j-\log10)^2}{2(0.7)^2}
+\right],
+\\[-1mm]
+&\hspace{35mm}
+\phi_j>0,\qquad j=1,2,3.
+\end{aligned}
+\label{eq:fc_precision}
+\end{equation}
+
+Apart from the Normal coefficient full conditional in
+Equation~\ref{eq:fc_beta_normal}, the full conditionals
+above do not generally have standard conjugate forms.
+The joint posterior density is known up to a normalising
+constant, but the integrals required for normalisation
+and marginalisation are analytically intractable.
+Inference is therefore based on numerical sampling
+using the No-U-Turn Sampler (NUTS), whose implementation
+and associated diagnostic criteria are described in
 Section~\ref{sec:posterior_computation}.
-
 
 \subsection{Node-specific intercepts}
 % TODO: Insert the model specification and the prior for node-specific intercepts.
 % TODO: Clarify identification relative to any common intercept.
 
-\subsection{Rank-two latent factor model}
+\subsection{Rank-two specification}
 % TODO: Insert rank-two specification, priors, and identification constraints.
 
 \section{Posterior computation}
 \label{sec:posterior_computation}
 
-\subsection{Sampling algorithm and implementation}
+\subsection{NUTS sampling algorithm and implementation}
 \label{subsec:posterior_sampling}
 
 The models were implemented in Python 3.12.15 using
@@ -1958,106 +2336,148 @@ high-dimensional posterior distributions more efficiently.
 NUTS extends HMC by automatically determining the
 trajectory length, avoiding the need to manually specify
 the number of integration steps.
+The principles underlying
+HMC and its NUTS extension are outlined below.
 
-Algorithm~\ref{alg:baseline_sampling} summarises posterior
-sampling for the rank-one baseline model. Let
-$\boldsymbol{\eta}=(\boldsymbol{\theta},
-\boldsymbol{\beta},\mathbf{f})$ collect all unknown
-response parameters, regression coefficients, and latent
-factors. The sampler operates on an unconstrained
-representation $\mathbf{q}=T(\boldsymbol{\eta})$.
-The transformed log-posterior density is
+Let $\boldsymbol{\omega}
+=(\boldsymbol{\theta},\boldsymbol{\beta},\mathbf{f})$
+collect all unknown response parameters, regression
+coefficients, and latent factors. 
+The sampler operates on their unconstrained
+representation $\mathbf{q}=T(\boldsymbol{\omega})$.
+By the change-of-variables formula, the transformed
+log-posterior density is
 \begin{equation}
- \mathcal{L}(\mathbf{q})
- =
- \log p\!\left(T^{-1}(\mathbf{q})\mid\mathcal{D}\right)
- +
- \log\left|
- \det\frac{\partial T^{-1}(\mathbf{q})}
-          {\partial\mathbf{q}}
- \right|.
+\mathcal{L}(\mathbf{q})
+=
+\log p_{\boldsymbol{\omega}}\!\left(
+T^{-1}(\mathbf{q})\mid\mathcal{D}
+\right)
++
+\log\left|
+\det\frac{\partial T^{-1}(\mathbf{q})}
+{\partial\mathbf{q}}
+\right|.
 \end{equation}
-The Jacobian term accounts for transformations of
-parameters with restricted support. Its inclusion
-ensures that sampling on the unconstrained scale
-targets the intended posterior distribution.
 
-\begin{algorithm}[tbp]
-\caption{NUTS posterior sampling for the baseline model}
+Following \citet{neal2011mcmc}, an auxiliary momentum
+vector $\mathbf{v}\sim\mathcal{N}(\mathbf{0},\mathbf{M})$
+is introduced, where $\mathbf{M}$ is a positive-definite
+mass matrix. Intuitively, HMC treats the current parameter values
+$\mathbf{q}$ as the position of a moving particle.
+The negative transformed
+log-posterior defines a potential-energy landscape,
+with lower values in regions of higher transformed
+posterior density. The momentum allows the particle
+to move through this landscape, while the gradient
+of $\mathcal{L}(\mathbf{q})$ guides its trajectory.
+
+The negative log-density of the Gaussian momentum,
+up to an additive constant, defines the kinetic
+energy $\frac{1}{2}\mathbf{v}^{\mathsf T}
+\mathbf{M}^{-1}\mathbf{v}$.
+Together with the potential energy
+$-\mathcal{L}(\mathbf{q})$, this defines the
+Hamiltonian:
+\begin{equation}
+H(\mathbf{q},\mathbf{v})
+=
+-\mathcal{L}(\mathbf{q})
++\frac{1}{2}\mathbf{v}^{\mathsf T}
+\mathbf{M}^{-1}\mathbf{v}.
+\end{equation}
+The corresponding equations of motion are
+\begin{equation*}
+\frac{d\mathbf{q}}{d\tau}
+=
+\nabla_{\mathbf{v}}H(\mathbf{q},\mathbf{v})
+=
+\mathbf{M}^{-1}\mathbf{v},
+\qquad
+\frac{d\mathbf{v}}{d\tau}
+=
+-\nabla_{\mathbf{q}}H(\mathbf{q},\mathbf{v})
+=
+\nabla_{\mathbf{q}}\mathcal{L}(\mathbf{q}),
+\end{equation*}
+with $\tau$ denoting an artificial integration time.
+
+These equations are approximated numerically using
+leapfrog integration: for a step size $\epsilon$,
+each integration step comprises the updates
+\begin{equation}
+\begin{aligned}
+ \mathbf{v}_{1/2}
+ &=
+ \mathbf{v}
+ +\frac{\epsilon}{2}
+ \nabla_{\mathbf{q}}\mathcal{L}(\mathbf{q}),\\
+ \mathbf{q}'
+ &=
+ \mathbf{q}
+ +\epsilon\mathbf{M}^{-1}\mathbf{v}_{1/2},\\
+ \mathbf{v}'
+ &=
+ \mathbf{v}_{1/2}
+ +\frac{\epsilon}{2}
+ \nabla_{\mathbf{q}}\mathcal{L}(\mathbf{q}').
+\end{aligned}
+\label{eq:leapfrog_updates}
+\end{equation}
+These updates act on the complete state vector,
+so regression coefficients, response parameters,
+and latent factors are explored jointly rather
+than through sequential parameter-specific
+full conditional updates.
+
+NUTS constructs trajectories by recursively expanding
+a tree of leapfrog states in forward or backward
+directions until the no-U-turn
+criterion detects that the trajectory is doubling
+back, a numerical stopping criterion is met,
+or the maximum tree depth is reached.
+A state from the constructed trajectory is then
+selected according to a rule that preserves the
+target distribution \citep{hoffman2014no}.
+
+Algorithm~\ref{alg:baseline_sampling} summarises
+the sampling procedure for the rank-one baseline model.
+
+\begin{algorithm}[H]
+\caption{NUTS sampling for one-rank baseline model}
 \label{alg:baseline_sampling}
 \begin{algorithmic}[1]
-\Require Data $\mathcal{D}$; log-density $\mathcal{L}$
-and its gradient; chains $C=4$;
-warm-up iterations $W=5000$;
-retained draws $S=10000$;
-target acceptance $\delta=0.80$.
-\Ensure Posterior draws
-$\{\boldsymbol{\eta}^{(c,s)}\}_{c=1,s=1}^{C,S}$.
+\Require Data $\mathcal{D}$; chains $C$;
+warm-up iterations $W$; retained draws $S$;
+target acceptance $\delta$.
 
-\For{$c=1,\ldots,C$}
-    \State Construct data-informed initial values
-    $\boldsymbol{\eta}^{(c,0)}$ with chain-specific perturbations.
-    \State Set $\mathbf{q}\gets
-    T(\boldsymbol{\eta}^{(c,0)})$.
-    \State Initialise step size $\epsilon$
-    and diagonal mass matrix $\mathbf{M}$.
-
+\For{each chain $c=1,\ldots,C$}
+    \State Initialise the unconstrained parameter vector $\mathbf{q}$.
+    \State Initialise step size $\epsilon$ and diagonal mass matrix $\mathbf{M}$.
     \For{$m=1,\ldots,W+S$}
-        \State Sample momentum
-        $\mathbf{v}\sim
-        \mathcal{N}(\mathbf{0},\mathbf{M})$.
-        \State Initialise a trajectory tree at
-        $(\mathbf{q},\mathbf{v})$.
-        \While{no stopping criterion is met}
-            \State Sample direction
-            $d\sim\operatorname{Uniform}\{-1,+1\}$.
-            \State Extend the tree in direction $d$
-            by doubling its trajectory length.
-            \State Compute new states by leapfrog
-            integration using $\nabla\mathcal{L}$.
-            \State Update the candidate state
-            using the PyMC NUTS selection rule.
-            \State Check the no-U-turn criterion,
-            divergence criterion, and maximum tree depth.
-        \EndWhile
-        \State Set $\mathbf{q}$ to the selected state.
-
+        \State Sample momentum $\mathbf{v}\sim\mathcal{N}(\mathbf{0},\mathbf{M})$.
+        \State  Initialise the trajectory at $(\mathbf{q},\mathbf{v})$.
+        \Repeat
+            \State Sample a direction $d\sim\operatorname{Uniform}(\{-1,+1\})$.
+            \State Extend the tree in direction $d$ by doubling the number of leapfrog steps.
+            \State Update the candidate state according to the NUTS selection rule.
+        \Until{a stopping criterion is met}
+        \State Set $\mathbf{q}$ to the selected candidate position.
         \If{$m\leq W$}
-            \State Adapt $\epsilon$ towards
-            target acceptance $\delta$.
-            \State Update the diagonal mass matrix
-            according to the warm-up adaptation schedule.
-            \State Discard the warm-up draw.
+            \State Adapt $\epsilon$ to approach target acceptance $\delta$.
+            \State Adapt $\mathbf{M}$ to account for differences in parameter scales.
         \Else
-            \State Store
-            $\boldsymbol{\eta}^{(c,m-W)}
-            \gets T^{-1}(\mathbf{q})$.
-            \State Evaluate factor means, factor
-            residuals, and other deterministic quantities.
+            \State Store the joint posterior draw $\boldsymbol{\omega}^{(c,m-W)} =T^{-1}(\mathbf{q})$.
+            \State Compute factor means $\mathbf{x}_{n}^{\mathsf T}\boldsymbol{\beta}$ and residuals
+            $f_n-\mathbf{x}_{n}^{\mathsf T}\boldsymbol{\beta}$ for all $n\in\mathcal{O}$.
         \EndIf
     \EndFor
 \EndFor
-\State \Return $C\times S$ posterior draws,
-retaining chain identifiers.
+\State \Return $S$ posterior draws per chain.
 \end{algorithmic}
 \end{algorithm}
 
-During warm-up, the integration step size and diagonal
-mass matrix are adapted. These settings are fixed
-during the retained sampling phase, while trajectory
-length continues to be selected dynamically at each
-iteration. All unknown quantities are updated jointly:
-at each iteration, the sampler constructs a trajectory in the joint unconstrained
-parameter space and selects the next state of the entire vector;
-factor means and residuals are deterministic functions
-of the sampled quantities.
-
-Posterior summaries and convergence diagnostics were
-computed using ArviZ 0.21.0. Data processing and
-visualisation relied on NumPy 1.26.4, pandas 2.3.3,
-and Matplotlib 3.9.2.
-
-For the main results, each node-type model was
+Each node-type model was
 estimated using four parallel chains, with 5,000 warm-up
 iterations and 10,000 retained draws per chain, yielding
 40,000 posterior draws per node-type model.
@@ -2078,71 +2498,64 @@ step-size adaptation in the warm-up phase
 \subsection{Sampling diagnostics}
 \label{subsec:sampling_diagnostics}
 
-Sampling quality was assessed using rank-normalised
-$\widehat{R}$, bulk and tail effective sample sizes
-(ESS), post-warm-up divergences, and the Geweke and
-Heidelberger--Welch diagnostics. Together, these
-measures assess consistency across chains, sampling
-efficiency, within-chain stationarity, and Monte Carlo
-precision.
+Posterior summaries and convergence diagnostics were
+computed using ArviZ 0.21.0, with NumPy 1.26.4,
+pandas 2.3.3, and Matplotlib 3.9.2 used for data
+processing and visualisation.
 
-The rank-normalised $\widehat{R}$ statistic compares
-between-chain and within-chain variability, with
-values close to one indicating greater consistency
-across chains. Bulk ESS evaluates sampling efficiency
-for the central regions of the posterior distribution,
-while tail ESS assesses sampling efficiency for its
-tails. Both measures account for dependence between
-successive MCMC draws \citep{vehtari2021rank}.
+The assessment covered regression coefficients,
+response parameters, latent factors, factor means,
+and factor residuals. Several complementary diagnostics
+were considered together to examine agreement across
+chains, sampling efficiency, within-chain stationarity,
+and the Monte Carlo precision of posterior estimates.
 
-Post-warm-up divergences indicate numerical difficulties
-in simulating Hamiltonian trajectories and may reveal
-regions of the posterior that are insufficiently
-explored \citep{betancourt2017conceptual}.
+Agreement across chains was assessed using
+rank-normalised $\widehat{R}$, with values close to
+one indicating consistency between within-chain
+and between-chain variability. Bulk and tail effective
+sample sizes (ESS) were used to assess how much
+information the correlated draws provided about
+the centre and tails of the posterior distribution,
+respectively \citep{vehtari2021rank}.
 
-Within-chain stationarity and the precision of estimated
-posterior means were examined using the diagnostics
-proposed by Geweke \citep{geweke1992evaluating} and
-Heidelberger and Welch \citep{heidelberger1983simulation}.
+Post-warm-up divergences were also monitored, as they
+signal numerical difficulties in following Hamiltonian
+trajectories and may indicate that some posterior
+regions have not been adequately explored
+\citep{betancourt2017conceptual}.
+
+The Geweke and Heidelberger--Welch diagnostics provided
+additional checks on individual chains
+\citep{geweke1992evaluating,heidelberger1983simulation}.
 
 The Geweke diagnostic compares the means of an early
-and a late segment of a chain. Their difference is
-standardised using an estimated standard error based
-on spectral density estimates, accounting for
+and a late segment of a chain, standardising their
+difference using a standard error that accounts for
 autocorrelation. Under suitable stationarity conditions,
-the resulting statistic follows an asymptotic standard
-Normal distribution. Large absolute values indicate
-potential inconsistencies between the two segments.
+the statistic has an asymptotic standard Normal
+distribution, with large absolute values suggesting
+inconsistency between the two segments.
 
-The Heidelberger--Welch diagnostic combines a
-stationarity test based on the Cramér--von Mises
-statistic with a half-width test for the estimated
-posterior mean. The stationarity test is applied
-sequentially, discarding an initial portion of the
-chain when necessary, up to half of the available
-draws. For the portion passing this test, the
-half-width criterion assesses whether the Monte Carlo
-confidence interval for the posterior mean is
-sufficiently narrow relative to the magnitude of
-the estimated mean.
+The Heidelberger--Welch procedure first assesses
+stationarity using a test based on the
+Cramér--von Mises statistic. If necessary, the test
+is repeated after removing progressively larger
+initial portions of the chain, up to half of the
+available draws. Once stationarity is accepted,
+a half-width test checks whether the Monte Carlo
+confidence interval for the posterior mean, computed
+from the remaining draws, is sufficiently narrow
+relative to the magnitude of the estimated mean.
 
-Diagnostics were evaluated for regression coefficients,
-response parameters, latent factors, factor means,
-and factor residuals. Numerical results were interpreted
-jointly, since no individual diagnostic can establish
-convergence or guarantee complete exploration of the
-posterior distribution.
-
-Numerical diagnostics were complemented by trace plots
-and autocorrelation functions (ACFs) for selected
-parameters. Trace plots display the sampled parameter
-values across iterations for each chain. Well-mixing
-chains are expected to explore similar regions of the
-posterior distribution without persistent trends or
-systematic differences between chains. ACFs measure
-the dependence between draws at increasing lags, with
-faster decay generally indicating more efficient
-sampling and higher effective sample sizes
+Trace plots and autocorrelation functions (ACFs)
+for selected parameters complemented these numerical
+checks. Trace plots were inspected for persistent
+trends, differences between chains, and whether the
+chains explored similar posterior regions.
+ACFs showed how dependence between draws changed
+with increasing lag, with faster decay generally
+indicating more efficient sampling
 \citep{vehtari2021rank}.
 
 % TODO: Confirm sampling settings separately for Models 2 and 3 once estimated.
@@ -3473,240 +3886,118 @@ using the response likelihoods and original prior
 specification introduced in
 Sections~\ref{subsec:shared_response_likelihoods}
 and~\ref{subsec:prior_distributions}.
-
-Throughout, ``rest'' denotes all remaining unknown
-quantities together with the observed data and covariates.
 Each full conditional is obtained from the joint posterior
-in Equation~\ref{eq:joint_posterior} by retaining all factors
+in Equation~\ref{eq:joint_posterior} by retaining the factors
 that depend on the quantity under consideration.
 Multiplicative terms that are constant with respect to
 that quantity are absorbed into the normalising constant.
 
-\section{Notation and likelihood contributions}
-\label{app:conditional_notation}
-
-Let $\mathcal{O}$ be the set of node--month observations
-included in estimation and let $N=|\mathcal{O}|$.
-The factor-regression model is
-\begin{equation}
-f_{i,t}\mid\boldsymbol{\beta},\mathbf{x}_{i,t}
-\sim
-\mathcal{N}\!\left(
-\mathbf{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1
-\right),
-\qquad (i,t)\in\mathcal{O}.
-\end{equation}
-
-For each bounded response $j=1,2,3$,
-\begin{equation}
-\operatorname{logit}(\mu_{i,t,j})
-=
-\alpha_j+\lambda_j f_{i,t},
-\qquad
-A_{i,t,j}=\mu_{i,t,j}\phi_j,
-\qquad
-D_{i,t,j}=(1-\mu_{i,t,j})\phi_j.
-\end{equation}
-
-Define the interior observation set
-\begin{equation}
-\mathcal{I}_j
-=
-\{(i,t)\in\mathcal{O}:0<Y_{i,t,j}<1\}.
-\end{equation}
-For an ordinary Beta response,
-$\mathcal{I}_j=\mathcal{O}$.
-For a boundary-inflated response, this set excludes
-observations at the inflated boundary.
-
-The Beta log-density for an interior observation is
-\begin{equation}
-\begin{aligned}
-H_{i,t,j}
-={}&
-\log\Gamma(\phi_j)
--\log\Gamma(\mu_{i,t,j}\phi_j)
-\\
-&-\log\Gamma((1-\mu_{i,t,j})\phi_j)
-\\
-&+(\mu_{i,t,j}\phi_j-1)\log Y_{i,t,j}
-\\
-&+((1-\mu_{i,t,j})\phi_j-1)
-  \log(1-Y_{i,t,j}),
-\qquad (i,t)\in\mathcal{I}_j.
-\end{aligned}
-\label{eq:appendix_beta_logdensity}
-\end{equation}
-Thus, $H_{i,t,j}$ denotes the log-density evaluated at
-$Y_{i,t,j}$, not an additional model parameter.
-
-For binary response $k$, define its log-likelihood
-contribution as
-\begin{equation}
-\begin{aligned}
-Q_{i,t,k}
-={}&
-B_{i,t,k}(a_k+\ell_k f_{i,t})
-\\
-&-\log\!\left[
-1+\exp(a_k+\ell_k f_{i,t})
-\right],
-\end{aligned}
-\label{eq:appendix_binary_loglik}
-\end{equation}
-which follows from
-$\operatorname{logit}(p_{i,t,k})
-=a_k+\ell_k f_{i,t}$.
-
-To handle the boundary components with common notation,
-let $\mathcal{J}_{\partial}$ denote the set of
-boundary-inflated responses. For terminals,
-$\mathcal{J}_{\partial}=\{2,3\}$ and define
-\begin{equation}
-Z_{i,t,j}=\mathbb{1}(Y_{i,t,j}=1),
-\qquad
-(c_j,d_j)=(c_j^T,d_j^T).
-\end{equation}
-For chokepoints,
-$\mathcal{J}_{\partial}=\{2\}$ and define
-\begin{equation}
-Z_{i,t,2}=\mathbb{1}(Y_{i,t,2}=0),
-\qquad
-(c_2,d_2)=(c_2^C,d_2^C).
-\end{equation}
-
-The boundary indicator is Bernoulli with logit
-$c_j+d_jf_{i,t}$. Its log-likelihood contribution is
-\begin{equation}
-\begin{aligned}
-R_{i,t,j}
-={}&
-Z_{i,t,j}(c_j+d_j f_{i,t})
-\\
-&-\log\!\left[
-1+\exp(c_j+d_j f_{i,t})
-\right].
-\end{aligned}
-\label{eq:appendix_boundary_loglik}
-\end{equation}
-
-Consequently, the complete response log-likelihood is
-\begin{equation}
-\begin{aligned}
-\log L(\boldsymbol{\theta},\mathbf{f})
-={}&
-\sum_{j=1}^{3}
-\sum_{(i,t)\in\mathcal{I}_j} H_{i,t,j}
-\\
-&+
-\sum_{j\in\mathcal{J}_{\partial}}
-\sum_{(i,t)\in\mathcal{O}}R_{i,t,j}
-\\
-&+
-\sum_{k=1}^{K}
-\sum_{(i,t)\in\mathcal{O}}Q_{i,t,k}.
-\end{aligned}
-\label{eq:appendix_response_loglik}
-\end{equation}
-
-For inflated responses, interior observations contribute
-both their Beta log-density and the log-probability of
-not being at the boundary. Boundary observations
-contribute only the corresponding boundary
-log-probability.
-
+The notation follows the main text:
+$n\in\mathcal{O}$ indexes the node--month observations,
+$N=|\mathcal{O}|$, and
+$\mathcal{I}_j=\{n\in\mathcal{O}:0<Y_{nj}<1\}$
+contains the interior observations for bounded response
+$j$.
+Throughout, $\textit{rest}$ denotes all remaining unknown
+quantities together with the observed data and covariates.
 
 \section{Factor-regression coefficients}
 \label{app:beta_conditional}
 
 Let $\mathbf{X}$ be the $N\times q$ covariate design
-matrix and let $\mathbf{f}$ collect the corresponding
-latent factors. The regression-coefficient prior is
-\begin{equation}
-\boldsymbol{\beta}
-\sim
-\mathcal{N}_q(\mathbf{b}_0,\mathbf{V}_0),
-\qquad
-\mathbf{b}_0=\mathbf{0},
-\qquad
-\mathbf{V}_0=0.5^2\mathbf{I}_q.
-\end{equation}
+matrix, with row $\mathbf{x}_n^{\mathsf T}$, and let
+$\mathbf{f}$ collect the corresponding latent factors.
 
 Conditional on $\mathbf{f}$, the response likelihood
-does not depend on $\boldsymbol{\beta}$. Therefore,
-\begin{equation}
+does not depend on $\boldsymbol{\beta}$. Retaining
+the Gaussian factor-regression density and the
+independent $\mathcal{N}(0,0.5^2)$ coefficient priors
+therefore gives
+\begin{equation*}
 p(\boldsymbol{\beta}\mid\mathrm{rest})
 \propto
 p(\mathbf{f}\mid\boldsymbol{\beta},\mathbf{X})
 p(\boldsymbol{\beta}).
-\end{equation}
+\end{equation*}
 
-Substituting the Gaussian densities gives
-\begin{equation}
+Writing the relevant densities explicitly,
+\begin{equation*}
+\begin{aligned}
+p(\boldsymbol{\beta}\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\exp\!\left\{
+-\frac12
+(f_n-\mathbf{x}_n^{\mathsf T}\boldsymbol{\beta})^2
+\right\}
+\right]
+\\
+&\times
+\left[
+\prod_{r=1}^{q}
+\exp\!\left\{
+-\frac{\beta_r^2}{2(0.5)^2}
+\right\}
+\right].
+\end{aligned}
+\end{equation*}
+
+Combining the exponential terms and using matrix
+notation yields
+\begin{equation*}
 \begin{aligned}
 p(\boldsymbol{\beta}\mid\mathrm{rest})
 \propto
-\exp\Bigg\{
-&-\frac12
+\exp\Bigg\{-\frac12\Big[
+&
 (\mathbf{f}-\mathbf{X}\boldsymbol{\beta})^{\mathsf T}
 (\mathbf{f}-\mathbf{X}\boldsymbol{\beta})
 \\
-&-\frac12
-(\boldsymbol{\beta}-\mathbf{b}_0)^{\mathsf T}
-\mathbf{V}_0^{-1}
-(\boldsymbol{\beta}-\mathbf{b}_0)
-\Bigg\}.
+&+
+4\boldsymbol{\beta}^{\mathsf T}\boldsymbol{\beta}
+\Big]\Bigg\}.
 \end{aligned}
-\end{equation}
+\end{equation*}
 
-Expanding the quadratic terms and dropping terms
-independent of $\boldsymbol{\beta}$ yields
-\begin{equation}
+The first quadratic term expands as
+\begin{equation*}
+\begin{aligned}
+(\mathbf{f}-\mathbf{X}\boldsymbol{\beta})^{\mathsf T}
+(\mathbf{f}-\mathbf{X}\boldsymbol{\beta})
+={}&
+\mathbf{f}^{\mathsf T}\mathbf{f}
+-2\boldsymbol{\beta}^{\mathsf T}\mathbf{X}^{\mathsf T}
+\mathbf{f}
+\\
+&+
+\boldsymbol{\beta}^{\mathsf T}
+\mathbf{X}^{\mathsf T}\mathbf{X}\boldsymbol{\beta}.
+\end{aligned}
+\end{equation*}
+
+Removing $\mathbf{f}^{\mathsf T}\mathbf{f}$,
+which does not depend on $\boldsymbol{\beta}$, gives
+\begin{equation*}
 \begin{aligned}
 p(\boldsymbol{\beta}\mid\mathrm{rest})
 \propto
 \exp\Bigg\{-\frac12\Big[
 &
 \boldsymbol{\beta}^{\mathsf T}
-(\mathbf{X}^{\mathsf T}\mathbf{X}
-+\mathbf{V}_0^{-1})
+(\mathbf{X}^{\mathsf T}\mathbf{X}+4\mathbf{I}_q)
 \boldsymbol{\beta}
 \\
 &-
 2\boldsymbol{\beta}^{\mathsf T}
-(\mathbf{X}^{\mathsf T}\mathbf{f}
-+\mathbf{V}_0^{-1}\mathbf{b}_0)
-\Big]\Bigg\}.
-\end{aligned}
-\end{equation}
-
-Completing the square gives
-\begin{equation}
-\boldsymbol{\beta}\mid\mathrm{rest}
-\sim
-\mathcal{N}_q(\mathbf{m}_{\beta},\mathbf{V}_{\beta}),
-\label{eq:appendix_beta_conditional}
-\end{equation}
-where
-\begin{align}
-\mathbf{V}_{\beta}
-&=
-\left(
-\mathbf{X}^{\mathsf T}\mathbf{X}
-+\mathbf{V}_0^{-1}
-\right)^{-1},
-\\
-\mathbf{m}_{\beta}
-&=
-\mathbf{V}_{\beta}
-\left(
 \mathbf{X}^{\mathsf T}\mathbf{f}
-+\mathbf{V}_0^{-1}\mathbf{b}_0
-\right).
-\end{align}
+\Big]\Bigg\},
+\end{aligned}
+\end{equation*}
+where $\mathbf{I}_q$ is the $q\times q$ identity matrix.
 
-Under the original prior specification, these simplify to
-\begin{equation}
+Define
+\begin{equation*}
 \mathbf{V}_{\beta}
 =
 (\mathbf{X}^{\mathsf T}\mathbf{X}
@@ -3715,431 +4006,1239 @@ Under the original prior specification, these simplify to
 \mathbf{m}_{\beta}
 =
 \mathbf{V}_{\beta}\mathbf{X}^{\mathsf T}\mathbf{f}.
-\end{equation}
+\end{equation*}
+Since
+$\mathbf{V}_{\beta}^{-1}\mathbf{m}_{\beta}
+=\mathbf{X}^{\mathsf T}\mathbf{f}$,
+completing the square gives
+\begin{equation*}
+\begin{aligned}
+&
+\boldsymbol{\beta}^{\mathsf T}
+\mathbf{V}_{\beta}^{-1}\boldsymbol{\beta}
+-
+2\boldsymbol{\beta}^{\mathsf T}
+\mathbf{X}^{\mathsf T}\mathbf{f}
+\\
+&\quad=
+(\boldsymbol{\beta}-\mathbf{m}_{\beta})^{\mathsf T}
+\mathbf{V}_{\beta}^{-1}
+(\boldsymbol{\beta}-\mathbf{m}_{\beta})
+-
+\mathbf{m}_{\beta}^{\mathsf T}
+\mathbf{V}_{\beta}^{-1}\mathbf{m}_{\beta}.
+\end{aligned}
+\end{equation*}
+
+The final term is constant with respect to
+$\boldsymbol{\beta}$. Thus,
+\begin{equation*}
+p(\boldsymbol{\beta}\mid\mathrm{rest})
+\propto
+\exp\!\left\{
+-\frac12
+(\boldsymbol{\beta}-\mathbf{m}_{\beta})^{\mathsf T}
+\mathbf{V}_{\beta}^{-1}
+(\boldsymbol{\beta}-\mathbf{m}_{\beta})
+\right\},
+\end{equation*}
+which identifies the conjugate full conditional
+\begin{equation*}
+\boldsymbol{\beta}\mid\mathrm{rest}
+\sim
+\mathcal{N}_q\!\left(
+(\mathbf{X}^{\mathsf T}\mathbf{X}
++4\mathbf{I}_q)^{-1}
+\mathbf{X}^{\mathsf T}\mathbf{f},
+\;
+(\mathbf{X}^{\mathsf T}\mathbf{X}
++4\mathbf{I}_q)^{-1}
+\right).
+\end{equation*}
+
 
 \section{Response loadings}
 \label{app:loading_conditionals}
 
-\subsection{Bounded-response interior loadings}
+\subsection{Binary-response loadings}
 
-The loading $\lambda_j$ enters the interior mean through
-\begin{equation}
-\operatorname{logit}(\mu_{i,t,j})
+For binary response $k$,
+\begin{equation*}
+B_{nk}\mid f_n,a_k,\ell_k
+\sim\operatorname{Bernoulli}(p_{nk}),
+\qquad
+\operatorname{logit}(p_{nk})=a_k+\ell_kf_n.
+\end{equation*}
+
+Holding the factors and other response parameters
+fixed, only the likelihood of binary response $k$
+and the prior of $\ell_k$ depend on this loading.
+Therefore,
+\begin{equation*}
+p(\ell_k\mid\mathrm{rest})
+\propto
+\left[
+\prod_{n\in\mathcal{O}}
+p(B_{nk}\mid f_n,a_k,\ell_k)
+\right]
+p(\ell_k).
+\end{equation*}
+
+The Bernoulli probability is
+\begin{equation*}
+p(B_{nk}\mid f_n,a_k,\ell_k)
 =
-\alpha_j+\lambda_jf_{i,t}.
-\end{equation}
-Since the boundary probabilities have separate loadings,
-their likelihood contributions do not depend on
-$\lambda_j$ when the factors are held fixed. Thus,
-\begin{equation}
+p_{nk}^{B_{nk}}(1-p_{nk})^{1-B_{nk}}.
+\end{equation*}
+Using
+\begin{equation*}
+p_{nk}
+=
+\frac{\exp(a_k+\ell_kf_n)}
+{1+\exp(a_k+\ell_kf_n)},
+\qquad
+1-p_{nk}
+=
+\frac{1}{1+\exp(a_k+\ell_kf_n)},
+\end{equation*}
+this becomes
+\begin{equation*}
+p(B_{nk}\mid f_n,a_k,\ell_k)
+=
+\frac{
+\exp\{B_{nk}(a_k+\ell_kf_n)\}
+}{
+1+\exp(a_k+\ell_kf_n)
+}.
+\end{equation*}
+
+The prior $\ell_k\sim\mathcal{N}(0,1)$ has density
+\begin{equation*}
+p(\ell_k)
+=
+\frac{1}{\sqrt{2\pi}}
+\exp\!\left(-\frac{\ell_k^2}{2}\right).
+\end{equation*}
+Combining likelihood and prior, and absorbing
+the Normal normalising constant, gives
+\begin{equation*}
+p(\ell_k\mid\mathrm{rest})
+\propto
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\exp\{B_{nk}(a_k+\ell_kf_n)\}
+}{
+1+\exp(a_k+\ell_kf_n)
+}
+\right]
+\exp\!\left(-\frac{\ell_k^2}{2}\right).
+\end{equation*}
+
+This expression applies to $k=1,2,3$ for terminals
+and $k=1,2$ for chokepoints.
+
+
+\subsection{Ordinary Beta-response loadings}
+
+For an ordinary Beta response,
+\begin{equation*}
+Y_{nj}\mid f_n,\alpha_j,\lambda_j,\phi_j
+\sim
+\operatorname{Beta}
+\bigl(\mu_{nj}\phi_j,(1-\mu_{nj})\phi_j\bigr),
+\qquad
+\operatorname{logit}(\mu_{nj})
+=
+\alpha_j+\lambda_jf_n.
+\end{equation*}
+Its density is
+\begin{equation*}
+\begin{aligned}
+&p(Y_{nj}\mid f_n,\alpha_j,\lambda_j,\phi_j)
+\\
+&\quad=
+\frac{\Gamma(\phi_j)}
+{\Gamma(\mu_{nj}\phi_j)
+ \Gamma((1-\mu_{nj})\phi_j)}
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}.
+\end{aligned}
+\end{equation*}
+
+The loading enters this density through $\mu_{nj}$.
+Retaining the relevant likelihood and prior gives
+\begin{equation*}
 p(\lambda_j\mid\mathrm{rest})
 \propto
-p(\lambda_j)
-\exp\!\left\{
-\sum_{(i,t)\in\mathcal{I}_j}H_{i,t,j}
-\right\}.
-\end{equation}
+\left[
+\prod_{n\in\mathcal{O}}
+p(Y_{nj}\mid f_n,\alpha_j,\lambda_j,\phi_j)
+\right]
+p(\lambda_j).
+\end{equation*}
 
-For $j=2,3$, the prior is
-$\lambda_j\sim\mathcal{N}(0,1)$, giving
-\begin{equation}
-p(\lambda_j\mid\mathrm{rest})
-\propto
-\exp\!\left\{
--\frac{\lambda_j^2}{2}
-+
-\sum_{(i,t)\in\mathcal{I}_j}H_{i,t,j}
-\right\}.
-\label{eq:appendix_interior_loading}
-\end{equation}
+\subsubsection{Unrestricted loading of chokepoint flow share}
 
-For PageRank, the HalfNormal prior gives
-\begin{equation}
+For chokepoint flow share, $j=3$ and
+$\lambda_3\sim\mathcal{N}(0,1)$, with density
+\begin{equation*}
+p(\lambda_3)
+=
+\frac{1}{\sqrt{2\pi}}
+\exp\!\left(-\frac{\lambda_3^2}{2}\right).
+\end{equation*}
+
+Substituting the Beta likelihood and Normal prior gives
+\begin{equation*}
+\begin{aligned}
+p(\lambda_3\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\Gamma(\phi_3)
+Y_{n3}^{\mu_{n3}\phi_3-1}
+(1-Y_{n3})^{(1-\mu_{n3})\phi_3-1}
+}{
+\Gamma(\mu_{n3}\phi_3)
+\Gamma((1-\mu_{n3})\phi_3)
+}
+\right]
+\\
+&\times
+\exp\!\left(-\frac{\lambda_3^2}{2}\right).
+\end{aligned}
+\end{equation*}
+
+Since $\phi_3$ is held fixed, $\Gamma(\phi_3)$
+does not depend on $\lambda_3$ and can be absorbed
+into the normalising constant. The resulting kernel is
+\begin{equation*}
+\begin{aligned}
+p(\lambda_3\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+Y_{n3}^{\mu_{n3}\phi_3-1}
+(1-Y_{n3})^{(1-\mu_{n3})\phi_3-1}
+}{
+\Gamma(\mu_{n3}\phi_3)
+\Gamma((1-\mu_{n3})\phi_3)
+}
+\right]
+\\
+&\times
+\exp\!\left(-\frac{\lambda_3^2}{2}\right).
+\end{aligned}
+\end{equation*}
+
+\subsubsection{Positive PageRank loading}
+
+For PageRank in both node types, $j=1$ and
+$\lambda_1\sim\operatorname{HalfNormal}(1)$.
+Its prior density is
+\begin{equation*}
+p(\lambda_1)
+=
+\sqrt{\frac{2}{\pi}}
+\exp\!\left(-\frac{\lambda_1^2}{2}\right)
+\mathbb{1}(\lambda_1>0).
+\end{equation*}
+
+Combining this prior with the PageRank likelihood gives
+\begin{equation*}
 \begin{aligned}
 p(\lambda_1\mid\mathrm{rest})
 \propto {}&
-\mathbb{1}(\lambda_1>0)
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\Gamma(\phi_1)
+Y_{n1}^{\mu_{n1}\phi_1-1}
+(1-Y_{n1})^{(1-\mu_{n1})\phi_1-1}
+}{
+\Gamma(\mu_{n1}\phi_1)
+\Gamma((1-\mu_{n1})\phi_1)
+}
+\right]
 \\
 &\times
-\exp\!\left\{
--\frac{\lambda_1^2}{2}
-+
-\sum_{(i,t)\in\mathcal{O}}H_{i,t,1}
-\right\}.
+\exp\!\left(-\frac{\lambda_1^2}{2}\right)
+\mathbb{1}(\lambda_1>0).
 \end{aligned}
-\label{eq:appendix_pagerank_loading}
-\end{equation}
+\end{equation*}
 
-In both expressions, $H_{i,t,j}$ depends on the loading
-through $\mu_{i,t,j}$. The resulting full conditionals
-do not have a standard conjugate form.
-
-\subsection{Binary-response loadings}
-
-For binary response $k$, the prior is
-$\ell_k\sim\mathcal{N}(0,1)$. Retaining its Bernoulli
-likelihood and prior gives
-\begin{equation}
-p(\ell_k\mid\mathrm{rest})
-\propto
-\exp\!\left\{
--\frac{\ell_k^2}{2}
-+
-\sum_{(i,t)\in\mathcal{O}}Q_{i,t,k}
-\right\}.
-\end{equation}
-
-Substituting Equation~\ref{eq:appendix_binary_loglik}
-and dropping terms independent of $\ell_k$ yields
-\begin{equation}
+Removing the factors $\Gamma(\phi_1)$, which are
+constant with respect to $\lambda_1$, yields
+\begin{equation*}
 \begin{aligned}
-p(\ell_k\mid\mathrm{rest})
-\propto
-\exp\Bigg\{
-&-\frac{\ell_k^2}{2}
-+
-\ell_k
-\sum_{(i,t)\in\mathcal{O}}B_{i,t,k}f_{i,t}
-\\
-&-
-\sum_{(i,t)\in\mathcal{O}}
-\log\!\left[
-1+\exp(a_k+\ell_kf_{i,t})
+p(\lambda_1\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+Y_{n1}^{\mu_{n1}\phi_1-1}
+(1-Y_{n1})^{(1-\mu_{n1})\phi_1-1}
+}{
+\Gamma(\mu_{n1}\phi_1)
+\Gamma((1-\mu_{n1})\phi_1)
+}
 \right]
-\Bigg\}.
+\\
+&\times
+\exp\!\left(-\frac{\lambda_1^2}{2}\right)
+\mathbb{1}(\lambda_1>0).
 \end{aligned}
-\label{eq:appendix_binary_loading}
-\end{equation}
+\end{equation*}
 
-\subsection{Boundary-probability loadings}
 
-For both node types, the boundary loading has prior
-$d_j\sim\mathcal{N}(0,1)$. Consequently,
-\begin{equation}
-p(d_j\mid\mathrm{rest})
-\propto
-\exp\!\left\{
--\frac{d_j^2}{2}
-+
-\sum_{(i,t)\in\mathcal{O}}R_{i,t,j}
-\right\}.
-\end{equation}
+\subsection{Interior-mean loadings of boundary-inflated
+Beta responses}
 
-Expanding and removing terms independent of $d_j$ gives
-\begin{equation}
+\subsubsection{Terminal HHI and dependence}
+
+For terminal HHI and dependence, $j=2,3$, define
+$Z_{nj}=\mathbb{1}(Y_{nj}=1)$.
+The boundary probability satisfies
+\begin{equation*}
+\operatorname{logit}(\pi_{nj})
+=
+c_j^T+d_j^Tf_n.
+\end{equation*}
+
+Separating the boundary and interior observations,
+the likelihood for response $j$ is
+\begin{equation*}
 \begin{aligned}
-p(d_j\mid\mathrm{rest})
-\propto
-\exp\Bigg\{
-&-\frac{d_j^2}{2}
-+
-d_j
-\sum_{(i,t)\in\mathcal{O}}Z_{i,t,j}f_{i,t}
+&\prod_{n\in\mathcal{O}}
+p(Y_{nj}\mid f_n,\alpha_j,\lambda_j,
+\phi_j,c_j^T,d_j^T)
 \\
-&-
-\sum_{(i,t)\in\mathcal{O}}
-\log\!\left[
-1+\exp(c_j+d_jf_{i,t})
+&\quad=
+\left[
+\prod_{\substack{n\in\mathcal{O}:\\Y_{nj}=1}}
+\pi_{nj}
 \right]
-\Bigg\}.
+\left[
+\prod_{n\in\mathcal{I}_j}
+(1-\pi_{nj})
+\frac{
+\Gamma(\phi_j)
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}
+}{
+\Gamma(\mu_{nj}\phi_j)
+\Gamma((1-\mu_{nj})\phi_j)
+}
+\right].
 \end{aligned}
-\label{eq:appendix_boundary_loading}
-\end{equation}
+\end{equation*}
 
-For terminals, this expression applies to $d_2^T$
-and $d_3^T$, using indicators of exact ones.
-For chokepoints, it applies to $d_2^C$, using the
-indicator of exact zeros.
+The probabilities $\pi_{nj}$ depend on $c_j^T$,
+$d_j^T$, and $f_n$, but not on $\lambda_j$.
+Their contributions are therefore constant in
+the full conditional of $\lambda_j$. Consequently,
+\begin{equation*}
+\begin{aligned}
+p(\lambda_j\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{I}_j}
+\frac{
+\Gamma(\phi_j)
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}
+}{
+\Gamma(\mu_{nj}\phi_j)
+\Gamma((1-\mu_{nj})\phi_j)
+}
+\right]
+p(\lambda_j).
+\end{aligned}
+\end{equation*}
 
+Substituting the $\mathcal{N}(0,1)$ prior and
+absorbing the factors $\Gamma(\phi_j)$ gives
+\begin{equation*}
+\begin{aligned}
+p(\lambda_j\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{I}_j}
+\frac{
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}
+}{
+\Gamma(\mu_{nj}\phi_j)
+\Gamma((1-\mu_{nj})\phi_j)
+}
+\right]
+\\
+&\times
+\exp\!\left(-\frac{\lambda_j^2}{2}\right),
+\qquad j=2,3.
+\end{aligned}
+\end{equation*}
+
+Thus, exact ones do not contribute to the full
+conditional of the interior-mean loading when
+the factors and boundary parameters are held fixed.
+
+\subsubsection{Chokepoint betweenness}
+
+For chokepoint betweenness, define
+$Z_{n2}=\mathbb{1}(Y_{n2}=0)$, with
+\begin{equation*}
+\operatorname{logit}(\rho_{n2})
+=
+c_2^C+d_2^Cf_n.
+\end{equation*}
+The response likelihood is
+\begin{equation*}
+\begin{aligned}
+&\prod_{n\in\mathcal{O}}
+p(Y_{n2}\mid f_n,\alpha_2,\lambda_2,
+\phi_2,c_2^C,d_2^C)
+\\
+&\quad=
+\left[
+\prod_{\substack{n\in\mathcal{O}:\\Y_{n2}=0}}
+\rho_{n2}
+\right]
+\left[
+\prod_{n\in\mathcal{I}_2}
+(1-\rho_{n2})
+\frac{
+\Gamma(\phi_2)
+Y_{n2}^{\mu_{n2}\phi_2-1}
+(1-Y_{n2})^{(1-\mu_{n2})\phi_2-1}
+}{
+\Gamma(\mu_{n2}\phi_2)
+\Gamma((1-\mu_{n2})\phi_2)
+}
+\right].
+\end{aligned}
+\end{equation*}
+
+Since $\rho_{n2}$ does not depend on $\lambda_2$,
+only the interior Beta densities and the loading
+prior remain:
+\begin{equation*}
+\begin{aligned}
+p(\lambda_2\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{I}_2}
+\frac{
+\Gamma(\phi_2)
+Y_{n2}^{\mu_{n2}\phi_2-1}
+(1-Y_{n2})^{(1-\mu_{n2})\phi_2-1}
+}{
+\Gamma(\mu_{n2}\phi_2)
+\Gamma((1-\mu_{n2})\phi_2)
+}
+\right]
+p(\lambda_2).
+\end{aligned}
+\end{equation*}
+
+Using $\lambda_2\sim\mathcal{N}(0,1)$ and removing
+terms constant with respect to $\lambda_2$ yields
+\begin{equation*}
+\begin{aligned}
+p(\lambda_2\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{I}_2}
+\frac{
+Y_{n2}^{\mu_{n2}\phi_2-1}
+(1-Y_{n2})^{(1-\mu_{n2})\phi_2-1}
+}{
+\Gamma(\mu_{n2}\phi_2)
+\Gamma((1-\mu_{n2})\phi_2)
+}
+\right]
+\\
+&\times
+\exp\!\left(-\frac{\lambda_2^2}{2}\right).
+\end{aligned}
+\end{equation*}
+
+As in the one-inflated case, only interior observations
+contribute to this loading conditional.
+
+
+\subsection{Loadings of the probability of mass at one}
+
+For terminal HHI and dependence, the indicators
+$Z_{nj}=\mathbb{1}(Y_{nj}=1)$ satisfy
+\begin{equation*}
+Z_{nj}\mid f_n,c_j^T,d_j^T
+\sim\operatorname{Bernoulli}(\pi_{nj}),
+\qquad
+\operatorname{logit}(\pi_{nj})
+=
+c_j^T+d_j^Tf_n,
+\qquad j=2,3.
+\end{equation*}
+
+When deriving the full conditional of $d_j^T$,
+the interior Beta densities are constant because
+their parameters do not depend on $d_j^T$.
+The remaining likelihood consists of the boundary
+probabilities for all observations:
+\begin{equation*}
+p(d_j^T\mid\mathrm{rest})
+\propto
+\left[
+\prod_{n\in\mathcal{O}}
+\pi_{nj}^{Z_{nj}}
+(1-\pi_{nj})^{1-Z_{nj}}
+\right]
+p(d_j^T).
+\end{equation*}
+
+From the logistic specification,
+\begin{equation*}
+\pi_{nj}
+=
+\frac{\exp(c_j^T+d_j^Tf_n)}
+{1+\exp(c_j^T+d_j^Tf_n)},
+\qquad
+1-\pi_{nj}
+=
+\frac{1}{1+\exp(c_j^T+d_j^Tf_n)}.
+\end{equation*}
+Hence,
+\begin{equation*}
+\pi_{nj}^{Z_{nj}}
+(1-\pi_{nj})^{1-Z_{nj}}
+=
+\frac{
+\exp\{Z_{nj}(c_j^T+d_j^Tf_n)\}
+}{
+1+\exp(c_j^T+d_j^Tf_n)
+}.
+\end{equation*}
+
+The prior $d_j^T\sim\mathcal{N}(0,1)$ has density
+\begin{equation*}
+p(d_j^T)
+=
+\frac{1}{\sqrt{2\pi}}
+\exp\!\left(-\frac{(d_j^T)^2}{2}\right).
+\end{equation*}
+Combining these terms gives
+\begin{equation*}
+\begin{aligned}
+p(d_j^T\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\exp\{Z_{nj}(c_j^T+d_j^Tf_n)\}
+}{
+1+\exp(c_j^T+d_j^Tf_n)
+}
+\right]
+\\
+&\times
+\exp\!\left(-\frac{(d_j^T)^2}{2}\right),
+\qquad j=2,3.
+\end{aligned}
+\end{equation*}
+
+Both boundary and interior observations contribute:
+the former have $Z_{nj}=1$, while the latter
+have $Z_{nj}=0$.
+
+
+\subsection{Loading of the probability of mass at zero}
+
+For chokepoint betweenness,
+$Z_{n2}=\mathbb{1}(Y_{n2}=0)$ satisfies
+\begin{equation*}
+Z_{n2}\mid f_n,c_2^C,d_2^C
+\sim\operatorname{Bernoulli}(\rho_{n2}),
+\qquad
+\operatorname{logit}(\rho_{n2})
+=
+c_2^C+d_2^Cf_n.
+\end{equation*}
+
+The interior Beta densities do not depend on $d_2^C$.
+Retaining the boundary-indicator likelihood
+and the loading prior therefore gives
+\begin{equation*}
+p(d_2^C\mid\mathrm{rest})
+\propto
+\left[
+\prod_{n\in\mathcal{O}}
+\rho_{n2}^{Z_{n2}}
+(1-\rho_{n2})^{1-Z_{n2}}
+\right]
+p(d_2^C).
+\end{equation*}
+
+Using
+\begin{equation*}
+\rho_{n2}
+=
+\frac{\exp(c_2^C+d_2^Cf_n)}
+{1+\exp(c_2^C+d_2^Cf_n)},
+\qquad
+1-\rho_{n2}
+=
+\frac{1}{1+\exp(c_2^C+d_2^Cf_n)},
+\end{equation*}
+the likelihood contribution becomes
+\begin{equation*}
+\rho_{n2}^{Z_{n2}}
+(1-\rho_{n2})^{1-Z_{n2}}
+=
+\frac{
+\exp\{Z_{n2}(c_2^C+d_2^Cf_n)\}
+}{
+1+\exp(c_2^C+d_2^Cf_n)
+}.
+\end{equation*}
+
+The prior $d_2^C\sim\mathcal{N}(0,1)$ has density
+\begin{equation*}
+p(d_2^C)
+=
+\frac{1}{\sqrt{2\pi}}
+\exp\!\left(-\frac{(d_2^C)^2}{2}\right).
+\end{equation*}
+The resulting full conditional kernel is
+\begin{equation*}
+\begin{aligned}
+p(d_2^C\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\exp\{Z_{n2}(c_2^C+d_2^Cf_n)\}
+}{
+1+\exp(c_2^C+d_2^Cf_n)
+}
+\right]
+\\
+&\times
+\exp\!\left(-\frac{(d_2^C)^2}{2}\right).
+\end{aligned}
+\end{equation*}
+
+Here exact zeros have $Z_{n2}=1$ and interior
+observations have $Z_{n2}=0$, so both contribute
+to inference on the zero-probability loading.
 
 \section{Response intercepts}
 \label{app:intercept_conditionals}
 
 \subsection{Bounded-response interior intercepts}
 
-The prior for each interior intercept is
-$\alpha_j\sim\mathcal{N}(m_j,1.5^2)$.
-Only the interior Beta likelihood depends on $\alpha_j$,
-so
-\begin{equation}
-p(\alpha_j\mid\mathrm{rest})
-\propto
-p(\alpha_j)
-\exp\!\left\{
-\sum_{(i,t)\in\mathcal{I}_j}H_{i,t,j}
-\right\}.
-\end{equation}
+For each bounded response, the interior intercept
+enters the Beta mean through
+\begin{equation*}
+\operatorname{logit}(\mu_{nj})
+=
+\alpha_j+\lambda_jf_n.
+\end{equation*}
+Its prior is
+$\alpha_j\sim\mathcal{N}(m_j,1.5^2)$,
+where $(m_1,m_2,m_3)=(-4,0,0)$ for terminals
+and $(-4,-5,-4)$ for chokepoints.
 
-Substitution gives
-\begin{equation}
+For ordinary Beta responses, all observations
+contribute to the likelihood of $\alpha_j$.
+For boundary-inflated responses, the boundary
+probabilities do not depend on $\alpha_j$,
+so only the interior Beta densities remain.
+Both cases can therefore be written as
+\begin{equation*}
 p(\alpha_j\mid\mathrm{rest})
 \propto
+\left[
+\prod_{n\in\mathcal{I}_j}
+p(Y_{nj}\mid f_n,\alpha_j,\lambda_j,\phi_j,
+0<Y_{nj}<1)
+\right]
+p(\alpha_j).
+\end{equation*}
+For ordinary Beta responses,
+$\mathcal{I}_j=\mathcal{O}$.
+
+The interior density is
+\begin{equation*}
+\begin{aligned}
+&p(Y_{nj}\mid f_n,\alpha_j,\lambda_j,\phi_j,
+0<Y_{nj}<1)
+\\
+&\quad=
+\frac{
+\Gamma(\phi_j)
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}
+}{
+\Gamma(\mu_{nj}\phi_j)
+\Gamma((1-\mu_{nj})\phi_j)
+}.
+\end{aligned}
+\end{equation*}
+The prior density is
+\begin{equation*}
+p(\alpha_j)
+=
+\frac{1}{1.5\sqrt{2\pi}}
 \exp\!\left\{
 -\frac{(\alpha_j-m_j)^2}{2(1.5)^2}
-+
-\sum_{(i,t)\in\mathcal{I}_j}H_{i,t,j}
 \right\}.
-\label{eq:appendix_interior_intercept}
-\end{equation}
+\end{equation*}
 
-Here $(m_1,m_2,m_3)=(-4,0,0)$ for terminals and
-$(-4,-5,-4)$ for chokepoints. The dependence of
-$H_{i,t,j}$ on $\alpha_j$ is through
-$\operatorname{logit}(\mu_{i,t,j})
-=\alpha_j+\lambda_jf_{i,t}$.
+Substituting these densities gives
+\begin{equation*}
+\begin{aligned}
+p(\alpha_j\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{I}_j}
+\frac{
+\Gamma(\phi_j)
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}
+}{
+\Gamma(\mu_{nj}\phi_j)
+\Gamma((1-\mu_{nj})\phi_j)
+}
+\right]
+\\
+&\times
+\exp\!\left\{
+-\frac{(\alpha_j-m_j)^2}{2(1.5)^2}
+\right\}.
+\end{aligned}
+\end{equation*}
+
+Since $\phi_j$ is held fixed, the factors
+$\Gamma(\phi_j)$ do not depend on $\alpha_j$.
+Absorbing them into the normalising constant yields
+\begin{equation*}
+\begin{aligned}
+p(\alpha_j\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{I}_j}
+\frac{
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}
+}{
+\Gamma(\mu_{nj}\phi_j)
+\Gamma((1-\mu_{nj})\phi_j)
+}
+\right]
+\\
+&\times
+\exp\!\left\{
+-\frac{(\alpha_j-m_j)^2}{2(1.5)^2}
+\right\},
+\qquad j=1,2,3.
+\end{aligned}
+\end{equation*}
+The likelihood dependence on $\alpha_j$ enters
+through $\mu_{nj}$.
+
 
 \subsection{Binary-response intercepts}
 
-The prior is $a_k\sim\mathcal{N}(0,2^2)$.
-Combining it with the Bernoulli likelihood gives
-\begin{equation}
+For binary response $k$,
+\begin{equation*}
+B_{nk}\mid f_n,a_k,\ell_k
+\sim\operatorname{Bernoulli}(p_{nk}),
+\qquad
+\operatorname{logit}(p_{nk})
+=
+a_k+\ell_kf_n.
+\end{equation*}
+
+Only the likelihood of response $k$ and the prior
+of $a_k$ depend on this intercept. Therefore,
+\begin{equation*}
 p(a_k\mid\mathrm{rest})
 \propto
-\exp\!\left\{
--\frac{a_k^2}{8}
-+
-\sum_{(i,t)\in\mathcal{O}}Q_{i,t,k}
-\right\}.
-\end{equation}
+\left[
+\prod_{n\in\mathcal{O}}
+p(B_{nk}\mid f_n,a_k,\ell_k)
+\right]
+p(a_k).
+\end{equation*}
 
-After removing terms independent of $a_k$,
-\begin{equation}
+Using the logistic specification,
+\begin{equation*}
+\begin{aligned}
+p(B_{nk}\mid f_n,a_k,\ell_k)
+&=
+p_{nk}^{B_{nk}}(1-p_{nk})^{1-B_{nk}}
+\\
+&=
+\frac{
+\exp\{B_{nk}(a_k+\ell_kf_n)\}
+}{
+1+\exp(a_k+\ell_kf_n)
+}.
+\end{aligned}
+\end{equation*}
+
+The prior $a_k\sim\mathcal{N}(0,2^2)$ has density
+\begin{equation*}
+p(a_k)
+=
+\frac{1}{2\sqrt{2\pi}}
+\exp\!\left(-\frac{a_k^2}{8}\right).
+\end{equation*}
+Combining likelihood and prior gives
+\begin{equation*}
+p(a_k\mid\mathrm{rest})
+\propto
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\exp\{B_{nk}(a_k+\ell_kf_n)\}
+}{
+1+\exp(a_k+\ell_kf_n)
+}
+\right]
+\exp\!\left(-\frac{a_k^2}{8}\right).
+\end{equation*}
+
+Equivalently, collecting the exponential terms
+and removing those independent of $a_k$ gives
+\begin{equation*}
 \begin{aligned}
 p(a_k\mid\mathrm{rest})
 \propto
 \exp\Bigg\{
 &-\frac{a_k^2}{8}
 +
-a_k\sum_{(i,t)\in\mathcal{O}}B_{i,t,k}
+a_k\sum_{n\in\mathcal{O}}B_{nk}
 \\
 &-
-\sum_{(i,t)\in\mathcal{O}}
+\sum_{n\in\mathcal{O}}
 \log\!\left[
-1+\exp(a_k+\ell_kf_{i,t})
+1+\exp(a_k+\ell_kf_n)
 \right]
 \Bigg\}.
 \end{aligned}
-\label{eq:appendix_binary_intercept}
-\end{equation}
+\end{equation*}
 
-\subsection{Boundary-probability intercepts}
+This expression applies to $k=1,2,3$ for terminals
+and $k=1,2$ for chokepoints.
 
-Write the boundary-intercept prior as
-\begin{equation}
-c_j\sim\mathcal{N}(m_{\partial j},1.5^2),
-\end{equation}
-where $m_{\partial j}=0$ for terminal HHI and dependence,
-and $m_{\partial 2}=-5$ for chokepoint betweenness.
 
-Combining this prior with the boundary-indicator
-likelihood gives
-\begin{equation}
-p(c_j\mid\mathrm{rest})
+\subsection{Intercepts of the probability of mass at one}
+
+For terminal HHI and dependence, define
+$Z_{nj}=\mathbb{1}(Y_{nj}=1)$, with
+\begin{equation*}
+Z_{nj}\mid f_n,c_j^T,d_j^T
+\sim\operatorname{Bernoulli}(\pi_{nj}),
+\qquad
+\operatorname{logit}(\pi_{nj})
+=
+c_j^T+d_j^Tf_n,
+\qquad j=2,3.
+\end{equation*}
+
+The interior Beta densities do not depend on
+$c_j^T$. Retaining the boundary-indicator
+likelihood and the intercept prior gives
+\begin{equation*}
+p(c_j^T\mid\mathrm{rest})
 \propto
-\exp\!\left\{
--\frac{(c_j-m_{\partial j})^2}{2(1.5)^2}
-+
-\sum_{(i,t)\in\mathcal{O}}R_{i,t,j}
-\right\}.
-\end{equation}
+\left[
+\prod_{n\in\mathcal{O}}
+\pi_{nj}^{Z_{nj}}
+(1-\pi_{nj})^{1-Z_{nj}}
+\right]
+p(c_j^T).
+\end{equation*}
 
-Equivalently, after removing constant terms,
-\begin{equation}
+The logistic link implies
+\begin{equation*}
+\pi_{nj}^{Z_{nj}}
+(1-\pi_{nj})^{1-Z_{nj}}
+=
+\frac{
+\exp\{Z_{nj}(c_j^T+d_j^Tf_n)\}
+}{
+1+\exp(c_j^T+d_j^Tf_n)
+}.
+\end{equation*}
+
+The prior $c_j^T\sim\mathcal{N}(0,1.5^2)$
+has density
+\begin{equation*}
+p(c_j^T)
+=
+\frac{1}{1.5\sqrt{2\pi}}
+\exp\!\left\{
+-\frac{(c_j^T)^2}{2(1.5)^2}
+\right\}.
+\end{equation*}
+Substituting gives
+\begin{equation*}
 \begin{aligned}
-p(c_j\mid\mathrm{rest})
+p(c_j^T\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\exp\{Z_{nj}(c_j^T+d_j^Tf_n)\}
+}{
+1+\exp(c_j^T+d_j^Tf_n)
+}
+\right]
+\\
+&\times
+\exp\!\left\{
+-\frac{(c_j^T)^2}{2(1.5)^2}
+\right\},
+\qquad j=2,3.
+\end{aligned}
+\end{equation*}
+
+Equivalently, removing terms independent of $c_j^T$
+yields
+\begin{equation*}
+\begin{aligned}
+p(c_j^T\mid\mathrm{rest})
 \propto
 \exp\Bigg\{
-&-\frac{(c_j-m_{\partial j})^2}{2(1.5)^2}
+&-\frac{(c_j^T)^2}{2(1.5)^2}
 +
-c_j\sum_{(i,t)\in\mathcal{O}}Z_{i,t,j}
+c_j^T\sum_{n\in\mathcal{O}}Z_{nj}
 \\
 &-
-\sum_{(i,t)\in\mathcal{O}}
+\sum_{n\in\mathcal{O}}
 \log\!\left[
-1+\exp(c_j+d_jf_{i,t})
+1+\exp(c_j^T+d_j^Tf_n)
+\right]
+\Bigg\},
+\qquad j=2,3.
+\end{aligned}
+\end{equation*}
+
+
+\subsection{Intercept of the probability of mass at zero}
+
+For chokepoint betweenness, define
+$Z_{n2}=\mathbb{1}(Y_{n2}=0)$, with
+\begin{equation*}
+Z_{n2}\mid f_n,c_2^C,d_2^C
+\sim\operatorname{Bernoulli}(\rho_{n2}),
+\qquad
+\operatorname{logit}(\rho_{n2})
+=
+c_2^C+d_2^Cf_n.
+\end{equation*}
+
+The interior Beta densities do not depend on $c_2^C$.
+Its full conditional therefore satisfies
+\begin{equation*}
+p(c_2^C\mid\mathrm{rest})
+\propto
+\left[
+\prod_{n\in\mathcal{O}}
+\rho_{n2}^{Z_{n2}}
+(1-\rho_{n2})^{1-Z_{n2}}
+\right]
+p(c_2^C).
+\end{equation*}
+
+Using the logistic link,
+\begin{equation*}
+\rho_{n2}^{Z_{n2}}
+(1-\rho_{n2})^{1-Z_{n2}}
+=
+\frac{
+\exp\{Z_{n2}(c_2^C+d_2^Cf_n)\}
+}{
+1+\exp(c_2^C+d_2^Cf_n)
+}.
+\end{equation*}
+
+The prior $c_2^C\sim\mathcal{N}(-5,1.5^2)$
+has density
+\begin{equation*}
+p(c_2^C)
+=
+\frac{1}{1.5\sqrt{2\pi}}
+\exp\!\left\{
+-\frac{(c_2^C+5)^2}{2(1.5)^2}
+\right\}.
+\end{equation*}
+Combining these expressions gives
+\begin{equation*}
+\begin{aligned}
+p(c_2^C\mid\mathrm{rest})
+\propto {}&
+\left[
+\prod_{n\in\mathcal{O}}
+\frac{
+\exp\{Z_{n2}(c_2^C+d_2^Cf_n)\}
+}{
+1+\exp(c_2^C+d_2^Cf_n)
+}
+\right]
+\\
+&\times
+\exp\!\left\{
+-\frac{(c_2^C+5)^2}{2(1.5)^2}
+\right\}.
+\end{aligned}
+\end{equation*}
+
+Equivalently, removing terms independent of $c_2^C$
+yields
+\begin{equation*}
+\begin{aligned}
+p(c_2^C\mid\mathrm{rest})
+\propto
+\exp\Bigg\{
+&-\frac{(c_2^C+5)^2}{2(1.5)^2}
++
+c_2^C\sum_{n\in\mathcal{O}}Z_{n2}
+\\
+&-
+\sum_{n\in\mathcal{O}}
+\log\!\left[
+1+\exp(c_2^C+d_2^Cf_n)
 \right]
 \Bigg\}.
 \end{aligned}
-\label{eq:appendix_boundary_intercept}
-\end{equation}
-
+\end{equation*}
 
 \section{Beta precision parameters}
 \label{app:precision_conditionals}
 
-The prior
-$\log\phi_j\sim\mathcal{N}(\log 10,0.7^2)$
-implies the log-Normal density
-\begin{equation}
-p(\phi_j)
+For each bounded response, the precision $\phi_j$
+enters both Beta shape parameters:
+\begin{equation*}
+A_{nj}=\mu_{nj}\phi_j,
+\qquad
+D_{nj}=(1-\mu_{nj})\phi_j.
+\end{equation*}
+When deriving its full conditional, the interior
+means $\mu_{nj}$ are held fixed because they depend
+on $\alpha_j$, $\lambda_j$, and $f_n$, rather than
+on $\phi_j$.
+
+For ordinary Beta responses, all observations
+contribute to the precision likelihood.
+For boundary-inflated responses, the boundary
+probabilities do not depend on $\phi_j$, so only
+the interior observations contribute.
+Retaining the relevant likelihood and prior gives
+\begin{equation*}
+p(\phi_j\mid\mathrm{rest})
 \propto
-\frac{1}{\phi_j}
+\left[
+\prod_{n\in\mathcal{I}_j}
+p(Y_{nj}\mid f_n,\alpha_j,\lambda_j,\phi_j,
+0<Y_{nj}<1)
+\right]
+p(\phi_j).
+\end{equation*}
+
+The interior Beta density is
+\begin{equation*}
+\begin{aligned}
+&p(Y_{nj}\mid f_n,\alpha_j,\lambda_j,\phi_j,
+0<Y_{nj}<1)
+\\
+&\quad=
+\frac{
+\Gamma(\phi_j)
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}
+}{
+\Gamma(\mu_{nj}\phi_j)
+\Gamma((1-\mu_{nj})\phi_j)
+}.
+\end{aligned}
+\end{equation*}
+
+The prior is specified on the logarithmic scale:
+\begin{equation*}
+\log\phi_j
+\sim
+\mathcal{N}(\log 10,0.7^2).
+\end{equation*}
+Expressed as a density for $\phi_j$, this becomes
+\begin{equation*}
+p(\phi_j)
+=
+\frac{1}{0.7\,\phi_j\sqrt{2\pi}}
 \exp\!\left\{
 -\frac{(\log\phi_j-\log 10)^2}{2(0.7)^2}
 \right\},
 \qquad \phi_j>0.
-\end{equation}
+\end{equation*}
+The factor $1/\phi_j$ follows from the
+change-of-variables derivative
+$|d\log\phi_j/d\phi_j|=1/\phi_j$.
 
-The boundary-indicator likelihood does not depend on
-$\phi_j$. Therefore,
-\begin{equation}
-p(\phi_j\mid\mathrm{rest})
-\propto
-p(\phi_j)
-\exp\!\left\{
-\sum_{(i,t)\in\mathcal{I}_j}H_{i,t,j}
-\right\},
-\end{equation}
-giving
-\begin{equation}
+Substituting the likelihood and prior densities,
+and absorbing constants independent of $\phi_j$,
+gives the full conditional kernel
+\begin{equation*}
 \begin{aligned}
 p(\phi_j\mid\mathrm{rest})
 \propto {}&
+\left[
+\prod_{n\in\mathcal{I}_j}
+\frac{
+\Gamma(\phi_j)
+Y_{nj}^{\mu_{nj}\phi_j-1}
+(1-Y_{nj})^{(1-\mu_{nj})\phi_j-1}
+}{
+\Gamma(\mu_{nj}\phi_j)
+\Gamma((1-\mu_{nj})\phi_j)
+}
+\right]
+\\
+&\times
 \frac{1}{\phi_j}
-\exp\Bigg\{
+\exp\!\left\{
 -\frac{(\log\phi_j-\log 10)^2}{2(0.7)^2}
-\\
-&\hspace{22mm}
-+
-\sum_{(i,t)\in\mathcal{I}_j}H_{i,t,j}
-\Bigg\},
-\qquad \phi_j>0.
+\right\},
+\qquad \phi_j>0,
+\quad j=1,2,3.
 \end{aligned}
-\label{eq:appendix_precision}
-\end{equation}
-
-Unlike the loading and intercept conditionals,
-$\log\Gamma(\phi_j)$ in
-Equation~\ref{eq:appendix_beta_logdensity}
-cannot be discarded here because it depends on the
-precision being updated.
-
-Alternatively, defining $u_j=\log\phi_j$ gives
-\begin{equation}
-\begin{aligned}
-p(u_j\mid\mathrm{rest})
-\propto
-\exp\Bigg\{
-&-\frac{(u_j-\log 10)^2}{2(0.7)^2}
-\\
-&+
-\left.
-\sum_{(i,t)\in\mathcal{I}_j}H_{i,t,j}
-\right|_{\phi_j=e^{u_j}}
-\Bigg\},
-\qquad u_j\in\mathbb{R}.
-\end{aligned}
-\label{eq:appendix_logprecision}
-\end{equation}
-
-The factor $1/\phi_j$ is absent in this expression
-because the density is now expressed with respect to
-$u_j$; the change-of-variable Jacobian cancels the
-corresponding factor in the log-Normal density.
-
+\end{equation*}
 
 \section{Latent factors}
 \label{app:factor_conditionals}
 
-For a particular observation $(i,t)$, the full
-conditional retains its Gaussian factor-regression
-density and all response contributions for that
-observation:
-\begin{equation}
-\begin{aligned}
-p(f_{i,t}\mid\mathrm{rest})
-\propto {}&
-\mathcal{N}\!\left(
-f_{i,t};
-\mathbf{x}_{i,t}^{\mathsf T}\boldsymbol{\beta},1
-\right)
-\\
-&\times
-\prod_{j=1}^{3}
-g_j(Y_{i,t,j}\mid f_{i,t},\boldsymbol{\theta})
-\\
-&\times
-\prod_{k=1}^{K}
-p_{i,t,k}^{B_{i,t,k}}
-(1-p_{i,t,k})^{1-B_{i,t,k}}.
-\end{aligned}
-\end{equation}
-
-Using the log-likelihood contributions defined above,
-this becomes
-\begin{equation}
-\begin{aligned}
-p(f_{i,t}\mid\mathrm{rest})
+To derive the full conditional of a particular
+latent factor $f_n$, the regression coefficients,
+response parameters, and all other latent factors
+are held fixed. The parameter priors and the
+likelihood contributions from other observations
+are therefore constant with respect to $f_n$.
+Retaining the factors of the joint posterior
+that depend on $f_n$ gives
+\begin{equation*}
+p(f_n\mid\mathrm{rest})
 \propto
-\exp\Bigg\{
-&-\frac12
+p(\mathbf{Y}_n,\mathbf{B}_n
+\mid f_n,\boldsymbol{\theta})
+p(f_n\mid\boldsymbol{\beta},\mathbf{x}_n).
+\end{equation*}
+
+The Gaussian factor-regression density is
+\begin{equation*}
+p(f_n\mid\boldsymbol{\beta},\mathbf{x}_n)
+=
+\frac{1}{\sqrt{2\pi}}
+\exp\!\left\{
+-\frac12
 \left(
-f_{i,t}
--\mathbf{x}_{i,t}^{\mathsf T}\boldsymbol{\beta}
+f_n-\mathbf{x}_n^{\mathsf T}\boldsymbol{\beta}
 \right)^2
+\right\}.
+\end{equation*}
+
+Conditional independence of the responses gives
+\begin{equation*}
+\begin{aligned}
+&p(\mathbf{Y}_n,\mathbf{B}_n
+\mid f_n,\boldsymbol{\theta})
 \\
-&+
-\sum_{\substack{j=1,2,3:\\
-                 (i,t)\in\mathcal{I}_j}}
-H_{i,t,j}
-\\
-&+
-\sum_{j\in\mathcal{J}_{\partial}}R_{i,t,j}
-+
-\sum_{k=1}^{K}Q_{i,t,k}
-\Bigg\}.
+&\quad=
+\prod_{j=1}^{3}
+g_j(Y_{nj}\mid f_n,\boldsymbol{\theta})
+\prod_{k=1}^{K}
+p(B_{nk}\mid f_n,a_k,\ell_k),
 \end{aligned}
-\label{eq:appendix_factor_conditional}
-\end{equation}
+\end{equation*}
+where $g_j$ is the bounded-response contribution
+introduced in the main text.
+
+Denote this observation-specific likelihood by
+$L_n(f_n)$. For terminals, it is
+\begin{equation*}
+\begin{aligned}
+L_n^T(f_n)
+={}&
+p(Y_{n1}\mid f_n,\alpha_1,\lambda_1,\phi_1)
+\\
+&\times
+\prod_{j=2}^{3}
+p(Y_{nj}\mid
+f_n,\alpha_j,\lambda_j,\phi_j,c_j^T,d_j^T)
+\\
+&\times
+\prod_{k=1}^{3}
+p(B_{nk}\mid f_n,a_k,\ell_k).
+\end{aligned}
+\end{equation*}
+The bounded-response terms are the ordinary Beta
+density for PageRank and the one-inflated Beta
+contributions for HHI and dependence.
+
+For chokepoints,
+\begin{equation*}
+\begin{aligned}
+L_n^C(f_n)
+={}&
+p(Y_{n1}\mid f_n,\alpha_1,\lambda_1,\phi_1)
+\\
+&\times
+p(Y_{n2}\mid
+f_n,\alpha_2,\lambda_2,\phi_2,c_2^C,d_2^C)
+\\
+&\times
+p(Y_{n3}\mid f_n,\alpha_3,\lambda_3,\phi_3)
+\\
+&\times
+\prod_{k=1}^{2}
+p(B_{nk}\mid f_n,a_k,\ell_k).
+\end{aligned}
+\end{equation*}
+Here PageRank and flow share contribute ordinary
+Beta densities, while betweenness contributes
+the zero-inflated Beta likelihood.
+
+Combining the observation-specific likelihood
+with the Gaussian factor-regression density
+and removing its constant prefactor yields
+\begin{equation*}
+p(f_n\mid\mathrm{rest})
+\propto
+L_n(f_n)
+\exp\!\left\{
+-\frac12
+\left(
+f_n-\mathbf{x}_n^{\mathsf T}\boldsymbol{\beta}
+\right)^2
+\right\},
+\end{equation*}
+where $L_n=L_n^T$ for terminals and $L_n=L_n^C$
+for chokepoints.
 
 The factor enters the interior means, binary
-probabilities, and boundary probabilities. Its full
-conditional therefore combines information from all
-responses observed for the same node--month.
+probabilities, and boundary probabilities.
+Its full conditional therefore combines information
+from all responses observed for the same node--month.
+Although the factor-regression density is Gaussian,
+the response likelihood is a non-Gaussian function
+of $f_n$, so the resulting full conditional does
+not have a standard conjugate form.
 
-The Gaussian factor-regression density does not make
-this full conditional Gaussian, because the response
-contributions are non-Gaussian functions of $f_{i,t}$.
-Moreover, the factor conditionals involve no factors
-from other node--months once the regression
-coefficients and response parameters are held fixed,
-as implied by the baseline conditional-independence
-assumptions.
-
-
-\section{Conditional and marginal posterior distributions}
-\label{app:conditional_marginal_distinction}
-
-The preceding expressions are full conditional
-posterior distributions. For a generic parameter
-$\vartheta$ and remaining unknown quantities
-$\boldsymbol{\xi}$, the marginal posterior is instead
-\begin{equation}
-p(\vartheta\mid\mathcal{D})
-=
-\int
-p(\vartheta,\boldsymbol{\xi}\mid\mathcal{D})
-\,d\boldsymbol{\xi}.
-\end{equation}
-
-Equivalently,
-\begin{equation}
-p(\vartheta\mid\mathcal{D})
-=
-\int
-p(\vartheta\mid\boldsymbol{\xi},\mathcal{D})
-p(\boldsymbol{\xi}\mid\mathcal{D})
-\,d\boldsymbol{\xi}.
-\end{equation}
-
-Thus, marginal inference accounts for uncertainty in
-the remaining parameters and latent factors rather
-than holding them fixed. Posterior summaries reported
-in the results chapter are obtained from the joint
-NUTS draws and approximate these marginal posterior
-distributions.
-
-\chapter{Model specification and diagnostics}
+\chapter{Model diagnostics}
 \label{app:model_diagnostics}
 
 \section{MCMC convergence diagnostics}
