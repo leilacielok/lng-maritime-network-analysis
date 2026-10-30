@@ -1,0 +1,10 @@
+{
+  "divergences": 0,
+  "nondivergent_draws": 40000,
+  "selected_parameters": [],
+  "selection_method": "Descending two-sample Kolmogorov-Smirnov distance",
+  "candidate_scope": "Global parameters and node effects; observation-level arrays excluded",
+  "note": "Exploratory marginal association, not a cause or attribution of divergences; no hypothesis-test p-values.",
+  "status": "skipped_no_divergences",
+  "warning": null
+}

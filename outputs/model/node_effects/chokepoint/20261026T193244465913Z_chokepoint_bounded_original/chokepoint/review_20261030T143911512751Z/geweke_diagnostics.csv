@@ -1,0 +1,93 @@
+variable,coordinates,chain,alpha,n_draws,first_fraction,last_fraction,z_score,p_value,passed,status
+beta,"{""predictor"": ""neighbor_activity_lag1""}",0,0.05,10000,0.1,0.5,-1.8081559180649742,0.0705822372465786,True,ok
+beta,"{""predictor"": ""neighbor_activity_lag1""}",1,0.05,10000,0.1,0.5,1.1438545603201795,0.25268395829872703,True,ok
+beta,"{""predictor"": ""neighbor_activity_lag1""}",2,0.05,10000,0.1,0.5,0.4756619186314145,0.6343152552077582,True,ok
+beta,"{""predictor"": ""neighbor_activity_lag1""}",3,0.05,10000,0.1,0.5,0.8142535486587199,0.4154997145013922,True,ok
+beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1""}",0,0.05,10000,0.1,0.5,-2.1053653873683937,0.03525951431448876,False,ok
+beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1""}",1,0.05,10000,0.1,0.5,-1.8517604814085475,0.0640602247288396,True,ok
+beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1""}",2,0.05,10000,0.1,0.5,1.8667118644189693,0.0619418360103029,True,ok
+beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1""}",3,0.05,10000,0.1,0.5,-1.3116094456836407,0.1896519443414595,True,ok
+beta,"{""predictor"": ""month_sin""}",0,0.05,10000,0.1,0.5,3.6591645300224296,0.0002530388503757675,False,ok
+beta,"{""predictor"": ""month_sin""}",1,0.05,10000,0.1,0.5,-1.8482249280993046,0.06456981065907942,True,ok
+beta,"{""predictor"": ""month_sin""}",2,0.05,10000,0.1,0.5,-0.6618081191665348,0.5080942020510784,True,ok
+beta,"{""predictor"": ""month_sin""}",3,0.05,10000,0.1,0.5,-1.35549369552986,0.175260315875303,True,ok
+beta,"{""predictor"": ""month_cos""}",0,0.05,10000,0.1,0.5,-2.1057506245166158,0.03522601983866481,False,ok
+beta,"{""predictor"": ""month_cos""}",1,0.05,10000,0.1,0.5,-1.6052355585381817,0.10844197480510258,True,ok
+beta,"{""predictor"": ""month_cos""}",2,0.05,10000,0.1,0.5,0.31231962948033254,0.7547976234834209,True,ok
+beta,"{""predictor"": ""month_cos""}",3,0.05,10000,0.1,0.5,-0.39249968757098047,0.6946890421516081,True,ok
+other_loadings,"{""other_continuous"": ""betweenness""}",0,0.05,10000,0.1,0.5,1.638625500627884,0.10129127813042992,True,ok
+other_loadings,"{""other_continuous"": ""betweenness""}",1,0.05,10000,0.1,0.5,-1.0396158095562817,0.2985184289000481,True,ok
+other_loadings,"{""other_continuous"": ""betweenness""}",2,0.05,10000,0.1,0.5,0.46962205889276104,0.6386250618121654,True,ok
+other_loadings,"{""other_continuous"": ""betweenness""}",3,0.05,10000,0.1,0.5,-0.03445614269981757,0.9725134146196608,True,ok
+other_loadings,"{""other_continuous"": ""share_monthly_network_flow""}",0,0.05,10000,0.1,0.5,-1.7801644806107522,0.07504904647211647,True,ok
+other_loadings,"{""other_continuous"": ""share_monthly_network_flow""}",1,0.05,10000,0.1,0.5,-0.9675086868489786,0.3332898007666222,True,ok
+other_loadings,"{""other_continuous"": ""share_monthly_network_flow""}",2,0.05,10000,0.1,0.5,0.14490346575702814,0.8847870900404627,True,ok
+other_loadings,"{""other_continuous"": ""share_monthly_network_flow""}",3,0.05,10000,0.1,0.5,-0.5483008187177241,0.583485365328147,True,ok
+loading_binary,"{""binary"": ""is_articulation_point""}",0,0.05,10000,0.1,0.5,-3.825726784957206,0.00013038683654360592,False,ok
+loading_binary,"{""binary"": ""is_articulation_point""}",1,0.05,10000,0.1,0.5,0.6099035609133945,0.5419256935274865,True,ok
+loading_binary,"{""binary"": ""is_articulation_point""}",2,0.05,10000,0.1,0.5,1.0937956946453427,0.27404459279794824,True,ok
+loading_binary,"{""binary"": ""is_articulation_point""}",3,0.05,10000,0.1,0.5,-0.34602169302262203,0.7293264119261975,True,ok
+loading_binary,"{""binary"": ""connected_to_articulation_point""}",0,0.05,10000,0.1,0.5,1.1488084104318703,0.25063499059755967,True,ok
+loading_binary,"{""binary"": ""connected_to_articulation_point""}",1,0.05,10000,0.1,0.5,1.8983920322359846,0.05764445844124498,True,ok
+loading_binary,"{""binary"": ""connected_to_articulation_point""}",2,0.05,10000,0.1,0.5,0.8696835133900682,0.38447338442510737,True,ok
+loading_binary,"{""binary"": ""connected_to_articulation_point""}",3,0.05,10000,0.1,0.5,1.2069025924740466,0.2274696591806875,True,ok
+intercept_cont,"{""continuous"": ""pagerank""}",0,0.05,10000,0.1,0.5,0.1826748783220516,0.8550531282499645,True,ok
+intercept_cont,"{""continuous"": ""pagerank""}",1,0.05,10000,0.1,0.5,-1.8693863377933853,0.06156908396606301,True,ok
+intercept_cont,"{""continuous"": ""pagerank""}",2,0.05,10000,0.1,0.5,-2.750797141425874,0.00594504463977737,False,ok
+intercept_cont,"{""continuous"": ""pagerank""}",3,0.05,10000,0.1,0.5,-1.8894843713544998,0.05882695499116648,True,ok
+intercept_cont,"{""continuous"": ""betweenness""}",0,0.05,10000,0.1,0.5,-0.7991542762508658,0.42420096095912563,True,ok
+intercept_cont,"{""continuous"": ""betweenness""}",1,0.05,10000,0.1,0.5,-1.7341397250317678,0.08289329451705033,True,ok
+intercept_cont,"{""continuous"": ""betweenness""}",2,0.05,10000,0.1,0.5,-2.598810314938549,0.009354744986671059,False,ok
+intercept_cont,"{""continuous"": ""betweenness""}",3,0.05,10000,0.1,0.5,-1.8027948364878523,0.07142044141204085,True,ok
+intercept_cont,"{""continuous"": ""share_monthly_network_flow""}",0,0.05,10000,0.1,0.5,1.8156477920928087,0.0694244174042273,True,ok
+intercept_cont,"{""continuous"": ""share_monthly_network_flow""}",1,0.05,10000,0.1,0.5,-1.659439774497135,0.09702720704649179,True,ok
+intercept_cont,"{""continuous"": ""share_monthly_network_flow""}",2,0.05,10000,0.1,0.5,-2.689558711547208,0.007154656027927176,False,ok
+intercept_cont,"{""continuous"": ""share_monthly_network_flow""}",3,0.05,10000,0.1,0.5,-1.8467794471626937,0.06477911179654948,True,ok
+intercept_binary,"{""binary"": ""is_articulation_point""}",0,0.05,10000,0.1,0.5,0.6429105904958123,0.5202821171043792,True,ok
+intercept_binary,"{""binary"": ""is_articulation_point""}",1,0.05,10000,0.1,0.5,-1.9617390410698594,0.0497928740127053,False,ok
+intercept_binary,"{""binary"": ""is_articulation_point""}",2,0.05,10000,0.1,0.5,-2.7556144819007073,0.005858199965023221,False,ok
+intercept_binary,"{""binary"": ""is_articulation_point""}",3,0.05,10000,0.1,0.5,-1.7022511597640047,0.08870829608794353,True,ok
+intercept_binary,"{""binary"": ""connected_to_articulation_point""}",0,0.05,10000,0.1,0.5,1.1589131648990687,0.2464915821278031,True,ok
+intercept_binary,"{""binary"": ""connected_to_articulation_point""}",1,0.05,10000,0.1,0.5,-1.8643324731986728,0.06227502927477324,True,ok
+intercept_binary,"{""binary"": ""connected_to_articulation_point""}",2,0.05,10000,0.1,0.5,-2.8295875381435014,0.0046608047744820195,False,ok
+intercept_binary,"{""binary"": ""connected_to_articulation_point""}",3,0.05,10000,0.1,0.5,-1.6768115972451496,0.09357932921157006,True,ok
+intercept_zero,"{""boundary"": ""betweenness""}",0,0.05,10000,0.1,0.5,-0.37719140729538675,0.7060313654988604,True,ok
+intercept_zero,"{""boundary"": ""betweenness""}",1,0.05,10000,0.1,0.5,3.7766338736416034,0.00015896213521737006,False,ok
+intercept_zero,"{""boundary"": ""betweenness""}",2,0.05,10000,0.1,0.5,5.651825604936687,1.5875261748507414e-08,False,ok
+intercept_zero,"{""boundary"": ""betweenness""}",3,0.05,10000,0.1,0.5,2.8761410196018775,0.004025698143905145,False,ok
+loading_zero,"{""boundary"": ""betweenness""}",0,0.05,10000,0.1,0.5,0.6720562146586978,0.5015479096558486,True,ok
+loading_zero,"{""boundary"": ""betweenness""}",1,0.05,10000,0.1,0.5,-0.2584745362574978,0.7960406985125312,True,ok
+loading_zero,"{""boundary"": ""betweenness""}",2,0.05,10000,0.1,0.5,-5.644177188465675,1.6597307525460593e-08,False,ok
+loading_zero,"{""boundary"": ""betweenness""}",3,0.05,10000,0.1,0.5,-4.66634496719941,3.066047848870842e-06,False,ok
+sigma_mu,{},0,0.05,10000,0.1,0.5,-1.9195417661384373,0.054915805825265326,True,ok
+sigma_mu,{},1,0.05,10000,0.1,0.5,0.6527168410916225,0.5139388432553258,True,ok
+sigma_mu,{},2,0.05,10000,0.1,0.5,0.8284538090654109,0.4074135437851294,True,ok
+sigma_mu,{},3,0.05,10000,0.1,0.5,0.22588722189226654,0.8212891364425376,True,ok
+pagerank_loading,{},0,0.05,10000,0.1,0.5,2.3122977586318805,0.020761280126168895,False,ok
+pagerank_loading,{},1,0.05,10000,0.1,0.5,-1.0073560881021588,0.31376368533721877,True,ok
+pagerank_loading,{},2,0.05,10000,0.1,0.5,0.17373013915810176,0.8620775500728054,True,ok
+pagerank_loading,{},3,0.05,10000,0.1,0.5,-0.46717084470840026,0.6403776511590327,True,ok
+precision_cont,"{""continuous"": ""pagerank""}",0,0.05,10000,0.1,0.5,1.3273554217649712,0.1843911385788397,True,ok
+precision_cont,"{""continuous"": ""pagerank""}",1,0.05,10000,0.1,0.5,0.26234462323497776,0.7930557620155114,True,ok
+precision_cont,"{""continuous"": ""pagerank""}",2,0.05,10000,0.1,0.5,0.08266497234565909,0.934117937529882,True,ok
+precision_cont,"{""continuous"": ""pagerank""}",3,0.05,10000,0.1,0.5,-0.0985488788192289,0.9214964611328176,True,ok
+precision_cont,"{""continuous"": ""betweenness""}",0,0.05,10000,0.1,0.5,1.0804116036225493,0.27995893094247815,True,ok
+precision_cont,"{""continuous"": ""betweenness""}",1,0.05,10000,0.1,0.5,1.1742305405168483,0.24030269628856937,True,ok
+precision_cont,"{""continuous"": ""betweenness""}",2,0.05,10000,0.1,0.5,0.036148383161036676,0.9711640433322459,True,ok
+precision_cont,"{""continuous"": ""betweenness""}",3,0.05,10000,0.1,0.5,1.2755763160407725,0.20210533072995895,True,ok
+precision_cont,"{""continuous"": ""share_monthly_network_flow""}",0,0.05,10000,0.1,0.5,-1.3827323146300663,0.16674695961434816,True,ok
+precision_cont,"{""continuous"": ""share_monthly_network_flow""}",1,0.05,10000,0.1,0.5,-1.140165838197991,0.254217216879441,True,ok
+precision_cont,"{""continuous"": ""share_monthly_network_flow""}",2,0.05,10000,0.1,0.5,-0.11971618049661478,0.9047079823625593,True,ok
+precision_cont,"{""continuous"": ""share_monthly_network_flow""}",3,0.05,10000,0.1,0.5,-0.49747720252206434,0.6188525754351162,True,ok
+loading_cont,"{""continuous"": ""pagerank""}",0,0.05,10000,0.1,0.5,2.3122977586318805,0.020761280126168895,False,ok
+loading_cont,"{""continuous"": ""pagerank""}",1,0.05,10000,0.1,0.5,-1.0073560881021588,0.31376368533721877,True,ok
+loading_cont,"{""continuous"": ""pagerank""}",2,0.05,10000,0.1,0.5,0.17373013915810176,0.8620775500728054,True,ok
+loading_cont,"{""continuous"": ""pagerank""}",3,0.05,10000,0.1,0.5,-0.46717084470840026,0.6403776511590327,True,ok
+loading_cont,"{""continuous"": ""betweenness""}",0,0.05,10000,0.1,0.5,1.638625500627884,0.10129127813042992,True,ok
+loading_cont,"{""continuous"": ""betweenness""}",1,0.05,10000,0.1,0.5,-1.0396158095562817,0.2985184289000481,True,ok
+loading_cont,"{""continuous"": ""betweenness""}",2,0.05,10000,0.1,0.5,0.46962205889276104,0.6386250618121654,True,ok
+loading_cont,"{""continuous"": ""betweenness""}",3,0.05,10000,0.1,0.5,-0.03445614269981757,0.9725134146196608,True,ok
+loading_cont,"{""continuous"": ""share_monthly_network_flow""}",0,0.05,10000,0.1,0.5,-1.7801644806107522,0.07504904647211647,True,ok
+loading_cont,"{""continuous"": ""share_monthly_network_flow""}",1,0.05,10000,0.1,0.5,-0.9675086868489786,0.3332898007666222,True,ok
+loading_cont,"{""continuous"": ""share_monthly_network_flow""}",2,0.05,10000,0.1,0.5,0.14490346575702814,0.8847870900404627,True,ok
+loading_cont,"{""continuous"": ""share_monthly_network_flow""}",3,0.05,10000,0.1,0.5,-0.5483008187177241,0.583485365328147,True,ok

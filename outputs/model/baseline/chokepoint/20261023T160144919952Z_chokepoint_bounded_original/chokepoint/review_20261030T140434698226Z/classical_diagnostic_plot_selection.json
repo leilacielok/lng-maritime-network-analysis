@@ -1,0 +1,9 @@
+{
+  "hidden_alias_variables": [
+    "pagerank_loading",
+    "other_loadings"
+  ],
+  "canonical_variable": "loading_cont",
+  "rule": "Known loading aliases; exact equality of every posterior draw verified",
+  "csv_files": "Complete original variables retained"
+}

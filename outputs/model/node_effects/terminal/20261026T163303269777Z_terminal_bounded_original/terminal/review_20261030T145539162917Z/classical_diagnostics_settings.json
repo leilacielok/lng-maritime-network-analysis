@@ -1,0 +1,32 @@
+{
+  "parameters": [
+    "beta",
+    "other_loadings",
+    "loading_binary",
+    "intercept_cont",
+    "intercept_binary",
+    "intercept_one",
+    "loading_one",
+    "sigma_mu",
+    "pagerank_loading",
+    "precision_cont",
+    "loading_cont"
+  ],
+  "rows": 120,
+  "alpha": 0.05,
+  "eps": 0.1,
+  "geweke_segments": [
+    0.1,
+    0.5
+  ],
+  "half_width_confidence": 0.95,
+  "spectrum": "AIC-selected Yule-Walker autoregression",
+  "scope": "Selected variables only; each coordinate and chain separately",
+  "warmup": "Posterior group only; warm-up excluded",
+  "notes": [
+    "Python implementation; not guaranteed numerically identical to R coda",
+    "Unadjusted p-values; interpret alongside R-hat, ESS and divergences",
+    "Relative half-width is unstable for means near zero",
+    "HW discarded draws affect this diagnostic only, not saved posterior"
+  ]
+}
