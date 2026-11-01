@@ -1,10 +1,11 @@
 from pathlib import Path
 import xarray as xr
 
-"reparametrized model outputs"
+# Reparametrized node-effects model: chokepoints
 source = Path(
-    r""C:\Users\Leila\OneDrive\Desktop\Thesis\code\outputs\model\node_effects_1\chokepoint\20261030T155547550840Z_chokepoint_bounded_original"\chokepoint\posterior.nc"
+    r"C:\Users\Leila\OneDrive\Desktop\Thesis\code\outputs\model\node_effects_1\chokepoint\20261030T155547550840Z_chokepoint_bounded_original\chokepoint\posterior.nc"
 )
+
 destination = source.with_name("posterior_diagnostic_subset.nc")
 
 variables = [
@@ -27,12 +28,34 @@ variables = [
     "precision_cont",
 ]
 
-with xr.open_dataset(source, group="posterior") as posterior:
-    missing = [name for name in variables if name not in posterior]
-    if missing:
-        raise ValueError(f"Missing variables: {missing}")
+if not source.exists():
+    raise FileNotFoundError(f"File non trovato: {source}")
 
-    reduced = posterior[variables]
+# Extract selected posterior variables
+with xr.open_dataset(source, group="posterior") as posterior:
+
+    available = [
+        name for name in variables
+        if name in posterior.data_vars
+    ]
+
+    missing = [
+        name for name in variables
+        if name not in posterior.data_vars
+    ]
+
+    print(f"Variabili disponibili: {len(available)}")
+
+    if missing:
+        print("\nVariabili mancanti:")
+        for name in missing:
+            print(f"  - {name}")
+
+    if not available:
+        raise ValueError("Nessuna variabile richiesta è disponibile.")
+
+    reduced = posterior[available].load()
+
     reduced.to_netcdf(
         destination,
         group="posterior",
@@ -44,7 +67,9 @@ with xr.open_dataset(source, group="posterior") as posterior:
         },
     )
 
+# Preserve sampling diagnostics
 with xr.open_dataset(source, group="sample_stats") as stats:
+
     stats.to_netcdf(
         destination,
         group="sample_stats",
@@ -56,5 +81,10 @@ with xr.open_dataset(source, group="sample_stats") as stats:
         },
     )
 
-print(f"File creato: {destination}")
-print(f"Dimensione: {destination.stat().st_size / 1024**2:.1f} MB")
+print("\nFile creato:")
+print(destination)
+
+print(
+    f"Dimensione: "
+    f"{destination.stat().st_size / 1024**2:.1f} MB"
+)
