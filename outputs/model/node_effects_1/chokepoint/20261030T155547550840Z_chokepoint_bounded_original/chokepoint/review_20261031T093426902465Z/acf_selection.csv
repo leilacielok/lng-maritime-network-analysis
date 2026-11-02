@@ -1,0 +1,4 @@
+,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat,selection_reason
+beta[neighbor_activity_lag1],0.006,0.005,92.0,52.0,1.03,Lowest bulk ESS among regression coefficients
+loading_cont[share_monthly_network_flow],0.006,0.009,45.0,11.0,1.06,Lowest bulk ESS among response loadings; Lowest bulk ESS among global parameters; Lowest tail ESS among global parameters
+loading_cont[pagerank],0.0,0.0,303.0,230.0,1.01,PageRank anchor loading

@@ -1,0 +1,4 @@
+trim,draws_per_chain,max_rhat,min_ess_bulk,min_ess_tail,n_rhat_above_1_01,n_ess_bulk_below_400,n_ess_tail_below_400,n_geweke_tests,n_geweke_failures,n_hw_stationarity_failures,n_hw_halfwidth_failures
+0,10000,1.01,506.0,213.0,0,0,203,212,31,2,0
+1000,9000,1.0,767.0,1622.0,0,0,0,212,34,0,0
+2000,8000,1.0,664.0,1430.0,0,0,0,212,7,1,0

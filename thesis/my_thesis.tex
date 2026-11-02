@@ -2312,8 +2312,244 @@ and associated diagnostic criteria are described in
 Section~\ref{sec:posterior_computation}.
 
 \subsection{Node-specific intercepts}
-% TODO: Insert the model specification and the prior for node-specific intercepts.
-% TODO: Clarify identification relative to any common intercept.
+
+\subsubsection{Model specification}
+
+The second model extends the baseline rank-one specification by incorporating node-specific effects into the latent factor regression. The purpose of this extension is to account for persistent differences in latent criticality across nodes that may not be fully explained by the observed covariates.
+
+In the baseline model, the conditional mean of the latent factor depends exclusively on the covariates. The extended specification introduces an additional node-level component, allowing each terminal or chokepoint to have its own persistent deviation from the covariate-based prediction.
+
+Specifically, the latent factor for node \(i\) in month \(t\) is defined as
+
+$$
+f_{i,t}
+=
+\mathbf{x}_{i,t}^{\top}\boldsymbol{\beta}
++
+\mu_i
++
+z_{i,t},
+\qquad
+z_{i,t}\sim\mathcal N(0,1),
+$$
+
+where \(\mu_i\) represents the node-specific effect. These effects follow a hierarchical Gaussian prior,
+
+$$
+\mu_i\mid\sigma_\mu
+\sim\mathcal N(0,\sigma_\mu^2),
+$$
+
+with
+
+$$
+\sigma_\mu\sim\operatorname{HalfNormal}(s_\mu).
+$$
+
+The parameter \(\sigma_\mu\) controls the dispersion of the node-specific effects and therefore the extent of persistent heterogeneity across nodes.
+
+This extension is particularly relevant for the LNG maritime network, where terminals and chokepoints may exhibit structural characteristics that remain relatively stable over time. Although some of these characteristics are represented by the observed covariates, others may remain unobserved or only partially captured.
+
+Introducing node-specific effects allows the model to account for these persistent differences without attributing them entirely to the observed predictors.
+
+The extension preserves the rank-one structure of the baseline model, since the responses remain conditionally linked through a single latent factor. The response likelihoods and their associated parameters are also unchanged.
+
+\subsubsection{Computational reparameterization}
+
+The introduction of node-specific effects increases the dimensionality of the posterior distribution and may introduce additional dependencies between the node effects, latent factors, and response intercepts.
+
+To facilitate posterior sampling, the model was implemented using an equivalent mean-and-contrast parameterization.
+
+Let \(N\) denote the number of nodes included in the estimation sample. The vector of node-specific effects is decomposed as
+
+$$
+\boldsymbol{\mu}
+=
+m\mathbf 1_N+\boldsymbol{\delta},
+$$
+
+where \(m\) represents the mean of the node-specific effects and \(\boldsymbol{\delta}\) contains deviations from this mean.
+
+The two components are specified as
+
+$$
+m\mid\sigma_\mu
+\sim
+\mathcal N\left(
+0,\frac{\sigma_\mu^2}{N}
+\right),
+$$
+
+and
+
+$$
+\boldsymbol{\delta}
+=
+\sigma_\mu Q\mathbf u,
+\qquad
+\mathbf u\sim\mathcal N(\mathbf 0,I_{N-1}),
+$$
+
+where \(Q\) is an \(N\times(N-1)\) orthonormal contrast matrix satisfying
+
+$$
+Q^\top Q=I_{N-1},
+\qquad
+Q^\top\mathbf 1_N=\mathbf 0.
+$$
+
+Consequently, the deviations satisfy
+
+$$
+\sum_{i=1}^{N}\delta_i=0.
+$$
+
+This decomposition preserves the original conditional distribution of the node-specific effects:
+
+$$
+\boldsymbol{\mu}\mid\sigma_\mu
+\sim
+\mathcal N(\mathbf 0,\sigma_\mu^2 I_N).
+$$
+
+Therefore, the transformation changes the sampling coordinates without modifying the underlying hierarchical model.
+
+The latent factor is subsequently expressed in centered coordinates,
+
+$$
+g_{i,t}=f_{i,t}-m,
+$$
+
+so that
+
+$$
+g_{i,t}
+=
+\mathbf{x}_{i,t}^{\top}\boldsymbol{\beta}
++
+\delta_i
++
+z_{i,t}.
+$$
+
+To preserve the original response predictors, the intercepts are shifted accordingly.
+
+For a response with original linear predictor
+
+$$
+\eta_{i,t,j}
+=
+\alpha_j+\lambda_jf_{i,t},
+$$
+
+define
+
+$$
+A_j=\alpha_j+\lambda_jm.
+$$
+
+The predictor can then be written equivalently as
+
+$$
+\eta_{i,t,j}
+=
+A_j+\lambda_jg_{i,t}.
+$$
+
+The same transformation is applied to the intercepts associated with the binary responses and the boundary probabilities of the inflated Beta likelihoods.
+
+The conditional priors of the transformed intercepts are adjusted to preserve the original prior distributions.
+
+This reparameterization is intended to reduce posterior dependencies associated with the common level of the node effects and the response intercepts, potentially improving the efficiency of NUTS.
+
+\subsubsection{Posterior sampling and initial diagnostics}
+
+The node-effects models were estimated separately for terminals and chokepoints using four parallel NUTS chains.
+
+The initial extended runs employed 5,000 warm-up iterations and 10,000 retained posterior draws per chain, with a target acceptance probability of 0.80.
+
+For terminals, this configuration produced satisfactory convergence according to the principal MCMC diagnostics.
+
+No post-warm-up divergences were observed, the maximum \(\widehat R\) was approximately 1.00, and the minimum bulk and tail effective sample sizes were 860 and 1,696, respectively.
+
+Additional diagnostics were computed using the Geweke and Heidelberger–Welch procedures.
+
+Among 700 chain-specific tests, 132 Geweke tests failed at the nominal 5% significance level, while only two Heidelberger–Welch stationarity tests failed.
+
+To investigate the sensitivity of the Geweke results to the initial portion of the retained chains, the diagnostics were recomputed after excluding the first 1,000 and 2,000 posterior draws from each chain.
+
+The number of Geweke failures decreased to 58 and 39, respectively, while the Heidelberger–Welch stationarity results remained largely unchanged.
+
+Although these findings indicate some sensitivity of the Geweke statistic to the initial posterior samples, the absence of divergences and the satisfactory \(\widehat R\) and effective sample size diagnostics supported retaining the original terminal run.
+
+The trimming analysis was therefore treated as an additional diagnostic investigation rather than as a modification of the posterior samples used for inference.
+
+For chokepoints, the initial sampling configuration was less satisfactory.
+
+With 5,000 warm-up iterations, 10,000 retained draws per chain, and a target acceptance probability of 0.80, the model produced 13 post-warm-up divergences.
+
+The maximum \(\widehat R\) reached 1.06, while the minimum bulk and tail effective sample sizes were 45 and 11, respectively.
+
+These results indicated inadequate sampling efficiency for some parameters and motivated further adjustments to the NUTS configuration.
+
+\subsubsection{Sampling adjustments for the chokepoint model}
+
+The first adjustment consisted of increasing the target acceptance probability from 0.80 to 0.95, while maintaining 5,000 warm-up iterations and 10,000 retained draws per chain.
+
+A higher target acceptance probability generally leads NUTS to adapt a smaller integration step size, which can improve the numerical accuracy of Hamiltonian trajectories and reduce the occurrence of divergences.
+
+Following this adjustment, no post-warm-up divergences were observed.
+
+The maximum \(\widehat R\) decreased to approximately 1.01, while the minimum bulk and tail effective sample sizes increased to 506 and 213, respectively.
+
+Although these results represented a substantial improvement, the relatively low tail effective sample size for some parameters indicated that further investigation was warranted.
+
+The Geweke diagnostic also continued to identify discrepancies between the initial and final portions of some chains, with 31 failures among 212 chain-specific tests.
+
+An additional sensitivity analysis suggested that excluding the initial portion of the retained samples improved the diagnostic results.
+
+These findings motivated a further extension of the warm-up period, allowing more iterations for sampler adaptation before posterior draws were retained.
+
+The final chokepoint run was therefore performed using 8,000 warm-up iterations, 10,000 retained draws per chain, four parallel chains, and a target acceptance probability of 0.95.
+
+This configuration produced no post-warm-up divergences and satisfactory convergence diagnostics across the monitored parameters.
+
+The maximum \(\widehat R\) was approximately 1.00, while the minimum bulk and tail effective sample sizes increased to 972 and 2,133, respectively.
+
+The Geweke diagnostic was passed in 206 of 212 chain-specific evaluations, corresponding to approximately 97.2% of the tests.
+
+All 212 Heidelberger–Welch stationarity tests and all 212 half-width tests were also passed.
+
+These results indicated a substantial improvement in sampling efficiency and supported the adoption of the final configuration for the chokepoint model.
+
+The use of different sampling configurations for terminals and chokepoints reflects differences in posterior geometry and computational requirements rather than changes in the underlying statistical specification.
+
+\subsubsection{Preliminary posterior findings}
+
+The node-effects extension introduces an additional source of heterogeneity through the node-specific effects.
+
+For terminals, the posterior mean of the hierarchical standard deviation parameter was approximately 1.37, indicating substantial dispersion in persistent node-level contributions to the latent factor.
+
+The posterior regression estimates suggested positive associations between latent criticality and both terminal capacity and lagged exporter status. The posterior means of the corresponding coefficients were approximately 0.73 and 1.30, respectively.
+
+Terminal age exhibited a negative posterior association, with a posterior mean coefficient of approximately -0.33.
+
+The remaining covariates showed weaker associations, with posterior intervals including zero for lagged neighboring activity, lagged voyage distance, and the seasonal components.
+
+For chokepoints, the posterior mean of the hierarchical standard deviation parameter was approximately 2.37, indicating substantial heterogeneity in node-specific latent contributions.
+
+The posterior regression coefficient for lagged neighboring activity was positive, with a mean of approximately 0.32.
+
+The seasonal sine and cosine components exhibited negative posterior associations, while the posterior interval for lagged voyage distance included zero.
+
+These findings suggest that persistent node-level heterogeneity plays an important role in the extended model.
+
+However, the hierarchical standard deviations should not be interpreted as directly comparable measures of criticality between terminals and chokepoints, since the two models are estimated separately and have different response structures.
+
+Furthermore, the introduction of node-specific effects changes the interpretation of the regression coefficients relative to the baseline model: the coefficients now describe associations with the latent factor after accounting for persistent node-level heterogeneity.
+
+The adequacy of the extended specification must therefore be evaluated through posterior predictive checks and comparisons with the baseline model, rather than through convergence diagnostics alone.
+
 
 \subsection{Rank-two specification}
 % TODO: Insert rank-two specification, priors, and identification constraints.
@@ -2444,7 +2680,7 @@ Algorithm~\ref{alg:baseline_sampling} summarises
 the sampling procedure for the rank-one baseline model.
 
 \begin{algorithm}[H]
-\caption{NUTS sampling for one-rank baseline model}
+\caption{NUTS sampling for rank-one baseline model}
 \label{alg:baseline_sampling}
 \begin{algorithmic}[1]
 \Require Data $\mathcal{D}$; chains $C$;

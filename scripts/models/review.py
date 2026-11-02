@@ -264,6 +264,112 @@ def export_node_effects(post, data, out):
         plt.close(fig)
 
 
+def export_classical_diagnostics(post, out, nc=None):
+    """Compute single-chain tests and paginate readable diagnostic figures."""
+    # Resolve the sibling explicitly: archived model imports may change sys.path.
+    spec = importlib.util.spec_from_file_location(
+        'review_classical_diagnostics', Path(__file__).with_name('diagnostics.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    if not hasattr(module, 'save_classical_diagnostics'):
+        raise RuntimeError('Update the sibling diagnostics.py to the version with classical tests.')
+    if nc is not None:
+        module.export_sampling_diagnostics(post, nc, out)
+    module.save_classical_diagnostics(post, out)
+    from scipy.stats import norm
+    from matplotlib.colors import ListedColormap, BoundaryNorm
+    g = pd.read_csv(out / 'geweke_diagnostics.csv')
+    h = pd.read_csv(out / 'heidelberger_welch_diagnostics.csv')
+    # Keep canonical loadings in figures. Verify equality of all retained
+    # draws, so a similarly named parameter in another model is never hidden.
+    aliases = []
+    if 'loading_cont' in post:
+        def components(name):
+            da = post[name]
+            dims = [dim for dim in da.dims if dim not in ('chain', 'draw')]
+            values = da.transpose('chain', 'draw', *dims).values
+            return values.reshape(values.shape[0], values.shape[1], -1)
+        canonical = components('loading_cont')
+        for name in ('pagerank_loading', 'other_loadings'):
+            if name not in post:
+                continue
+            candidate = components(name)
+            if all(any(np.array_equal(candidate[..., i], canonical[..., j], equal_nan=True)
+                       for j in range(canonical.shape[-1]))
+                   for i in range(candidate.shape[-1])):
+                aliases.append(name)
+    g = g.loc[~g.variable.isin(aliases)].copy()
+    h = h.loc[~h.variable.isin(aliases)].copy()
+    (out / 'classical_diagnostic_plot_selection.json').write_text(json.dumps(
+        dict(hidden_alias_variables=aliases, canonical_variable='loading_cont',
+             rule='Known loading aliases; exact equality of every posterior draw verified',
+             csv_files='Complete original variables retained'), indent=2), encoding='utf-8')
+    def label(row):
+        coords = json.loads(row['coordinates'])
+        return row['variable'] + (' [' + ', '.join(str(v) for v in coords.values()) + ']' if coords else '')
+    for frame in (g, h):
+        frame['parameter'] = frame.apply(label, axis=1)
+    labels = g['parameter'].drop_duplicates().tolist()
+    chains = g['chain'].drop_duplicates().tolist()
+    threshold = norm.ppf(1 - float(g['alpha'].iloc[0]) / 2)
+    def truth(value):
+        if pd.isna(value):
+            return None
+        return str(value).lower() in ('true', '1', '1.0')
+    for page, start in enumerate(range(0, len(labels), 24), 1):
+        subset = labels[start:start+24]
+        fig, ax = plt.subplots(figsize=(11, max(4, .34*len(subset)+2)))
+        for ci, chain in enumerate(chains):
+            rows = g[g.chain.eq(chain)].set_index('parameter').reindex(subset)
+            y = np.arange(len(subset)) + (ci - (len(chains)-1)/2)*(.65/max(1,len(chains)))
+            z = rows.z_score.to_numpy()
+            ax.scatter(z, y, s=22, label=f'Chain {chain}')
+            bad = ~np.isfinite(z)
+            for yi in y[bad]:
+                ax.text(0, yi, 'NA', fontsize=6, color='gray', ha='center')
+        ax.axvline(-threshold, color='firebrick', linestyle='--', linewidth=1)
+        ax.axvline(threshold, color='firebrick', linestyle='--', linewidth=1)
+        ax.axvline(0, color='gray', linewidth=.6)
+        ax.set_yticks(range(len(subset)), subset)
+        ax.invert_yaxis()
+        ax.set_xlabel('Geweke z-score (first 10% versus last 50%)')
+        ax.set_title('Geweke diagnostic by chain')
+        ax.legend(loc='best', fontsize=8)
+        ax.grid(axis='x', alpha=.2)
+        fig.text(.02, .015, 'Dashed lines: unadjusted two-sided 5% threshold. NA: diagnostic unavailable.', fontsize=8)
+        fig.tight_layout(rect=(0,.04,1,1))
+        fig.savefig(out / f'geweke_zscores_{page:02d}.png', dpi=160)
+        plt.close(fig)
+        # A categorical grid avoids comparing relative half-widths across scales.
+        matrix = np.full((len(subset), 2*len(chains)), 2.)
+        for ri, name in enumerate(subset):
+            for ci, chain in enumerate(chains):
+                row = h[h.parameter.eq(name) & h.chain.eq(chain)].iloc[0]
+                for offset, column in enumerate(('stationarity_passed', 'half_width_passed')):
+                    result = truth(row[column])
+                    matrix[ri, 2*ci+offset] = 2 if result is None else int(result)
+        fig, ax = plt.subplots(figsize=(11, max(4,.34*len(subset)+2)))
+        cmap = ListedColormap(['#d77269', '#62b5a1', '#d8dce2'])
+        ax.imshow(matrix, cmap=cmap, norm=BoundaryNorm([-.5,.5,1.5,2.5],3), aspect='auto')
+        ax.set_yticks(range(len(subset)), subset)
+        ax.set_xticks(range(2*len(chains)), [f'Chain {c}\n{test}' for c in chains for test in ('Stationarity','Half-width')])
+        for (r,c), value in np.ndenumerate(matrix):
+            ax.text(c,r, ['Fail','Pass','NA'][int(value)], ha='center',va='center',fontsize=8)
+        ax.set_title('Heidelberger–Welch diagnostic by chain')
+        fig.text(.02,.015, 'Half-width: 95% interval, relative target 0.10; sensitive to means near zero. See CSV for discarded draws.',fontsize=8)
+        fig.tight_layout(rect=(0,.04,1,1))
+        fig.savefig(out / f'heidelberger_welch_results_{page:02d}.png', dpi=160)
+        plt.close(fig)
+    (out / 'classical_diagnostics_README.txt').write_text(
+        'Python implementation; not R coda. Global parameters only by default.\n'
+        'Tests are per chain, using retained posterior draws without concatenation or thinning.\n'
+        'Geweke: first 10% vs final 50%; thresholds are unadjusted for multiple comparisons.\n'
+        'Heidelberger-Welch: stationarity may discard up to 50%; this does not modify the posterior.\n'
+        'Half-width results apply to the retained segment and are NA if stationarity fails.\n'
+        'A relative half-width failure for a mean near zero need not imply poor mixing.\n'
+        'Pass is a diagnostic outcome, not proof of convergence; inspect R-hat, ESS and divergences too.\n', encoding='utf-8')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run-dir', type=Path, required=True)
@@ -312,6 +418,7 @@ def main():
         out = terminal / ('review_' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
         out.mkdir()
         print(f'Exporting to {out}', flush=True)
+        export_classical_diagnostics(post, out, nc)
         export_selected_acf(post, out)
         export_trace_pages(post, out, args.node_type)
         if 'mu_node' in post:
@@ -437,7 +544,7 @@ def main():
                 low, mid, high = np.quantile(valid, [.025,.5,.975]) if len(valid) else [np.nan]*3
                 rows.append(dict(role_lag1=role, response_a=names[i], response_b=names[j], observed=obs_corr[i,j], replicated_median=mid, replicated_q025=low, replicated_q975=high, valid_replicates=len(valid)))
     pd.DataFrame(rows).to_csv(out / 'joint_predictive_checks.csv', index=False)
-    for name in ['parameter_summary.csv','sampling_diagnostics.json','posterior_checks.csv','sample_audit.json','predictor_scaling.csv',
+    for name in ['posterior_checks.csv','prior_checks.csv','binary_correlations.csv','response_scaling.csv','sample_audit.json','predictor_scaling.csv',
                  'node_index.csv', 'node_effects.csv', 'node_effects_UNVALIDATED.csv',
                  'node_effect_diagnostics.csv', 'run_status.json']:
         if (terminal / name).exists():
@@ -448,8 +555,6 @@ def main():
     (out / 'README.txt').write_text('factor_response_contrasts.csv: paired posterior comparisons of expected bounded responses at factor 0 vs 1; intervals are equal-tailed 95% credible intervals for the difference, not predictive intervals.\nExisting posterior only: no refitting.\nPredictive checks are conditional and in-sample, not out-of-sample validation.\nTerminal role groups use LAGGED role; chokepoints use the full sample.\nFactor associations use posterior mean scores informed by these same responses; they are descriptive, not independent validation or causal effects.\nCurve bands are equal-tailed 95% parameter uncertainty, not predictive intervals.\nCurves span the 1st-99th percentiles of posterior mean latent scores.\nNode/month scores are conditional on consecutive activity (and available age for terminals); interpret alongside sampling diagnostics and model limitations.\n', encoding='utf-8')
     (out / 'export_metadata.json').write_text(json.dumps(dict(source=str(nc), node_type=args.node_type, predictive_replicates=actual_draws, panel_sha256=audit['input_sha256']), indent=2))
     archive = shutil.make_archive(str(out), 'zip', out)
-    print(f'Done. Send this small ZIP: {archive}', flush=True)
-
 
 if __name__ == '__main__':
     main()
