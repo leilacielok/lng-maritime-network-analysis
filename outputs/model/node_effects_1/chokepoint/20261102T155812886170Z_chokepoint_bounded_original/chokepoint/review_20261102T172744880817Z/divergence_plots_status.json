@@ -1,0 +1,20 @@
+{
+  "divergences": 78,
+  "nondivergent_draws": 39922,
+  "selected_parameters": [
+    "node_deviation [CP006]",
+    "loading_cont [share_monthly_network_flow]",
+    "node_deviation [CP005]",
+    "node_deviation [CP008]",
+    "node_deviation [CP009]",
+    "loading_cont [betweenness]",
+    "loading_cont [pagerank]",
+    "node_deviation [CP001]"
+  ],
+  "selection_method": "Descending two-sample Kolmogorov-Smirnov distance",
+  "candidate_scope": "Global parameters and node effects; observation-level arrays excluded",
+  "note": "Exploratory marginal association, not a cause or attribution of divergences; no hypothesis-test p-values.",
+  "candidate_count": 122,
+  "warning": "Exploratory ranking; uncertainty is greater when divergent draws are few. No count threshold is applied.",
+  "status": "created"
+}
