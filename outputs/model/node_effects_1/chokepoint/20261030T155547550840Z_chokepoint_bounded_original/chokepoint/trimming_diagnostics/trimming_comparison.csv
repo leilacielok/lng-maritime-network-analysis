@@ -1,4 +1,0 @@
-trim,draws_per_chain,max_rhat,min_ess_bulk,min_ess_tail,n_rhat_above_1_01,n_ess_bulk_below_400,n_ess_tail_below_400
-0,10000,1.06,45.0,11.0,1411,2141,2066
-1000,9000,1.02,128.0,34.0,122,691,1067
-2000,8000,1.01,656.0,1320.0,0,0,0

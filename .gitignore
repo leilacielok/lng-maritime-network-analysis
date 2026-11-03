@@ -27,6 +27,9 @@ data/processed/*
 outputs/model/simple_criticality/**/*.zip
 archive/runs_original_model/
 
+# drafts
+outputs/model/node_effects_1/
+
 # ==========================================
 # PYTHON
 # ==========================================
