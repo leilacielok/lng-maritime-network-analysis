@@ -2474,7 +2474,7 @@ No post-warm-up divergences were observed, the maximum \(\widehat R\) was approx
 
 Additional diagnostics were computed using the Geweke and Heidelberger–Welch procedures.
 
-Among 700 chain-specific tests, 132 Geweke tests failed at the nominal 5% significance level, while only two Heidelberger–Welch stationarity tests failed.
+Among 700 chain-specific tests, 132 Geweke tests failed at the nominal 5\% significance level, while only two Heidelberger–Welch stationarity tests failed.
 
 To investigate the sensitivity of the Geweke results to the initial portion of the retained chains, the diagnostics were recomputed after excluding the first 1,000 and 2,000 posterior draws from each chain.
 
@@ -2856,29 +2856,6 @@ deviation was fixed at 0.7.
 \label{chap:results}
 
 % TODO: Revise section introduction and transitions after Models 2 and 3 are fitted.
-
-\section{Sampling diagnostics: baseline results}
-The baseline models were estimated using four chains, each with
-5,000 warm-up iterations and 10,000 retained draws. Neither run
-presented post-warm-up divergences. For the terminal model, the
-maximum reported rank-normalised $\widehat{R}$ was 1.00 rounded to two decimal points,
-with minimum bulk and tail effective sample sizes (ESS) of
-2,931 and 6,726, respectively. For the chokepoint model,
-the maximum reported $\widehat{R}$ was also 1.00, with
-minimum bulk and tail ESS of 1,693 and 3,698, respectively.
-The lowest ESS values in the chokepoint model were associated
-with the betweenness precision parameter.
-
-Both models therefore satisfied the prespecified screening
-criteria of no divergences, maximum $\widehat{R}\leq 1.01$,
-and minimum bulk and tail ESS of at least 400. The selected
-trace plots and within-chain autocorrelation functions in
-Appendix~\ref{app:mcmc_diagnostics} complement these numerical
-results. The betweenness loading and precision show relatively
-persistent autocorrelation in the chokepoint model. Overall,
-the diagnostics support satisfactory sampling behaviour,
-although they cannot establish model adequacy or guarantee
-complete exploration of the posterior distribution.
 
 \section{Baseline model results}
 \subsection{Terminal posterior analysis}
@@ -3294,6 +3271,161 @@ PageRank--articulation & 0.287 & 0.201 & $[0.139,0.268]$ \\
 \end{tabular}
 \end{table}
 
+\section{Sampling diagnostics}
+\label{sec:baseline_sampling_diagnostics}
+
+The baseline terminal and chokepoint models were estimated
+using four parallel chains, each with 5,000 warm-up
+iterations and 10,000 retained draws, resulting in
+40,000 posterior draws per model.
+
+Sampling performance was evaluated using rank-normalised
+$\widehat{R}$, bulk and tail effective sample sizes (ESS),
+post-warm-up divergences, and the Geweke and
+Heidelberger--Welch diagnostics. The latter two procedures
+were applied separately to each chain for the selected
+global parameters, using the retained posterior draws.
+
+Neither model presented post-warm-up divergences, and the maximum reported rank-normalised $\widehat{R}$
+was 1.00, rounded to two decimal places, for both models.
+
+For terminals, the minimum bulk and tail ESS were
+2,931 and 6,726, respectively. For chokepoints,
+the corresponding values were 1,693 and 3,698, with the lowest ESS values in the chokepoint model associated with the betweenness precision parameter.
+Both models therefore satisfied the CODA diagnostics criteria.
+
+The selected trace plots and within-chain autocorrelation functions presented in
+Appendix~\ref{app:mcmc_diagnostics}
+provide additional visual evidence of sampling
+behaviour. In particular, the betweenness loading
+and precision parameters exhibit relatively
+persistent autocorrelation in the chokepoint model,
+consistent with their comparatively lower effective sample sizes.
+
+For the terminal model, 102 out of 116
+parameter-chain tests (87.9\%) satisfied the
+criterion for passing the Geweke test, $|Z|\leq 1.96$. The remaining 14 tests
+exceeded the threshold, with a maximum absolute
+$Z$-score of 3.07. These exceedances were
+distributed across regression coefficients,
+response loadings, intercepts, and precision parameters.
+
+For the chokepoint model, 83 out of 88 tests
+(94.3\%) satisfied the same criterion.
+The five exceedances were concentrated
+primarily among the precision parameters
+of the continuous responses, with one
+additional exceedance involving the
+betweenness boundary-component loading.
+The maximum absolute $Z$-score was 2.46.
+
+Although these results indicate some differences
+between the early and late portions of individual
+chains, the tests were conducted separately for
+multiple parameters and chains without adjustment
+for multiple comparisons. Consequently, isolated
+exceedances should not be interpreted as
+conclusive evidence of non-convergence,
+particularly in the presence of satisfactory
+$\widehat{R}$, ESS, and divergence diagnostics.
+
+The Heidelberger--Welch procedure was used
+to assess stationarity and the Monte Carlo
+precision of posterior mean estimates.
+
+All 116 terminal and 88 chokepoint
+parameter-chain tests satisfied the
+stationarity criterion. For terminals,
+105 tests passed without excluding
+any additional draws, while 11 required
+the exclusion of between 1,000 and
+3,000 initial draws. For chokepoints,
+86 tests passed without additional
+exclusions, while the remaining two
+required the exclusion of 3,000 and
+4,000 draws, respectively.
+
+These exclusions were applied solely
+within the diagnostic procedure and
+did not modify the posterior samples
+used for inference.
+
+The half-width test assessed whether
+the half-width of the 95\% Monte Carlo
+confidence interval for the posterior
+mean was below 10\% of its absolute
+estimated value.
+All 88 chokepoint tests satisfied
+this criterion. For terminals,
+108 out of 116 tests (93.1\%)
+passed, while the remaining eight
+failures involved only two parameters:
+the seasonal regression coefficient
+associated with $\mathrm{month\_cos}$
+and the continuous intercept for
+counterparty HHI, each across all
+four chains.
+
+Notably, both parameters had posterior means
+close to zero, making the relative
+half-width criterion particularly
+sensitive to small absolute differences.
+These failures therefore do not
+necessarily indicate substantial
+Monte Carlo uncertainty in absolute
+terms.
+
+Table~\ref{tab:baseline_sampling_diagnostics} summarises the convergence and mixing diagnostics, together with the results of the Geweke and Heidelberger--Welch tests for both baseline models.
+
+\begin{table}[htbp]
+\centering
+\caption{Summary of sampling diagnostics for the
+baseline terminal and chokepoint models.
+Geweke and Heidelberger--Welch results refer
+to parameter-chain tests on selected global
+parameters.}
+\label{tab:baseline_sampling_diagnostics}
+\small
+\begin{tabular}{lcc}
+\hline
+Diagnostic & Terminals & Chokepoints \\
+\hline
+\multicolumn{3}{l}{\textit{MCMC convergence and mixing}} \\
+Post-warm-up divergences & 0 & 0 \\
+Maximum $\widehat{R}$ & 1.00 & 1.00 \\
+Minimum bulk ESS & 2,931 & 1,693 \\
+Minimum tail ESS & 6,726 & 3,698 \\
+\hline
+\multicolumn{3}{l}{\textit{Geweke diagnostic}} \\
+Total tests & 116 & 88 \\
+Passed & 102 (87.9\%) & 83 (94.3\%) \\
+Failed & 14 (12.1\%) & 5 (5.7\%) \\
+Maximum $|Z|$ & 3.07 & 2.46 \\
+\hline
+\multicolumn{3}{l}{\textit{Heidelberger--Welch diagnostic}} \\
+Stationarity passed & 116 (100\%) & 88 (100\%) \\
+Half-width passed & 108 (93.1\%) & 88 (100\%) \\
+Half-width failed & 8 (6.9\%) & 0 (0\%) \\
+\hline
+\end{tabular}
+\end{table}
+
+Overall, the combined diagnostics indicate
+satisfactory sampling behaviour for both
+baseline models. The absence of divergences,
+$\widehat{R}$ values close to one, and
+effective sample sizes above the specified
+thresholds provide the strongest evidence
+of adequate mixing.
+
+The Geweke exceedances and the limited
+half-width failures in the terminal model
+suggest some parameter-specific differences
+in sampling behaviour, but do not reveal
+a systematic convergence problem.
+Moreover, all selected parameter-chain
+tests satisfied the Heidelberger--Welch
+stationarity criterion.
 
 \section{Prior sensitivity results}
 \subsection{Prior predictive assessment}
