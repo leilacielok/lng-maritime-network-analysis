@@ -29,7 +29,7 @@ from datetime import datetime, timezone
 from importlib.metadata import version, PackageNotFoundError
 
 from common import BASE_DIR, PANEL_DIR, OUTPUT_DIR, SPECS, prepare_panel
-from baseline import prior_specification, build_model, initial_values, chokepoint_initial_values
+from baseline import prior_specification, build_model, initial_values, chokepoint_initial_values, rank_two_initial_values
 import numpy as np
 import pandas as pd
 
@@ -46,9 +46,9 @@ def fit_model(data, kind, args, destination):
     from diagnostics import predictive_checks
     if args.model == "node_effects":
         from node_effects import build_factor_mean
-        model = build_model(data, factor_builder=build_factor_mean)
+        model = build_model(data, factor_builder=build_factor_mean, rank=args.rank)
     else:
-        model = build_model(data)
+        model = build_model(data, rank=args.rank)
     with model:
         prior_count_key = ("draws" if "draws" in inspect.signature(pm.sample_prior_predictive).parameters
                            else "samples")
@@ -60,8 +60,9 @@ def fit_model(data, kind, args, destination):
         idata = pm.sample(draws=args.draws, tune=args.tune, chains=args.chains,
                           cores=args.cores, target_accept=args.target_accept,
                           init="adapt_diag",
-                          initvals=(initial_values(data, args.chains, args.seed) if kind == "terminal"
-                                    else chokepoint_initial_values(data, args.chains, args.seed)),
+                          initvals=(rank_two_initial_values(data, args.chains, args.seed) if args.rank == 2
+                                     else initial_values(data, args.chains, args.seed) if kind == "terminal"
+                                     else chokepoint_initial_values(data, args.chains, args.seed)),
                           random_seed=args.seed, return_inferencedata=True)
         if (idata.posterior.sizes["chain"] != args.chains
                 or idata.posterior.sizes["draw"] != args.draws):
@@ -82,11 +83,17 @@ def fit_model(data, kind, args, destination):
     if args.model == "node_effects":
         parameters += ["sigma_mu"]
     diagnostic = run_diagnostics(idata, data, kind, destination, parameters)
-    export_findings(idata, data, kind, destination, parameters, diagnostic, SPECS)
+    if args.rank == 1:
+        export_findings(idata, data, kind, destination, parameters, diagnostic, SPECS)
+    else:
+        # findings.py is rank-one-specific; retain rank-two summaries without mislabelling scores.
+        az.summary(idata, var_names=parameters).to_csv(destination / "parameter_summary.csv")
 
 def main(default_model="baseline"):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model", choices=["baseline", "node_effects"], default=default_model)
+    parser.add_argument("--rank", type=int, choices=[1, 2], default=1,
+                        help="Latent rank (rank 1 preserves original baseline)")
     parser.add_argument("--node-sd-prior", type=float, default=1.0,
                         help="HalfNormal scale for sigma_mu in node_effects model")
     parser.add_argument("--terminal-panel", type=Path, default=PANEL_DIR / "terminal_criticality_model_panel.csv")
@@ -109,6 +116,8 @@ def main(default_model="baseline"):
     parser.add_argument("--target-accept", type=float, default=.80)
     parser.add_argument("--seed", type=int, default=20261008)
     args = parser.parse_args()
+    if args.rank == 2 and args.model != "baseline":
+        parser.error("--rank 2 currently supports --model baseline only")
     profiles = {"baseline": "original", "CON": "regularized", "RS": "response_precision"}
     expected_profile = profiles[args.model_group]
     if args.prior_profile is not None and args.prior_profile != expected_profile:
@@ -134,6 +143,7 @@ def main(default_model="baseline"):
             prepare_node_effects(item, kind, args.node_sd_prior)
         item["precision_prior_sd"] = args.precision_prior_sd
         item["prior_profile"] = args.prior_profile
+        item["audit"]["rank"] = args.rank
         item["audit"]["prior_specification"] = {**prior_specification(kind, args.prior_profile),
                                                   "precision_log_sd": args.precision_prior_sd}
         item["audit"]["response_likelihood_scale"] = "original (0,1]"
@@ -161,6 +171,9 @@ def main(default_model="baseline"):
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     group_dir = (args.output_dir / "baseline" if args.model_group == "baseline"
                  else args.output_dir / "sensitivity_analysis" / args.model_group)
+    if args.rank == 2:
+        group_dir = (args.output_dir / "rank_two" if args.model_group == "baseline"
+                     else args.output_dir / "rank_two" / "sensitivity_analysis" / args.model_group)
     if args.model == "node_effects":
         group_dir = (args.output_dir / "node_effects" if args.model_group == "baseline"
                      else args.output_dir / "node_effects" / "sensitivity_analysis" / args.model_group)
