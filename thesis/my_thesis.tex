@@ -32,7 +32,7 @@
 \usepackage{subcaption}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-
+\usepackage{multirow}
 
 % ---(Colors)-------------------------------------------------------------
 \ifpdf
@@ -2797,67 +2797,12 @@ indicating more efficient sampling
 % TODO: Confirm sampling settings separately for Models 2 and 3 once estimated.
 % Appendix trace/ACF plots should refer to the longer-chain baseline runs.
 
-\section{Prior sensitivity analysis}
-\label{sec:prior_sensitivity}
-
-To assess the implications of the prior assumptions and the
-sensitivity of posterior findings, two alternative prior
-profiles were investigated on the same estimation samples.
-The analysis considers both the prior predictive distributions
-and the sensitivity of posterior inference to these modifications.
-
-\subsection{Alternative prior specifications}
-\label{subsec:alternative_priors}
-Three prior specifications were considered: the baseline
-described above, an alternative with more concentrated
-priors for selected parameters, and a third specification
-with response-specific priors for the Beta precision parameters.
-The alternative specifications were informed by the
-observed response distributions and prior predictive
-simulations, rather than independently elicited prior
-information. 
-
-Under the baseline priors, prior predictive simulations
-generated relatively broad distributions for several
-network measures, particularly those characterised by
-small observed values, such as PageRank, betweenness
-and flow share.
-
-In response to these findings, the second specification
-introduced more concentrated prior distributions for
-selected intercepts and factor loadings.
-Specifically, the standard deviations of the
-logit-intercept priors for the small-valued continuous
-responses were reduced from 1.5 to 0.7, while the
-PageRank loading scale and the loading standard
-deviations for betweenness and flow share were reduced
-from 1 to 0.5.
-For the boundary components, intercept prior standard
-deviations were reduced from 1.5 to 1, and
-boundary-loading standard deviations from 1 to 0.5.
-The prior centres were retained, as were the original
-priors for the terminal HHI and dependence interior
-components, regression coefficients, and
-binary-response parameters.
-
-The third specification retained the modifications
-introduced in the second specification and additionally
-introduced response-specific priors for the Beta
-precision parameters.
-
-The corresponding prior medians were set to $ (\widetilde{\phi}_1,\widetilde{\phi}_2,\widetilde{\phi}_3) = (300,10,10)$
-for terminal PageRank, HHI, and dependence,
-respectively, and to $(\widetilde{\phi}_1,\widetilde{\phi}_2,\widetilde{\phi}_3)=(500,100,100)$
-for chokepoint PageRank, betweenness, and flow share, respectively.
-For each precision prior, the log-scale standard
-deviation was fixed at 0.7.
-
 \chapter{Results and discussion}
 \label{chap:results}
 
 % TODO: Revise section introduction and transitions after Models 2 and 3 are fitted.
 
-\section{Baseline model results}
+\section{Rank-one model results}
 \subsection{Terminal posterior analysis}
 \label{sec:terminal_results}
 
@@ -3271,28 +3216,29 @@ PageRank--articulation & 0.287 & 0.201 & $[0.139,0.268]$ \\
 \end{tabular}
 \end{table}
 
-\section{Sampling diagnostics}
-\label{sec:baseline_sampling_diagnostics}
-
-The baseline terminal and chokepoint models were estimated
-using four parallel chains, each with 5,000 warm-up
-iterations and 10,000 retained draws, resulting in
-40,000 posterior draws per model.
+\subsection{Sampling diagnostics}
+\label{subsec:baseline_sampling_diagnostics}
 
 Sampling performance was evaluated using rank-normalised
 $\widehat{R}$, bulk and tail effective sample sizes (ESS),
 post-warm-up divergences, and the Geweke and
-Heidelberger--Welch diagnostics. The latter two procedures
-were applied separately to each chain for the selected
-global parameters, using the retained posterior draws.
+Heidelberger--Welch diagnostics. 
+The Geweke and Heidelberger--Welch diagnostics were applied separately to each chain for all distinct global model parameters, 
+using the retained posterior draws. These procedures covered 26 parameters for terminals and 19 for chokepoints, corresponding to 104 and 76 parameter-chain tests, respectively. 
+Observation-level latent factors were excluded from these additional tests but included in the computation of $\widehat{R}$ and effective sample sizes.
 
-Neither model presented post-warm-up divergences, and the maximum reported rank-normalised $\widehat{R}$
-was 1.00, rounded to two decimal places, for both models.
+Neither model presented post-warm-up divergences,
+and the maximum reported rank-normalised
+$\widehat{R}$ was 1.00, rounded to two decimal
+places, for both models.
 
-For terminals, the minimum bulk and tail ESS were
-2,931 and 6,726, respectively. For chokepoints,
-the corresponding values were 1,693 and 3,698, with the lowest ESS values in the chokepoint model associated with the betweenness precision parameter.
-Both models therefore satisfied the CODA diagnostics criteria.
+For terminals, the minimum bulk and tail ESS
+were 2,931, associated with the
+lagged exporter coefficient, and 6,726, for the HHI boundary loading.
+For chokepoints, the corresponding values were
+1,693 and 3,698, both associated with the
+betweenness precision parameter, indicating satisfactory convergence
+and sampling efficiency.
 
 The selected trace plots and within-chain autocorrelation functions presented in
 Appendix~\ref{app:mcmc_diagnostics}
@@ -3302,16 +3248,13 @@ and precision parameters exhibit relatively
 persistent autocorrelation in the chokepoint model,
 consistent with their comparatively lower effective sample sizes.
 
-For the terminal model, 102 out of 116
-parameter-chain tests (87.9\%) satisfied the
-criterion for passing the Geweke test, $|Z|\leq 1.96$. The remaining 14 tests
-exceeded the threshold, with a maximum absolute
-$Z$-score of 3.07. These exceedances were
-distributed across regression coefficients,
-response loadings, intercepts, and precision parameters.
-
-For the chokepoint model, 83 out of 88 tests
-(94.3\%) satisfied the same criterion.
+For the terminal model, 92 out of 104
+parameter-chain tests (88.5\%) satisfied
+$|Z|\leq 1.96$. The remaining 12 tests
+exceeded the threshold, with a maximum
+absolute $Z$-score of 3.07.
+For the chokepoint model, 71 out of 76
+tests (93.4\%) satisfied the same criterion.
 The five exceedances were concentrated
 primarily among the precision parameters
 of the continuous responses, with one
@@ -3333,31 +3276,25 @@ The Heidelberger--Welch procedure was used
 to assess stationarity and the Monte Carlo
 precision of posterior mean estimates.
 
-All 116 terminal and 88 chokepoint
+All 104 terminal and 76 chokepoint
 parameter-chain tests satisfied the
-stationarity criterion. For terminals,
-105 tests passed without excluding
-any additional draws, while 11 required
-the exclusion of between 1,000 and
-3,000 initial draws. For chokepoints,
-86 tests passed without additional
-exclusions, while the remaining two
-required the exclusion of 3,000 and
+stationarity criterion. For terminals, 93 tests passed without
+excluding any additional draws, while
+11 required the exclusion of between
+1,000 and 3,000 initial draws.
+For chokepoints, 74 tests passed without
+additional exclusions, while the remaining
+two required the exclusion of 3,000 and
 4,000 draws, respectively.
-
-These exclusions were applied solely
-within the diagnostic procedure and
-did not modify the posterior samples
-used for inference.
 
 The half-width test assessed whether
 the half-width of the 95\% Monte Carlo
 confidence interval for the posterior
 mean was below 10\% of its absolute
 estimated value.
-All 88 chokepoint tests satisfied
+All 76 chokepoint parameter-chain tests satisfied
 this criterion. For terminals,
-108 out of 116 tests (93.1\%)
+96 out of 104 tests (92.3\%)
 passed, while the remaining eight
 failures involved only two parameters:
 the seasonal regression coefficient
@@ -3365,7 +3302,6 @@ associated with $\mathrm{month\_cos}$
 and the continuous intercept for
 counterparty HHI, each across all
 four chains.
-
 Notably, both parameters had posterior means
 close to zero, making the relative
 half-width criterion particularly
@@ -3375,7 +3311,8 @@ necessarily indicate substantial
 Monte Carlo uncertainty in absolute
 terms.
 
-Table~\ref{tab:baseline_sampling_diagnostics} summarises the convergence and mixing diagnostics, together with the results of the Geweke and Heidelberger--Welch tests for both baseline models.
+Table~\ref{tab:baseline_sampling_diagnostics} summarises the convergence and mixing diagnostics, 
+together with the results of the Geweke and Heidelberger--Welch tests for both baseline models.
 
 \begin{table}[htbp]
 \centering
@@ -3410,115 +3347,137 @@ Half-width failed & 8 (6.9\%) & 0 (0\%) \\
 \end{tabular}
 \end{table}
 
+Additional numerical results, including the
+parameters and chains associated with the
+minimum ESS values, Geweke exceedances,
+and Heidelberger--Welch diagnostic exceptions,
+are reported in Appendix~\ref{app:mcmc_diagnostics}.
+
 Overall, the combined diagnostics indicate
 satisfactory sampling behaviour for both
-baseline models. The absence of divergences,
-$\widehat{R}$ values close to one, and
-effective sample sizes above the specified
-thresholds provide the strongest evidence
-of adequate mixing.
+baseline models.
+The absence of divergences, $\widehat{R}$
+values close to one, and sufficiently large
+effective sample sizes provide complementary
+evidence of satisfactory posterior exploration
+and sampling efficiency.
 
-The Geweke exceedances and the limited
-half-width failures in the terminal model
-suggest some parameter-specific differences
-in sampling behaviour, but do not reveal
-a systematic convergence problem.
-Moreover, all selected parameter-chain
-tests satisfied the Heidelberger--Welch
-stationarity criterion.
+\section{Node-specific intercept model results}
+% TODO: Insert results and posterior predictive assessment.
+
+\section{Rank-two model results}
+% TODO: Insert results and posterior predictive assessment.
 
 \section{Prior sensitivity results}
-\subsection{Prior predictive assessment}
+\label{sec:prior_sensitivity}
+To assess the implications of the prior assumptions and the sensitivity of posterior
+findings, two alternative prior profiles were investigated on the same estimation samples.
+The analysis considers both the prior predictive distributions and the sensitivity
+of posterior inference to these modifications.
 
-Prior predictive simulations were used to examine
-the response distributions implied by the three
-prior specifications before conditioning on the
-observed responses. Table~\ref{tab:prior_predictive_comparison}
-compares the observed standard deviations with
-the mean standard deviations across prior predictive
-replications under each specification.
+\subsection{Alternative prior specifications}
+Three prior specifications were considered: the original specification (ORG), described above; 
+a concentrated specification (CON), with more concentrated priors for selected parameters; and a response-specific precision specification (RS), 
+allowing prior distributions to vary across response variables.
+The alternative specifications were informed by the observed response distributions and prior predictive
+simulations, rather than independently elicited prior information.
+
+Under the original priors, prior predictive simulations generated relatively broad
+distributions for several network measures, particularly those characterised by small
+observed values, such as PageRank, betweenness and flow share.
+In response to these findings, the second specification introduced more concentrated
+prior distributions for selected intercepts and factor loadings. Specifically, the standard
+deviations of the logit-intercept priors for the small-valued continuous responses
+were reduced from 1.5 to 0.7, while the PageRank loading scale and the loading standard
+deviations for betweenness and flow share were reduced from 1 to 0.5. For the
+boundary components, intercept prior standard deviations were reduced from 1.5 to
+1, and boundary-loading standard deviations from 1 to 0.5. The prior centres were
+retained, as were the original priors for the terminal HHI and dependence interior
+components, regression coefficients, and binary-response parameters.
+The third specification retained the modifications introduced in the concentrated one
+and additionally introduced response-specific priors for the Beta precision
+parameters.
+
+The corresponding prior medians were set to $(\tilde{\phi}_1, \tilde{\phi}_2, \tilde{\phi}_3) = (300, 10, 10)$ for terminal
+PageRank, HHI, and dependence, respectively, and to $(\tilde{\phi}_1, \tilde{\phi}_2, \tilde{\phi}_3) = (500, 100, 100)$ for
+chokepoint PageRank, betweenness, and flow share, respectively. For each precision
+prior, the log-scale standard deviation was fixed at 0.7.
+
+\subsection{Prior predictive assessment}
+Prior predictive simulations were conducted under the rank-one model to examine the response 
+distributions implied by the three prior specifications before conditioning on the observed responses. 
+The model structure was held fixed across specifications, allowing the analysis to isolate the influence 
+of the prior distributions. Table~\ref{tab:prior_predictive_comparison} compares the observed standard deviations with the mean 
+standard deviations across prior predictive replications under each specification.
 
 \begin{table}[htbp]
 \centering
-\caption{Observed standard deviations and mean prior
-predictive standard deviations under the three prior
-specifications.}
+\caption{Observed and mean prior predictive standard
+deviations under the three prior specifications.}
 \label{tab:prior_predictive_comparison}
 \begin{tabular}{llrrrr}
-\hline
-Node type & Response & Observed & Baseline & Second & Third \\
-\hline
-Terminal & PageRank    & 0.0133 & 0.1065 & 0.0584 & 0.0289 \\
-\hline
-Chokepoint & PageRank   & 0.0069 & 0.0959 & 0.0542 & 0.0228 \\
-           & Betweenness & 0.0135 & 0.0599 & 0.0329 & 0.0154 \\
-           & Flow share  & 0.0201 & 0.0870 & 0.0546 & 0.0278 \\
-\hline
+\toprule
+Node type & Response & Observed & ORG & CON & RS \\
+\midrule
+Terminal
+    & PageRank & 0.0133 & 0.1065 & 0.0584 & 0.0289 \\
+    & Counterparty HHI & 0.3254 & 0.2880 & 0.2935 & 0.2935 \\
+    & Role-specific dependence & 0.3219 & 0.2854 & 0.2867 & 0.2867 \\
+\midrule
+Chokepoint
+    & PageRank & 0.0069 & 0.0959 & 0.0542 & 0.0228 \\
+    & Betweenness & 0.0135 & 0.0599 & 0.0329 & 0.0154 \\
+    & Flow share & 0.0201 & 0.0870 & 0.0546 & 0.0278 \\
+\bottomrule
 \end{tabular}
 \end{table}
 
-Under the baseline specification, several continuous
-responses exhibited substantially greater prior
-predictive dispersion than observed in the data.
+For both node types, the original specification (ORG) generated substantially greater PageRank dispersion than observed. 
+The concentrated specification (CON) reduced this discrepancy, while the response-specific precision specification (RS) produced further improvements. 
+For chokepoints, similar reductions were observed for betweenness and flow share, with RS yielding prior predictive standard deviations closer to their empirical counterparts.
 
-The second specification reduced the simulated
-dispersion of PageRank, betweenness and flow share,
-with further reductions under the third specification.
-The latter produced standard deviations closer to
-the observed values, particularly for chokepoint
-betweenness, although substantial differences
-remained for PageRank.
+For terminals, the prior predictive standard deviations of counterparty HHI and role-specific dependence remained relatively stable across specifications and were slightly below their observed values. 
+This is consistent with the unchanged response-specific precision priors for HHI and dependence between CON and RS.
 
-The modifications had a more limited effect on
-the terminal HHI and dependence distributions,
-whose prior predictive boundary frequencies
-remained relatively high.
-
-These results indicate that the alternative
-specifications imply less dispersed prior
-predictive distributions for several responses,
-without eliminating all differences from the
-empirical distributions. 
+However, the prior predictive distributions continued to assign excessive probability to the boundary value of one. Under RS, the mean predicted proportions were approximately 0.492 for HHI and 0.504 for dependence, compared with observed proportions of 0.341 and 0.208, respectively. 
+These discrepancies remained largely unchanged across the three specifications, indicating that the alternative priors did not adequately address the excessive prior predictive boundary mass. The corresponding results are reported in Appendix Table~\ref{tab:prior_predictive_boundary}.
 
 \subsection{Posterior sensitivity and predictive robustness}
 \label{subsec:posterior_sensitivity}
 
-To assess the sensitivity of posterior inference
-to more concentrated priors, the models were
-re-estimated under the third specification and
-compared with the baseline results.
+To assess the sensitivity of posterior inference to the alternative prior assumptions, 
+the rank-one models were re-estimated under the response-specific precision specification (RS) 
+and compared with the original specification (ORG).
 
-The alternative terminal fit produced no divergent
-transitions, a maximum reported $\widehat{R}$ of 1.01,
-a minimum bulk effective sample size (ESS) of 782,
-and a minimum tail ESS of 2,037.
-For chokepoints, no divergences were observed and
-the maximum reported $\widehat{R}$ was 1.01, with a minimum tail ESS of 780.
-However, the minimum bulk ESS was 359 for the
-betweenness precision parameter, below the
-screening threshold of 400.
-Estimates involving this parameter should therefore be interpreted with some caution
-due to reduced Monte Carlo precision.
+The alternative terminal fit produced no divergent transitions, a maximum reported $\widehat{R}$ of 1.01, a minimum bulk effective sample size (ESS) of 782, and a minimum tail ESS of 2,037. The corresponding values under ORG were 1.01, 817, and 1,958, respectively.
+
+For chokepoints, neither specification produced divergent transitions, and the maximum reported $\widehat{R}$ was 1.01 in both cases. However, the minimum bulk ESS decreased from 472 under ORG to 359 under RS, while the minimum tail ESS decreased from 905 to 780. 
+The lowest bulk ESS under both specifications was associated with the betweenness precision parameter. Under RS, this value fell below the commonly recommended minimum of 400 effective samples, indicating reduced Monte Carlo precision for this parameter.
+
+The complete diagnostic comparison, including the parameters associated with the reported extrema, is provided in Appendix Table~\ref{tab:prior_sensitivity_diagnostics}.
 
 Table~\ref{tab:prior_sensitivity_coefficients}
-compares the posterior means and 95\% HDIs
-of all regression coefficients under the
-two specifications.
+compares the posterior means and 95\% highest-density
+intervals (HDIs) of the regression coefficients
+under the original and response-specific prior specifications, showing that the regression coefficients remained relatively stable, with similar posterior
+means and credible intervals.
 
 \begin{table}[htbp]
 \centering
 \small
 \caption{Posterior means and 95\% highest-density intervals
-(HDIs) for regression coefficients under the baseline
-and alternative prior specifications.}
+(HDIs) for regression coefficients under the original
+(ORG) and response-specific precision (RS) prior specifications.}
 \label{tab:prior_sensitivity_coefficients}
 
 \begin{tabular}{lcc}
-\hline
-Covariate & Baseline & Alternative \\
-\hline
+\toprule
+Covariate & ORG & RS \\
+\midrule
+
 \multicolumn{3}{l}{\textit{Terminals}} \\
-\hline
+\midrule
+
 Lagged neighbour activity
 & 0.096 [0.057, 0.137]
 & 0.093 [0.055, 0.132] \\
@@ -3547,9 +3506,10 @@ Lagged exporter indicator
 & 1.392 [1.296, 1.488]
 & 1.407 [1.311, 1.504] \\
 
-\hline
+\midrule
 \multicolumn{3}{l}{\textit{Chokepoints}} \\
-\hline
+\midrule
+
 Lagged neighbour activity
 & 0.103 [0.042, 0.170]
 & 0.103 [0.040, 0.168] \\
@@ -3566,13 +3526,9 @@ Month cosine
 & -0.064 [-0.128, -0.004]
 & -0.065 [-0.125, -0.004] \\
 
-\hline
+\bottomrule
 \end{tabular}
 \end{table}
-
-The regression coefficients remained relatively stable
-across the two specifications, with similar posterior
-means and credible intervals.
 
 For terminals, the positive associations with lagged
 neighbour activity, voyage distance, capacity and
@@ -3594,11 +3550,10 @@ changed from $-1.659$ to $-0.980$.
 Both retained their negative directions, although
 their magnitudes changed.
 
-Posterior predictive checks were also compared
+In-sample posterior predictive checks were also compared
 to examine whether the alternative specification
 improved the reproduction of selected observed
-statistics. These checks were conditional and
-in-sample, as in the preceding analyses.
+statistics.
 Table~\ref{tab:prior_sensitivity_ppc}
 reports the corresponding replicated statistics
 under both specifications.
@@ -3606,15 +3561,16 @@ under both specifications.
 \begin{table}[htbp]
 \centering
 \caption{Selected posterior predictive statistics
-under the baseline and alternative prior specifications.
+under the original (ORG) and response-specific
+precision (RS) prior specifications.
 Replicated values are posterior predictive means,
-except for correlations, for which medians are reported.
-Checks were based on 200 replicated datasets.}
+except for correlations, for which medians are
+reported. Checks were based on 200 replicated datasets.}
 \label{tab:prior_sensitivity_ppc}
 
 \begin{tabular}{llrrr}
 \hline
-Model & Statistic & Observed & Baseline & Alternative \\
+Model & Statistic & Observed & ORG & RS \\
 \hline
 Terminal
 & Articulation--bridge correlation
@@ -3651,20 +3607,12 @@ inaccurately reproduced; for chokepoints, both specifications underestimated
 the observed dispersion of flow share and
 overestimated its median.
 
-Given the limited changes in posterior inference
-and predictive performance, together with the
-lower bulk ESS in the alternative chokepoint fit,
-the baseline specification was retained for the
-main analysis, while the alternative provides a
-sensitivity assessment of the results under
-more concentrated priors.
-
-
-\section{Model 2: Node-specific intercept results}
-% TODO: Insert results and posterior predictive assessment.
-
-\section{Model 3: Rank-two results}
-% TODO: Insert results and posterior predictive assessment.
+Given the limited changes in posterior inference and predictive performance, together 
+with the minimum bulk ESS falling below the recommended threshold in the 
+alternative chokepoint fit, the original specification (ORG) was retained for the main analysis. 
+The response-specific precision specification (RS) therefore serves as a sensitivity assessment, 
+indicating that the main posterior findings are relatively robust to the considered changes 
+in prior assumptions, while the identified predictive limitations remain largely unresolved.
 
 \section{Comparative discussion and limitations}
 \subsection{Model limitations and implications}
@@ -5609,8 +5557,326 @@ not have a standard conjugate form.
 \chapter{Model diagnostics}
 \label{app:model_diagnostics}
 
-\section{MCMC convergence diagnostics}
+\section{Prior sensitivity analysis}
+\label{app:prior_sensitivity}
+
+\subsection{Prior predictive checks}
+\label{app:prior_predictive}
+
+Table~\ref{tab:prior_predictive_boundary} reports
+the observed proportions of values equal to one
+for the two one-inflated terminal responses,
+together with the corresponding mean proportions
+across prior predictive replications under the
+three prior specifications.
+
+\begin{table}[htbp]
+\centering
+\caption{Observed and mean prior predictive proportions
+of values equal to one for terminal responses under
+the three prior specifications.}
+\label{tab:prior_predictive_boundary}
+\begin{tabular}{lrrrr}
+\toprule
+Response & Observed & ORG & CON & RS \\
+\midrule
+Counterparty HHI
+    & 0.3409 & 0.5063 & 0.4922 & 0.4920 \\
+Role-specific dependence
+    & 0.2076 & 0.4960 & 0.5042 & 0.5039 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{MCMC sampling diagnostics}
+\label{app:prior_sensitivity_diagnostics}
+
+Table~\ref{tab:prior_sensitivity_diagnostics} reports the maximum rank-normalised $\widehat{R}$ and minimum bulk and tail effective sample sizes for the original (ORG) and response-specific precision (RS) prior specifications of the rank-one models. 
+All four fits were obtained using four chains, each with 1,500 warm-up iterations and 2,000 retained draws, ensuring comparable sampling configurations.
+
+For terminals, the minimum bulk ESS was associated with the lagged exporter coefficient under both specifications, while the minimum tail ESS concerned the HHI boundary loading under ORG and a latent factor mean under RS. 
+For chokepoints, the betweenness precision parameter exhibited the lowest bulk ESS under both specifications, decreasing from 472 under ORG to 359 under RS. 
+
+The maximum reported $\widehat{R}$ was 1.01 across all four fits, indicating no substantial between-chain discrepancies according to this diagnostic. 
+Nevertheless, the lower effective sample sizes for selected parameters, particularly the betweenness precision under RS, indicate reduced Monte Carlo precision for those posterior estimates.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{MCMC convergence diagnostics for the original
+(ORG) and response-specific precision (RS) prior
+specifications of the rank-one models.}
+\label{tab:prior_sensitivity_diagnostics}
+
+\begin{tabular}{lllrl}
+\toprule
+Node type & Prior & Diagnostic & Value & Parameter \\
+\midrule
+
+\multirow{6}{*}{Terminal}
+& \multirow{3}{*}{ORG}
+& Max $\widehat{R}$ & 1.01 & Multiple parameters \\
+& & Min bulk ESS & 817 & $\beta_{\mathrm{exporter}}$ \\
+& & Min tail ESS & 1958 & HHI boundary loading \\
+
+\cmidrule(lr){2-5}
+
+& \multirow{3}{*}{RS}
+& Max $\widehat{R}$ & 1.01 & HHI interior intercept \\
+& & Min bulk ESS & 782 & $\beta_{\mathrm{exporter}}$ \\
+& & Min tail ESS & 2037 & Factor mean (obs.\ 1927) \\
+
+\midrule
+
+\multirow{6}{*}{Chokepoint}
+& \multirow{3}{*}{ORG}
+& Max $\widehat{R}$ & 1.01 & Betweenness loading \\
+& & Min bulk ESS & 472 & Betweenness precision \\
+& & Min tail ESS & 905 & Betweenness precision \\
+
+\cmidrule(lr){2-5}
+
+& \multirow{3}{*}{RS}
+& Max $\widehat{R}$ & 1.01 & Multiple parameters \\
+& & Min bulk ESS & 359 & Betweenness precision \\
+& & Min tail ESS & 780 & Betweenness intercept \\
+
+\bottomrule
+\end{tabular}
+
+\begin{minipage}{0.95\textwidth}
+\vspace{0.2cm}
+\footnotesize
+\textit{Note:} All models were estimated using four
+chains, with 1,500 warm-up iterations and 2,000
+retained draws per chain. Maximum $\widehat{R}$
+values are reported to two decimal places.
+\end{minipage}
+
+\end{table}
+
+\section{Rank-one MCMC convergence diagnostics}
 \label{app:mcmc_diagnostics}
+
+\subsection{R-hat and Effective Sample Sizes}
+
+Table~\ref{tab:baseline_detailed_mixing}
+reports the maximum rank-normalised $\widehat{R}$
+and minimum bulk and tail effective sample sizes
+for the rank-one terminal and chokepoint models,
+together with the parameters associated with
+the minimum ESS values.
+
+For terminals, the minimum bulk ESS was associated
+with the lagged exporter coefficient, while the
+minimum tail ESS concerned the loading governing
+the probability of counterparty HHI equal to one.
+For chokepoints, both minimum ESS values were
+associated with the betweenness precision parameter,
+indicating comparatively less efficient sampling
+for this parameter.
+
+All reported $\widehat{R}$ values were equal to
+1.00 when rounded to two decimal places.
+The ESS values nevertheless indicate differences
+in sampling efficiency across parameters.
+
+\begin{table}[htbp]
+\centering
+\small
+
+\caption{Detailed MCMC convergence and mixing
+diagnostics for the baseline rank-one terminal
+and chokepoint models.}
+
+\label{tab:baseline_detailed_mixing}
+
+\begin{tabular}{llrl}
+\toprule
+Node type & Diagnostic & Value & Parameter \\
+\midrule
+
+\multirow{3}{*}{Terminal}
+& Maximum $\widehat{R}$
+& 1.00
+& Multiple parameters \\
+
+& Minimum bulk ESS
+& 2,931
+& Lagged exporter coefficient \\
+
+& Minimum tail ESS
+& 6,726
+& HHI boundary loading \\
+
+\midrule
+
+\multirow{3}{*}{Chokepoint}
+& Maximum $\widehat{R}$
+& 1.00
+& Multiple parameters \\
+
+& Minimum bulk ESS
+& 1,693
+& Betweenness precision \\
+
+& Minimum tail ESS
+& 3,698
+& Betweenness precision \\
+
+\bottomrule
+\end{tabular}
+
+\begin{minipage}{0.95\textwidth}
+\vspace{0.2cm}
+\footnotesize
+\textit{Note:} Both models were estimated using
+four chains, each with 5,000 warm-up iterations
+and 10,000 retained draws. Maximum $\widehat{R}$
+values are reported to two decimal places.
+\end{minipage}
+
+\end{table}
+
+\subsection{Geweke diagnostic}
+
+The Geweke diagnostic compares estimates obtained
+from the first 10\% and last 50\% of each chain.
+The reference criterion was $|Z|\leq 1.96$,
+corresponding to a two-sided significance level
+of 0.05.
+
+For terminals, 92 out of 104 parameter-chain
+tests (88.5\%) satisfied this criterion, while
+12 tests (11.5\%) exceeded the reference value.
+For chokepoints, 71 out of 76 tests (93.4\%)
+satisfied the criterion, with five exceedances
+(6.6\%).
+
+Table~\ref{tab:baseline_geweke_details}
+reports the parameter-chain combinations
+associated with these exceedances.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Parameter-chain combinations with
+absolute Geweke Z-scores exceeding 1.96
+in the baseline rank-one models.}
+\label{tab:baseline_geweke_details}
+
+\begin{tabular}{llrr}
+\toprule
+Node type & Parameter & Chain & $Z$ \\
+\midrule
+
+\multirow{12}{*}{Terminal}
+& Neighbour activity coefficient & 1 & 2.526 \\
+& Month cosine coefficient & 3 & -1.969 \\
+& Terminal age coefficient & 2 & 2.708 \\
+& Lagged exporter coefficient & 3 & 3.068 \\
+& Dependence loading & 3 & -2.366 \\
+& Global bridge binary loading & 1 & -2.397 \\
+& Global bridge binary intercept & 3 & 2.368 \\
+& HHI boundary intercept & 3 & 2.032 \\
+& Dependence boundary intercept & 3 & 2.766 \\
+& Dependence boundary loading & 2 & -3.034 \\
+& PageRank anchor loading & 3 & -2.438 \\
+& Dependence precision & 1 & -2.888 \\
+
+\midrule
+
+\multirow{5}{*}{Chokepoint}
+& Betweenness zero-component loading & 3 & -2.232 \\
+& PageRank precision & 3 & -2.035 \\
+& Betweenness precision & 4 & -2.465 \\
+& Flow-share precision & 2 & 1.999 \\
+& Flow-share precision & 3 & -2.215 \\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+The terminal exceedances were distributed across
+regression coefficients, response loadings,
+intercepts, and precision parameters.
+For chokepoints, four of the five exceedances
+involved precision parameters, while the
+remaining one concerned the betweenness
+zero-component loading.
+
+\subsection{Heidelberger--Welch diagnostic}
+
+The Heidelberger--Welch procedure assesses
+stationarity and the Monte Carlo precision
+of posterior mean estimates.
+Table~\ref{tab:baseline_heidel_stationarity}
+reports the parameter-chain combinations
+requiring additional exclusions.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Parameter-chain combinations requiring
+additional initial-draw exclusions in the
+Heidelberger--Welch stationarity diagnostic.}
+\label{tab:baseline_heidel_stationarity}
+
+\begin{tabular}{llrr}
+\toprule
+Node type & Parameter & Chain & Excluded draws \\
+\midrule
+
+\multirow{11}{*}{Terminal}
+& Voyage distance coefficient & 3 & 1,000 \\
+& Capacity coefficient & 2 & 2,000 \\
+& Lagged exporter coefficient & 3 & 1,000 \\
+& Global bridge binary loading & 4 & 1,000 \\
+& PageRank intercept & 3 & 1,000 \\
+& HHI interior intercept & 3 & 3,000 \\
+& Articulation-point intercept & 3 & 3,000 \\
+& Global bridge binary intercept & 3 & 1,000 \\
+& Dependence boundary intercept & 3 & 1,000 \\
+& HHI boundary loading & 4 & 2,000 \\
+& PageRank precision & 3 & 2,000 \\
+
+\midrule
+
+\multirow{2}{*}{Chokepoint}
+& Betweenness interior intercept & 3 & 4,000 \\
+& Articulation-point intercept & 3 & 3,000 \\
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+The half-width test assesses the precision of posterior mean estimates by requiring the half-width of the 95\% 
+Monte Carlo confidence interval to be less than 10\% of the absolute estimated mean. Table~\ref{tab:baseline_heidel_halfwidth} 
+reports the relative half-width values for the parameters that did not satisfy this criterion.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Relative half-width values exceeding
+the reference criterion of 0.10 in the
+baseline terminal model.}
+\label{tab:baseline_heidel_halfwidth}
+
+\begin{tabular}{lrrrr}
+\toprule
+Parameter & Chain 1 & Chain 2 & Chain 3 & Chain 4 \\
+\midrule
+
+Month cosine coefficient
+& 0.130 & 0.116 & 0.142 & 0.160 \\
+
+HHI interior intercept
+& 1.004 & 1.021 & 0.627 & 2.052 \\
+
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Trace plots}
 
@@ -5618,24 +5884,13 @@ The following figures present posterior densities and
 trace plots for selected global parameters of the baseline
 terminal and chokepoint models, estimated using four chains
 with 5,000 warm-up iterations and 10,000 retained draws
-per chain. The displayed pages include parameters selected
-for the autocorrelation diagnostics, together with
-additional global parameters appearing on the same
-plotting pages. Complete plots are retained in the
-accompanying model outputs.
+per chain.
 
 For terminals, the selection covers the lagged exporter
 coefficient, the PageRank loading, and the loading for
 the probability of counterparty HHI equal to one.
 For chokepoints, it covers the PageRank and betweenness
 loadings and the betweenness precision.
-
-The displayed chains occupy broadly overlapping ranges,
-and their estimated posterior densities are similar.
-These visual checks complement the numerical diagnostics
-reported in Chapter~\ref{chap:criticality_modelling};
-they do not by themselves establish convergence.
-
 
 % ============================================================
 % TERMINAL TRACE PLOTS
@@ -5716,7 +5971,6 @@ they do not by themselves establish convergence.
 
 \clearpage
 
-
 \subsection{Autocorrelation diagnostics}
 \label{app:acf_diagnostics}
 
@@ -5742,7 +5996,6 @@ The ACF for the lagged neighbour-activity coefficient,
 which was also generated by the selection procedure,
 is omitted from the appendix because of its relatively
 high effective sample size and rapid autocorrelation decay.
-
 
 % ============================================================
 % TERMINAL ACF
@@ -5784,7 +6037,6 @@ high effective sample size and rapid autocorrelation decay.
     terminal model.}
     \label{fig:terminal_acf_additional}
 \end{figure}
-
 
 % ============================================================
 % CHOKEPOINT ACF
