@@ -65,6 +65,112 @@ def add_chain_legend(fig, chain_values):
 def samples(ds, name, dimension):
     return ds[name].transpose('chain', 'draw', dimension).values.reshape(-1, ds.sizes[dimension])
 
+def samples_rank_two(ds, name, response_dim, max_draws=4000):
+    """Paired, evenly spaced posterior samples: (sample, response, factor)."""
+    da = ds[name]
+    if 'factor_dim' not in da.dims:
+        raise ValueError(f'{name} has no factor_dim: {da.dims}')
+    per_chain = max(1, max_draws // da.sizes['chain'])
+    selected = np.unique(np.linspace(0, da.sizes['draw'] - 1,
+                                    min(per_chain, da.sizes['draw']), dtype=int))
+    arr = da.isel(draw=selected).transpose('chain', 'draw', response_dim, 'factor_dim').values
+    return arr.reshape(-1, da.sizes[response_dim], da.sizes['factor_dim'])
+
+
+def export_rank_two_responses(post, audit, keys, node_type, out):
+    """Conditional curves varying one raw factor while holding the other at zero."""
+    ac = samples(post, 'intercept_cont', 'continuous')
+    ab = samples(post, 'intercept_binary', 'binary')
+    suffix = 'one' if node_type == 'terminal' else 'zero'
+    ao = samples(post, 'intercept_' + suffix, 'boundary')
+    lc = samples_rank_two(post, 'loading_cont', 'continuous')
+    lb = samples_rank_two(post, 'loading_binary', 'binary')
+    lo = samples_rank_two(post, 'loading_' + suffix, 'boundary')
+    # Match the same evenly spaced chain/draw selection for every parameter.
+    n = lc.shape[0]
+    per_chain = n // post.sizes['chain']
+    chosen = np.unique(np.linspace(0, post.sizes['draw']-1, per_chain, dtype=int))
+    def paired(name, dim):
+        a = post[name].isel(draw=chosen).transpose('chain', 'draw', dim).values
+        return a.reshape(-1, post.sizes[dim])
+    ac, ab = paired('intercept_cont', 'continuous'), paired('intercept_binary', 'binary')
+    ao = paired('intercept_' + suffix, 'boundary')
+    if not (len(ac) == len(lc) == len(lb) == len(lo)):
+        raise ValueError('Posterior draws are not paired')
+
+    for h in range(2):
+        label = f'factor_{h+1}'
+        series = keys[f'factor_mean_{label}_mean']
+        low, high = series.quantile([.01, .99])
+        grid = np.linspace(float(low), float(high), 101)
+        fig, axes = plt.subplots(2, 3, figsize=(13, 7))
+        rows = []
+        def values_at(j, f):
+            mu = expit(ac[:, j, None] + lc[:, j, h, None] * f)
+            if node_type == 'terminal':
+                prob = np.zeros_like(mu) if j == 0 else expit(
+                    ao[:, j-1, None] + lo[:, j-1, h, None] * f)
+                expected = prob + (1-prob)*mu
+            else:
+                response = audit['continuous_responses'][j]
+                prob = (expit(ao[:, 0, None] + lo[:, 0, h, None] * f)
+                        if response == 'betweenness' else np.zeros_like(mu))
+                expected = (1-prob)*mu
+            return mu, prob, expected
+        contrasts = []
+        for j, response in enumerate(audit['continuous_responses']):
+            mu, prob, expected = values_at(j, grid[None, :])
+            for quantity, v in [('interior_mean', mu),
+                                ('probability_' + suffix, prob), ('marginal_mean', expected)]:
+                q025, median, q975 = np.quantile(v, [.025, .5, .975], axis=0)
+                rows.extend(dict(response=response, quantity=quantity, factor=float(f),
+                                 median=float(m), q025=float(l), q975=float(u),
+                                 held_other_factor_at=0.0)
+                            for f, m, l, u in zip(grid, median, q025, q975))
+                if quantity == 'marginal_mean':
+                    axes.flat[j].plot(grid, median)
+                    axes.flat[j].fill_between(grid, q025, q975, alpha=.25)
+            at_zero = values_at(j, np.array([[0.0]]))[2][:, 0]
+            at_one = values_at(j, np.array([[1.0]]))[2][:, 0]
+            row = dict(response=response, factor=label, factor_from=0.0, factor_to=1.0,
+                       other_factor_held_at=0.0, scale='original_response', draws=len(at_zero),
+                       within_plotted_factor_range=bool(low <= 0 <= high and low <= 1 <= high))
+            for key, v in [('expected_f0', at_zero), ('expected_f1', at_one),
+                           ('difference', at_one-at_zero)]:
+                row[key+'_median'] = float(np.median(v))
+                row[key+'_q025'] = float(np.quantile(v, .025))
+                row[key+'_q975'] = float(np.quantile(v, .975))
+            contrasts.append(row)
+            axes.flat[j].set_title(DISPLAY_NAMES.get(response, response.replace('_',' ').title()))
+        for j, response in enumerate(audit['binary_responses']):
+            v = expit(ab[:, j, None] + lb[:, j, h, None] * grid)
+            q025, median, q975 = np.quantile(v, [.025, .5, .975], axis=0)
+            rows.extend(dict(response=response, quantity='probability', factor=float(f),
+                             median=float(m), q025=float(l), q975=float(u),
+                             held_other_factor_at=0.0)
+                        for f, m, l, u in zip(grid, median, q025, q975))
+            axes.flat[j+3].plot(grid, median)
+            axes.flat[j+3].fill_between(grid, q025, q975, alpha=.25)
+            axes.flat[j+3].set_title(DISPLAY_NAMES.get(response, response.replace('_',' ').title()))
+        for ax in list(axes.flat)[3+len(audit['binary_responses']):]:
+            ax.set_visible(False)
+        for j, ax in enumerate(axes.flat):
+            if ax.get_visible():
+                ax.set_xlabel(f'Latent factor {h+1} (other factor = 0)')
+                ax.set_ylabel('Expected response' if j < 3 else 'Probability')
+        fig.tight_layout()
+        fig.savefig(out / f'response_curves_factor_{h+1}.png', dpi=130)
+        plt.close(fig)
+        pd.DataFrame(rows).to_csv(out / f'response_curves_factor_{h+1}.csv', index=False)
+        pd.DataFrame(contrasts).to_csv(out / f'factor_response_contrasts_factor_{h+1}.csv', index=False)
+    (out / 'rank_two_curves_README.txt').write_text(
+        'Raw rank-two factor coordinates are not rotationally identified.\n'
+        'Each curve varies one factor while holding the other at zero.\n'
+        'Curves are descriptive and depend on the sampled orientation; do not interpret\n'
+        'individual-factor curves as identified effects without further analysis.\n'
+        'Bands are equal-tailed 95% posterior intervals for conditional expectations.\n'
+        'Posterior samples are paired and evenly spaced, capped at 4000 total.\n', encoding='utf-8')
+
 def export_trace_pages(post, out, node_type):
     import arviz as az
 
@@ -428,102 +534,131 @@ def main():
         if args.node_type == 'terminal':
             key_columns += ['terminal_role_lag1']
         keys = frame[key_columns].copy()
-        # Load one latent array at a time, rather than the whole NetCDF.
-        for name in ['factor', 'factor_mean', 'factor_residual', 'factor_covariate_mean']:
-            if name not in post:
-                continue
-            values = samples(post, name, 'obs')
-            keys[name + '_mean'] = values.mean(axis=0)
-            keys[name + '_q025'] = np.quantile(values, .025, axis=0)
-            keys[name + '_q975'] = np.quantile(values, .975, axis=0)
-            del values
-        keys.to_csv(out / 'latent_summary.csv', index=False)
-        associations = []
-        for role, mask in masks:
-            for response in audit['continuous_responses'] + audit['binary_responses']:
-                a = keys.loc[mask, 'factor_mean_mean'].to_numpy()
-                b = frame.loc[mask, response].to_numpy()
-                rho = np.corrcoef(rankdata(a), rankdata(b))[0, 1] if np.std(b) else np.nan
-                associations.append(dict(role_lag1=role, response=response, spearman_with_posterior_factor_mean=rho))
-        pd.DataFrame(associations).to_csv(out / 'factor_associations.csv', index=False)
-        # Response functions use paired posterior draws, preserving dependence.
-        ac = samples(post, 'intercept_cont', 'continuous')
-        lc = samples(post, 'loading_cont', 'continuous')
-        boundary_suffix = 'one' if args.node_type == 'terminal' else 'zero'
-        ao = samples(post, 'intercept_' + boundary_suffix, 'boundary')
-        lo = samples(post, 'loading_' + boundary_suffix, 'boundary')
-        ab = samples(post, 'intercept_binary', 'binary')
-        lb = samples(post, 'loading_binary', 'binary')
-        # Paired posterior contrasts on the original response scale.
-        # These include the point mass at one (terminal HHI/dependence)
-        # or zero (chokepoint betweenness), rather than only the Beta mean.
-        factor_low = float(keys.factor_mean_mean.quantile(.01))
-        factor_high = float(keys.factor_mean_mean.quantile(.99))
-        if not (factor_low <= 0.0 and 1.0 <= factor_high):
-            print(f'WARNING: factor values 0 and 1 are not both within '
-                  f'the plotted 1%-99% range [{factor_low:.3f}, {factor_high:.3f}]')
-        contrast_rows = []
-        for j, response in enumerate(audit['continuous_responses']):
-            def expected_at(f):
-                mu = expit(ac[:, j] + lc[:, j] * f)
-                if args.node_type == 'terminal':
-                    p = (np.zeros_like(mu) if j == 0 else
-                         expit(ao[:, j-1] + lo[:, j-1] * f))
-                    return p + (1.0 - p) * mu
-                p = (expit(ao[:, 0] + lo[:, 0] * f)
-                     if response == 'betweenness' else np.zeros_like(mu))
-                return (1.0 - p) * mu
+        rank_two = 'factor_dim' in post['factor'].dims
+        if rank_two:
+            # Summarize each component separately without loading the full 4D array.
+            for name in ['factor', 'factor_mean', 'factor_residual', 'factor_covariate_mean']:
+                if name not in post:
+                    continue
+                for h, factor_label in enumerate(post.factor_dim.values):
+                    da = post[name].isel(factor_dim=h)
+                    values = da.transpose('chain', 'draw', 'obs').values.reshape(-1, len(keys))
+                    prefix = f'{name}_{factor_label}'
+                    keys[prefix + '_mean'] = values.mean(axis=0)
+                    keys[prefix + '_q025'] = np.quantile(values, .025, axis=0)
+                    keys[prefix + '_q975'] = np.quantile(values, .975, axis=0)
+                    del values
+            keys.to_csv(out / 'latent_summary.csv', index=False)
+            associations = []
+            for role, mask in masks:
+                for h, factor_label in enumerate(post.factor_dim.values):
+                    a = keys.loc[mask, f'factor_mean_{factor_label}_mean'].to_numpy()
+                    for response in audit['continuous_responses'] + audit['binary_responses']:
+                        b = frame.loc[mask, response].to_numpy()
+                        rho = (np.corrcoef(rankdata(a), rankdata(b))[0, 1]
+                               if np.std(a) and np.std(b) else np.nan)
+                        associations.append(dict(role_lag1=role, factor=str(factor_label),
+                                                 response=response,
+                                                 spearman_with_posterior_factor_mean=rho))
+            pd.DataFrame(associations).to_csv(out / 'factor_associations.csv', index=False)
+            export_rank_two_responses(post, audit, keys, args.node_type, out)
+        else:
+            # Load one latent array at a time, rather than the whole NetCDF.
+            for name in ['factor', 'factor_mean', 'factor_residual', 'factor_covariate_mean']:
+                if name not in post:
+                    continue
+                values = samples(post, name, 'obs')
+                keys[name + '_mean'] = values.mean(axis=0)
+                keys[name + '_q025'] = np.quantile(values, .025, axis=0)
+                keys[name + '_q975'] = np.quantile(values, .975, axis=0)
+                del values
+            keys.to_csv(out / 'latent_summary.csv', index=False)
+            associations = []
+            for role, mask in masks:
+                for response in audit['continuous_responses'] + audit['binary_responses']:
+                    a = keys.loc[mask, 'factor_mean_mean'].to_numpy()
+                    b = frame.loc[mask, response].to_numpy()
+                    rho = np.corrcoef(rankdata(a), rankdata(b))[0, 1] if np.std(b) else np.nan
+                    associations.append(dict(role_lag1=role, response=response, spearman_with_posterior_factor_mean=rho))
+            pd.DataFrame(associations).to_csv(out / 'factor_associations.csv', index=False)
+            # Response functions use paired posterior draws, preserving dependence.
+            ac = samples(post, 'intercept_cont', 'continuous')
+            lc = samples(post, 'loading_cont', 'continuous')
+            boundary_suffix = 'one' if args.node_type == 'terminal' else 'zero'
+            ao = samples(post, 'intercept_' + boundary_suffix, 'boundary')
+            lo = samples(post, 'loading_' + boundary_suffix, 'boundary')
+            ab = samples(post, 'intercept_binary', 'binary')
+            lb = samples(post, 'loading_binary', 'binary')
+            # Paired posterior contrasts on the original response scale.
+            # These include the point mass at one (terminal HHI/dependence)
+            # or zero (chokepoint betweenness), rather than only the Beta mean.
+            factor_low = float(keys.factor_mean_mean.quantile(.01))
+            factor_high = float(keys.factor_mean_mean.quantile(.99))
+            if not (factor_low <= 0.0 and 1.0 <= factor_high):
+                print(f'WARNING: factor values 0 and 1 are not both within '
+                      f'the plotted 1%-99% range [{factor_low:.3f}, {factor_high:.3f}]')
+            contrast_rows = []
+            for j, response in enumerate(audit['continuous_responses']):
+                def expected_at(f):
+                    mu = expit(ac[:, j] + lc[:, j] * f)
+                    if args.node_type == 'terminal':
+                        p = (np.zeros_like(mu) if j == 0 else
+                             expit(ao[:, j-1] + lo[:, j-1] * f))
+                        return p + (1.0 - p) * mu
+                    p = (expit(ao[:, 0] + lo[:, 0] * f)
+                         if response == 'betweenness' else np.zeros_like(mu))
+                    return (1.0 - p) * mu
 
-            at_zero = expected_at(0.0)
-            at_one = expected_at(1.0)
-            difference = at_one - at_zero  # paired draws, not differences of quantiles
-            row = {'response': response, 'factor_from': 0.0, 'factor_to': 1.0,
-                   'scale': 'original_response', 'draws': len(difference),
-                   'within_plotted_factor_range': factor_low <= 0.0 and 1.0 <= factor_high}
-            for label, values in [('expected_f0', at_zero), ('expected_f1', at_one),
-                                  ('difference', difference)]:
-                row[f'{label}_median'] = float(np.median(values))
-                row[f'{label}_q025'] = float(np.quantile(values, .025))
-                row[f'{label}_q975'] = float(np.quantile(values, .975))
-            contrast_rows.append(row)
-        pd.DataFrame(contrast_rows).to_csv(out / 'factor_response_contrasts.csv', index=False)
-        grid = np.linspace(keys.factor_mean_mean.quantile(.01), keys.factor_mean_mean.quantile(.99), 101)
-        rows = []
-        fig, axes = plt.subplots(2, 3, figsize=(13, 7))
-        for j, response in enumerate(audit['continuous_responses']):
-            mu = expit(ac[:, j, None] + lc[:, j, None] * grid)
-            if args.node_type == 'terminal':
-                p = np.zeros_like(mu) if j == 0 else expit(ao[:, j-1, None] + lo[:, j-1, None] * grid)
-                expected = p + (1-p)*mu
-            else:
-                p = expit(ao[:, 0, None] + lo[:, 0, None] * grid) if response == 'betweenness' else np.zeros_like(mu)
-                expected = (1-p)*mu
-            for quantity, v in [('interior_mean', mu), ('probability_' + boundary_suffix, p), ('marginal_mean', expected)]:
+                at_zero = expected_at(0.0)
+                at_one = expected_at(1.0)
+                difference = at_one - at_zero  # paired draws, not differences of quantiles
+                row = {'response': response, 'factor_from': 0.0, 'factor_to': 1.0,
+                       'scale': 'original_response', 'draws': len(difference),
+                       'within_plotted_factor_range': factor_low <= 0.0 and 1.0 <= factor_high}
+                for label, values in [('expected_f0', at_zero), ('expected_f1', at_one),
+                                      ('difference', difference)]:
+                    row[f'{label}_median'] = float(np.median(values))
+                    row[f'{label}_q025'] = float(np.quantile(values, .025))
+                    row[f'{label}_q975'] = float(np.quantile(values, .975))
+                contrast_rows.append(row)
+            pd.DataFrame(contrast_rows).to_csv(out / 'factor_response_contrasts.csv', index=False)
+            grid = np.linspace(keys.factor_mean_mean.quantile(.01), keys.factor_mean_mean.quantile(.99), 101)
+            rows = []
+            fig, axes = plt.subplots(2, 3, figsize=(13, 7))
+            for j, response in enumerate(audit['continuous_responses']):
+                mu = expit(ac[:, j, None] + lc[:, j, None] * grid)
+                if args.node_type == 'terminal':
+                    p = np.zeros_like(mu) if j == 0 else expit(ao[:, j-1, None] + lo[:, j-1, None] * grid)
+                    expected = p + (1-p)*mu
+                else:
+                    p = expit(ao[:, 0, None] + lo[:, 0, None] * grid) if response == 'betweenness' else np.zeros_like(mu)
+                    expected = (1-p)*mu
+                for quantity, v in [('interior_mean', mu), ('probability_' + boundary_suffix, p), ('marginal_mean', expected)]:
+                    low, mid, high = np.quantile(v, [.025, .5, .975], axis=0)
+                    rows.extend(dict(response=response, quantity=quantity, factor=f, median=m, q025=l, q975=h) for f,m,l,h in zip(grid, mid,low,high))
+                    if quantity == 'marginal_mean':
+                        axes.flat[j].plot(grid, mid)
+                        axes.flat[j].fill_between(grid, low, high, alpha=.25)
+                axes.flat[j].set_title(DISPLAY_NAMES.get(response, response.replace('_', ' ').title()), fontsize=11)
+            for j, response in enumerate(audit['binary_responses']):
+                v = expit(ab[:, j, None] + lb[:, j, None] * grid)
                 low, mid, high = np.quantile(v, [.025, .5, .975], axis=0)
-                rows.extend(dict(response=response, quantity=quantity, factor=f, median=m, q025=l, q975=h) for f,m,l,h in zip(grid, mid,low,high))
-                if quantity == 'marginal_mean':
-                    axes.flat[j].plot(grid, mid)
-                    axes.flat[j].fill_between(grid, low, high, alpha=.25)
-            axes.flat[j].set_title(DISPLAY_NAMES.get(response, response.replace('_', ' ').title()), fontsize=11)
-        for j, response in enumerate(audit['binary_responses']):
-            v = expit(ab[:, j, None] + lb[:, j, None] * grid)
-            low, mid, high = np.quantile(v, [.025, .5, .975], axis=0)
-            rows.extend(dict(response=response, quantity='probability', factor=f, median=m, q025=l, q975=h) for f,m,l,h in zip(grid,mid,low,high))
-            axes.flat[j+3].plot(grid, mid)
-            axes.flat[j+3].fill_between(grid, low, high, alpha=.25)
-            axes.flat[j+3].set_title(DISPLAY_NAMES.get(response, response.replace('_', ' ').title()), fontsize=11)
-        for ax in list(axes.flat)[3 + len(audit['binary_responses']):]:
-            ax.set_visible(False)
-        for j, ax in enumerate(axes.flat):
-            if not ax.get_visible():
-                continue
-            ax.set_xlabel('Latent factor')
-            ax.set_ylabel('Expected response' if j < len(audit['continuous_responses'])
-                          else 'Probability')
-        fig.tight_layout()
-        fig.savefig(out / 'response_curves.png', dpi=130)
-        plt.close(fig)
-        pd.DataFrame(rows).to_csv(out / 'response_curves.csv', index=False)
+                rows.extend(dict(response=response, quantity='probability', factor=f, median=m, q025=l, q975=h) for f,m,l,h in zip(grid,mid,low,high))
+                axes.flat[j+3].plot(grid, mid)
+                axes.flat[j+3].fill_between(grid, low, high, alpha=.25)
+                axes.flat[j+3].set_title(DISPLAY_NAMES.get(response, response.replace('_', ' ').title()), fontsize=11)
+            for ax in list(axes.flat)[3 + len(audit['binary_responses']):]:
+                ax.set_visible(False)
+            for j, ax in enumerate(axes.flat):
+                if not ax.get_visible():
+                    continue
+                ax.set_xlabel('Latent factor')
+                ax.set_ylabel('Expected response' if j < len(audit['continuous_responses'])
+                              else 'Probability')
+            fig.tight_layout()
+            fig.savefig(out / 'response_curves.png', dpi=130)
+            plt.close(fig)
+            pd.DataFrame(rows).to_csv(out / 'response_curves.csv', index=False)
     print('Checking replicated response associations...', flush=True)
     with xr.open_dataset(nc, group='posterior_predictive') as ppc:
         # Equal spacing within every chain; only selected predictive draws load.
@@ -552,7 +687,7 @@ def main():
     config = terminal.parent / 'run_config.json'
     if config.exists():
         shutil.copy2(config, out / 'run_config.json')
-    (out / 'README.txt').write_text('factor_response_contrasts.csv: paired posterior comparisons of expected bounded responses at factor 0 vs 1; intervals are equal-tailed 95% credible intervals for the difference, not predictive intervals.\nExisting posterior only: no refitting.\nPredictive checks are conditional and in-sample, not out-of-sample validation.\nTerminal role groups use LAGGED role; chokepoints use the full sample.\nFactor associations use posterior mean scores informed by these same responses; they are descriptive, not independent validation or causal effects.\nCurve bands are equal-tailed 95% parameter uncertainty, not predictive intervals.\nCurves span the 1st-99th percentiles of posterior mean latent scores.\nNode/month scores are conditional on consecutive activity (and available age for terminals); interpret alongside sampling diagnostics and model limitations.\n', encoding='utf-8')
+    (out / 'README.txt').write_text('For rank-two see rank_two_curves_README.txt.\nFor rank-one: factor_response_contrasts.csv: paired posterior comparisons of expected bounded responses at factor 0 vs 1; intervals are equal-tailed 95% credible intervals for the difference, not predictive intervals.\nExisting posterior only: no refitting.\nPredictive checks are conditional and in-sample, not out-of-sample validation.\nTerminal role groups use LAGGED role; chokepoints use the full sample.\nFactor associations use posterior mean scores informed by these same responses; they are descriptive, not independent validation or causal effects.\nCurve bands are equal-tailed 95% parameter uncertainty, not predictive intervals.\nCurves span the 1st-99th percentiles of posterior mean latent scores.\nNode/month scores are conditional on consecutive activity (and available age for terminals); interpret alongside sampling diagnostics and model limitations.\n', encoding='utf-8')
     (out / 'export_metadata.json').write_text(json.dumps(dict(source=str(nc), node_type=args.node_type, predictive_replicates=actual_draws, panel_sha256=audit['input_sha256']), indent=2))
     archive = shutil.make_archive(str(out), 'zip', out)
 
