@@ -1,0 +1,10 @@
+{
+  "chain_files": "C:\\Users\\Leila\\OneDrive\\Desktop\\Thesis\\code\\outputs\\model\\node_effects\\terminal\\terminal_lowram_corrected_1500_300\\terminal\\chains",
+  "chains": 4,
+  "tune_per_chain": 1500,
+  "retained_per_chain": 300,
+  "posterior_predictive_draws_per_chain": 100,
+  "observation_level_deterministics_not_stored": true,
+  "posterior_draws_thinned": false,
+  "note": "PPC is a subset. Global diagnostics are computed separately; run review.py for detailed plots."
+}

@@ -61,5 +61,5 @@ def build_factor_mean(data, beta):
 
 
 if __name__ == "__main__":
-    from estimation import main
+    from scripts.models.estimation import main
     main(default_model="node_effects")

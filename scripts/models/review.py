@@ -40,6 +40,7 @@ DISPLAY_NAMES = {
     'incident_global_bridge': 'Incident global bridge',
     'connected_to_articulation_point': 'Adjacent to articulation point',
     'exporter_current': 'Current exporter status',
+    'counterparty_hhi_terminal': 'Counterparty HHI',
 }
 PARAMETER_FAMILIES = {
     'sigma_mu': 'Between-node standard deviation', 'mu_node': 'Node effect',
@@ -622,7 +623,7 @@ def main():
                     row[f'{label}_q975'] = float(np.quantile(values, .975))
                 contrast_rows.append(row)
             pd.DataFrame(contrast_rows).to_csv(out / 'factor_response_contrasts.csv', index=False)
-            grid = np.linspace(keys.factor_mean_mean.quantile(.01), keys.factor_mean_mean.quantile(.99), 101)
+            grid = np.linspace(keys.factor_mean.min(), keys.factor_mean.max(), 101)
             rows = []
             fig, axes = plt.subplots(2, 3, figsize=(13, 7))
             for j, response in enumerate(audit['continuous_responses']):

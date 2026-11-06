@@ -57,6 +57,21 @@ def fit_model(data, kind, args, destination):
         prior.to_netcdf(destination / "prior.nc")
         if args.prior_only:
             return
+        if args.low_ram:
+            from low_ram import run_chains, merge_chains, posterior_predictive_subset
+            chain_dir = run_chains(model, data, kind, args, destination)
+            merge_chains(chain_dir, destination / "posterior.nc", args.chains, args.draws)
+            n_ppc = posterior_predictive_subset(model, destination / "posterior.nc", args)
+            (destination / "low_ram_metadata.json").write_text(json.dumps({
+                "chain_files": str(chain_dir), "chains": args.chains,
+                "tune_per_chain": args.tune, "retained_per_chain": args.draws,
+                "posterior_predictive_draws_per_chain": n_ppc,
+                "observation_level_deterministics_not_stored": True,
+                "posterior_draws_thinned": False,
+                "note": "PPC is a subset. Global diagnostics are computed separately; run review.py for detailed plots."
+            }, indent=2), encoding="utf-8")
+            print("Saved full posterior and sample_stats; PPC uses a subset.", flush=True)
+            return
         idata = pm.sample(draws=args.draws, tune=args.tune, chains=args.chains,
                           cores=args.cores, target_accept=args.target_accept,
                           init="adapt_diag",
@@ -108,10 +123,11 @@ def main(default_model="baseline"):
     parser.add_argument("--node-type", choices=["terminal", "chokepoint"], default="terminal")
     parser.add_argument("--check-only", action="store_true", help="Validate/filter panels without PyMC or writing datasets")
     parser.add_argument("--prior-only", action="store_true", help="Save prior predictive checks without fitting")
+    parser.add_argument("--low-ram", action="store_true", help="Resumable chains; --cores controls parallel chains; chunked NetCDF assembly")
     parser.add_argument("--draws", type=int, default=1000)
     parser.add_argument("--tune", type=int, default=2000)
     parser.add_argument("--chains", type=int, default=4)
-    parser.add_argument("--cores", type=int, default=1, help="One core is portable to Windows; increase if desired")
+    parser.add_argument("--cores", type=int, default=1, help="Maximum concurrent chains in --low-ram mode (1 or 2 recommended with 12 GB RAM)")
     parser.add_argument("--prior-draws", type=int, default=200)
     parser.add_argument("--target-accept", type=float, default=.80)
     parser.add_argument("--seed", type=int, default=20261008)
@@ -178,7 +194,17 @@ def main(default_model="baseline"):
         group_dir = (args.output_dir / "node_effects" if args.model_group == "baseline"
                      else args.output_dir / "node_effects" / "sensitivity_analysis" / args.model_group)
     run = group_dir / args.node_type / (args.run_name or f"{stamp}_{args.node_type}_bounded_{args.prior_profile}")
-    run.mkdir(parents=True, exist_ok=False)
+    if args.low_ram and run.exists():
+        config_file = run / "run_config.json"
+        if not config_file.exists():
+            raise RuntimeError("Existing run directory lacks run_config.json; refusing to resume")
+        previous = json.loads(config_file.read_text())
+        for key in ("draws", "tune", "chains", "seed", "rank", "model", "node_type", "target_accept"):
+            if str(previous[key]) != str(getattr(args, key)):
+                raise RuntimeError(f"Cannot resume: {key} differs from original run")
+        print(f"Resuming run: {run.resolve()}", flush=True)
+    else:
+        run.mkdir(parents=True, exist_ok=False)
     print(f"Run directory: {run.resolve()}", flush=True)
     script_path = Path(__file__).resolve()
     packages = {}
@@ -202,7 +228,8 @@ def main(default_model="baseline"):
               "started_utc": stamp, "command_argv": sys.argv,
               "python": platform.python_version(), "packages": packages,
               "script_sha256": hashlib.sha256(script_path.read_bytes()).hexdigest()}
-    (run / "run_config.json").write_text(json.dumps(config, default=str, indent=2), encoding="utf-8")
+    if not (run / "run_config.json").exists():
+        (run / "run_config.json").write_text(json.dumps(config, default=str, indent=2), encoding="utf-8")
     for kind, item in data.items():
         destination = run / kind
         destination.mkdir(exist_ok=True)
@@ -226,6 +253,9 @@ def main(default_model="baseline"):
         if args.prior_only:
             write_status("prior_only_complete")
         else:
+            if args.low_ram:
+                write_status("sampling_complete_pending_diagnostics", note="Run low_ram_review.py to compute global diagnostics")
+                continue
             diagnostics = json.loads((destination / "sampling_diagnostics.json").read_text())
             write_status("sampling_complete", passes_basic_sampling_checks=diagnostics["passes_basic_checks"],
                          note="Passing sampling checks does not establish model adequacy.")

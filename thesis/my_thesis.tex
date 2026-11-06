@@ -27,6 +27,7 @@
 \usepackage{tabularx}
 \usepackage{array}
 \usepackage{longtable}
+\usepackage{booktabs}
 \usepackage{ragged2e}
 \usepackage{chngcntr}
 \usepackage{subcaption}
@@ -2742,20 +2743,21 @@ indicating more efficient sampling
 % TODO: Revise section introduction and transitions after Models 2 and 3 are fitted.
 
 \section{Rank-one model results}
+\label{sec: rank-one model}
+This section presents the posterior results for the terminal
+model and the chokepoint model, under the rank-one factor
+specification. Covariate associations, relationships among
+responses, and the interpretation of the latent factor in each
+case are discussed. Furthermore, posterior predictive checks
+are performed for each type of node to assess how well the
+model reproduces the observed responses distributions and
+associations.
+
 \subsection{Terminal posterior analysis}
 \label{sec:terminal_results}
 
-This section presents the posterior results for the terminal
-model, focusing on covariate associations, response relationships
-and the interpretation of the latent factor.
-Posterior predictive checks are then used to assess how well
-the model reproduces the observed response distributions
-and associations.
-
-\subsubsection{Terminal posterior associations and factor interpretation}
-\label{subsec:posterior_associations_terminals}
-
-The posterior estimates of the factor-regression coefficients
+The posterior estimates of the factor-regression coefficients,
+computed as the mean of the retained MCMC samples,
 are presented in Table~\ref{tab:simple_beta}, together with
 their 95\% highest-density intervals (HDIs).
 
@@ -2850,6 +2852,7 @@ Combining these components, as defined in
 Equation~\eqref{eq:inflated_mean}, yields a mildly
 U-shaped conditional expectation over the displayed
 factor range.
+
 The fitted response functions are displayed in
 Figure~\ref{fig:simple_response_curves} to allow
 the different response components and their
@@ -2859,41 +2862,50 @@ the estimated factor range.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{images/terminal_response_curves.png}
-\caption{Fitted response functions against the terminal
-latent factor. Lines are posterior medians and bands
-are equal-tailed 95\% credible intervals for conditional
-expected responses or probabilities. HHI and dependence
-means include the point mass at one. The range spans
-the first to the 99th percentile of posterior mean
-factor scores.}
+\caption{Fitted response functions against the terminal latent factor. Lines represent posterior medians, and shaded 
+bands indicate equal-tailed 95\% credible intervals for conditional expected responses or probabilities. HHI and 
+dependence means include the point mass at one. 
+The horizontal axis spans the full empirical range of posterior mean latent factor scores in the estimation sample.}
 \label{fig:simple_response_curves}
 \end{figure}
 
-To relate these posterior patterns to observed network
-positions, two terminal-month observations with posterior mean factor values closest to
-the 5th and 95th percentiles of the estimation sample are considered:
-Zhuhai LNG Terminal in September 2022 has an estimated
-factor value of approximately $-1.0$, compared with
-$2.7$ for Sabine Pass LNG Terminal in June 2024.
-Their observed PageRank values are 0.011 and 0.039,
-respectively, while their HHI values are 1.00 and
-0.17. Zhuhai is classified as an importer and has
-an incident global bridge, whereas Sabine Pass is
-an exporter without one.
-These differences are consistent with the estimated
-relationships between the latent factor and the terminal
-responses, although the two observations also differ
-in commercial role.
+To relate these posterior patterns to observed network positions, two terminal-month observations with 
+posterior mean latent factor scores closest to the 5th and 95th percentiles of the estimation sample are 
+considered. These observations were selected to illustrate contrasting positions along the latent dimension 
+while avoiding the most extreme cases.
+Mugardos LNG Terminal, located in Galicia, Spain, has an estimated latent factor score of approximately $-1.0$ in October 2022, 
+compared with $2.73$ for Sabine Pass LNG Terminal, located in Cameron Parish, Louisiana, in June 2024. 
+Their observed PageRank values are 0.011 and 0.039, respectively, while their counterparty HHI values are 1.00 and 0.17. 
+Mugardos is classified as an importer and has an incident global bridge, whereas Sabine Pass is an exporter without one. 
+These differences are broadly consistent with the estimated relationships between the latent factor and the terminal 
+responses, although the two observations also differ in commercial role.
 
-While this example provides an illustration of the
-factor's interpretation, the extent to which the model
-reproduces the observed response patterns more generally
-is examined through the posterior predictive checks
-in the following subsection.
+An additional case of interest is Rasgas LNG Terminal 3, Qatar, which exhibits the highest posterior mean latent factor 
+score in the estimation sample, approximately $6.38$ in June 2020. Its estimated factor score consists of a systematic 
+component of approximately $\mathbf{x}_n^\top\boldsymbol{\beta}=1.84$
+and a residual component of $z_n=4.55$, indicating a substantial deviation from the 
+position explained by the observed covariates. 
+Importantly, this deviation is not confined to a single observation: across its 59 terminal-month observations, Rasgas exhibits a positive posterior 
+mean residual in every month, with an average of approximately $3.13$. Similar, although less pronounced, patterns are 
+observed for other terminals, including Fos Tonkin, Yamal and Sabine Pass, whose residual components remain predominantly 
+positive over time. Conversely, terminals such as Cameroon FLNG and Sakhalin II exhibit consistently negative posterior 
+mean residuals. Table~\ref{tab:baseline_terminal_residuals} in the Appendix provides descriptive summaries of these 
+patterns.
+
+These findings suggest that part of the variation left unexplained by the baseline covariates 
+may reflect persistent differences across terminals rather than exclusively observation-specific fluctuations. 
+This provides an empirical motivation for extending the rank-one model by introducing node-specific effects, 
+allowing persistent terminal-level heterogeneity to be represented separately from residual variation. 
+The results of this extension are presented in Section~\ref{sec:node_specific_model}.
+
+While these examples provide an illustration of the latent factor's interpretation and highlight potential limitations 
+of the baseline specification, the extent to which the model reproduces the observed response patterns is examined 
+through the posterior predictive checks in the following subsection.
 
 \subsubsection{Terminal posterior predictive assessment}
-\label{sec:simple_ppc}
-Posterior predictive assessment evaluates how well the
+\label{subsubsec:simple_ppc}
+
+This section evaluates how well the
 fitted model reproduces the observed response distributions
 and associations by comparing statistics computed from
 the terminal-month observations with those obtained from
@@ -2906,8 +2918,8 @@ The model closely reproduces the overall response means and the overall frequenc
 The observed overall binary proportions also lie within their replicated intervals. 
 Nevertheless, discrepancies appear in dispersion, quantiles and role-specific boundary frequencies. 
 For instance, PageRank dispersion is overestimated for lagged importers and underestimated for lagged
-exporters. For exporters, the observed 95th percentile
-of PageRank is 0.0714, compared with a replicated mean
+exporters. The observed 95th percentile
+of exporters' PageRank is 0.0714, compared with a replicated mean
 of 0.0620 and a 95\% replicated interval
 of $[0.0587,0.0654]$.
 
@@ -2937,22 +2949,18 @@ These discrepancies suggest that a shared factor
 with common response functions does not fully
 capture role-specific response behaviour.
 
-The assessment then turns to associations between
-responses, comparing observed pairwise Spearman
-correlations with those obtained from 200 replicated
-datasets selected evenly across the four chains.
-
-Table~\ref{tab:simple_joint_ppc} reports selected
-results. The most pronounced discrepancy concerns
-articulation-point and incident-global-bridge status,
-which are positively associated in the observed data
-but negatively associated in the replications.
-This pattern is particularly evident among exporters.
+Association between responses is assessed by comparing observed pairwise Spearman correlations with those obtained from 200 replicated datasets selected evenly across the four chains. 
+Table~\ref{tab:simple_joint_ppc} reports the five response-pair and role combinations 
+with the largest absolute discrepancies, together with the 
+articulation-point--incident-global-bridge correlation for importers to complete the 
+comparison across terminal roles. 
+The full set of 45 pairwise correlation checks is provided in Table~\ref{tab:joint_ppc_full} in the Appendix.
 
 \begin{table}[htbp]
 \centering
 \small
-\caption{Selected joint posterior predictive checks. Entries are Spearman correlations. Replicated intervals use 200 conditional in-sample replicates.}
+\caption{Selected joint posterior predictive checks. Entries are Spearman correlations. 
+Replicated intervals use 200 conditional in-sample replicates.}
 \label{tab:simple_joint_ppc}
 \begin{tabular}{llrrr}
 \hline
@@ -2962,19 +2970,24 @@ Articulation--bridge & All & 0.290 & -0.123 & $[-0.162,-0.081]$ \\
 Articulation--bridge & Importer & 0.137 & -0.034 & $[-0.076,0.003]$ \\
 Articulation--bridge & Exporter & 0.546 & -0.155 & $[-0.211,-0.091]$ \\
 HHI--bridge & All & 0.533 & 0.288 & $[0.249,0.340]$ \\
-PageRank--dependence & All & 0.314 & 0.158 & $[0.116,0.195]$ \\
+HHI--bridge & Importer & 0.644 & 0.185 & $[0.145,0.238]$ \\
+Dependence--bridge & Exporter & 0.195 & -0.121 & $[-0.187,-0.069]$ \\
 \hline
 \end{tabular}
 \end{table}
 
-This mismatch is consistent with restrictions of the fitted
-specification. The single factor has opposite loadings on
-articulation-point and incident-bridge probabilities, while
-conditional independence allows no additional residual
-association between these responses. The model therefore
-struggles to reproduce their positive observed co-occurrence;
-these checks alone do not establish which restriction is
-primarily responsible. 
+The largest discrepancy concerns articulation-point and incident-global-bridge status 
+among exporters, for which the observed correlation is positive ($0.546$), whereas the 
+posterior predictive median is negative ($-0.155$). 
+The same sign reversal is observed for the full sample, while the replicated correlation 
+among importers is closer to zero. Substantial discrepancies also concern the association 
+between counterparty HHI and incident-global-bridge status, particularly among importers, 
+and between dependence and incident-global-bridge status among exporters.
+
+These mismatches are consistent with restrictions of the fitted specification. In particular, 
+the single latent factor has opposite loadings on articulation-point and incident-global-bridge 
+probabilities, while conditional independence allows no additional residual association between 
+these responses. The model therefore struggles to reproduce their positive observed co-occurrence. 
 
 \subsection{Chokepoint posterior analysis}
 \label{sec:chokepoint_findings}
@@ -2984,8 +2997,6 @@ flow exposure and structural importance for the chokepoint specification.
 The adequacy of the fitted model is subsequently evaluated
 through posterior predictive checks.
 
-\subsubsection{Chokepoint posterior associations and factor interpretation}
-\label{posterior_associations_chokepoints}
 For chokepoints, the factor-regression results in
 Table~\ref{tab:chokepoint_beta} indicate relatively
 modest associations with the available predictors.
@@ -2996,8 +3007,7 @@ higher factor values. However, the posterior interval
 for voyage distance has a lower endpoint close to zero,
 suggesting that this association is less clearly
 established.
-
-The seasonal coefficients provide limited evidence of
+Meanwhile, the seasonal coefficients provide limited evidence of
 seasonal variation in the conditional factor mean:
 the 95\% HDI for the negative cosine coefficient
 narrowly excludes zero, whereas the corresponding
@@ -3021,11 +3031,11 @@ Month cosine & $-0.064$ & $[-0.128,-0.004]$ \\
 \end{tabular}
 \end{table}
 
-Turning to the responses, Table~\ref{tab:chokepoint_loadings}
+With respect to the responses, Table~\ref{tab:chokepoint_loadings}
 shows a consistent pattern of positive loadings across
 the interior means and binary structural probabilities,
 with all 95\% HDIs excluding zero.
-These relationships are also illustrated by the fitted
+These relationships are further illustrated by the fitted
 response curves in Figure~\ref{fig:chokepoint_response_curves}.
 
 The factor is positively related to PageRank,
@@ -3093,9 +3103,7 @@ are classified as articulation points and are
 connected to articulation points. Their different
 factor values therefore reflect variation in
 the continuous measures even though these binary
-structural indicators coincide.
-
-This comparison illustrates how the estimated
+structural indicators coincide, showing how the estimated
 factor can summarise different aspects of
 chokepoint centrality, flow exposure and
 structural position.
@@ -3126,8 +3134,7 @@ These discrepancies indicate that, despite reproducing
 the overall mean, the model does not fully capture
 the observed distribution of the measure.
 
-Beyond the marginal distributions, posterior predictive
-checks also examine whether the model reproduces the
+Posterior predictive checks also examine whether the model reproduces the
 observed associations between responses. Pairwise
 Spearman correlations are compared with those obtained
 from 200 replicated datasets selected evenly across
@@ -3302,6 +3309,7 @@ evidence of satisfactory posterior exploration
 and sampling efficiency.
 
 \section{Node-specific intercept model results}
+\label{sec:node_specific_model}
 % TODO: Insert results and posterior predictive assessment.
 
 \section{Rank-two model results}
@@ -5339,6 +5347,182 @@ Although the factor-regression density is Gaussian,
 the response likelihood is a non-Gaussian function
 of $f_n$, so the resulting full conditional does
 not have a standard conjugate form.
+
+\chapter{Additional posterior results}
+\label{app:additional_posterior_results}
+
+\section{Rank-one terminal-level residual heterogeneity}
+\label{app:terminal_residual_heterogeneity}
+
+This section provides additional descriptive evidence
+of persistent terminal-level residual patterns under
+the baseline rank-one specification, complementing
+the discussion in the main text.
+
+\begin{table}[htbp]
+\centering
+\caption{Posterior residual summaries for selected terminals
+under the baseline rank-one model.}
+\label{tab:baseline_terminal_residuals}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Terminal
+& $N_i$
+& Mean residual
+& Median residual
+& Positive residuals (\%)\\
+\midrule
+Rasgas LNG Terminal 3    & 59 &  3.133 &  3.116 & 100.0 \\
+Fos Tonkin LNG Terminal  & 50 &  1.426 &  1.449 & 100.0 \\
+Yamal LNG Terminal       & 59 &  0.958 &  0.723 &  96.6 \\
+Sabine Pass LNG Terminal & 59 &  0.932 &  0.859 &  94.9 \\
+\midrule
+Cameroon FLNG Terminal   & 24 & -1.548 & -1.592 &   0.0 \\
+Sakhalin II LNG Terminal & 21 & -1.459 & -1.644 &   0.0 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.2cm}
+\begin{minipage}{0.95\textwidth}
+\footnotesize
+\textit{Notes:} $N_i$ denotes the number of terminal-month
+observations available for terminal $i$ in the estimation sample.
+Mean and median residuals are calculated across the posterior
+mean residuals $\widehat{z}_{it}$ for each terminal.
+Positive residuals (\%) denotes the percentage of observations
+for which $\widehat{z}_{it}>0$.
+The table reports selected terminals exhibiting predominantly
+positive or negative residuals.
+\end{minipage}
+\end{table}
+
+\subsection{Joint posterior predictive checks}
+\label{app:joint_ppc}
+
+Table~\ref{tab:joint_ppc_full} presents the complete set of 45 pairwise 
+Spearman correlation checks for the terminal baseline rank-one model, 
+covering all 15 response pairs across the full estimation sample and 
+the importer and exporter subsamples. For each comparison, the observed 
+correlation is reported alongside the median and the 95\% interval 
+obtained from 200 conditional in-sample posterior predictive replicates. 
+These results complement the selected discrepancies discussed in Section~\ref{subsubsec:simple_ppc}.
+
+\begin{longtable}{llrrrr}
+
+\caption{Complete joint posterior predictive checks for the terminal baseline rank-one model. Entries are Spearman correlations. Replicated intervals use 200 conditional in-sample replicates. AP = articulation-point status; GB = incident-global-bridge status; toAP = adjacency to an articulation point; DEP = dependence}
+
+\label{tab:joint_ppc_full}\\
+\toprule
+Response pair & Observed & Rep. median & 95\% lower & 95\% upper \\
+\midrule
+\endfirsthead
+\multicolumn{6}{c}{\textit{Table continued from previous page}}\\
+\toprule
+Response pair & Observed & Rep. median & 95\% lower & 95\% upper \\
+\midrule
+\endhead
+\midrule
+\multicolumn{6}{r}{\textit{Continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{6}{l}{\textit{All terminals}}\\
+\midrule
+PageRank--HHI & -0.639 & -0.713 & -0.729 & -0.695 \\
+
+PageRank--DEP & 0.314 & 0.158 & 0.116 & 0.195 \\
+
+PageRank--AP & 0.372 & 0.267 & 0.224 & 0.298 \\
+
+PageRank--GB & -0.238 & -0.290 & -0.327 & -0.256 \\
+
+PageRank--toAP & -0.015 & 0.026 & -0.011 & 0.065 \\
+
+HHI--DEP & -0.171 & -0.156 & -0.197 & -0.119 \\
+
+HHI--AP & -0.290 & -0.262 & -0.297 & -0.227 \\
+
+HHI--GB & 0.533 & 0.288 & 0.249 & 0.340 \\
+
+HHI--toAP & -0.038 & -0.026 & -0.066 & 0.014 \\
+
+DEP--AP & 0.157 & 0.084 & 0.050 & 0.119 \\
+
+DEP--GB & -0.066 & -0.074 & -0.108 & -0.040 \\
+
+DEP--toAP & -0.082 & 0.005 & -0.030 & 0.044 \\
+
+AP--GB & 0.290 & -0.123 & -0.162 & -0.081 \\
+
+AP--toAP & -0.063 & 0.011 & -0.025 & 0.038 \\
+
+GB--toAP & 0.060 & -0.012 & -0.043 & 0.022 \\
+\midrule
+\multicolumn{6}{l}{\textit{Importers}}\\
+\midrule
+PageRank--HHI & -0.416 & -0.576 & -0.604 & -0.548 \\
+
+PageRank--DEP & 0.209 & 0.069 & 0.023 & 0.116 \\
+
+PageRank--AP & 0.232 & 0.112 & 0.076 & 0.153 \\
+
+PageRank--GB & -0.258 & -0.177 & -0.218 & -0.138 \\
+
+PageRank--toAP & -0.043 & 0.016 & -0.022 & 0.054 \\
+
+HHI--DEP & -0.163 & -0.076 & -0.123 & -0.035 \\
+
+HHI--AP & -0.137 & -0.118 & -0.154 & -0.079 \\
+
+HHI--GB & 0.644 & 0.185 & 0.145 & 0.238 \\
+
+HHI--toAP & 0.014 & -0.018 & -0.055 & 0.025 \\
+
+DEP--AP & 0.033 & 0.017 & -0.016 & 0.051 \\
+
+DEP--GB & -0.154 & -0.025 & -0.062 & 0.017 \\
+
+DEP--toAP & -0.045 & -0.001 & -0.040 & 0.046 \\
+
+AP--GB & 0.137 & -0.034 & -0.076 & 0.003 \\
+
+AP--toAP & 0.019 & 0.004 & -0.045 & 0.040 \\
+
+GB--toAP & 0.131 & -0.007 & -0.047 & 0.035 \\
+\midrule
+\multicolumn{6}{l}{\textit{Exporters}}\\
+\midrule
+PageRank--HHI & -0.818 & -0.779 & -0.804 & -0.753 \\
+
+PageRank--DEP & 0.516 & 0.288 & 0.218 & 0.345 \\
+
+PageRank--AP & 0.276 & 0.364 & 0.305 & 0.428 \\
+
+PageRank--GB & -0.198 & -0.354 & -0.407 & -0.305 \\
+
+PageRank--toAP & 0.166 & 0.032 & -0.032 & 0.096 \\
+
+HHI--DEP & -0.102 & -0.261 & -0.317 & -0.194 \\
+
+HHI--AP & -0.159 & -0.330 & -0.388 & -0.274 \\
+
+HHI--GB & 0.398 & 0.329 & 0.274 & 0.393 \\
+
+HHI--toAP & -0.230 & -0.031 & -0.090 & 0.039 \\
+
+DEP--AP & 0.307 & 0.143 & 0.087 & 0.199 \\
+
+DEP--GB & 0.195 & -0.121 & -0.187 & -0.069 \\
+
+DEP--toAP & -0.106 & 0.009 & -0.041 & 0.070 \\
+
+AP--GB & 0.546 & -0.155 & -0.211 & -0.091 \\
+
+AP--toAP & -0.049 & 0.014 & -0.057 & 0.063 \\
+
+GB--toAP & -0.047 & -0.014 & -0.076 & 0.050 \\
+\end{longtable}
 
 \chapter{Model diagnostics}
 \label{app:model_diagnostics}
