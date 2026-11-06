@@ -1,0 +1,138 @@
+node_index,node_id,node_name
+0,LNGN0008,Al Zour LNG Import Terminal
+1,LNGN0013,American LNG Hialeah Terminal
+2,LNGN0025,Arun LNG Import Terminal
+3,LNGN0026,Arzew-Bethioua LNG Terminal
+4,LNGN0027,Atlantic LNG Terminal
+5,LNGN0035,Barcelona LNG Terminal
+6,LNGN0037,Bilbao LNG Terminal
+7,LNGN0039,Bontang LNG Terminal
+8,LNGN0040,Boryeong LNG Terminal
+9,LNGN0044,Brunnsviksholme LNG Terminal
+10,LNGN0045,Brunsbüttel FSRU
+11,LNGN0050,Calcasieu Pass LNG Terminal
+12,LNGN0052,Cameroon FLNG Terminal
+13,LNGN0055,Cartagena FSRU (Colombia)
+14,LNGN0056,Cartagena LNG Terminal (Spain)
+15,LNGN0070,Corpus Christi LNG Terminal
+16,LNGN0074,Costa Norte LNG Terminal
+17,LNGN0076,Cove Point LNG Import Terminal
+18,LNGN0079,Dabhol LNG Terminal
+19,LNGN0081,Dalian LNG Terminal
+20,LNGN0083,Damietta SEGAS LNG Terminal
+21,LNGN0085,Das Island LNG Terminal
+22,LNGN0097,Dunkirk LNG Terminal
+23,LNGN0098,Dörtyol FSRU
+24,LNGN0100,Eemshaven FSRU
+25,LNGN0101,Egyptian LNG Terminal
+26,LNGN0102,El Musel LNG Terminal
+27,LNGN0103,Elba Island LNG Terminal
+28,LNGN0108,Ennore LNG Terminal
+29,LNGN0109,Escobar FSRU
+30,LNGN0112,Everett Marine Terminal
+31,LNGN0121,Fos Tonkin LNG Terminal
+32,LNGN0122,Fredrikstad LNG Terminal
+33,LNGN0124,Freeport LNG Terminal
+34,LNGN0130,GasPort FSRU
+35,LNGN0132,Gate LNG Terminal
+36,LNGN0136,Gibraltar LNG Terminal
+37,LNGN0142,Gorgon LNG Terminal
+38,LNGN0143,Gorontalo FSRU
+39,LNGN0144,Grain LNG Terminal
+40,LNGN0148,Guanabara Bay FSRU
+41,LNGN0150,Guangxi LNG Terminal
+42,LNGN0156,Gwangyang LNG Terminal
+43,LNGN0163,Hainan Shennan LNG Storage Facility
+44,LNGN0164,Hakodate LNG Terminal
+45,LNGN0166,Hammerfest LNG Snohvit Terminal
+46,LNGN0168,Hazira LNG Terminal
+47,LNGN0170,Higashi Niigata LNG Terminal
+48,LNGN0173,Himeji LNG Terminal
+49,LNGN0175,Hong Kong FSRU
+50,LNGN0178,Huelva LNG Terminal
+51,LNGN0180,Ichthys FLNG Terminal
+52,LNGN0181,Incheon LNG Terminal
+53,LNGN0182,Inkoo FSRU
+54,LNGN0186,Izmir Aliaga LNG Terminal
+55,LNGN0190,Jawa Satu FSRU
+56,LNGN0191,Jebel Ali FLNG Terminal
+57,LNGN0195,Jieyang LNG Terminal (PipeChina)
+58,LNGN0199,Kagoshima LNG Terminal
+59,LNGN0206,Kiyanly LNG Terminal
+60,LNGN0207,Klaipeda FSRU
+61,LNGN0208,Kochi LNG Terminal
+62,LNGN0210,Krk FSRU
+63,LNGN0219,Le Havre FSRU
+64,LNGN0222,Lysekil LNG Terminal
+65,LNGN0230,Map Ta Phut LNG Terminal 2
+66,LNGN0232,Marmara LNG Terminal
+67,LNGN0237,Mejillones LNG Terminal
+68,LNGN0238,Melaka FSRU
+69,LNGN0241,Mizushima LNG Terminal
+70,LNGN0244,Montoir LNG Terminal
+71,LNGN0248,Mugardos LNG Terminal
+72,LNGN0250,Mukran FSRU
+73,LNGN0251,Mundra LNG Terminal
+74,LNGN0261,Nigeria LNG Terminal
+75,LNGN0268,Nusantara Regas Satu Terminal
+76,LNGN0270,Ohgishima LNG Terminal
+77,LNGN0272,Old Harbour FSRU
+78,LNGN0274,Oman Qalhat LNG Terminal
+79,LNGN0278,Panigaglia LNG Terminal
+80,LNGN0285,Pengerang Johor LNG Terminal
+81,LNGN0287,Penuelas LNG Terminal
+82,LNGN0288,Peru LNG Terminal
+83,LNGN0290,Philippines LNG Terminal
+84,LNGN0291,Pichilingue LNG Terminal
+85,LNGN0293,Pinghu LNG Terminal
+86,LNGN0294,Piombino FSRU
+87,LNGN0297,Pluto LNG Terminal
+88,LNGN0299,Pori LNG Terminal
+89,LNGN0307,Porto do Açu FSRU
+90,LNGN0308,Portovaya LNG Terminal
+91,LNGN0309,Prelude FLNG Terminal
+92,LNGN0312,Punta Europa LNG Terminal
+93,LNGN0314,Pyeongtaek LNG Terminal
+94,LNGN0319,Qidong LNG Terminal
+95,LNGN0322,Queensland Curtis LNG Terminal
+96,LNGN0324,Quintero LNG Terminal
+97,LNGN0328,Rasgas LNG Terminal 3
+98,LNGN0331,Revithoussa LNG Terminal
+99,LNGN0334,Risavika LNG Terminal
+100,LNGN0345,Sabine Pass LNG Terminal
+101,LNGN0347,Sagunto LNG Terminal
+102,LNGN0348,Saint John LNG Terminal
+103,LNGN0351,Sakhalin II LNG Terminal
+104,LNGN0354,Samcheok LNG Terminal
+105,LNGN0359,Senboku 2 LNG Terminal
+106,LNGN0362,Sergipe FSRU
+107,LNGN0363,Shandong LNG Terminal
+108,LNGN0372,Shin-Sendai LNG Terminal
+109,LNGN0374,Sines LNG Terminal
+110,LNGN0378,Skikda LNG Terminal
+111,LNGN0381,Sodegaura LNG Terminal
+112,LNGN0382,Sodeshi Shimizu LNG Terminal
+113,LNGN0385,South Hook LNG Terminal
+114,LNGN0391,Summit FSRU
+115,LNGN0398,Taichung LNG Terminal
+116,LNGN0405,Tanjung Benoa FSRU
+117,LNGN0421,Tianjin LNG Terminal (Sinopec)
+118,LNGN0423,Tiga Malaysia LNG Terminal
+119,LNGN0425,Tobata LNG Terminal
+120,LNGN0426,Tongyoung LNG Terminal
+121,LNGN0427,Tornio Manga LNG Terminal
+122,LNGN0428,Toscana FSRU
+123,LNGN0429,Toyama Shinko LNG Terminal
+124,LNGN0435,Vysotsk LNG Terminal
+125,LNGN0437,Wenzhou LNG Terminal
+126,LNGN0441,Wheatstone LNG Terminal
+127,LNGN0442,Wilhelmshaven FSRU
+128,LNGN0449,Xintian Tangshan LNG Terminal
+129,LNGN0452,Yamal LNG Terminal
+130,LNGN0453,Yanai LNG Terminal
+131,LNGN0460,Yokkaichi Works LNG Terminal
+132,LNGN0463,Yung-An LNG Terminal
+133,LNGN0464,Zeebrugge LNG Terminal
+134,LNGN0472,Zhoushan LNG Terminal
+135,LNGN0473,Zhuhai LNG Terminal
+136,LNGN0474,Świnoujście Polskie LNG Terminal
