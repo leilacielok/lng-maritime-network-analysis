@@ -2871,19 +2871,19 @@ The horizontal axis spans the full empirical range of posterior mean latent fact
 
 To relate these posterior patterns to observed network positions, two terminal-month observations with 
 posterior mean latent factor scores closest to the 5th and 95th percentiles of the estimation sample are 
-considered. These observations were selected to illustrate contrasting positions along the latent dimension 
-while avoiding the most extreme cases.
+considered. 
 Mugardos LNG Terminal, located in Galicia, Spain, has an estimated latent factor score of approximately $-1.0$ in October 2022, 
 compared with $2.73$ for Sabine Pass LNG Terminal, located in Cameron Parish, Louisiana, in June 2024. 
 Their observed PageRank values are 0.011 and 0.039, respectively, while their counterparty HHI values are 1.00 and 0.17. 
 Mugardos is classified as an importer and has an incident global bridge, whereas Sabine Pass is an exporter without one. 
-These differences are broadly consistent with the estimated relationships between the latent factor and the terminal 
-responses, although the two observations also differ in commercial role.
+These observations were selected to illustrate contrasting positions along the latent dimension 
+while avoiding the most extreme cases, and display differences which are broadly consistent with the estimated relationships between the latent factor and the terminal 
+responses presented above, although the two observations also differ in commercial role.
 
 An additional case of interest is Rasgas LNG Terminal 3, Qatar, which exhibits the highest posterior mean latent factor 
 score in the estimation sample, approximately $6.38$ in June 2020. Its estimated factor score consists of a systematic 
-component of approximately $\mathbf{x}_n^\top\boldsymbol{\beta}=1.84$
-and a residual component of $z_n=4.55$, indicating a substantial deviation from the 
+component $\mathbf{x}_n^\top\boldsymbol{\beta}\approx 1.84$
+and a residual component $z_n\approx 4.55$, indicating a substantial deviation from the 
 position explained by the observed covariates. 
 Importantly, this deviation is not confined to a single observation: across its 59 terminal-month observations, Rasgas exhibits a positive posterior 
 mean residual in every month, with an average of approximately $3.13$. Similar, although less pronounced, patterns are 
@@ -2898,7 +2898,7 @@ This provides an empirical motivation for extending the rank-one model by introd
 allowing persistent terminal-level heterogeneity to be represented separately from residual variation. 
 The results of this extension are presented in Section~\ref{sec:node_specific_model}.
 
-While these examples provide an illustration of the latent factor's interpretation and highlight potential limitations 
+While the preceding examples illustrate the interpretation of the latent factor and highlight potential limitations 
 of the baseline specification, the extent to which the model reproduces the observed response patterns is examined 
 through the posterior predictive checks in the following subsection.
 
@@ -2918,10 +2918,8 @@ The model closely reproduces the overall response means and the overall frequenc
 The observed overall binary proportions also lie within their replicated intervals. 
 Nevertheless, discrepancies appear in dispersion, quantiles and role-specific boundary frequencies. 
 For instance, PageRank dispersion is overestimated for lagged importers and underestimated for lagged
-exporters. The observed 95th percentile
-of exporters' PageRank is 0.0714, compared with a replicated mean
-of 0.0620 and a 95\% replicated interval
-of $[0.0587,0.0654]$.
+exporters: the observed 95th percentile of exporters' PageRank is 0.0714, compared with a replicated mean
+of 0.0620 and a 95\% replicated interval of $[0.0587,0.0654]$.
 
 \begin{table}[htbp]
 \centering
@@ -2949,45 +2947,67 @@ These discrepancies suggest that a shared factor
 with common response functions does not fully
 capture role-specific response behaviour.
 
-Association between responses is assessed by comparing observed pairwise Spearman correlations with those obtained from 200 replicated datasets selected evenly across the four chains. 
-Table~\ref{tab:simple_joint_ppc} reports the five response-pair and role combinations 
-with the largest absolute discrepancies, together with the 
-articulation-point--incident-global-bridge correlation for importers to complete the 
-comparison across terminal roles. 
-The full set of 45 pairwise correlation checks is provided in Table~\ref{tab:joint_ppc_full} in the Appendix.
+Association between responses is assessed by comparing observed pairwise 
+Spearman correlations with those obtained from 200 replicated datasets 
+selected evenly across the four chains. Table~\ref{tab:joint_ppc} focuses 
+on the three response pairs associated with the five largest absolute 
+discrepancies between observed correlations and posterior predictive 
+medians, reporting results for the full sample, importers, and exporters 
+to allow systematic comparisons across terminal roles. 
+The complete set of 45 pairwise correlation checks is provided in 
+Table~\ref{tab:joint_ppc_full} in the Appendix.
 
 \begin{table}[htbp]
 \centering
 \small
 \caption{Selected joint posterior predictive checks. Entries are Spearman correlations. 
 Replicated intervals use 200 conditional in-sample replicates.}
-\label{tab:simple_joint_ppc}
+\label{tab:joint_ppc}
 \begin{tabular}{llrrr}
 \hline
 Response pair & Lagged role & Observed & Rep. median & 95\% interval \\
 \hline
-Articulation--bridge & All & 0.290 & -0.123 & $[-0.162,-0.081]$ \\
-Articulation--bridge & Importer & 0.137 & -0.034 & $[-0.076,0.003]$ \\
-Articulation--bridge & Exporter & 0.546 & -0.155 & $[-0.211,-0.091]$ \\
-HHI--bridge & All & 0.533 & 0.288 & $[0.249,0.340]$ \\
-HHI--bridge & Importer & 0.644 & 0.185 & $[0.145,0.238]$ \\
-Dependence--bridge & Exporter & 0.195 & -0.121 & $[-0.187,-0.069]$ \\
+AP--GB & All & 0.290 & -0.123 & $[-0.162,-0.081]$ \\
+AP--GB & Importer & 0.137 & -0.034 & $[-0.076,0.003]$ \\
+AP--GB & Exporter & 0.546 & -0.155 & $[-0.211,-0.091]$ \\
+HHI--GB & All & 0.533 & 0.288 & $[0.249,0.340]$ \\
+HHI--GB & Importer & 0.644 & 0.185 & $[0.145,0.238]$ \\
+HHI--GB & Exporter & 0.398 & 0.329 & $[0.274, 0.393]$ \\
+DEP--GB & All & -0.066 & -0.074	& $[-0.108, -0.040]$ \\
+DEP--GB & Importers	& -0.154 & -0.025 & $[-0.062, 0.017]$ \\
+DEP--GB & Exporters	& 0.195	& -0.121 & $[-0.187, -0.069]$ \\
 \hline
 \end{tabular}
 \end{table}
 
-The largest discrepancy concerns articulation-point and incident-global-bridge status 
-among exporters, for which the observed correlation is positive ($0.546$), whereas the 
-posterior predictive median is negative ($-0.155$). 
-The same sign reversal is observed for the full sample, while the replicated correlation 
-among importers is closer to zero. Substantial discrepancies also concern the association 
-between counterparty HHI and incident-global-bridge status, particularly among importers, 
-and between dependence and incident-global-bridge status among exporters.
+The largest discrepancy concerns the association between articulation-point 
+and incident-global-bridge status among exporters, for which the observed 
+correlation is positive ($0.546$), whereas the posterior predictive median 
+is negative ($-0.155$). The same sign reversal is observed for the full 
+sample, while the replicated correlation among importers is closer to zero, 
+although still negative. This indicates that the model fails to reproduce 
+the positive association between these two indicators across terminal roles, 
+with the most pronounced discrepancy occurring among exporters.
+The association between counterparty HHI and incident-global-bridge status 
+also exhibits substantial discrepancies, particularly among importers, for 
+whom the observed correlation ($0.644$) considerably exceeds the posterior 
+predictive median ($0.185$). In contrast, the corresponding discrepancy 
+among exporters is relatively small. For dependence and incident-global-bridge 
+status, the model reproduces the observed negative association reasonably 
+well in the full sample but underestimates its magnitude among importers. 
+Among exporters, the observed correlation is positive ($0.195$), whereas 
+the posterior predictive median is negative ($-0.121$), indicating a further sign reversal.
 
-These mismatches are consistent with restrictions of the fitted specification. In particular, 
-the single latent factor has opposite loadings on articulation-point and incident-global-bridge 
-probabilities, while conditional independence allows no additional residual association between 
-these responses. The model therefore struggles to reproduce their positive observed co-occurrence. 
+These discrepancies suggest limitations in the rank-one model's ability to 
+reproduce the dependence structure among responses. In particular, the single 
+latent factor has opposite loadings on articulation-point and incident-global-bridge 
+probabilities, while the assumption of conditional independence does not 
+allow for additional residual associations between these responses. 
+Consequently, the model struggles to reproduce their positive observed co-occurrence.
+These findings provide a complementary motivation for considering a 
+rank-two specification, in which two latent factors allow for a more 
+flexible representation of associations among responses. The results of 
+this extension are presented in Section~\ref{sec:rank_two_model}.
 
 \subsection{Chokepoint posterior analysis}
 \label{sec:chokepoint_findings}
@@ -3083,8 +3103,7 @@ Probability of betweenness equal to zero & $-1.656$ & $[-2.556,-0.767]$ \\
 latent factor. Lines are posterior medians and bands
 are equal-tailed 95\% credible intervals for conditional
 expected responses or binary probabilities. The betweenness
-mean includes the mass at zero. The range spans the first
-to the 99th percentile of posterior mean factor scores.}
+mean includes the mass at zero. The horizontal axis spans the full empirical range of posterior mean latent factor scores in the estimation sample.}
 \label{fig:chokepoint_response_curves}
 \end{figure}
 
@@ -3107,6 +3126,30 @@ structural indicators coincide, showing how the estimated
 factor can summarise different aspects of
 chokepoint centrality, flow exposure and
 structural position.
+
+Although the chokepoint latent factor does not exhibit values as extreme 
+as those observed for some terminals, a similar pattern of persistent 
+residual deviations emerges. The highest and lowest posterior mean factor 
+scores are observed for Gibraltar Strait in November 2024 ($2.39$) and 
+Sunda Strait in December 2022 ($-2.28$), respectively. In both cases, the 
+systematic components explained by the covariates are close to zero 
+($-0.01$ and $0.04$), while the residual components account for nearly the 
+entire factor scores ($2.41$ and $-2.32$, respectively).
+
+As observed for the terminals, these deviations are not limited to isolated 
+months. Gibraltar Strait exhibits positive posterior mean residuals in $96.6\%$ 
+of its 59 observations, with an average of $1.30$, while Sunda Strait exhibits 
+negative residuals in $95.9\%$ of its 49 observations, averaging $-1.18$. 
+Similar patterns are found across other chokepoints: among the 20 with at 
+least 20 observations, 13 exhibit residuals of the same sign in more than 
+$85\%$ of their observed months. Descriptive summaries of these cases are 
+provided in Table~\ref{app:chokepoint_residuals} in the Appendix.
+
+These findings reinforce the evidence of persistent node-level heterogeneity 
+already identified for terminals, suggesting that the baseline covariates 
+may not fully account for systematic differences across nodes. They 
+therefore provide further motivation for the node-specific extension 
+discussed in Section~\ref{sec:node_specific_model}.
 
 \subsubsection{Chokepoint posterior predictive assessment}
 
@@ -3167,45 +3210,43 @@ PageRank--articulation & 0.287 & 0.201 & $[0.139,0.268]$ \\
 
 Sampling performance was evaluated using rank-normalised
 $\widehat{R}$, bulk and tail effective sample sizes (ESS),
-post-warm-up divergences, and the Geweke and
-Heidelberger--Welch diagnostics. 
-The Geweke and Heidelberger--Welch diagnostics were applied separately to each chain for all distinct global model parameters, 
-using the retained posterior draws. These procedures covered 26 parameters for terminals and 19 for chokepoints, corresponding to 104 and 76 parameter-chain tests, respectively. 
-Observation-level latent factors were excluded from these additional tests but included in the computation of $\widehat{R}$ and effective sample sizes.
+post-burn-in divergences, and the Geweke and Heidelberger--Welch diagnostics. 
+The Geweke and Heidelberger--Welch diagnostics were applied separately to each chain for every global parameter in both node-specific models, 
+using the retained posterior draws.
+Observation-level latent factors were excluded from these additional tests 
+to limit the computational burden associated with evaluating thousands of observation-specific 
+quantities across four chains. Their convergence and sampling efficiency were nevertheless 
+assessed through rank-normalised $\widehat{R}$ and bulk and tail effective sample sizes.
 
-Neither model presented post-warm-up divergences,
-and the maximum reported rank-normalised
-$\widehat{R}$ was 1.00, rounded to two decimal
-places, for both models.
+Neither model presented post-burn-in divergences. 
+The maximum rank-normalised $\widehat{R}$, rounded to three 
+decimal places, was 1.001 for terminals and 1.003 for chokepoints.
 
-For terminals, the minimum bulk and tail ESS
-were 2,931, associated with the
-lagged exporter coefficient, and 6,726, for the HHI boundary loading.
+For terminals, the minimum bulk ESS
+was 2,931, associated with the
+lagged exporter coefficient, and the minimum tail ESS was 6,726 for the HHI boundary loading.
 For chokepoints, the corresponding values were
 1,693 and 3,698, both associated with the
 betweenness precision parameter, indicating satisfactory convergence
 and sampling efficiency.
 
-The selected trace plots and within-chain autocorrelation functions presented in
-Appendix~\ref{app:mcmc_diagnostics}
+Trace plots and within-chain autocorrelation functions are presented in
+Appendix~\ref{app:mcmc_diagnostics} and
 provide additional visual evidence of sampling
 behaviour. In particular, the betweenness loading
 and precision parameters exhibit relatively
 persistent autocorrelation in the chokepoint model,
 consistent with their comparatively lower effective sample sizes.
 
-For the terminal model, 92 out of 104
-parameter-chain tests (88.5\%) satisfied
-$|Z|\leq 1.96$. The remaining 12 tests
-exceeded the threshold, with a maximum
-absolute $Z$-score of 3.07.
-For the chokepoint model, 71 out of 76
-tests (93.4\%) satisfied the same criterion.
-The five exceedances were concentrated
-primarily among the precision parameters
-of the continuous responses, with one
-additional exceedance involving the
-betweenness boundary-component loading.
+The Geweke diagnostic was used to assess differences between 
+the early and late portions of each chain. For the terminal model, 
+92 out of 104 parameter-chain tests (88.5\%) satisfied $|Z|\leq 1.96$. 
+The remaining 12 tests exceeded the threshold, with a maximum absolute $Z$-score of 3.07.
+
+For the chokepoint model, 71 out of 76 tests (93.4\%) satisfied the same 
+criterion. The five exceedances were concentrated primarily among the 
+precision parameters of the continuous responses, with one additional 
+exceedance involving the betweenness boundary-component loading. 
 The maximum absolute $Z$-score was 2.46.
 
 Although these results indicate some differences
@@ -3265,8 +3306,8 @@ together with the results of the Geweke and Heidelberger--Welch tests for both b
 \caption{Summary of sampling diagnostics for the
 baseline terminal and chokepoint models.
 Geweke and Heidelberger--Welch results refer
-to parameter-chain tests on selected global
-parameters.}
+to parameter-chain tests on distinct global
+parameters, excluding duplicate parameter aliases.}
 \label{tab:baseline_sampling_diagnostics}
 \small
 \begin{tabular}{lcc}
@@ -3275,29 +3316,25 @@ Diagnostic & Terminals & Chokepoints \\
 \hline
 \multicolumn{3}{l}{\textit{MCMC convergence and mixing}} \\
 Post-warm-up divergences & 0 & 0 \\
-Maximum $\widehat{R}$ & 1.00 & 1.00 \\
+Maximum $\widehat{R}$ & 1.001 & 1.003 \\
 Minimum bulk ESS & 2,931 & 1,693 \\
 Minimum tail ESS & 6,726 & 3,698 \\
 \hline
 \multicolumn{3}{l}{\textit{Geweke diagnostic}} \\
-Total tests & 116 & 88 \\
-Passed & 102 (87.9\%) & 83 (94.3\%) \\
-Failed & 14 (12.1\%) & 5 (5.7\%) \\
+Total tests & 104 & 76 \\
+Passed & 92 (88.5\%) & 71 (93.4\%) \\
+Failed & 12 (11.5\%) & 5 (6.6\%) \\
 Maximum $|Z|$ & 3.07 & 2.46 \\
 \hline
 \multicolumn{3}{l}{\textit{Heidelberger--Welch diagnostic}} \\
-Stationarity passed & 116 (100\%) & 88 (100\%) \\
-Half-width passed & 108 (93.1\%) & 88 (100\%) \\
-Half-width failed & 8 (6.9\%) & 0 (0\%) \\
+Stationarity passed & 104 (100\%) & 76 (100\%) \\
+Half-width passed & 96 (92.3\%) & 76 (100\%) \\
+Half-width failed & 8 (7.7\%) & 0 (0\%) \\
 \hline
 \end{tabular}
 \end{table}
 
-Additional numerical results, including the
-parameters and chains associated with the
-minimum ESS values, Geweke exceedances,
-and Heidelberger--Welch diagnostic exceptions,
-are reported in Appendix~\ref{app:mcmc_diagnostics}.
+Additional results are reported in Appendix~\ref{app:mcmc_diagnostics}.
 
 Overall, the combined diagnostics indicate
 satisfactory sampling behaviour for both
@@ -3313,6 +3350,7 @@ and sampling efficiency.
 % TODO: Insert results and posterior predictive assessment.
 
 \section{Rank-two model results}
+\label{sec:rank_two_model}
 % TODO: Insert results and posterior predictive assessment.
 
 \section{Prior sensitivity results}
@@ -5351,7 +5389,10 @@ not have a standard conjugate form.
 \chapter{Additional posterior results}
 \label{app:additional_posterior_results}
 
-\section{Rank-one terminal-level residual heterogeneity}
+\section{Terminals}
+\label{app:terminals_add_posterior_results}
+
+\subsection{Terminals residuals heterogeneity}
 \label{app:terminal_residual_heterogeneity}
 
 This section provides additional descriptive evidence
@@ -5377,9 +5418,21 @@ Rasgas LNG Terminal 3    & 59 &  3.133 &  3.116 & 100.0 \\
 Fos Tonkin LNG Terminal  & 50 &  1.426 &  1.449 & 100.0 \\
 Yamal LNG Terminal       & 59 &  0.958 &  0.723 &  96.6 \\
 Sabine Pass LNG Terminal & 59 &  0.932 &  0.859 &  94.9 \\
+Pluto LNG Terminal & 59 & 0.871 & 0.853 & 91.5 \\
+Gate LNG Terminal & 59 & 0.706 & 0.771 & 89.8 \\
+Corpus Christi LNG Terminal & 51 & 0.393 & 0.461 & 86.3 \\
 \midrule
 Cameroon FLNG Terminal   & 24 & -1.548 & -1.592 &   0.0 \\
 Sakhalin II LNG Terminal & 21 & -1.459 & -1.644 &   0.0 \\
+Punta Europa LNG Terminal & 20 & -1.234 & -1.455 & 0.0 \\
+Elba Island LNG Terminal & 25 & -1.024 & -0.966 & 0.0 \\
+Tiga Malaysia LNG Terminal & 30	& -0.932 &	-0.817 & 3.3 \\
+Oman Qalhat LNG Terminal	& 25 &	-1.552 &	-1.805 &	4.0 \\
+Queensland Curtis LNG Terminal &	47 &	-0.928	& -0.910 &	6.4 \\
+Senboku 2 LNG Terminal	& 39 &	-0.652	& -0.751 &	7.7 \\
+Incheon LNG Terminal	& 53	& -0.606	& -0.623 &	9.4 \\
+Prelude FLNG Terminal	& 24	& -1.002	& -1.002 &	12.5 \\
+Wheatstone LNG Terminal	& 50 &	-0.542	& -0.538 &	14.0 \\
 \bottomrule
 \end{tabular}
 
@@ -5392,12 +5445,12 @@ Mean and median residuals are calculated across the posterior
 mean residuals $\widehat{z}_{it}$ for each terminal.
 Positive residuals (\%) denotes the percentage of observations
 for which $\widehat{z}_{it}>0$.
-The table reports selected terminals exhibiting predominantly
-positive or negative residuals.
+The table includes terminals with at least 20 observations and a proportion 
+of positive posterior mean residuals either above 85\% or below 15\%.
 \end{minipage}
 \end{table}
 
-\subsection{Joint posterior predictive checks}
+\subsection{Terminals joint posterior predictive checks}
 \label{app:joint_ppc}
 
 Table~\ref{tab:joint_ppc_full} presents the complete set of 45 pairwise 
@@ -5410,7 +5463,9 @@ These results complement the selected discrepancies discussed in Section~\ref{su
 
 \begin{longtable}{llrrrr}
 
-\caption{Complete joint posterior predictive checks for the terminal baseline rank-one model. Entries are Spearman correlations. Replicated intervals use 200 conditional in-sample replicates. AP = articulation-point status; GB = incident-global-bridge status; toAP = adjacency to an articulation point; DEP = dependence}
+\caption{Complete joint posterior predictive checks for the terminal baseline rank-one model. 
+Entries are Spearman correlations. Replicated intervals use 200 conditional in-sample replicates. 
+PR = PageRank; AP = articulation-point status; GB = incident-global-bridge status; toAP = adjacency to an articulation point; DEP = dependence}
 
 \label{tab:joint_ppc_full}\\
 \toprule
@@ -5429,15 +5484,15 @@ Response pair & Observed & Rep. median & 95\% lower & 95\% upper \\
 \endlastfoot
 \multicolumn{6}{l}{\textit{All terminals}}\\
 \midrule
-PageRank--HHI & -0.639 & -0.713 & -0.729 & -0.695 \\
+PR--HHI & -0.639 & -0.713 & -0.729 & -0.695 \\
 
-PageRank--DEP & 0.314 & 0.158 & 0.116 & 0.195 \\
+PR--DEP & 0.314 & 0.158 & 0.116 & 0.195 \\
 
-PageRank--AP & 0.372 & 0.267 & 0.224 & 0.298 \\
+PR--AP & 0.372 & 0.267 & 0.224 & 0.298 \\
 
-PageRank--GB & -0.238 & -0.290 & -0.327 & -0.256 \\
+PR--GB & -0.238 & -0.290 & -0.327 & -0.256 \\
 
-PageRank--toAP & -0.015 & 0.026 & -0.011 & 0.065 \\
+PR--toAP & -0.015 & 0.026 & -0.011 & 0.065 \\
 
 HHI--DEP & -0.171 & -0.156 & -0.197 & -0.119 \\
 
@@ -5461,15 +5516,15 @@ GB--toAP & 0.060 & -0.012 & -0.043 & 0.022 \\
 \midrule
 \multicolumn{6}{l}{\textit{Importers}}\\
 \midrule
-PageRank--HHI & -0.416 & -0.576 & -0.604 & -0.548 \\
+PR--HHI & -0.416 & -0.576 & -0.604 & -0.548 \\
 
-PageRank--DEP & 0.209 & 0.069 & 0.023 & 0.116 \\
+PR--DEP & 0.209 & 0.069 & 0.023 & 0.116 \\
 
-PageRank--AP & 0.232 & 0.112 & 0.076 & 0.153 \\
+PR--AP & 0.232 & 0.112 & 0.076 & 0.153 \\
 
-PageRank--GB & -0.258 & -0.177 & -0.218 & -0.138 \\
+PR--GB & -0.258 & -0.177 & -0.218 & -0.138 \\
 
-PageRank--toAP & -0.043 & 0.016 & -0.022 & 0.054 \\
+PR--toAP & -0.043 & 0.016 & -0.022 & 0.054 \\
 
 HHI--DEP & -0.163 & -0.076 & -0.123 & -0.035 \\
 
@@ -5493,15 +5548,15 @@ GB--toAP & 0.131 & -0.007 & -0.047 & 0.035 \\
 \midrule
 \multicolumn{6}{l}{\textit{Exporters}}\\
 \midrule
-PageRank--HHI & -0.818 & -0.779 & -0.804 & -0.753 \\
+PR--HHI & -0.818 & -0.779 & -0.804 & -0.753 \\
 
-PageRank--DEP & 0.516 & 0.288 & 0.218 & 0.345 \\
+PR--DEP & 0.516 & 0.288 & 0.218 & 0.345 \\
 
-PageRank--AP & 0.276 & 0.364 & 0.305 & 0.428 \\
+PR--AP & 0.276 & 0.364 & 0.305 & 0.428 \\
 
-PageRank--GB & -0.198 & -0.354 & -0.407 & -0.305 \\
+PR--GB & -0.198 & -0.354 & -0.407 & -0.305 \\
 
-PageRank--toAP & 0.166 & 0.032 & -0.032 & 0.096 \\
+PR--toAP & 0.166 & 0.032 & -0.032 & 0.096 \\
 
 HHI--DEP & -0.102 & -0.261 & -0.317 & -0.194 \\
 
@@ -5523,6 +5578,61 @@ AP--toAP & -0.049 & 0.014 & -0.057 & 0.063 \\
 
 GB--toAP & -0.047 & -0.014 & -0.076 & 0.050 \\
 \end{longtable}
+
+\section{Chokepoints}
+
+\subsection{Chokepoints residuals heterogeneity}
+\label{app:chokepoint_residuals}
+
+This section provides additional descriptive evidence of persistent
+chokepoint-level residual patterns under the baseline rank-one
+specification, complementing the discussion in the main text.
+The table includes chokepoints with at least 20 observations and
+positive posterior mean residuals in either more than 85\% or
+less than 15\% of their observed months.
+
+\begin{table}[htbp]
+\centering
+\caption{Posterior residual summaries for selected chokepoints
+under the baseline rank-one model.}
+\label{tab:chokepoint_residual_summary}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Chokepoint & $N_i$ & Mean residual & Median residual
+& Positive residuals (\%) \\
+\midrule
+Gibraltar Strait & 59 & 1.295 & 1.302 & 96.6 \\
+Taiwan Strait & 59 & 1.130 & 1.247 & 96.6 \\
+Suez Canal & 59 & 1.067 & 1.227 & 96.6 \\
+Malacca Strait & 59 & 0.980 & 1.178 & 91.5 \\
+Bab el-Mandeb Strait & 59 & 0.916 & 1.088 & 89.8 \\
+Strait of Hormuz & 59 & 0.770 & 0.767 & 98.3 \\
+\midrule
+Lombok Strait & 59 & -0.409 & -0.435 & 11.9 \\
+Makassar Strait & 59 & -0.440 & -0.417 & 5.1 \\
+Bohai Strait & 52 & -0.564 & -0.514 & 3.8 \\
+Ombai Strait & 59 & -0.721 & -0.766 & 3.4 \\
+Tsugaru Strait & 56 & -0.792 & -0.787 & 7.1 \\
+Cape of Good Hope & 57 & -1.082 & -1.132 & 8.8 \\
+Sunda Strait & 49 & -1.179 & -1.253 & 4.1 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.2cm}
+\begin{minipage}{\textwidth}
+\footnotesize
+\textit{Notes:} $N_i$ denotes the number of chokepoint-month
+observations available for chokepoint $i$ in the estimation sample.
+Mean and median residuals are calculated across the posterior
+mean residuals $\hat{z}_{it}$ for each chokepoint.
+Positive residuals (\%) denotes the percentage of observations
+for which $\hat{z}_{it}>0$.
+The table reports chokepoints with at least 20 observations
+and predominantly positive or negative residuals, defined
+as more than 85\% or less than 15\% positive residuals.
+\end{minipage}
+\end{table}
 
 \chapter{Model diagnostics}
 \label{app:model_diagnostics}
