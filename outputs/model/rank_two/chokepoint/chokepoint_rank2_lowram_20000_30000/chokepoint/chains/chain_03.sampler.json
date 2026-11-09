@@ -1,0 +1,10 @@
+{
+  "sampler_version": "pymc_default_trace_v2",
+  "draws": 30000,
+  "tune": 20000,
+  "seed": 2792526254,
+  "target_accept": 0.8,
+  "model": "baseline",
+  "rank": 2,
+  "node_type": "chokepoint"
+}

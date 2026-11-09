@@ -1,0 +1,20 @@
+{
+  "divergences": 183,
+  "nondivergent_draws": 119817,
+  "selected_parameters": [
+    "mu_node [CP007]",
+    "intercept_cont [share_monthly_network_flow]",
+    "mu_raw [CP015]",
+    "mu_node [CP009]",
+    "mu_node [CP005]",
+    "intercept_cont [betweenness]",
+    "mu_node [CP015]",
+    "mu_node [CP006]"
+  ],
+  "selection_method": "Descending two-sample Kolmogorov-Smirnov distance",
+  "candidate_scope": "Global parameters and node effects; observation-level arrays excluded",
+  "note": "Exploratory marginal association, not a cause or attribution of divergences; no hypothesis-test p-values.",
+  "candidate_count": 68,
+  "warning": "Exploratory ranking; uncertainty is greater when divergent draws are few. No count threshold is applied.",
+  "status": "created"
+}

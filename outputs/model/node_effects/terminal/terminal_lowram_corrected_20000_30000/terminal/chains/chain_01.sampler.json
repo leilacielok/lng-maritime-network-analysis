@@ -1,0 +1,10 @@
+{
+  "sampler_version": "pymc_default_trace_v2",
+  "draws": 30000,
+  "tune": 20000,
+  "seed": 3112530800,
+  "target_accept": 0.8,
+  "model": "node_effects",
+  "rank": 1,
+  "node_type": "terminal"
+}

@@ -80,10 +80,7 @@ def samples_rank_two(ds, name, response_dim, max_draws=4000):
 
 def export_rank_two_responses(post, audit, keys, node_type, out):
     """Conditional curves varying one raw factor while holding the other at zero."""
-    ac = samples(post, 'intercept_cont', 'continuous')
-    ab = samples(post, 'intercept_binary', 'binary')
     suffix = 'one' if node_type == 'terminal' else 'zero'
-    ao = samples(post, 'intercept_' + suffix, 'boundary')
     lc = samples_rank_two(post, 'loading_cont', 'continuous')
     lb = samples_rank_two(post, 'loading_binary', 'binary')
     lo = samples_rank_two(post, 'loading_' + suffix, 'boundary')
@@ -99,10 +96,10 @@ def export_rank_two_responses(post, audit, keys, node_type, out):
     if not (len(ac) == len(lc) == len(lb) == len(lo)):
         raise ValueError('Posterior draws are not paired')
 
-    for h in range(2):
-        label = f'factor_{h+1}'
-        series = keys[f'factor_mean_{label}_mean']
-        low, high = series.quantile([.01, .99])
+    for h, factor_label in enumerate(post.factor_dim.values):
+        label = str(factor_label)
+        series = keys[f'factor_{label}_mean']
+        low, high = series.min(), series.max()
         grid = np.linspace(float(low), float(high), 101)
         fig, axes = plt.subplots(2, 3, figsize=(13, 7))
         rows = []
@@ -285,8 +282,11 @@ def export_selected_acf(post, out):
             families[label] = name
 
     dataset = xr.Dataset(variables)
-    diagnostics = az.summary(dataset, kind='diagnostics')
-
+    diagnostics = az.summary(
+        dataset,
+        kind='diagnostics',
+        round_to=6
+    )
     selected = {}
 
     def select_lowest(labels, column, reason):
@@ -553,7 +553,7 @@ def main():
             associations = []
             for role, mask in masks:
                 for h, factor_label in enumerate(post.factor_dim.values):
-                    a = keys.loc[mask, f'factor_mean_{factor_label}_mean'].to_numpy()
+                    a = keys.loc[mask, f'factor_{factor_label}_mean'].to_numpy()
                     for response in audit['continuous_responses'] + audit['binary_responses']:
                         b = frame.loc[mask, response].to_numpy()
                         rho = (np.corrcoef(rankdata(a), rankdata(b))[0, 1]
@@ -577,9 +577,13 @@ def main():
             associations = []
             for role, mask in masks:
                 for response in audit['continuous_responses'] + audit['binary_responses']:
-                    a = keys.loc[mask, 'factor_mean_mean'].to_numpy()
+                    a = keys.loc[mask, 'factor_mean'].to_numpy()
                     b = frame.loc[mask, response].to_numpy()
-                    rho = np.corrcoef(rankdata(a), rankdata(b))[0, 1] if np.std(b) else np.nan
+                    rho = (
+                        np.corrcoef(rankdata(a), rankdata(b))[0, 1]
+                        if np.std(a) and np.std(b)
+                        else np.nan
+                    )
                     associations.append(dict(role_lag1=role, response=response, spearman_with_posterior_factor_mean=rho))
             pd.DataFrame(associations).to_csv(out / 'factor_associations.csv', index=False)
             # Response functions use paired posterior draws, preserving dependence.
@@ -593,11 +597,12 @@ def main():
             # Paired posterior contrasts on the original response scale.
             # These include the point mass at one (terminal HHI/dependence)
             # or zero (chokepoint betweenness), rather than only the Beta mean.
-            factor_low = float(keys.factor_mean_mean.quantile(.01))
-            factor_high = float(keys.factor_mean_mean.quantile(.99))
+            factor_low = float(keys.factor_mean.min())
+            factor_high = float(keys.factor_mean.max())
             if not (factor_low <= 0.0 and 1.0 <= factor_high):
                 print(f'WARNING: factor values 0 and 1 are not both within '
-                      f'the plotted 1%-99% range [{factor_low:.3f}, {factor_high:.3f}]')
+                      f'the observed posterior-mean factor range '
+                      f'[{factor_low:.3f}, {factor_high:.3f}]')
             contrast_rows = []
             for j, response in enumerate(audit['continuous_responses']):
                 def expected_at(f):
@@ -688,7 +693,7 @@ def main():
     config = terminal.parent / 'run_config.json'
     if config.exists():
         shutil.copy2(config, out / 'run_config.json')
-    (out / 'README.txt').write_text('For rank-two see rank_two_curves_README.txt.\nFor rank-one: factor_response_contrasts.csv: paired posterior comparisons of expected bounded responses at factor 0 vs 1; intervals are equal-tailed 95% credible intervals for the difference, not predictive intervals.\nExisting posterior only: no refitting.\nPredictive checks are conditional and in-sample, not out-of-sample validation.\nTerminal role groups use LAGGED role; chokepoints use the full sample.\nFactor associations use posterior mean scores informed by these same responses; they are descriptive, not independent validation or causal effects.\nCurve bands are equal-tailed 95% parameter uncertainty, not predictive intervals.\nCurves span the 1st-99th percentiles of posterior mean latent scores.\nNode/month scores are conditional on consecutive activity (and available age for terminals); interpret alongside sampling diagnostics and model limitations.\n', encoding='utf-8')
+    (out / 'README.txt').write_text('For rank-two see rank_two_curves_README.txt.\nFor rank-one: factor_response_contrasts.csv: paired posterior comparisons of expected bounded responses at factor 0 vs 1; intervals are equal-tailed 95% credible intervals for the difference, not predictive intervals.\nExisting posterior only: no refitting.\nPredictive checks are conditional and in-sample, not out-of-sample validation.\nTerminal role groups use LAGGED role; chokepoints use the full sample.\nFactor associations use posterior mean scores informed by these same responses; they are descriptive, not independent validation or causal effects.\nCurve bands are equal-tailed 95% parameter uncertainty, not predictive intervals.\nCurves span the minimum-to-maximum range of observation-specific posterior mean latent scores.\nNode/month scores are conditional on consecutive activity (and available age for terminals); interpret alongside sampling diagnostics and model limitations.\n', encoding='utf-8')
     (out / 'export_metadata.json').write_text(json.dumps(dict(source=str(nc), node_type=args.node_type, predictive_replicates=actual_draws, panel_sha256=audit['input_sha256']), indent=2))
     archive = shutil.make_archive(str(out), 'zip', out)
 

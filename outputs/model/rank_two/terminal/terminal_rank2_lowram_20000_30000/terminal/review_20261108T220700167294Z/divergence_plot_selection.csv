@@ -1,0 +1,42 @@
+rank,parameter,variable,coordinates,ks_distance,standardized_mean_difference,selected
+1,"beta [log1p_capacity_mtpa, factor_2]",beta,"{""predictor"": ""log1p_capacity_mtpa"", ""factor_dim"": ""factor_2""}",0.4846241724979401,-0.6020439162514457,True
+2,"loading_one [counterparty_hhi_terminal, factor_2]",loading_one,"{""boundary"": ""counterparty_hhi_terminal"", ""factor_dim"": ""factor_2""}",0.4616589063918141,0.658401553360389,True
+3,"loading_cont [role_specific_pagerank, factor_1]",loading_cont,"{""continuous"": ""role_specific_pagerank"", ""factor_dim"": ""factor_1""}",0.39197558946629574,0.10681932694826768,True
+4,"loading_binary [has_incident_global_bridge, factor_2]",loading_binary,"{""binary"": ""has_incident_global_bridge"", ""factor_dim"": ""factor_2""}",0.37346141413136724,0.2663988896709,True
+5,"loading_cont [counterparty_hhi_terminal, factor_1]",loading_cont,"{""continuous"": ""counterparty_hhi_terminal"", ""factor_dim"": ""factor_1""}",0.37245154937998803,0.15432504165189742,True
+6,"loading_one [counterparty_hhi_terminal, factor_1]",loading_one,"{""boundary"": ""counterparty_hhi_terminal"", ""factor_dim"": ""factor_1""}",0.36954190548420385,0.2849526526479471,True
+7,"loading_cont [role_specific_pagerank, factor_2]",loading_cont,"{""continuous"": ""role_specific_pagerank"", ""factor_dim"": ""factor_2""}",0.36909887328608026,-0.4686153149566545,True
+8,"loading_binary [is_articulation_point, factor_2]",loading_binary,"{""binary"": ""is_articulation_point"", ""factor_dim"": ""factor_2""}",0.36725543125050153,-0.2609626061323359,True
+9,"loading_cont [counterparty_hhi_terminal, factor_2]",loading_cont,"{""continuous"": ""counterparty_hhi_terminal"", ""factor_dim"": ""factor_2""}",0.36373307272975935,0.5471467332954018,False
+10,"loading_cont [role_specific_dependence, factor_1]",loading_cont,"{""continuous"": ""role_specific_dependence"", ""factor_dim"": ""factor_1""}",0.36238091147578777,0.08353954999507014,False
+11,"loading_binary [has_incident_global_bridge, factor_1]",loading_binary,"{""binary"": ""has_incident_global_bridge"", ""factor_dim"": ""factor_1""}",0.36109854465883234,0.44071016258973067,False
+12,"beta [exporter_lag1, factor_2]",beta,"{""predictor"": ""exporter_lag1"", ""factor_dim"": ""factor_2""}",0.3593192456888513,-0.45860860515870466,False
+13,"loading_one [role_specific_dependence, factor_2]",loading_one,"{""boundary"": ""role_specific_dependence"", ""factor_dim"": ""factor_2""}",0.3573009290289474,0.5811763893639518,False
+14,"loading_cont [role_specific_dependence, factor_2]",loading_cont,"{""continuous"": ""role_specific_dependence"", ""factor_dim"": ""factor_2""}",0.354903158099376,-0.4688199179931317,False
+15,"beta [log1p_capacity_mtpa, factor_1]",beta,"{""predictor"": ""log1p_capacity_mtpa"", ""factor_dim"": ""factor_1""}",0.35482114257166786,-0.21655914047034727,False
+16,"loading_binary [is_articulation_point, factor_1]",loading_binary,"{""binary"": ""is_articulation_point"", ""factor_dim"": ""factor_1""}",0.35043518385606637,0.5311381388920824,False
+17,"beta [exporter_lag1, factor_1]",beta,"{""predictor"": ""exporter_lag1"", ""factor_dim"": ""factor_1""}",0.3403602014600883,0.09481981339069472,False
+18,"loading_one [role_specific_dependence, factor_1]",loading_one,"{""boundary"": ""role_specific_dependence"", ""factor_dim"": ""factor_1""}",0.3354097060608698,0.2965460871074383,False
+19,"beta [terminal_age, factor_2]",beta,"{""predictor"": ""terminal_age"", ""factor_dim"": ""factor_2""}",0.3176436663385103,0.14763170510942578,False
+20,"beta [neighbor_activity_lag1, factor_1]",beta,"{""predictor"": ""neighbor_activity_lag1"", ""factor_dim"": ""factor_1""}",0.31018011203278706,-0.32455147894258063,False
+21,"beta [neighbor_activity_lag1, factor_2]",beta,"{""predictor"": ""neighbor_activity_lag1"", ""factor_dim"": ""factor_2""}",0.2989776457177864,-0.3477935552323051,False
+22,"beta [log1p_mean_voyage_distance_lag1, factor_1]",beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1"", ""factor_dim"": ""factor_1""}",0.287075645584414,-0.4746301915377192,False
+23,"beta [terminal_age, factor_1]",beta,"{""predictor"": ""terminal_age"", ""factor_dim"": ""factor_1""}",0.2716091488921617,-0.5472648781202529,False
+24,"beta [log1p_mean_voyage_distance_lag1, factor_2]",beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1"", ""factor_dim"": ""factor_2""}",0.26123217133601817,-0.17161937401674113,False
+25,"beta [month_cos, factor_1]",beta,"{""predictor"": ""month_cos"", ""factor_dim"": ""factor_1""}",0.21385944445888683,-0.5239854991848735,False
+26,"beta [month_sin, factor_2]",beta,"{""predictor"": ""month_sin"", ""factor_dim"": ""factor_2""}",0.20337537341436646,0.2917679291425064,False
+27,intercept_one [counterparty_hhi_terminal],intercept_one,"{""boundary"": ""counterparty_hhi_terminal""}",0.18309846469192675,-0.4569360003051161,False
+28,"beta [month_cos, factor_2]",beta,"{""predictor"": ""month_cos"", ""factor_dim"": ""factor_2""}",0.1542491319493502,-0.05328258289538387,False
+29,intercept_binary [has_incident_global_bridge],intercept_binary,"{""binary"": ""has_incident_global_bridge""}",0.14847918769447777,-0.29294071218292556,False
+30,"loading_binary [connected_to_articulation_point, factor_2]",loading_binary,"{""binary"": ""connected_to_articulation_point"", ""factor_dim"": ""factor_2""}",0.14284575938042887,-0.25877820536480184,False
+31,intercept_binary [is_articulation_point],intercept_binary,"{""binary"": ""is_articulation_point""}",0.11495571161503759,0.2858366743946898,False
+32,precision_cont [counterparty_hhi_terminal],precision_cont,"{""continuous"": ""counterparty_hhi_terminal""}",0.10309415410837747,-0.1682132679519766,False
+33,intercept_cont [counterparty_hhi_terminal],intercept_cont,"{""continuous"": ""counterparty_hhi_terminal""}",0.08943602562783914,-0.17118824444257974,False
+34,intercept_cont [role_specific_pagerank],intercept_cont,"{""continuous"": ""role_specific_pagerank""}",0.07747330857279136,0.0724979511241848,False
+35,precision_cont [role_specific_pagerank],precision_cont,"{""continuous"": ""role_specific_pagerank""}",0.0750313863040144,0.1382956830197221,False
+36,"loading_binary [connected_to_articulation_point, factor_1]",loading_binary,"{""binary"": ""connected_to_articulation_point"", ""factor_dim"": ""factor_1""}",0.06791238904945063,-0.08787866516285506,False
+37,"beta [month_sin, factor_1]",beta,"{""predictor"": ""month_sin"", ""factor_dim"": ""factor_1""}",0.061653247956181545,-0.09537527609593764,False
+38,precision_cont [role_specific_dependence],precision_cont,"{""continuous"": ""role_specific_dependence""}",0.05832275349509064,-0.09595142155441236,False
+39,intercept_one [role_specific_dependence],intercept_one,"{""boundary"": ""role_specific_dependence""}",0.04527797541879486,-0.11224832447429145,False
+40,intercept_binary [connected_to_articulation_point],intercept_binary,"{""binary"": ""connected_to_articulation_point""}",0.039040344857986686,0.05331894584684974,False
+41,intercept_cont [role_specific_dependence],intercept_cont,"{""continuous"": ""role_specific_dependence""}",0.011792116280357753,0.018895307143247116,False
