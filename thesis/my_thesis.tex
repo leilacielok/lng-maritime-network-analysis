@@ -2653,13 +2653,9 @@ target acceptance $\delta$.
 \end{algorithmic}
 \end{algorithm}
 
-Each node-type model was
-estimated using four parallel chains, with 5,000 burn-in
-iterations and 10,000 retained draws per chain, yielding
-40,000 posterior draws per node-type model.
-Earlier runs with 1,500 burn-in iterations and 2,000
-retained draws per chain were used for initial estimation
-and comparison. The use of multiple chains allows convergence to be assessed
+Each node-type model was estimated using four parallel chains, with 20,000 burn-in
+iterations and 30,000 retained draws per chain.
+The use of multiple chains allows convergence to be assessed
 by comparing within-chain and between-chain variability
 \citep{gelman2013bayesian}, while the number of iterations
 was increased to allow more extensive sampler adaptation
@@ -5743,10 +5739,9 @@ values are reported to two decimal places.
 Table~\ref{tab:baseline_detailed_mixing}
 reports the maximum rank-normalised $\widehat{R}$
 and minimum bulk and tail effective sample sizes
-for the rank-one terminal and chokepoint models,
+for the baseline rank-one terminal and chokepoint models,
 together with the parameters associated with
 the minimum ESS values.
-
 For terminals, the minimum bulk ESS was associated
 with the lagged exporter coefficient, while the
 minimum tail ESS concerned the loading governing
@@ -5755,11 +5750,6 @@ For chokepoints, both minimum ESS values were
 associated with the betweenness precision parameter,
 indicating comparatively less efficient sampling
 for this parameter.
-
-All reported $\widehat{R}$ values were equal to
-1.00 when rounded to two decimal places.
-The ESS values nevertheless indicate differences
-in sampling efficiency across parameters.
 
 \begin{table}[htbp]
 \centering
@@ -5778,30 +5768,30 @@ Node type & Diagnostic & Value & Parameter \\
 
 \multirow{3}{*}{Terminal}
 & Maximum $\widehat{R}$
-& 1.00
+& 1.001
 & Multiple parameters \\
 
 & Minimum bulk ESS
-& 2,931
+& 8,602
 & Lagged exporter coefficient \\
 
 & Minimum tail ESS
-& 6,726
+& 20,487
 & HHI boundary loading \\
 
 \midrule
 
 \multirow{3}{*}{Chokepoint}
 & Maximum $\widehat{R}$
-& 1.00
+& 1.001
 & Multiple parameters \\
 
 & Minimum bulk ESS
-& 1,693
+& 4,808
 & Betweenness precision \\
 
 & Minimum tail ESS
-& 3,698
+& 9,772
 & Betweenness precision \\
 
 \bottomrule
@@ -5811,9 +5801,9 @@ Node type & Diagnostic & Value & Parameter \\
 \vspace{0.2cm}
 \footnotesize
 \textit{Note:} Both models were estimated using
-four chains, each with 5,000 warm-up iterations
-and 10,000 retained draws. Maximum $\widehat{R}$
-values are reported to two decimal places.
+four chains, each with 20,000 burn-in iterations
+and 30,000 retained draws. Maximum $\widehat{R}$
+values are reported to three decimal places.
 \end{minipage}
 
 \end{table}
@@ -5825,14 +5815,12 @@ from the first 10\% and last 50\% of each chain.
 The reference criterion was $|Z|\leq 1.96$,
 corresponding to a two-sided significance level
 of 0.05.
-
-For terminals, 92 out of 104 parameter-chain
-tests (88.5\%) satisfied this criterion, while
-12 tests (11.5\%) exceeded the reference value.
-For chokepoints, 71 out of 76 tests (93.4\%)
-satisfied the criterion, with five exceedances
-(6.6\%).
-
+For terminals, 98 out of 104 parameter-chain
+tests (94.2\%) satisfied this criterion, while
+6 tests (5.8\%) exceeded the reference value.
+For chokepoints, 73 out of 76 tests (96.1\%)
+satisfied the criterion, with three exceedances
+(3.9\%).
 Table~\ref{tab:baseline_geweke_details}
 reports the parameter-chain combinations
 associated with these exceedances.
@@ -5850,46 +5838,41 @@ in the baseline rank-one models.}
 Node type & Parameter & Chain & $Z$ \\
 \midrule
 
-\multirow{12}{*}{Terminal}
-& Neighbour activity coefficient & 1 & 2.526 \\
-& Month cosine coefficient & 3 & -1.969 \\
-& Terminal age coefficient & 2 & 2.708 \\
-& Lagged exporter coefficient & 3 & 3.068 \\
-& Dependence loading & 3 & -2.366 \\
-& Global bridge binary loading & 1 & -2.397 \\
-& Global bridge binary intercept & 3 & 2.368 \\
-& HHI boundary intercept & 3 & 2.032 \\
-& Dependence boundary intercept & 3 & 2.766 \\
-& Dependence boundary loading & 2 & -3.034 \\
-& PageRank anchor loading & 3 & -2.438 \\
-& Dependence precision & 1 & -2.888 \\
+\multirow{6}{*}{Terminal}
+& Neighbour activity coefficient & 1 & 2.400 \\
+& Voyage distance coefficient & 2 & 2.589 \\
+& HHI interior loading & 1 & -2.013 \\
+& HHI interior intercept & 1 & 1.988 \\
+& HHI precision & 1 & 2.132 \\
+& Dependence precision & 1 & -2.363 \\
 
 \midrule
 
-\multirow{5}{*}{Chokepoint}
-& Betweenness zero-component loading & 3 & -2.232 \\
-& PageRank precision & 3 & -2.035 \\
-& Betweenness precision & 4 & -2.465 \\
-& Flow-share precision & 2 & 1.999 \\
-& Flow-share precision & 3 & -2.215 \\
+\multirow{3}{*}{Chokepoint}
+& Betweenness interior intercept & 1 & 2.308 \\
+& Articulation-point intercept & 1 & 2.145 \\
+& PageRank precision & 2 & -2.472 \\
 
 \bottomrule
 \end{tabular}
 \end{table}
-
-The terminal exceedances were distributed across
-regression coefficients, response loadings,
-intercepts, and precision parameters.
-For chokepoints, four of the five exceedances
-involved precision parameters, while the
-remaining one concerned the betweenness
-zero-component loading.
 
 \subsection{Heidelberger--Welch diagnostic}
 
 The Heidelberger--Welch procedure assesses
 stationarity and the Monte Carlo precision
 of posterior mean estimates.
+All 104 terminal and 76 chokepoint
+parameter-chain tests satisfied the
+stationarity criterion.
+For terminals, 103 tests passed without
+excluding any additional draws, while
+one required the exclusion of 6,000
+initial draws.
+For chokepoints, 72 tests passed without
+additional exclusions, while the remaining
+four required the exclusion of between
+3,000 and 15,000 draws.
 Table~\ref{tab:baseline_heidel_stationarity}
 reports the parameter-chain combinations
 requiring additional exclusions.
@@ -5908,69 +5891,56 @@ Node type & Parameter & Chain & Excluded draws \\
 \midrule
 
 \multirow{11}{*}{Terminal}
-& Voyage distance coefficient & 3 & 1,000 \\
-& Capacity coefficient & 2 & 2,000 \\
-& Lagged exporter coefficient & 3 & 1,000 \\
-& Global bridge binary loading & 4 & 1,000 \\
-& PageRank intercept & 3 & 1,000 \\
-& HHI interior intercept & 3 & 3,000 \\
-& Articulation-point intercept & 3 & 3,000 \\
-& Global bridge binary intercept & 3 & 1,000 \\
-& Dependence boundary intercept & 3 & 1,000 \\
-& HHI boundary loading & 4 & 2,000 \\
-& PageRank precision & 3 & 2,000 \\
+& Articulation-point binary loading & 4 & 6,000 \\
 
 \midrule
 
-\multirow{2}{*}{Chokepoint}
-& Betweenness interior intercept & 3 & 4,000 \\
-& Articulation-point intercept & 3 & 3,000 \\
+\multirow{4}{*}{Chokepoint}
+& Voyage distance coefficient & 2 & 6,000 \\
+& Betweenness interior loading & 4 & 15,000 \\
+& Flow-share interior loading & 4 & 15,000 \\
+& Flow-share interior intercept & 1 & 3,000 \\
 
 \bottomrule
 \end{tabular}
 
 \end{table}
 
-The half-width test assesses the precision of posterior mean estimates by requiring the half-width of the 95\% 
-Monte Carlo confidence interval to be less than 10\% of the absolute estimated mean. Table~\ref{tab:baseline_heidel_halfwidth} 
-reports the relative half-width values for the parameters that did not satisfy this criterion.
-
-\begin{table}[htbp]
-\centering
-\small
-\caption{Relative half-width values exceeding
-the reference criterion of 0.10 in the
-baseline terminal model.}
-\label{tab:baseline_heidel_halfwidth}
-
-\begin{tabular}{lrrrr}
-\toprule
-Parameter & Chain 1 & Chain 2 & Chain 3 & Chain 4 \\
-\midrule
-
-Month cosine coefficient
-& 0.130 & 0.116 & 0.142 & 0.160 \\
-
-HHI interior intercept
-& 1.004 & 1.021 & 0.627 & 2.052 \\
-
-\bottomrule
-\end{tabular}
-\end{table}
+The half-width test assesses the precision
+of posterior mean estimates by requiring
+the half-width of the 95\% Monte Carlo
+confidence interval to be less than 10\%
+of the absolute estimated mean.
+All 76 chokepoint tests satisfied this
+criterion. For terminals, 100 out of 104
+tests passed, while the remaining four
+exceedances were associated with the
+counterparty HHI interior intercept (half-width values for each chain were
+respectively 0.375, 0.512, 0.578, 0.562).
 
 \subsection{Trace plots}
 
 The following figures present posterior densities and
-trace plots for selected global parameters of the baseline
-terminal and chokepoint models, estimated using four chains
-with 5,000 warm-up iterations and 10,000 retained draws
-per chain.
-
-For terminals, the selection covers the lagged exporter
-coefficient, the PageRank loading, and the loading for
-the probability of counterparty HHI equal to one.
-For chokepoints, it covers the PageRank and betweenness
-loadings and the betweenness precision.
+trace plots for the global parameters of the baseline
+terminal and chokepoint models, estimated using four
+chains with 20,000 warm-up iterations and 30,000
+retained draws per chain.
+For both models, the posterior density estimates
+of the four chains exhibit substantial overlap,
+suggesting that the chains explored similar regions
+of the parameter space. The corresponding trace
+plots show fluctuations around relatively stable
+levels, without visible systematic trends or
+persistent shifts over the retained iterations.
+These patterns are observed across regression
+coefficients, response loadings, intercepts, and
+precision parameters, including those associated
+with comparatively lower effective sample sizes.
+Overall, the visual diagnostics are consistent
+with satisfactory mixing and support the
+convergence assessment based on the
+rank-normalised $\widehat{R}$ and effective
+sample size statistics.
 
 % ============================================================
 % TERMINAL TRACE PLOTS
@@ -5978,44 +5948,54 @@ loadings and the betweenness precision.
 
 \begin{figure}[p]
     \centering
-    \includegraphics[
-        width=\textwidth,
-        height=0.82\textheight,
-        keepaspectratio
-    ]{images/terminal_trace_01.png}
-    \caption{Posterior densities and trace plots for
-    selected regression coefficients in the baseline
-    terminal model.}
-    \label{fig:terminal_trace_appendix}
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/terminal_trace_01.png}
+    \caption{Posterior densities and trace plots for terminal regression coefficients (part 1).}
+    \label{fig:terminal_trace_01}
 \end{figure}
 
 \begin{figure}[p]
     \centering
-    \includegraphics[
-        width=\textwidth,
-        height=0.82\textheight,
-        keepaspectratio
-    ]{images/terminal_trace_02.png}
-    \caption{Posterior densities and trace plots for
-    additional terminal regression coefficients and
-    the PageRank loading in the baseline terminal model.}
-    \label{fig:terminal_trace_regression}
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/terminal_trace_02.png}
+    \caption{Posterior densities and trace plots for terminal regression coefficients and for the PageRank response loading (part 2).}
+    \label{fig:terminal_trace_02}
 \end{figure}
 
 \begin{figure}[p]
     \centering
-    \includegraphics[
-        width=\textwidth,
-        height=0.82\textheight,
-        keepaspectratio
-    ]{images/terminal_trace_05.png}
-    \caption{Posterior densities and trace plots for
-    selected response parameters in the baseline
-    terminal model, including parameters associated
-    with the boundary-inflated components.}
-    \label{fig:terminal_trace_additional}
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/terminal_trace_03.png}
+    \caption{Posterior densities and trace plots for terminal response loadings (part 3).}
+    \label{fig:terminal_trace_03}
 \end{figure}
 
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/terminal_trace_04.png}
+    \caption{Posterior densities and trace plots for terminal response loadings and intercepts (part 4).}
+    \label{fig:terminal_trace_04}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/terminal_trace_05.png}
+    \caption{Posterior densities and trace plots for terminal response intercepts and the PageRank precision parameter (part 5).}
+    \label{fig:terminal_trace_05}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/terminal_trace_06.png}
+    \caption{Posterior densities and trace plots for terminal precision parameters and one-mass intercepts (part 6).}
+    \label{fig:terminal_trace_06}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/terminal_trace_07.png}
+    \caption{Posterior densities and trace plots for terminal one-mass loadings (part 7).}
+    \label{fig:terminal_trace_07}
+\end{figure}
+
+\clearpage
 
 % ============================================================
 % CHOKEPOINT TRACE PLOTS
@@ -6023,30 +6003,37 @@ loadings and the betweenness precision.
 
 \begin{figure}[p]
     \centering
-    \includegraphics[
-        width=\textwidth,
-        height=0.82\textheight,
-        keepaspectratio
-    ]{images/chokepoint_trace_02.png}
-    \caption{Posterior densities and trace plots for
-    the PageRank, betweenness and flow-share loadings,
-    and the articulation-point loading in the baseline
-    chokepoint model.}
-    \label{fig:chokepoint_trace_loadings}
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/chokepoint_trace_01.png}
+    \caption{Posterior densities and trace plots for chokepoint regression coefficients (part 1).}
+    \label{fig:chokepoint_trace_01}
 \end{figure}
 
 \begin{figure}[p]
     \centering
-    \includegraphics[
-        width=\textwidth,
-        height=0.82\textheight,
-        keepaspectratio
-    ]{images/chokepoint_trace_04.png}
-    \caption{Posterior densities and trace plots for
-    selected response parameters, including the
-    PageRank and betweenness precision parameters,
-    in the baseline chokepoint model.}
-    \label{fig:chokepoint_trace_precision}
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/chokepoint_trace_02.png}
+    \caption{Posterior densities and trace plots for chokepoint response loadings (part 2).}
+    \label{fig:chokepoint_trace_02}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/chokepoint_trace_03.png}
+    \caption{Posterior densities and trace plots for chokepoint response loadings and intercepts (part 3).}
+    \label{fig:chokepoint_trace_03}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/chokepoint_trace_04.png}
+    \caption{Posterior densities and trace plots for chokepoint intercepts and precision parameters (part 4).}
+    \label{fig:chokepoint_trace_04}
+\end{figure}
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=\textwidth,height=0.88\textheight,keepaspectratio]{images/chokepoint_trace_05.png}
+    \caption{Posterior densities and trace plots for the remaining chokepoint precision and zero-mass parameters (part 5).}
+    \label{fig:chokepoint_trace_05}
 \end{figure}
 
 \clearpage
@@ -6055,27 +6042,43 @@ loadings and the betweenness precision.
 \label{app:acf_diagnostics}
 
 The following figures show within-chain autocorrelation
-functions for selected global parameters. Parameters were
-selected using the lowest bulk ESS among regression
-coefficients and response loadings, the lowest bulk and
-tail ESS among all global parameters, and the PageRank
-anchor loading. Duplicate selections were removed.
-
+functions for selected global parameters from the baseline
+models estimated using four chains, each with 20,000
+warm-up iterations and 30,000 retained draws.
+Parameters were selected using the lowest bulk ESS among
+regression coefficients and response loadings, the lowest
+bulk and tail ESS among all global parameters, and the
+PageRank anchor loading. 
 For terminals, the selected parameters are the lagged
-exporter coefficient, the PageRank loading, and the loading
-for the probability of HHI equal to one.
-Their autocorrelation decreases over the initial lags,
-with small fluctuations at longer lags.
+exporter coefficient, the PageRank loading, and the
+loading for the probability of HHI equal to one.
+All three exhibit a progressive decline in autocorrelation,
+approaching zero within approximately 30--40 lags.
+The lagged exporter coefficient shows slightly more
+persistent autocorrelation, while the PageRank and HHI
+loadings follow similar decay patterns across chains.
+The minimum bulk ESS among these parameters is 8,602,
+associated with the lagged exporter coefficient.
+For chokepoints, the selected parameters are the lagged
+neighbour-activity coefficient, the betweenness loading
+and precision, and the PageRank loading.
+The lagged neighbour-activity coefficient exhibits
+a rapid autocorrelation decay, reaching values close
+to zero within the first few lags.
+The PageRank loading also shows a relatively rapid
+decline, whereas the betweenness parameters exhibit
+more persistent autocorrelation, particularly the
+precision parameter, whose autocorrelation approaches
+zero around lag 60--70.
+The latter also has the lowest bulk ESS among global
+parameters (4,808).
 
-For chokepoints, the displayed parameters are the
-betweenness loading and precision, and the PageRank
-loading. The betweenness parameters show a more gradual
-decay, particularly in some chains, while the PageRank
-loading exhibits relatively less persistent autocorrelation.
-The ACF for the lagged neighbour-activity coefficient,
-which was also generated by the selection procedure,
-is omitted from the appendix because of its relatively
-high effective sample size and rapid autocorrelation decay.
+Overall, the autocorrelation functions show consistent
+decay patterns across chains, with no substantial
+persistent autocorrelation at longer lags.
+The slower decay observed for some parameters is
+reflected in their comparatively lower, but still
+substantial, effective sample sizes.
 
 % ============================================================
 % TERMINAL ACF
@@ -6097,25 +6100,18 @@ high effective sample size and rapid autocorrelation decay.
         keepaspectratio
     ]{images/terminal_acf_02.png}
 
-    \caption{Within-chain autocorrelation functions
-    for the lagged exporter coefficient and PageRank
-    loading in the baseline terminal model.}
-    \label{fig:terminal_acf_appendix}
-\end{figure}
+    \medskip
 
-\begin{figure}[p]
-    \centering
     \includegraphics[
         width=0.9\textwidth,
-        height=0.65\textheight,
+        height=0.38\textheight,
         keepaspectratio
     ]{images/terminal_acf_03.png}
 
     \caption{Within-chain autocorrelation functions
-    for the loading governing the probability of
-    counterparty HHI equal to one in the baseline
-    terminal model.}
-    \label{fig:terminal_acf_additional}
+    for the lagged exporter coefficient, counterparty HHI (mass at 1) and PageRank
+    loadings in the baseline rank-one terminal model.}
+    \label{fig:terminal_acf_appendix}
 \end{figure}
 
 % ============================================================
@@ -6124,6 +6120,14 @@ high effective sample size and rapid autocorrelation decay.
 
 \begin{figure}[p]
     \centering
+    \includegraphics[
+        width=0.9\textwidth,
+        height=0.38\textheight,
+        keepaspectratio
+    ]{images/chokepoint_acf_01.png}
+
+    \medskip
+
     \includegraphics[
         width=0.9\textwidth,
         height=0.38\textheight,
@@ -6138,24 +6142,18 @@ high effective sample size and rapid autocorrelation decay.
         keepaspectratio
     ]{images/chokepoint_acf_03.png}
 
-    \caption{Within-chain autocorrelation functions
-    for the betweenness loading and Beta precision
-    in the baseline chokepoint model.}
-    \label{fig:chokepoint_acf_appendix}
-\end{figure}
+    \medskip
 
-\begin{figure}[p]
-    \centering
     \includegraphics[
         width=0.9\textwidth,
-        height=0.65\textheight,
+        height=0.38\textheight,
         keepaspectratio
     ]{images/chokepoint_acf_04.png}
 
     \caption{Within-chain autocorrelation functions
-    for the PageRank loading in the baseline
-    chokepoint model.}
-    \label{fig:chokepoint_acf_additional}
+    for the lagged neighbour activity coefficient, betweenness loading, Beta precision
+    and PageRank loading in the baseline rank-one chokepoint model.}
+    \label{fig:chokepoint_acf_appendix}
 \end{figure}
 
 
