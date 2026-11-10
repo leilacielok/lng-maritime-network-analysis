@@ -564,16 +564,66 @@ def main():
             pd.DataFrame(associations).to_csv(out / 'factor_associations.csv', index=False)
             export_rank_two_responses(post, audit, keys, args.node_type, out)
         else:
-            # Load one latent array at a time, rather than the whole NetCDF.
-            for name in ['factor', 'factor_mean', 'factor_residual', 'factor_covariate_mean']:
+            # Load latent factor summaries.
+            # Some deterministic variables may be absent in low-RAM runs.
+
+            for name in [
+                'factor',
+                'factor_mean',
+                'factor_residual',
+                'factor_covariate_mean'
+            ]:
                 if name not in post:
                     continue
+
                 values = samples(post, name, 'obs')
+
                 keys[name + '_mean'] = values.mean(axis=0)
                 keys[name + '_q025'] = np.quantile(values, .025, axis=0)
                 keys[name + '_q975'] = np.quantile(values, .975, axis=0)
+
                 del values
-            keys.to_csv(out / 'latent_summary.csv', index=False)
+
+            # Reconstruct the systematic component when it was not saved.
+            # For the baseline rank-one model:
+            # factor_mean = X @ beta
+
+            if 'factor_mean_mean' not in keys.columns:
+
+                if 'beta' not in post:
+                    raise ValueError(
+                        "Cannot reconstruct factor_mean: beta is missing."
+                    )
+
+                beta_mean = (
+                    post['beta']
+                    .mean(dim=('chain', 'draw'))
+                    .values
+                )
+
+                x = np.asarray(data['x'])
+
+                if x.shape[1] != len(beta_mean):
+                    raise ValueError(
+                        "Predictor matrix and beta dimensions do not match."
+                    )
+
+                keys['factor_mean_mean'] = x @ beta_mean
+
+            # Reconstruct posterior mean residuals.
+            # E[f - X beta | y] = E[f | y] - X E[beta | y]
+
+            if 'factor_residual_mean' not in keys.columns:
+
+                keys['factor_residual_mean'] = (
+                    keys['factor_mean']
+                    - keys['factor_mean_mean']
+                )
+
+            keys.to_csv(
+                out / 'latent_summary.csv',
+                index=False
+            )
             associations = []
             for role, mask in masks:
                 for response in audit['continuous_responses'] + audit['binary_responses']:
@@ -672,6 +722,29 @@ def main():
         chosen = np.unique(np.linspace(0, ppc.sizes['draw']-1, min(per_chain, ppc.sizes['draw']), dtype=int))
         small = ppc.isel(draw=chosen).load()
         actual_draws = small.sizes['chain'] * small.sizes['draw']
+    
+    # ---------------------------------------------------------
+    # Marginal posterior predictive checks
+    # ---------------------------------------------------------
+    from types import SimpleNamespace
+    from diagnostics import predictive_checks
+
+    predictive_idata = SimpleNamespace(
+        posterior_predictive=small
+    )
+    marginal_checks = predictive_checks(
+        predictive_idata,
+        data,
+        'posterior_predictive'
+    )
+    marginal_checks.to_csv(
+        out / 'posterior_checks.csv',
+        index=False
+    )
+    print(
+        'Marginal posterior predictive checks exported.',
+        flush=True
+    )
     observed = frame[audit['continuous_responses'] + audit['binary_responses']].to_numpy()
     rep = np.concatenate([small.y_cont.transpose('chain','draw','obs','continuous').values, small.y_binary.transpose('chain','draw','obs','binary').values], axis=-1).reshape(actual_draws, len(frame), -1)
     names = audit['continuous_responses'] + audit['binary_responses']
@@ -685,7 +758,7 @@ def main():
                 low, mid, high = np.quantile(valid, [.025,.5,.975]) if len(valid) else [np.nan]*3
                 rows.append(dict(role_lag1=role, response_a=names[i], response_b=names[j], observed=obs_corr[i,j], replicated_median=mid, replicated_q025=low, replicated_q975=high, valid_replicates=len(valid)))
     pd.DataFrame(rows).to_csv(out / 'joint_predictive_checks.csv', index=False)
-    for name in ['posterior_checks.csv','prior_checks.csv','binary_correlations.csv','response_scaling.csv','sample_audit.json','predictor_scaling.csv',
+    for name in ['prior_checks.csv','binary_correlations.csv','response_scaling.csv','sample_audit.json','predictor_scaling.csv',
                  'node_index.csv', 'node_effects.csv', 'node_effects_UNVALIDATED.csv',
                  'node_effect_diagnostics.csv', 'run_status.json']:
         if (terminal / name).exists():
