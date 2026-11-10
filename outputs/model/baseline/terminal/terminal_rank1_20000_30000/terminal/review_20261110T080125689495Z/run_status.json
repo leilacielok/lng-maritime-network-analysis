@@ -1,0 +1,4 @@
+{
+  "status": "sampling_complete_pending_diagnostics",
+  "note": "Run low_ram_review.py to compute global diagnostics"
+}

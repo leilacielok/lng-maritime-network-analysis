@@ -53,7 +53,11 @@ def predictive_checks(idata, data, group):
 def run_diagnostics(idata, data, kind, destination, parameters):
     import arviz as az
     # Include latent residual mixing: good global parameters alone are insufficient.
-    mixing = az.summary(idata, var_names=parameters + ["factor", "factor_mean", "factor_residual"], kind="diagnostics")
+    mixing = az.summary(
+        idata, 
+        var_names=parameters + ["factor", "factor_mean", "factor_residual"], 
+        kind="diagnostics",
+        round_to=6)
     diagnostic = {"divergences": int(idata.sample_stats["diverging"].sum()),
                   "max_rhat": float(mixing["r_hat"].max()),
                   "min_ess_bulk": float(mixing["ess_bulk"].min()),
@@ -238,12 +242,18 @@ def export_sampling_diagnostics(post, nc, out):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    mixing = az.summary(post, kind='diagnostics')
-    mixing.to_csv(out / 'mixing_diagnostics.csv')
-    az.summary(post).to_csv(out / 'parameter_summary.csv')
+    mixing = az.summary(post, kind='diagnostics', round_to=6)
+    mixing.to_csv(out / 'mixing_diagnostics.csv', float_format='%.3f')
+    az.summary(post, round_to=6).to_csv(out / 'parameter_summary.csv', float_format='%.3f')
     for chain in post.chain.values:
-        az.summary(post.sel(chain=[chain]), kind='stats').to_csv(
-            out / f'parameter_summary_chain_{chain}.csv')
+        az.summary(
+            post.sel(chain=[chain]),
+            kind='stats',
+            round_to=6
+        ).to_csv(
+            out / f'parameter_summary_chain_{chain}.csv',
+            float_format='%.3f'
+        )
     try:
         stats = xr.open_dataset(nc, group='sample_stats')
     except (OSError, ValueError, KeyError) as exc:

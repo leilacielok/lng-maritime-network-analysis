@@ -1,0 +1,10 @@
+{
+  "chain_files": "C:\\Users\\Leila\\thesis_code\\outputs\\model\\baseline\\terminal\\terminal_rank1_20000_30000\\terminal\\chains",
+  "chains": 4,
+  "tune_per_chain": 20000,
+  "retained_per_chain": 30000,
+  "posterior_predictive_draws_per_chain": 100,
+  "observation_level_deterministics_not_stored": true,
+  "posterior_draws_thinned": false,
+  "note": "PPC is a subset. Global diagnostics are computed separately; run review.py for detailed plots."
+}
