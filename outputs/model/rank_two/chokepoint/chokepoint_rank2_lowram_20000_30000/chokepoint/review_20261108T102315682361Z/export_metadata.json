@@ -1,6 +1,0 @@
-{
-  "source": "C:\\Users\\Leila\\thesis_code\\outputs\\model\\rank_two\\chokepoint\\chokepoint_rank2_lowram_20000_30000\\chokepoint\\posterior.nc",
-  "node_type": "chokepoint",
-  "predictive_replicates": 200,
-  "panel_sha256": "a46965c889a8892eb1b8a5c9f9453931effd00a98a364e4496ca28b30d6bcd21"
-}

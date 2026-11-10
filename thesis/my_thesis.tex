@@ -1766,7 +1766,7 @@ examined in Section~\ref{sec:prior_sensitivity}.
 \section{Model specifications} 
 \label{sec:models}
 
-\subsection{Rank-one specification and posterior distribution}
+\subsection{Baseline rank-one specification}
 \label{subsec:simple_factor_specification}
 For each node type separately, let $\boldsymbol{x}_{i,t}$ be the standardised covariate vector and $f_{i,t}$ be a scalar latent factor. The factor regression is
 \begin{equation}
@@ -2251,245 +2251,295 @@ using the No-U-Turn Sampler (NUTS), whose implementation
 and associated diagnostic criteria are described in
 Section~\ref{sec:posterior_computation}.
 
-\subsection{Node-specific intercepts}
+\subsection{Random-intercept rank-one specification}
+\label{subsec:node_specific_model}
 
-\subsubsection{Model specification}
+The baseline rank-one specification assumes that the
+conditional mean of the latent factor is entirely determined
+by the observed covariates. However, nodes may exhibit
+persistent differences in their network characteristics
+that are not fully captured by these predictors.
+To account for such unobserved heterogeneity, the model
+is extended by introducing a node-specific random intercept
+into the latent-factor regression.
 
-The second model extends the baseline rank-one specification by incorporating node-specific effects into the latent factor regression. The purpose of this extension is to account for persistent differences in latent criticality across nodes that may not be fully explained by the observed covariates.
+Let $i=1,\ldots,N$ index the distinct nodes included
+in the estimation sample. The extended factor regression is
 
-In the baseline model, the conditional mean of the latent factor depends exclusively on the covariates. The extended specification introduces an additional node-level component, allowing each terminal or chokepoint to have its own persistent deviation from the covariate-based prediction.
+\begin{equation}
+f_{i,t}\mid
+\boldsymbol{x}_{i,t},\boldsymbol{\beta},\mu_i
+\sim
+\mathcal{N}
+\left(
+\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta}
++\mu_i,1
+\right),
+\label{eq:node_specific_factor}
+\end{equation}
+where $\mu_i$ represents a persistent node-specific
+deviation from the factor mean predicted by the observed
+covariates. Equivalently,
 
-Specifically, the latent factor for node \(i\) in month \(t\) is defined as
-
-$$
+\begin{equation}
 f_{i,t}
 =
-\mathbf{x}_{i,t}^{\top}\boldsymbol{\beta}
-+
-\mu_i
-+
-z_{i,t},
+\boldsymbol{x}_{i,t}^{\mathsf T}\boldsymbol{\beta}
++\mu_i+z_{i,t},
 \qquad
-z_{i,t}\sim\mathcal N(0,1),
-$$
+z_{i,t}\sim\mathcal{N}(0,1).
+\label{eq:node_specific_decomposition}
+\end{equation}
+The effect $\mu_i$ is shared across all observations
+belonging to node $i$, while $z_{i,t}$ represents
+observation-specific residual variation.
+The residual variance remains fixed at one, as in
+the baseline specification.
 
-where \(\mu_i\) represents the node-specific effect. These effects follow a hierarchical Gaussian prior,
+The node-specific intercepts are assigned a hierarchical
+Gaussian prior,
 
-$$
+\begin{equation}
 \mu_i\mid\sigma_\mu
-\sim\mathcal N(0,\sigma_\mu^2),
-$$
-
+\overset{\mathrm{iid}}{\sim}
+\mathcal{N}(0,\sigma_\mu^2),
+\qquad i=1,\ldots,N,
+\label{eq:node_effect_prior}
+\end{equation}
 with
 
-$$
-\sigma_\mu\sim\operatorname{HalfNormal}(s_\mu).
-$$
+\begin{equation}
+\sigma_\mu\sim\operatorname{HalfNormal}(1).
+\label{eq:node_effect_scale_prior}
+\end{equation}
+The parameter $\sigma_\mu$ controls the magnitude
+of persistent between-node heterogeneity:
+small values imply stronger shrinkage of the
+node-specific effects towards zero, approaching
+the baseline specification, whereas larger values
+allow greater differences across nodes.
 
-The parameter \(\sigma_\mu\) controls the dispersion of the node-specific effects and therefore the extent of persistent heterogeneity across nodes.
+The response-specific likelihoods, prior distributions
+of the baseline parameters, and positive PageRank
+loading constraint remain unchanged.
+The extension therefore preserves the rank-one
+structure of the covariate coefficient matrix
+$\boldsymbol{\gamma}\boldsymbol{\beta}^{\mathsf T}$,
+while introducing persistent node-specific
+contributions $\gamma_m\mu_i$ to each response
+component's linear predictor.
 
-This extension is particularly relevant for the LNG maritime network, where terminals and chokepoints may exhibit structural characteristics that remain relatively stable over time. Although some of these characteristics are represented by the observed covariates, others may remain unobserved or only partially captured.
+Using the observation index $n\in\mathcal{O}$
+introduced in the baseline specification, let
+$i(n)$ denote the node associated with observation $n$.
+Define $\boldsymbol{\mu}=(\mu_1,\ldots,\mu_N)^{\mathsf T}$.
+The conditional density of the latent factors is
 
-Introducing node-specific effects allows the model to account for these persistent differences without attributing them entirely to the observed predictors.
-
-The extension preserves the rank-one structure of the baseline model, since the responses remain conditionally linked through a single latent factor. The response likelihoods and their associated parameters are also unchanged.
-
-\subsubsection{Computational reparameterization}
-
-The introduction of node-specific effects increases the dimensionality of the posterior distribution and may introduce additional dependencies between the node effects, latent factors, and response intercepts.
-
-To facilitate posterior sampling, the model was implemented using an equivalent mean-and-contrast parameterization.
-
-Let \(N\) denote the number of nodes included in the estimation sample. The vector of node-specific effects is decomposed as
-
-$$
-\boldsymbol{\mu}
+\begin{equation}
+p(\mathbf{f}\mid
+\boldsymbol{\beta},\boldsymbol{\mu},\mathbf{X})
 =
-m\mathbf 1_N+\boldsymbol{\delta},
-$$
+\prod_{n\in\mathcal{O}}
+\mathcal{N}\left(
+f_n;
+\boldsymbol{x}_n^{\mathsf T}\boldsymbol{\beta}
++\mu_{i(n)},1
+\right).
+\label{eq:node_factor_density}
+\end{equation}
+Combining this density with the response likelihood
+and the hierarchical prior gives the joint posterior
 
-where \(m\) represents the mean of the node-specific effects and \(\boldsymbol{\delta}\) contains deviations from this mean.
+\begin{equation}
+\begin{aligned}
+&p(\boldsymbol{\theta},\boldsymbol{\beta},
+\mathbf{f},\boldsymbol{\mu},\sigma_\mu
+\mid\mathcal{D})
+\\
+&\quad\propto
+L(\boldsymbol{\theta},\mathbf{f})
+\,p(\mathbf{f}\mid
+\boldsymbol{\beta},\boldsymbol{\mu},\mathbf{X})
+\\
+&\qquad\times
+p(\boldsymbol{\theta})
+p(\boldsymbol{\beta})
+p(\boldsymbol{\mu}\mid\sigma_\mu)
+p(\sigma_\mu),
+\end{aligned}
+\label{eq:node_joint_posterior}
+\end{equation}
+where $L(\boldsymbol{\theta},\mathbf{f})$
+is the response likelihood defined in
+Equation~(\ref{eq:baseline_response_likelihood}),
+$p(\boldsymbol{\mu}\mid\sigma_\mu)
+=\prod_{i=1}^{N}p(\mu_i\mid\sigma_\mu)$,
+and $p(\sigma_\mu)$ is the Half-Normal prior
+in Equation~(\ref{eq:node_effect_scale_prior}).
 
-The two components are specified as
+The full conditional posterior kernels follow
+from Equation~(\ref{eq:node_joint_posterior}).
+Since the response likelihood and its parameters
+are unchanged, their full conditional kernels
+retain the expressions derived for the baseline
+model, conditional on the latent factors.
+Only the conditional distributions involving
+the factor regression and the newly introduced
+hierarchical parameters require modification.
 
-$$
-m\mid\sigma_\mu
-\sim
-\mathcal N\left(
-0,\frac{\sigma_\mu^2}{N}
-\right),
-$$
+\paragraph{Factor-regression coefficients.}
 
-and
+Define the $|\mathcal{O}|$-dimensional vector
+$\boldsymbol{\mu}_{\mathcal{O}}$ whose $n$th element
+is $\mu_{i(n)}$.
+The Gaussian factor regression and the independent
+$\mathcal{N}(0,0.5^2)$ coefficient priors give
 
-$$
-\boldsymbol{\delta}
-=
-\sigma_\mu Q\mathbf u,
+\begin{equation}
+p(\boldsymbol{\beta}\mid\mathrm{rest})
+\propto
+\exp\Bigg\{-\frac12\Big[
+\boldsymbol{\beta}^{\mathsf T}
+(\mathbf{X}^{\mathsf T}\mathbf{X}+4\mathbf{I}_q)
+\boldsymbol{\beta}
+-2\boldsymbol{\beta}^{\mathsf T}
+\mathbf{X}^{\mathsf T}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})
+\Big]\Bigg\}.
+\label{eq:node_fc_beta_kernel}
+\end{equation}
+Recognising the multivariate Normal kernel gives
+
+\begin{equation}
+\boldsymbol{\beta}\mid\mathrm{rest}
+\sim\mathcal{N}_q\Big(
+(\mathbf{X}^{\mathsf T}\mathbf{X}
++4\mathbf{I}_q)^{-1}
+\mathbf{X}^{\mathsf T}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}),
+(\mathbf{X}^{\mathsf T}\mathbf{X}
++4\mathbf{I}_q)^{-1}
+\Big).
+\label{eq:node_fc_beta_normal}
+\end{equation}
+
+\paragraph{Latent factors.}
+
+For each node--month observation, the full conditional
+kernel combines the unchanged response likelihood
+with the modified Gaussian factor regression:
+
+\begin{equation}
+p(f_n\mid\mathrm{rest})
+\propto
+L_n(f_n)
+\exp\left[
+-\frac12
+\left(
+f_n-\boldsymbol{x}_n^{\mathsf T}
+\boldsymbol{\beta}
+-\mu_{i(n)}
+\right)^2
+\right].
+\label{eq:node_fc_factor}
+\end{equation}
+Here $L_n(f_n)$ denotes the same observation-specific
+likelihood defined for terminals and chokepoints
+in the baseline specification.
+
+\paragraph{Node-specific intercepts.}
+
+For each node $i$, let
+$\mathcal{O}_i=\{n\in\mathcal{O}:i(n)=i\}$
+denote its observations in the estimation sample,
+and let $n_i=|\mathcal{O}_i|$.
+Combining the Gaussian prior for $\mu_i$
+with the factor regression gives
+
+\begin{equation}
+p(\mu_i\mid\mathrm{rest})
+\propto 
+\exp\left(
+-\frac{\mu_i^2}{2\sigma_\mu^2}
+\right)
+\exp\left[
+-\frac12
+\sum_{n\in\mathcal{O}_i}
+\left(
+f_n-\boldsymbol{x}_n^{\mathsf T}
+\boldsymbol{\beta}-\mu_i
+\right)^2
+\right].
+\label{eq:node_fc_mu_kernel}
+\end{equation}
+Completing the square yields the conjugate
+Normal full conditional
+
+\begin{equation}
+\mu_i\mid\mathrm{rest}
+\sim\mathcal{N}(m_{\mu_i},V_{\mu_i}),
+\label{eq:node_fc_mu_normal}
+\end{equation}
+where
+
+\begin{equation}
+V_{\mu_i}=
+\left(
+n_i+\frac{1}{\sigma_\mu^2}
+\right)^{-1},
 \qquad
-\mathbf u\sim\mathcal N(\mathbf 0,I_{N-1}),
-$$
+m_{\mu_i}=
+V_{\mu_i}
+\sum_{n\in\mathcal{O}_i}
+\left(
+f_n-\boldsymbol{x}_n^{\mathsf T}
+\boldsymbol{\beta}
+\right).
+\end{equation}
 
-where \(Q\) is an \(N\times(N-1)\) orthonormal contrast matrix satisfying
+\paragraph{Node-effect scale parameter.}
 
-$$
-Q^\top Q=I_{N-1},
+The full conditional kernel for $\sigma_\mu$
+combines its Half-Normal prior with the
+Gaussian hierarchical distribution of the
+node-specific intercepts:
+
+\begin{equation}
+p(\sigma_\mu\mid\mathrm{rest})
+\propto 
+\mathbb{I}(\sigma_\mu>0)
+\,\sigma_\mu^{-N}
+\exp\left[
+-\frac12
+\left(
+\sigma_\mu^2+
+\frac{\sum_{i=1}^{N}\mu_i^2}
+{\sigma_\mu^2}
+\right)
+\right].
+\label{eq:node_fc_sigma_kernel}
+\end{equation}
+Unlike the conditional distribution of the
+node-specific intercepts, this kernel does
+not correspond to a standard conjugate
+distribution for $\sigma_\mu$.
+
+For posterior computation, the hierarchical
+model is implemented through an equivalent
+non-centred parametrisation,
+
+\begin{equation}
+u_i\overset{\mathrm{iid}}{\sim}\mathcal{N}(0,1),
 \qquad
-Q^\top\mathbf 1_N=\mathbf 0.
-$$
-
-Consequently, the deviations satisfy
-
-$$
-\sum_{i=1}^{N}\delta_i=0.
-$$
-
-This decomposition preserves the original conditional distribution of the node-specific effects:
-
-$$
-\boldsymbol{\mu}\mid\sigma_\mu
-\sim
-\mathcal N(\mathbf 0,\sigma_\mu^2 I_N).
-$$
-
-Therefore, the transformation changes the sampling coordinates without modifying the underlying hierarchical model.
-
-The latent factor is subsequently expressed in centered coordinates,
-
-$$
-g_{i,t}=f_{i,t}-m,
-$$
-
-so that
-
-$$
-g_{i,t}
-=
-\mathbf{x}_{i,t}^{\top}\boldsymbol{\beta}
-+
-\delta_i
-+
-z_{i,t}.
-$$
-
-To preserve the original response predictors, the intercepts are shifted accordingly.
-
-For a response with original linear predictor
-
-$$
-\eta_{i,t,j}
-=
-\alpha_j+\lambda_jf_{i,t},
-$$
-
-define
-
-$$
-A_j=\alpha_j+\lambda_jm.
-$$
-
-The predictor can then be written equivalently as
-
-$$
-\eta_{i,t,j}
-=
-A_j+\lambda_jg_{i,t}.
-$$
-
-The same transformation is applied to the intercepts associated with the binary responses and the boundary probabilities of the inflated Beta likelihoods.
-
-The conditional priors of the transformed intercepts are adjusted to preserve the original prior distributions.
-
-This reparameterization is intended to reduce posterior dependencies associated with the common level of the node effects and the response intercepts, potentially improving the efficiency of NUTS.
-
-\subsubsection{Posterior sampling and initial diagnostics}
-
-The node-effects models were estimated separately for terminals and chokepoints using four parallel NUTS chains.
-
-The initial extended runs employed 5,000 warm-up iterations and 10,000 retained posterior draws per chain, with a target acceptance probability of 0.80.
-
-For terminals, this configuration produced satisfactory convergence according to the principal MCMC diagnostics.
-
-No post-warm-up divergences were observed, the maximum \(\widehat R\) was approximately 1.00, and the minimum bulk and tail effective sample sizes were 860 and 1,696, respectively.
-
-Additional diagnostics were computed using the Geweke and Heidelberger–Welch procedures.
-
-Among 700 chain-specific tests, 132 Geweke tests failed at the nominal 5\% significance level, while only two Heidelberger–Welch stationarity tests failed.
-
-To investigate the sensitivity of the Geweke results to the initial portion of the retained chains, the diagnostics were recomputed after excluding the first 1,000 and 2,000 posterior draws from each chain.
-
-The number of Geweke failures decreased to 58 and 39, respectively, while the Heidelberger–Welch stationarity results remained largely unchanged.
-
-Although these findings indicate some sensitivity of the Geweke statistic to the initial posterior samples, the absence of divergences and the satisfactory \(\widehat R\) and effective sample size diagnostics supported retaining the original terminal run.
-
-The trimming analysis was therefore treated as an additional diagnostic investigation rather than as a modification of the posterior samples used for inference.
-
-For chokepoints, the initial sampling configuration was less satisfactory.
-
-With 5,000 warm-up iterations, 10,000 retained draws per chain, and a target acceptance probability of 0.80, the model produced 13 post-warm-up divergences.
-
-The maximum \(\widehat R\) reached 1.06, while the minimum bulk and tail effective sample sizes were 45 and 11, respectively.
-
-These results indicated inadequate sampling efficiency for some parameters and motivated further adjustments to the NUTS configuration.
-
-\subsubsection{Sampling adjustments for the chokepoint model}
-
-The first adjustment consisted of increasing the target acceptance probability from 0.80 to 0.95, while maintaining 5,000 warm-up iterations and 10,000 retained draws per chain.
-
-A higher target acceptance probability generally leads NUTS to adapt a smaller integration step size, which can improve the numerical accuracy of Hamiltonian trajectories and reduce the occurrence of divergences.
-
-Following this adjustment, no post-warm-up divergences were observed.
-
-The maximum \(\widehat R\) decreased to approximately 1.01, while the minimum bulk and tail effective sample sizes increased to 506 and 213, respectively.
-
-Although these results represented a substantial improvement, the relatively low tail effective sample size for some parameters indicated that further investigation was warranted.
-
-The Geweke diagnostic also continued to identify discrepancies between the initial and final portions of some chains, with 31 failures among 212 chain-specific tests.
-
-An additional sensitivity analysis suggested that excluding the initial portion of the retained samples improved the diagnostic results.
-
-These findings motivated a further extension of the warm-up period, allowing more iterations for sampler adaptation before posterior draws were retained.
-
-The final chokepoint run was therefore performed using 8,000 warm-up iterations, 10,000 retained draws per chain, four parallel chains, and a target acceptance probability of 0.95.
-
-This configuration produced no post-warm-up divergences and satisfactory convergence diagnostics across the monitored parameters.
-
-The maximum \(\widehat R\) was approximately 1.00, while the minimum bulk and tail effective sample sizes increased to 972 and 2,133, respectively.
-
-The Geweke diagnostic was passed in 206 of 212 chain-specific evaluations, corresponding to approximately 97.2% of the tests.
-
-All 212 Heidelberger–Welch stationarity tests and all 212 half-width tests were also passed.
-
-These results indicated a substantial improvement in sampling efficiency and supported the adoption of the final configuration for the chokepoint model.
-
-The use of different sampling configurations for terminals and chokepoints reflects differences in posterior geometry and computational requirements rather than changes in the underlying statistical specification.
-
-\subsubsection{Preliminary posterior findings}
-
-The node-effects extension introduces an additional source of heterogeneity through the node-specific effects.
-
-For terminals, the posterior mean of the hierarchical standard deviation parameter was approximately 1.37, indicating substantial dispersion in persistent node-level contributions to the latent factor.
-
-The posterior regression estimates suggested positive associations between latent criticality and both terminal capacity and lagged exporter status. The posterior means of the corresponding coefficients were approximately 0.73 and 1.30, respectively.
-
-Terminal age exhibited a negative posterior association, with a posterior mean coefficient of approximately -0.33.
-
-The remaining covariates showed weaker associations, with posterior intervals including zero for lagged neighboring activity, lagged voyage distance, and the seasonal components.
-
-For chokepoints, the posterior mean of the hierarchical standard deviation parameter was approximately 2.37, indicating substantial heterogeneity in node-specific latent contributions.
-
-The posterior regression coefficient for lagged neighboring activity was positive, with a mean of approximately 0.32.
-
-The seasonal sine and cosine components exhibited negative posterior associations, while the posterior interval for lagged voyage distance included zero.
-
-These findings suggest that persistent node-level heterogeneity plays an important role in the extended model.
-
-However, the hierarchical standard deviations should not be interpreted as directly comparable measures of criticality between terminals and chokepoints, since the two models are estimated separately and have different response structures.
-
-Furthermore, the introduction of node-specific effects changes the interpretation of the regression coefficients relative to the baseline model: the coefficients now describe associations with the latent factor after accounting for persistent node-level heterogeneity.
-
-The adequacy of the extended specification must therefore be evaluated through posterior predictive checks and comparisons with the baseline model, rather than through convergence diagnostics alone.
-
+\mu_i=\sigma_\mu u_i.
+\label{eq:node_effect_noncentered}
+\end{equation}
+This transformation preserves the prior
+$\mu_i\mid\sigma_\mu\sim\mathcal{N}(0,\sigma_\mu^2)$
+and therefore leaves the posterior distribution
+of the model parameters and latent factors unchanged.
+It only changes the coordinates used for sampling,
+potentially improving computational efficiency.
 
 \subsection{Rank-two specification}
 % TODO: Insert rank-two specification, priors, and identification constraints.
@@ -2738,7 +2788,7 @@ indicating more efficient sampling
 
 % TODO: Revise section introduction and transitions after Models 2 and 3 are fitted.
 
-    \section{Rank-one model results}
+\section{Rank-one model results}
 \label{sec: rank-one model}
 This section presents the posterior results for the terminal
 model and the chokepoint model, under the rank-one factor
@@ -2888,10 +2938,27 @@ mean residual in every month, with an average of approximately $3.13$. Similar, 
 observed for other terminals, including Fos Tonkin, Yamal and Sabine Pass, whose residual components remain predominantly 
 positive over time. Conversely, terminals such as Cameroon FLNG and Sakhalin II exhibit consistently negative posterior 
 mean residuals. Table~\ref{tab:baseline_terminal_residuals} in the Appendix provides descriptive summaries of these 
-patterns. The terminal-level residual summaries are computed from posterior mean residuals.
+patterns. 
 
-These findings suggest that part of the variation left unexplained by the baseline covariates 
-may reflect persistent differences across terminals rather than exclusively observation-specific fluctuations. 
+To complement the observation-level examples, Figure~\ref{fig:terminal_factor_map} illustrates the geographical distribution 
+of posterior mean latent factor scores averaged over time for each terminal in the estimation sample. 
+The highest average factor scores are observed among major LNG export terminals located in geographically distinct regions, 
+including the Middle East, North America, Russia and West Africa. This pattern is consistent with the strong positive association 
+between lagged exporter status and the latent factor identified in Table~\ref{tab:simple_beta}. Conversely, terminals with the 
+lowest average scores are also distributed across different geographical areas, with several located in East and Southeast Asia. 
+Overall, the spatial distribution does not suggest that high or low factor values are confined to a single geographical region. 
+Rather, the geographical representation reinforces the interpretation of the latent factor as a network-related dimension associated 
+with terminal characteristics and commercial roles, rather than geographical location alone.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/terminal_mean_factor_map.pdf}
+\caption{Geographical distribution of time-averaged posterior mean latent factor scores for LNG terminals under the baseline rank-one model. The colour scale is centred at zero.}
+\label{fig:terminal_factor_map}
+\end{figure}
+
+The persistent residual patterns described above suggest that part of the variation left unexplained by the baseline 
+covariates may reflect systematic differences across terminals rather than exclusively observation-specific fluctuations. 
 This provides an empirical motivation for extending the rank-one model by introducing node-specific effects, 
 allowing persistent terminal-level heterogeneity to be represented separately from residual variation. 
 The results of this extension are presented in Section~\ref{sec:node_specific_model}.
@@ -2912,38 +2979,24 @@ factors. These comparisons are conducted both overall
 and within lagged-role groups, with 95\% equal-tailed
 intervals summarising the variability of the statistics across 200 conditional in-sample replications.
 
-The model closely reproduces the overall response means and the overall frequencies of HHI and dependence equal to one. 
-The observed overall binary proportions also lie within their replicated intervals. 
-Nevertheless, discrepancies appear in dispersion, quantiles and role-specific boundary frequencies. 
-For instance, PageRank dispersion is overestimated for lagged importers and underestimated for lagged
-exporters: the observed 95th percentile of exporters' PageRank is 0.0714, compared with a replicated mean
-of 0.0619 and a 95\% replicated interval of $[0.0587,0.0648]$.
+The model closely reproduces the HHI overall response means and the overall frequencies of dependence equal to one,
+with the observed overall binary proportions also lying within their respective replicated intervals. 
+Nevertheless, discrepancies emerge in the dispersion, quantiles and role-specific boundary frequencies of the bounded responses.
+For PageRank, the model overestimates dispersion among lagged importers and underestimates it among lagged exporters. 
+This difference is also reflected in the tails of the distributions: among importers, the observed 5th percentile (0.0089) exceeds the replicated 95\% 
+interval of $[0.0062,0.0068]$, indicating that the model generates excessively low values, whereas among exporters, the observed 95th percentile (0.0714) 
+exceeds the corresponding replicated interval of $[0.0587,0.0648]$, indicating an underestimation in the upper tail.
+For HHI, the model underestimates both the frequency of values equal to one (14.86\%, included in a 95\% interval of $[13.48\%,16.23\%]$, 
+compared with an observed 18.00\%) and the overall dispersion among exporters, where the observed mean 0.3103 exceeds its replicated interval $[0.2818,0.2993]$.
+For dependence, the discrepancies differ between terminal roles. The observed frequency of dependence equal to one among importers (26.45\%) 
+slightly exceeds the replicated interval of $[21.72\%,26.07\%]$, whereas the corresponding frequency among exporters (9.04\%) 
+falls below the replicated interval of $[11.79\%,16.14\%]$. 
+Moreover, the model underestimates dependence dispersion among importers and overestimates it among exporters. 
+The observed standard deviations are 0.3574 and 0.2296, respectively, compared with replicated intervals of $[0.3256,0.3402]$ and $[0.2709,0.2882]$.
+The complete marginal posterior predictive checks are reported in Table~\ref{tab:terminal_marginal_ppc_full} in the Appendix.
 
-\begin{table}[htbp]
-\centering
-\caption{Selected checks of the proportion of bounded responses equal to one, by lagged role. All entries are percentages.}
-\label{tab:simple_boundary_ppc}
-\begin{tabular}{llrrr}
-\hline
-Response & Lagged role & Observed & Replicated mean & 95\% interval \\
-\hline
-HHI & All & 34.09 & 34.12 & $[32.75,35.51]$ \\
-HHI & Importer & 41.89 & 43.46 & $[41.63,45.21]$ \\
-HHI & Exporter & 18.00 & 14.86 & $[13.48,16.23]$ \\
-Dependence & All & 20.76 & 20.71 & $[18.85,22.48]$ \\
-Dependence & Importer & 26.45 & 23.91 & $[21.72,26.07]$ \\
-Dependence & Exporter & 9.04 & 14.11 & $[11.79,16.14]$ \\
-\hline
-\end{tabular}
-\end{table}
-
-As shown in Table~\ref{tab:simple_boundary_ppc}, among exporters,
-the model also underestimates the frequency of HHI equal
-to one and overestimates the frequency of dependence equal to one. The importer
-dependence boundary frequency is also slightly above its replicated interval.
-These discrepancies suggest that a shared factor
-with common response functions does not fully
-capture role-specific response behaviour.
+These findings indicate that, although the baseline model captures several features of the overall response distributions, 
+it does not fully reproduce their role-specific dispersion, tail behaviour and boundary frequencies. 
 
 Association between responses is assessed by comparing observed pairwise 
 Spearman correlations with those obtained from 200 replicated datasets 
@@ -2984,8 +3037,7 @@ correlation is positive ($0.546$), whereas the posterior predictive median
 is negative ($-0.158$). The same sign reversal is observed for the full 
 sample, while the replicated correlation among importers is closer to zero, 
 although still negative. This indicates that the model fails to reproduce 
-the positive association between these two indicators across terminal roles, 
-with the most pronounced discrepancy occurring among exporters.
+the positive association between these two indicators across terminal roles.
 The association between counterparty HHI and incident-global-bridge status 
 also exhibits substantial discrepancies, particularly among importers, for 
 whom the observed correlation ($0.644$) considerably exceeds the posterior 
@@ -3006,7 +3058,6 @@ These findings provide a complementary motivation for considering a
 rank-two specification, in which two latent factors allow for a more 
 flexible representation of associations among responses. The results of 
 this extension are presented in Section~\ref{sec:rank_two_model}.
-
 
 \subsection{Chokepoint posterior analysis}
 \label{sec:chokepoint_findings}
@@ -3059,13 +3110,43 @@ Probability of betweenness equal to zero & $-1.658$ & $[-2.536,-0.797]$ \\
 \label{fig:chokepoint_response_curves}
 \end{figure}
 
-To illustrate how these relationships are reflected in individual observations, consider Cape of Good Hope in May 2021 and Taiwan Strait in October 2021. Their posterior mean factor values, located near the 5th and 95th percentiles of the estimation sample, are approximately $-1.63$ and $1.55$, respectively. Taiwan Strait has substantially higher observed PageRank (0.035 versus 0.007), betweenness (0.040 versus 0.0006), and flow share (3.6\% versus 0.3\%). Nevertheless, both chokepoint-month observations are classified as articulation points and are connected to articulation points. Their different factor values therefore reflect variation in the continuous measures even though these binary structural indicators coincide, illustrating how the estimated factor summarises different aspects of chokepoint centrality, flow exposure, and structural position.
+To illustrate how these relationships are reflected in individual observations, consider Cape of Good Hope in May 2021 and Taiwan Strait 
+in October 2021. Their posterior mean factor values, located near the 5th and 95th percentiles of the estimation sample, are approximately 
+$-1.63$ and $1.55$, respectively. Taiwan Strait has substantially higher observed PageRank (0.035 versus 0.007), betweenness 
+(0.040 versus 0.0006), and flow share (3.6\% versus 0.3\%). Nevertheless, both chokepoint-month observations are classified as 
+articulation points and are connected to articulation points. Their different factor values therefore reflect variation in the 
+continuous measures even though these binary structural indicators coincide, illustrating how the estimated factor summarises different 
+aspects of chokepoint centrality, flow exposure, and structural position.
 
-Although the chokepoint latent factor does not exhibit values as extreme as those observed for some terminals, a similar pattern of persistent residual deviations emerges. The highest and lowest posterior mean factor scores occur for Gibraltar Strait in November 2024 ($2.394$) and Sunda Strait in December 2022 ($-2.282$), respectively. In both cases, the systematic components explained by the covariates are close to zero ($-0.014$ and $0.044$), whereas the posterior mean residual components account for nearly the entire factor scores ($2.408$ and $-2.326$, respectively).
+Although the chokepoint latent factor does not exhibit values as extreme as those observed for some terminals, a similar pattern of 
+persistent residual deviations emerges. The highest and lowest posterior mean factor scores occur for Gibraltar Strait in November 2024 
+($2.394$) and Sunda Strait in December 2022 ($-2.282$), respectively. In both cases, the systematic components explained by the 
+covariates are close to zero ($-0.014$ and $0.044$), whereas the posterior mean residual components account for nearly the entire factor 
+scores ($2.408$ and $-2.326$, respectively).
 
-As observed for the terminals, these deviations are not limited to isolated months. Gibraltar Strait exhibits positive posterior mean residuals in 96.6\% of its 59 observations, with an average of $1.294$, whereas Sunda Strait exhibits negative residuals in 95.9\% of its 49 observations, averaging $-1.179$. Similar patterns are found across other chokepoints: among the 20 with at least 20 observations, 13 exhibit residuals of the same sign in more than 85\% of their observed months. Descriptive summaries of these cases are provided in Appendix~\ref{app:chokepoint_residuals}, Table~\ref{tab:chokepoint_residual_summary}.
+As observed for the terminals, these deviations are not limited to isolated months. Gibraltar Strait exhibits positive posterior mean 
+residuals in 96.6\% of its 59 observations, with an average of $1.294$, whereas Sunda Strait exhibits negative residuals in 95.9\% of 
+its 49 observations, averaging $-1.179$. Similar patterns are found across other chokepoints: among the 20 with at least 20 observations, 
+13 exhibit residuals of the same sign in more than 85\% of their observed months. Descriptive summaries of these cases are provided in 
+Appendix~\ref{app:chokepoint_residuals}, Table~\ref{tab:chokepoint_residual_summary}.
 
-These findings reinforce the evidence of persistent node-level heterogeneity already identified for terminals, suggesting that the baseline covariates may not fully account for systematic differences across nodes. They therefore provide further motivation for the node-specific extension discussed in Section~\ref{sec:node_specific_model}.
+The five highest and five lowest time-averaged scores are highlighted  in Figure ~\ref{fig:chokepoint_factor_map} to illustrate the spatial persistent variations in the estimated latent dimension.
+The highest average factor scores are associated with Gibraltar Strait, Taiwan Strait, Suez Canal, Malacca Strait, and Bab el-Mandeb Strait, 
+all located along major maritime corridors connecting Europe, the Middle East, and Asia. 
+Conversely, the lowest average scores are observed for Mona Passage and Windward Passage in the Caribbean, Magellan Strait at the 
+southern tip of South America, and Torres Strait and Sunda Strait in the Indo-Pacific region.
+Notably, the coexistence of relatively high and low factor scores among geographically proximate chokepoints in Southeast Asia suggests 
+that geographical proximity does not necessarily correspond to similar positions along the estimated latent dimension.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{images/chokepoint_mean_factor_map.pdf}
+\caption{Geographical distribution of time-averaged posterior mean latent factor scores for chokepoints under the baseline rank-one model. The colour scale is centred at zero.}
+\label{fig:chokepoint_factor_map}
+\end{figure}
+
+The persistent residual patterns identified above reinforce the evidence of node-level heterogeneity already observed for terminals, 
+suggesting that the baseline covariates may not fully account for systematic differences across chokepoints and providing further motivation for the node-specific extension discussed in Section~\ref{sec:node_specific_model}.
 
 \subsubsection{Chokepoint posterior predictive assessment}
 
@@ -4092,7 +4173,8 @@ $j$.
 Throughout, $\textit{rest}$ denotes all remaining unknown
 quantities together with the observed data and covariates.
 
-\section{Factor-regression coefficients}
+\section{Baseline rank-one specification}
+\subsection{Factor-regression coefficients}
 \label{app:beta_conditional}
 
 Let $\mathbf{X}$ be the $N\times q$ covariate design
@@ -4218,10 +4300,10 @@ which yields the following conjugate full conditional
 \end{equation*}
 
 
-\section{Response loadings}
+\subsection{Response loadings}
 \label{app:loading_conditionals}
 
-\subsection{Binary-response loadings}
+\subsubsection{Binary-response loadings}
 
 For binary response $k$,
 \begin{equation*}
@@ -4300,7 +4382,7 @@ This expression applies to $k=1,2,3$ for terminals
 and $k=1,2$ for chokepoints.
 
 
-\subsection{Ordinary Beta-response loadings}
+\subsubsection{Ordinary Beta-response loadings}
 
 For an ordinary Beta response,
 \begin{equation*}
@@ -4428,9 +4510,9 @@ Y_{n1}^{\mu_{n1}\phi_1-1}
 \mathds{1}_{\{\lambda_1>0\}}.
 \end{equation*}
 
-\subsection{Interior-mean loadings for boundary-inflated Beta responses}
+\subsubsection{Interior-mean loadings for boundary-inflated Beta responses}
 
-\subsubsection{Terminal HHI and dependence}
+\paragraph{Terminal HHI and dependence}
 
 For terminal HHI and dependence, $j=2,3$, define
 $Z_{nj}=\mathds{1}_{\{Y_{nj}=1\}}$. 
@@ -4514,7 +4596,7 @@ Thus, exact ones do not contribute to the full
 conditional of the interior-mean loading when
 the factors and boundary parameters are held fixed.
 
-\subsubsection{Chokepoint betweenness}
+\paragraph{Chokepoint betweenness}
 
 For chokepoint betweenness, define
 $Z_{n2}=\mathds{1}_{\{Y_{n2}=0\}}$, with
@@ -4590,7 +4672,7 @@ As in the one-inflated case, only interior observations
 contribute to this loading conditional.
 
 
-\subsection{Loadings for the probability mass at one}
+\subsubsection{Loadings for the probability mass at one}
 
 For terminal HHI and dependence, the indicators
 $Z_{nj}=\mathds{1}_{\{Y_{nj}=1\}}$ satisfy
@@ -4669,7 +4751,7 @@ Both boundary and interior observations contribute:
 the former have $Z_{nj}=1$, whereas the latter
 have $Z_{nj}=0$.
 
-\subsection{Loading for the probability mass at zero}
+\subsubsection{Loading for the probability mass at zero}
 
 For chokepoint betweenness,
 $Z_{n2}=\mathds{1}_{\{Y_{n2}=0\}}$,  satisfies
@@ -4741,10 +4823,10 @@ Here exact zeros have $Z_{n2}=1$, whereas interior
 observations have $Z_{n2}=0$, so both contribute
 to inference on the zero-probability loading.
 
-\section{Response intercepts}
+\subsection{Response intercepts}
 \label{app:intercept_conditionals}
 
-\subsection{Bounded-response interior intercepts}
+\subsubsection{Bounded-response interior intercepts}
 
 For each bounded response, the interior intercept
 enters the Beta mean through
@@ -4841,7 +4923,7 @@ Y_{nj}^{\mu_{nj}\phi_j-1}
 The likelihood depends on $\alpha_j$ through $\mu_{nj}$.
 
 
-\subsection{Binary-response intercepts}
+\subsubsection{Binary-response intercepts}
 
 For binary response $k$,
 \begin{equation*}
@@ -4915,7 +4997,7 @@ a_k\sum_{n\in\mathcal{O}}B_{nk}-
 This expression applies to $k=1,2,3$ for terminals
 and $k=1,2$ for chokepoints.
 
-\subsection{Intercepts of the probability of mass at one}
+\subsubsection{Intercepts of the probability of mass at one}
 
 For terminal HHI and dependence, define
 $Z_{nj}=\mathds{1}_{\{Y_{nj}=1\}}$, with
@@ -4997,7 +5079,7 @@ c_j^T\sum_{n\in\mathcal{O}}Z_{nj}-
 \qquad j=2,3.
 \end{equation*}
 
-\subsection{Intercept of the probability of mass at zero}
+\subsubsection{Intercept of the probability of mass at zero}
 
 For chokepoint betweenness, define
 $Z_{n2}=\mathds{1}_{\{Y_{n2}=0\}}$, with
@@ -5076,7 +5158,7 @@ c_2^C\sum_{n\in\mathcal{O}}Z_{n2}-
 \Bigg\}.
 \end{equation*}
 
-\section{Beta precision parameters}
+\subsection{Beta precision parameters}
 \label{app:precision_conditionals}
 
 For each bounded response, the precision $\phi_j$
@@ -5161,7 +5243,7 @@ Y_{nj}^{\mu_{nj}\phi_j-1}
 \end{equation*}
 for $j=1,2,3$ and $\phi_j>0$.
 
-\section{Latent factors}
+\subsection{Latent factors}
 \label{app:factor_conditionals}
 
 To derive the full conditional of a particular
@@ -5276,19 +5358,618 @@ the response likelihood is a non-Gaussian function
 of $f_n$, so the resulting full conditional does
 not have a standard conjugate form.
 
+\section{Random-intercept rank-one specification}
+\label{app:random_intercept_conditionals}
+
+This section derives the full conditional posterior
+distributions associated with the random-intercept
+extension introduced in
+Section~\ref{subsec:node_specific_model}.
+The response likelihoods and their parameter priors
+remain unchanged from the baseline specification.
+Consequently, the corresponding full conditional
+kernels retain the forms derived in the preceding
+sections, conditional on the latent factors.
+
+The derivations below therefore focus on the
+factor-regression coefficients, latent factors,
+node-specific intercepts, and their common scale
+parameter.
+
+Let $N_{\mathrm{node}}$ denote the number of distinct
+nodes included in estimation, and let
+$N_{\mathrm{obs}}=|\mathcal{O}|$ denote the number
+of node--month observations.
+For each observation $n\in\mathcal{O}$,
+let $i(n)$ identify its corresponding node.
+
+The extended factor regression is
+
+\begin{equation*}
+f_n\mid
+\boldsymbol{\beta},\mu_{i(n)},\mathbf{x}_n
+\sim
+\mathcal{N}
+\left(
+\mathbf{x}_n^{\mathsf T}\boldsymbol{\beta}
++\mu_{i(n)},1
+\right),
+\end{equation*}
+
+with hierarchical priors
+
+\begin{equation*}
+\mu_i\mid\sigma_\mu
+\overset{\mathrm{iid}}{\sim}
+\mathcal{N}(0,\sigma_\mu^2),
+\qquad
+\sigma_\mu\sim\operatorname{HalfNormal}(1).
+\end{equation*}
+
+The derivations are expressed in terms of the
+node-specific intercepts $\mu_i$, corresponding
+to the hierarchical model formulation.
+
+\subsection{Factor-regression coefficients}
+\label{app:node_beta_conditional}
+
+Conditional on the latent factors and node-specific
+intercepts, the response likelihood does not
+depend on $\boldsymbol{\beta}$.
+Therefore,
+
+\begin{equation*}
+p(\boldsymbol{\beta}\mid\mathrm{rest})
+\propto
+p(\mathbf{f}\mid
+\boldsymbol{\beta},\boldsymbol{\mu},\mathbf{X})
+p(\boldsymbol{\beta}).
+\end{equation*}
+
+Combining the Gaussian factor-regression density
+with the independent
+$\mathcal{N}(0,0.5^2)$ coefficient priors gives
+
+\begin{equation*}
+\begin{aligned}
+p(\boldsymbol{\beta}\mid\mathrm{rest})
+\propto {}&
+\prod_{n\in\mathcal{O}}
+\exp\left[
+-\frac12
+\left(
+f_n-\mathbf{x}_n^{\mathsf T}
+\boldsymbol{\beta}-\mu_{i(n)}
+\right)^2
+\right]
+\\
+&\times
+\prod_{r=1}^{q}
+\exp\left(
+-\frac{\beta_r^2}{2(0.5)^2}
+\right).
+\end{aligned}
+\end{equation*}
+
+Let $\boldsymbol{\mu}_{\mathcal{O}}$ denote
+the $N_{\mathrm{obs}}$-dimensional vector
+whose $n$th element is $\mu_{i(n)}$.
+Combining the exponential terms gives
+
+\begin{equation*}
+\begin{aligned}
+p(\boldsymbol{\beta}\mid\mathrm{rest})
+\propto
+\exp\Bigg\{-\frac12\Big[
+&(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}
+-\mathbf{X}\boldsymbol{\beta})^{\mathsf T}
+\\
+&\times
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}
+-\mathbf{X}\boldsymbol{\beta})
+\\
+&+4\boldsymbol{\beta}^{\mathsf T}
+\boldsymbol{\beta}
+\Big]\Bigg\}.
+\end{aligned}
+\end{equation*}
+
+Expanding the quadratic term,
+
+\begin{equation*}
+\begin{aligned}
+&(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}
+-\mathbf{X}\boldsymbol{\beta})^{\mathsf T}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}
+-\mathbf{X}\boldsymbol{\beta})
+\\
+&=
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})^{\mathsf T}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})
+\\
+&\quad
+-2\boldsymbol{\beta}^{\mathsf T}
+\mathbf{X}^{\mathsf T}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})
+\\
+&\quad
++\boldsymbol{\beta}^{\mathsf T}
+\mathbf{X}^{\mathsf T}
+\mathbf{X}\boldsymbol{\beta}.
+\end{aligned}
+\end{equation*}
+
+The first term does not depend on
+$\boldsymbol{\beta}$ and can be absorbed
+into the normalising constant.
+The resulting kernel is
+
+\begin{equation*}
+\begin{aligned}
+p(\boldsymbol{\beta}\mid\mathrm{rest})
+\propto
+\exp\Bigg\{-\frac12\Big[
+&\boldsymbol{\beta}^{\mathsf T}
+(\mathbf{X}^{\mathsf T}\mathbf{X}
++4\mathbf{I}_q)\boldsymbol{\beta}
+\\
+&-2\boldsymbol{\beta}^{\mathsf T}
+\mathbf{X}^{\mathsf T}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})
+\Big]\Bigg\}.
+\end{aligned}
+\end{equation*}
+
+Define
+
+\begin{equation*}
+\mathbf{V}_{\beta}
+=
+(\mathbf{X}^{\mathsf T}\mathbf{X}
++4\mathbf{I}_q)^{-1},
+\end{equation*}
+and
+
+\begin{equation*}
+\mathbf{m}_{\beta}
+=
+\mathbf{V}_{\beta}
+\mathbf{X}^{\mathsf T}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}).
+\end{equation*}
+
+Since
+
+\begin{equation*}
+\mathbf{V}_{\beta}^{-1}\mathbf{m}_{\beta}
+=
+\mathbf{X}^{\mathsf T}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}),
+\end{equation*}
+completing the square gives
+
+\begin{equation*}
+\begin{aligned}
+&\boldsymbol{\beta}^{\mathsf T}
+\mathbf{V}_{\beta}^{-1}\boldsymbol{\beta}
+-
+2\boldsymbol{\beta}^{\mathsf T}
+\mathbf{X}^{\mathsf T}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})
+\\
+&=
+(\boldsymbol{\beta}-\mathbf{m}_{\beta})^{\mathsf T}
+\mathbf{V}_{\beta}^{-1}
+(\boldsymbol{\beta}-\mathbf{m}_{\beta})
+\\
+&\quad-
+\mathbf{m}_{\beta}^{\mathsf T}
+\mathbf{V}_{\beta}^{-1}\mathbf{m}_{\beta}.
+\end{aligned}
+\end{equation*}
+
+The final term is constant with respect to
+$\boldsymbol{\beta}$. Therefore,
+
+\begin{equation*}
+p(\boldsymbol{\beta}\mid\mathrm{rest})
+\propto
+\exp\left[
+-\frac12
+(\boldsymbol{\beta}-\mathbf{m}_{\beta})^{\mathsf T}
+\mathbf{V}_{\beta}^{-1}
+(\boldsymbol{\beta}-\mathbf{m}_{\beta})
+\right],
+\end{equation*}
+which yields
+
+\begin{equation*}
+\boxed{
+\begin{aligned}
+\boldsymbol{\beta}\mid\mathrm{rest}
+\sim\mathcal{N}_q\Big(
+&(\mathbf{X}^{\mathsf T}\mathbf{X}
++4\mathbf{I}_q)^{-1}
+\mathbf{X}^{\mathsf T}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}),
+\\
+&(\mathbf{X}^{\mathsf T}\mathbf{X}
++4\mathbf{I}_q)^{-1}
+\Big).
+\end{aligned}
+}
+\end{equation*}
+
+\subsection{Latent factors}
+\label{app:node_factor_conditional}
+
+For each observation $n$, the full conditional
+distribution of $f_n$ combines the observation-specific
+response likelihood with the Gaussian factor regression:
+
+\begin{equation*}
+p(f_n\mid\mathrm{rest})
+\propto
+L_n(f_n)
+p(f_n\mid
+\boldsymbol{\beta},\mu_{i(n)},\mathbf{x}_n).
+\end{equation*}
+
+Substituting the Gaussian density gives
+
+\begin{equation*}
+p(f_n\mid\mathrm{rest})
+\propto
+L_n(f_n)
+\exp\left[
+-\frac12
+\left(
+f_n-\mathbf{x}_n^{\mathsf T}
+\boldsymbol{\beta}-\mu_{i(n)}
+\right)^2
+\right].
+\end{equation*}
+
+The likelihood contribution $L_n(f_n)$
+is identical to that of the baseline model.
+Consequently, the extension modifies only
+the centre of the Gaussian factor-regression
+term, replacing
+$\mathbf{x}_n^{\mathsf T}\boldsymbol{\beta}$
+with
+$\mathbf{x}_n^{\mathsf T}\boldsymbol{\beta}
++\mu_{i(n)}$.
+
+Because the response likelihood contains
+Beta and Bernoulli components linked to
+$f_n$ through logistic transformations,
+the resulting conditional distribution
+is not generally conjugate.
+
+\subsection{Node-specific intercepts}
+\label{app:node_mu_conditional}
+
+For each node $i$, define
+
+\begin{equation*}
+\mathcal{O}_i
+=
+\{n\in\mathcal{O}:i(n)=i\},
+\qquad
+n_i=|\mathcal{O}_i|.
+\end{equation*}
+
+Conditional on the latent factors and
+the remaining parameters, only the
+factor-regression contributions associated
+with node $i$ and the Gaussian prior
+for $\mu_i$ depend on this parameter.
+Therefore,
+
+\begin{equation*}
+p(\mu_i\mid\mathrm{rest})
+\propto
+p(\mu_i\mid\sigma_\mu)
+\prod_{n\in\mathcal{O}_i}
+p(f_n\mid
+\boldsymbol{\beta},\mu_i,\mathbf{x}_n).
+\end{equation*}
+Writing the relevant densities explicitly,
+
+\begin{equation*}
+\begin{aligned}
+p(\mu_i\mid\mathrm{rest})
+\propto {}&
+\exp\left(
+-\frac{\mu_i^2}{2\sigma_\mu^2}
+\right)
+\\
+&\times
+\prod_{n\in\mathcal{O}_i}
+\exp\left[
+-\frac12
+\left(
+f_n-\mathbf{x}_n^{\mathsf T}
+\boldsymbol{\beta}-\mu_i
+\right)^2
+\right].
+\end{aligned}
+\end{equation*}
+
+Define the factor-regression residuals
+
+\begin{equation*}
+r_n
+=
+f_n-\mathbf{x}_n^{\mathsf T}
+\boldsymbol{\beta}.
+\end{equation*}
+
+The conditional kernel becomes
+
+\begin{equation*}
+p(\mu_i\mid\mathrm{rest})
+\propto
+\exp\left\{
+-\frac12
+\left[
+\frac{\mu_i^2}{\sigma_\mu^2}
++
+\sum_{n\in\mathcal{O}_i}
+(r_n-\mu_i)^2
+\right]
+\right\}.
+\end{equation*}
+Expanding the sum of squared residuals,
+
+\begin{equation*}
+\begin{aligned}
+\sum_{n\in\mathcal{O}_i}
+(r_n-\mu_i)^2
+={}&
+\sum_{n\in\mathcal{O}_i}r_n^2
+\\
+&-2\mu_i
+\sum_{n\in\mathcal{O}_i}r_n
++n_i\mu_i^2.
+\end{aligned}
+\end{equation*}
+Removing the term
+$\sum_{n\in\mathcal{O}_i}r_n^2$,
+which does not depend on $\mu_i$, gives
+
+\begin{equation*}
+\begin{aligned}
+p(\mu_i\mid\mathrm{rest})
+\propto
+\exp\Bigg\{-\frac12\Bigg[
+&\left(
+n_i+\frac{1}{\sigma_\mu^2}
+\right)\mu_i^2
+\\
+&-2\mu_i
+\sum_{n\in\mathcal{O}_i}r_n
+\Bigg]\Bigg\}.
+\end{aligned}
+\end{equation*}
+
+Define
+
+\begin{equation*}
+V_{\mu_i}
+=
+\left(
+n_i+\frac{1}{\sigma_\mu^2}
+\right)^{-1},
+\end{equation*}
+and
+
+\begin{equation*}
+m_{\mu_i}
+=
+V_{\mu_i}
+\sum_{n\in\mathcal{O}_i}r_n.
+\end{equation*}
+
+Since
+
+\begin{equation*}
+V_{\mu_i}^{-1}m_{\mu_i}
+=
+\sum_{n\in\mathcal{O}_i}r_n,
+\end{equation*}
+completing the square yields
+
+\begin{equation*}
+\begin{aligned}
+&V_{\mu_i}^{-1}\mu_i^2
+-2\mu_i\sum_{n\in\mathcal{O}_i}r_n
+\\
+&=
+V_{\mu_i}^{-1}
+(\mu_i-m_{\mu_i})^2
+-
+V_{\mu_i}^{-1}m_{\mu_i}^2.
+\end{aligned}
+\end{equation*}
+
+The final term does not depend on $\mu_i$.
+Thus,
+
+\begin{equation*}
+p(\mu_i\mid\mathrm{rest})
+\propto
+\exp\left[
+-\frac{
+(\mu_i-m_{\mu_i})^2
+}{
+2V_{\mu_i}
+}
+\right],
+\end{equation*}
+which gives the conjugate full conditional
+
+\begin{equation*}
+\boxed{
+\mu_i\mid\mathrm{rest}
+\sim
+\mathcal{N}
+\left(
+V_{\mu_i}
+\sum_{n\in\mathcal{O}_i}
+(f_n-\mathbf{x}_n^{\mathsf T}
+\boldsymbol{\beta}),
+\;
+V_{\mu_i}
+\right),
+}
+\end{equation*}
+where
+
+\begin{equation*}
+V_{\mu_i}
+=
+\left(
+n_i+\sigma_\mu^{-2}
+\right)^{-1}.
+\end{equation*}
+
+\subsection{Node-effect scale parameter}
+\label{app:node_sigma_conditional}
+
+The full conditional distribution of
+$\sigma_\mu$ depends on its Half-Normal
+prior and the hierarchical Gaussian
+distribution of the node-specific intercepts.
+Conditional on $\boldsymbol{\mu}$,
+the factor-regression likelihood does not
+depend directly on $\sigma_\mu$.
+
+Therefore,
+
+\begin{equation*}
+p(\sigma_\mu\mid\mathrm{rest})
+\propto
+p(\boldsymbol{\mu}\mid\sigma_\mu)
+p(\sigma_\mu).
+\end{equation*}
+
+The hierarchical prior contributes
+
+\begin{equation*}
+p(\boldsymbol{\mu}\mid\sigma_\mu)
+\propto
+\prod_{i=1}^{N_{\mathrm{node}}}
+\frac{1}{\sigma_\mu}
+\exp\left(
+-\frac{\mu_i^2}{2\sigma_\mu^2}
+\right),
+\end{equation*}
+
+for $\sigma_\mu>0$.
+Combining the product gives
+
+\begin{equation*}
+p(\boldsymbol{\mu}\mid\sigma_\mu)
+\propto
+\sigma_\mu^{-N_{\mathrm{node}}}
+\exp\left(
+-\frac{
+\sum_{i=1}^{N_{\mathrm{node}}}\mu_i^2
+}{
+2\sigma_\mu^2
+}
+\right).
+\end{equation*}
+
+The Half-Normal prior with unit scale has kernel
+
+\begin{equation*}
+p(\sigma_\mu)
+\propto
+\exp\left(
+-\frac{\sigma_\mu^2}{2}
+\right)
+\mathbb{I}(\sigma_\mu>0).
+\end{equation*}
+
+Multiplying these contributions yields
+
+\begin{equation*}
+\boxed{
+\begin{aligned}
+p(\sigma_\mu\mid\mathrm{rest})
+\propto {}&
+\sigma_\mu^{-N_{\mathrm{node}}}
+\\
+&\times
+\exp\left[
+-\frac12
+\left(
+\sigma_\mu^2+
+\frac{
+\sum_{i=1}^{N_{\mathrm{node}}}\mu_i^2
+}{
+\sigma_\mu^2
+}
+\right)
+\right]
+\mathbb{I}(\sigma_\mu>0).
+\end{aligned}
+}
+\end{equation*}
+
+Equivalently, the log-kernel is
+
+\begin{equation*}
+\begin{aligned}
+\log p(\sigma_\mu\mid\mathrm{rest})
+={}&
+-N_{\mathrm{node}}\log\sigma_\mu
+\\
+&-\frac{\sigma_\mu^2}{2}
+-\frac{
+\sum_{i=1}^{N_{\mathrm{node}}}\mu_i^2
+}{
+2\sigma_\mu^2
+}
++C,
+\end{aligned}
+\end{equation*}
+
+where $C$ does not depend on $\sigma_\mu$.
+
+Unlike the conditional distribution of the
+node-specific intercepts, this conditional
+distribution does not have a standard
+conjugate form for $\sigma_\mu$.
+
+The expressions above correspond to the
+hierarchical formulation of the model.
+In the computational implementation,
+the node effects are represented using
+the equivalent non-centred transformation
+$\mu_i=\sigma_\mu u_i$, where
+$u_i\sim\mathcal{N}(0,1)$.
+This changes the sampling coordinates,
+but not the posterior distribution of
+the model quantities of interest.
+
 \chapter{Additional posterior results}
 \label{app:additional_posterior_results}
 
 \section{Terminals}
 \label{app:terminals_add_posterior_results}
 
+This section provides supplementary results for the terminal baseline rank-one model, 
+complementing the posterior analysis presented in Section~\ref{sec:terminal_results}.
+
 \subsection{Terminals residuals heterogeneity}
 \label{app:terminal_residual_heterogeneity}
 
-This section provides additional descriptive evidence
+The following table provides additional descriptive evidence
 of persistent terminal-level residual patterns under
-the baseline rank-one specification, complementing
-the discussion in the main text.
+the baseline rank-one specification.
 
 \begin{table}[htbp]
 \centering
@@ -5328,10 +6009,102 @@ Wheatstone LNG Terminal & 50 & -0.542 & -0.537 & 14.0 \\
 \end{minipage}
 \end{table}
 
-\subsection{Terminals joint posterior predictive checks}
-\label{app:joint_ppc}
+\subsection{Terminals posterior predictive checks}
+\label{app:terminal_ppc}
 
-Table~\ref{tab:joint_ppc_full} presents the complete set of 45 pairwise Spearman correlation checks for the terminal baseline rank-one model, covering all 15 response pairs across the full estimation sample and the importer and exporter subsamples. For each comparison, the observed correlation is reported alongside the median and the 95\% interval obtained from 200 conditional in-sample posterior predictive replicates. These results complement the selected discrepancies discussed in Section~\ref{subsubsec:simple_ppc}.
+Table~\ref{tab:terminal_marginal_ppc_full} reports marginal posterior predictive checks for the terminal baseline rank-one model, separately for all observations, lagged importers and lagged exporters. The reported intervals describe the distribution of each statistic across 200 conditional in-sample replicated datasets.
+
+\begingroup
+\small
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\begin{longtable}{llrrrr}
+\caption{Marginal posterior predictive checks for terminal responses under the baseline rank-one model. All statistics are on the original response scale; intervals are based on 200 conditional in-sample replicates.}
+\label{tab:terminal_marginal_ppc_full}\\
+\toprule
+Response & Statistic & Observed & Rep. mean & 95\% lower & 95\% upper \\
+\midrule
+\endfirsthead
+\multicolumn{6}{c}{\textit{Table continued from previous page}}\\
+\toprule
+Response & Statistic & Observed & Rep. mean & 95\% lower & 95\% upper \\
+\midrule
+\endhead
+\midrule
+\multicolumn{6}{r}{\textit{Continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{6}{l}{\textit{All terminals}}\\
+\midrule
+PageRank & Mean & 0.0185 & 0.0185 & 0.0183 & 0.0187 \\
+PageRank & SD & 0.0133 & 0.0124 & 0.0121 & 0.0127 \\
+PageRank & 5th percentile & 0.0089 & 0.0069 & 0.0067 & 0.0072 \\
+PageRank & Median & 0.0147 & 0.0155 & 0.0152 & 0.0158 \\
+PageRank & 95th percentile & 0.0391 & 0.0395 & 0.0384 & 0.0406 \\
+\addlinespace[2pt]
+HHI & Mean & 0.5887 & 0.5899 & 0.5822 & 0.5975 \\
+HHI & SD & 0.3254 & 0.3233 & 0.3193 & 0.3272 \\
+HHI & 5th percentile & 0.1268 & 0.1320 & 0.1219 & 0.1437 \\
+HHI & Median & 0.5045 & 0.4988 & 0.4863 & 0.5110 \\
+HHI & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+HHI & Proportion equal to one & 0.3409 & 0.3412 & 0.3275 & 0.3551 \\
+\addlinespace[2pt]
+Dependence & Mean & 0.4948 & 0.4953 & 0.4818 & 0.5116 \\
+Dependence & SD & 0.3219 & 0.3179 & 0.3116 & 0.3253 \\
+Dependence & 5th percentile & 0.0716 & 0.0796 & 0.0717 & 0.0879 \\
+Dependence & Median & 0.4283 & 0.4175 & 0.4020 & 0.4374 \\
+Dependence & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+Dependence & Proportion equal to one & 0.2076 & 0.2071 & 0.1885 & 0.2248 \\
+\midrule
+\multicolumn{6}{l}{\textit{Lagged importers}}\\
+\midrule
+PageRank & Mean & 0.0145 & 0.0145 & 0.0143 & 0.0148 \\
+PageRank & SD & 0.0045 & 0.0058 & 0.0056 & 0.0061 \\
+PageRank & 5th percentile & 0.0089 & 0.0065 & 0.0062 & 0.0068 \\
+PageRank & Median & 0.0136 & 0.0137 & 0.0135 & 0.0140 \\
+PageRank & 95th percentile & 0.0233 & 0.0252 & 0.0246 & 0.0261 \\
+\addlinespace[2pt]
+HHI & Mean & 0.6745 & 0.6810 & 0.6718 & 0.6908 \\
+HHI & SD & 0.2966 & 0.2981 & 0.2937 & 0.3028 \\
+HHI & 5th percentile & 0.2446 & 0.2476 & 0.2342 & 0.2597 \\
+HHI & Median & 0.5701 & 0.6060 & 0.5858 & 0.6257 \\
+HHI & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+HHI & Proportion equal to one & 0.4189 & 0.4346 & 0.4163 & 0.4521 \\
+\addlinespace[2pt]
+Dependence & Mean & 0.4812 & 0.4763 & 0.4601 & 0.4945 \\
+Dependence & SD & 0.3574 & 0.3330 & 0.3256 & 0.3402 \\
+Dependence & 5th percentile & 0.0614 & 0.0687 & 0.0603 & 0.0777 \\
+Dependence & Median & 0.3472 & 0.3731 & 0.3545 & 0.3945 \\
+Dependence & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+Dependence & Proportion equal to one & 0.2645 & 0.2391 & 0.2172 & 0.2607 \\
+\midrule
+\multicolumn{6}{l}{\textit{Lagged exporters}}\\
+\midrule
+PageRank & Mean & 0.0269 & 0.0268 & 0.0264 & 0.0271 \\
+PageRank & SD & 0.0198 & 0.0173 & 0.0166 & 0.0178 \\
+PageRank & 5th percentile & 0.0088 & 0.0090 & 0.0085 & 0.0096 \\
+PageRank & Median & 0.0210 & 0.0225 & 0.0219 & 0.0232 \\
+PageRank & 95th percentile & 0.0714 & 0.0619 & 0.0587 & 0.0648 \\
+\addlinespace[2pt]
+HHI & Mean & 0.4119 & 0.4019 & 0.3917 & 0.4126 \\
+HHI & SD & 0.3103 & 0.2905 & 0.2818 & 0.2993 \\
+HHI & 5th percentile & 0.0877 & 0.0609 & 0.0516 & 0.0727 \\
+HHI & Median & 0.3333 & 0.3258 & 0.3144 & 0.3409 \\
+HHI & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+HHI & Proportion equal to one & 0.1800 & 0.1486 & 0.1348 & 0.1623 \\
+\addlinespace[2pt]
+Dependence & Mean & 0.5228 & 0.5343 & 0.5165 & 0.5550 \\
+Dependence & SD & 0.2296 & 0.2800 & 0.2709 & 0.2882 \\
+Dependence & 5th percentile & 0.1852 & 0.1216 & 0.1048 & 0.1382 \\
+Dependence & Median & 0.4972 & 0.5010 & 0.4771 & 0.5286 \\
+Dependence & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+Dependence & Proportion equal to one & 0.0904 & 0.1411 & 0.1179 & 0.1614 \\
+\end{longtable}
+\endgroup
+
+Table~\ref{tab:joint_ppc_full} presents the complete set of 45 pairwise Spearman correlation checks for the terminal baseline rank-one model, covering all 15 response pairs across the full estimation sample and the importer and exporter subsamples. 
+For each comparison, the observed correlation is reported alongside the median and the 95\% interval obtained from 200 conditional in-sample posterior predictive replicates. These results complement the selected discrepancies discussed in Section~\ref{subsubsec:simple_ppc}.
 
 \begin{longtable}{lrrrr}
 \caption{Complete joint posterior predictive checks for the terminal baseline rank-one model. Entries are Spearman correlations. Replicated intervals use 200 conditional in-sample replicates. PR = PageRank; AP = articulation-point status; GB = incident-global-bridge status; toAP = adjacency to an articulation point; DEP = dependence.}
