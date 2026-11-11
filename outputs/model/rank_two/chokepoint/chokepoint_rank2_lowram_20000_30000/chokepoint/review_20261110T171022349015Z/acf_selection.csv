@@ -1,0 +1,6 @@
+,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat,selection_reason
+"beta[log1p_mean_voyage_distance_lag1, factor_1]",0.051013,0.010728,9.430813,47.547849,1.349949,Lowest bulk ESS among regression coefficients
+"loading_cont[share_monthly_network_flow, factor_2]",0.204747,0.049178,9.167542,51.059541,1.372302,Lowest bulk ESS among response loadings; Lowest bulk ESS among global parameters
+"loading_binary[is_articulation_point, factor_2]",0.175163,0.034939,9.398066,45.919323,1.353227,Lowest tail ESS among global parameters
+"loading_cont[pagerank, factor_1]",0.010747,0.003036,57.123133,263.218644,1.06749,PageRank anchor loading
+"loading_cont[pagerank, factor_2]",0.062458,0.010411,9.32226,53.015165,1.359255,PageRank anchor loading

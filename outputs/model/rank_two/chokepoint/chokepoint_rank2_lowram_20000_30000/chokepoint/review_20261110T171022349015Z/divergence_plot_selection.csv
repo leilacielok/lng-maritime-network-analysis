@@ -1,0 +1,30 @@
+rank,parameter,variable,coordinates,ks_distance,standardized_mean_difference,selected
+1,precision_cont [share_monthly_network_flow],precision_cont,"{""continuous"": ""share_monthly_network_flow""}",0.6563741584816272,1.810816966135714,True
+2,"loading_cont [betweenness, factor_1]",loading_cont,"{""continuous"": ""betweenness"", ""factor_dim"": ""factor_1""}",0.4874241252598538,-1.0881069290152268,True
+3,"loading_binary [connected_to_articulation_point, factor_1]",loading_binary,"{""binary"": ""connected_to_articulation_point"", ""factor_dim"": ""factor_1""}",0.4272727272727273,-1.069307646359921,True
+4,"loading_cont [pagerank, factor_2]",loading_cont,"{""continuous"": ""pagerank"", ""factor_dim"": ""factor_2""}",0.409534114436456,0.722518454245888,True
+5,"loading_cont [share_monthly_network_flow, factor_2]",loading_cont,"{""continuous"": ""share_monthly_network_flow"", ""factor_dim"": ""factor_2""}",0.4093690584291787,0.8693728580773417,True
+6,"loading_cont [betweenness, factor_2]",loading_cont,"{""continuous"": ""betweenness"", ""factor_dim"": ""factor_2""}",0.40554789037689465,0.6323428154728673,True
+7,"loading_zero [betweenness, factor_2]",loading_zero,"{""boundary"": ""betweenness"", ""factor_dim"": ""factor_2""}",0.40513568770042807,-1.0020936637301632,True
+8,"loading_binary [is_articulation_point, factor_2]",loading_binary,"{""binary"": ""is_articulation_point"", ""factor_dim"": ""factor_2""}",0.3980331932651966,0.8194177223215772,True
+9,"beta [neighbor_activity_lag1, factor_1]",beta,"{""predictor"": ""neighbor_activity_lag1"", ""factor_dim"": ""factor_1""}",0.36499753306870375,-0.7051195487787696,False
+10,"beta [log1p_mean_voyage_distance_lag1, factor_1]",beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1"", ""factor_dim"": ""factor_1""}",0.3627529009524655,-0.8013776066514429,False
+11,"beta [month_cos, factor_1]",beta,"{""predictor"": ""month_cos"", ""factor_dim"": ""factor_1""}",0.34469201585703907,0.7078230372649538,False
+12,"loading_cont [pagerank, factor_1]",loading_cont,"{""continuous"": ""pagerank"", ""factor_dim"": ""factor_1""}",0.33787713029965033,-0.7912179785049753,False
+13,"loading_binary [connected_to_articulation_point, factor_2]",loading_binary,"{""binary"": ""connected_to_articulation_point"", ""factor_dim"": ""factor_2""}",0.27978638934233846,0.37892158011753335,False
+14,"beta [neighbor_activity_lag1, factor_2]",beta,"{""predictor"": ""neighbor_activity_lag1"", ""factor_dim"": ""factor_2""}",0.2552859874738851,0.4723590349812824,False
+15,"beta [month_sin, factor_2]",beta,"{""predictor"": ""month_sin"", ""factor_dim"": ""factor_2""}",0.23730771137130602,-0.5932145538335556,False
+16,"beta [month_cos, factor_2]",beta,"{""predictor"": ""month_cos"", ""factor_dim"": ""factor_2""}",0.21875204700224926,-0.2700030077843634,False
+17,"loading_binary [is_articulation_point, factor_1]",loading_binary,"{""binary"": ""is_articulation_point"", ""factor_dim"": ""factor_1""}",0.20702960414742494,-0.3740599046048567,False
+18,"loading_zero [betweenness, factor_1]",loading_zero,"{""boundary"": ""betweenness"", ""factor_dim"": ""factor_1""}",0.1940206315149744,-0.22939010691702408,False
+19,intercept_cont [share_monthly_network_flow],intercept_cont,"{""continuous"": ""share_monthly_network_flow""}",0.16839098091213933,-0.1389672611832093,False
+20,"beta [log1p_mean_voyage_distance_lag1, factor_2]",beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1"", ""factor_dim"": ""factor_2""}",0.15426779114243694,-0.2539666690757784,False
+21,intercept_zero [betweenness],intercept_zero,"{""boundary"": ""betweenness""}",0.1482211044271617,0.3386140454532725,False
+22,"loading_cont [share_monthly_network_flow, factor_1]",loading_cont,"{""continuous"": ""share_monthly_network_flow"", ""factor_dim"": ""factor_1""}",0.14018788200585,-0.10263908182984881,False
+23,intercept_cont [pagerank],intercept_cont,"{""continuous"": ""pagerank""}",0.1382481256667436,-0.08205053233639485,False
+24,precision_cont [betweenness],precision_cont,"{""continuous"": ""betweenness""}",0.1273958956612785,-0.19463909953241396,False
+25,intercept_cont [betweenness],intercept_cont,"{""continuous"": ""betweenness""}",0.12613654586208312,-0.1436138617551614,False
+26,"beta [month_sin, factor_1]",beta,"{""predictor"": ""month_sin"", ""factor_dim"": ""factor_1""}",0.09764888327219723,-0.04714258731135855,False
+27,precision_cont [pagerank],precision_cont,"{""continuous"": ""pagerank""}",0.08514748620834767,0.06368944642462221,False
+28,intercept_binary [is_articulation_point],intercept_binary,"{""binary"": ""is_articulation_point""}",0.08212756059531603,0.038400410879005205,False
+29,intercept_binary [connected_to_articulation_point],intercept_binary,"{""binary"": ""connected_to_articulation_point""}",0.07568334644818586,0.008673250264258171,False
