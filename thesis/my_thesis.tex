@@ -2351,22 +2351,17 @@ Combining this density with the response likelihood
 and the hierarchical prior gives the joint posterior
 
 \begin{equation}
-\begin{aligned}
-&p(\boldsymbol{\theta},\boldsymbol{\beta},
+p(\boldsymbol{\theta},\boldsymbol{\beta},
 \mathbf{f},\boldsymbol{\mu},\sigma_\mu
 \mid\mathcal{D})
-\\
-&\quad\propto
+\propto
 L(\boldsymbol{\theta},\mathbf{f})
 \,p(\mathbf{f}\mid
 \boldsymbol{\beta},\boldsymbol{\mu},\mathbf{X})
-\\
-&\qquad\times
 p(\boldsymbol{\theta})
 p(\boldsymbol{\beta})
 p(\boldsymbol{\mu}\mid\sigma_\mu)
 p(\sigma_\mu),
-\end{aligned}
 \label{eq:node_joint_posterior}
 \end{equation}
 where $L(\boldsymbol{\theta},\mathbf{f})$
@@ -2390,7 +2385,7 @@ hierarchical parameters require modification.
 \paragraph{Factor-regression coefficients.}
 
 Define the $|\mathcal{O}|$-dimensional vector
-$\boldsymbol{\mu}_{\mathcal{O}}$ whose $n$th element
+$\boldsymbol{\mu}_{\mathcal{O}}$ whose $n^{th}$ element
 is $\mu_{i(n)}$.
 The Gaussian factor regression and the independent
 $\mathcal{N}(0,0.5^2)$ coefficient priors give
@@ -2482,7 +2477,7 @@ Normal full conditional
 \end{equation}
 where
 
-\begin{equation}
+\begin{equation*}
 V_{\mu_i}=
 \left(
 n_i+\frac{1}{\sigma_\mu^2}
@@ -2495,7 +2490,7 @@ V_{\mu_i}
 f_n-\boldsymbol{x}_n^{\mathsf T}
 \boldsymbol{\beta}
 \right).
-\end{equation}
+\end{equation*}
 
 \paragraph{Node-effect scale parameter.}
 
@@ -2539,10 +2534,96 @@ $\mu_i\mid\sigma_\mu\sim\mathcal{N}(0,\sigma_\mu^2)$
 and therefore leaves the posterior distribution
 of the model parameters and latent factors unchanged.
 It only changes the coordinates used for sampling,
-potentially improving computational efficiency.
+with the aim of improving computational efficiency \citep{papaspiliopoulos2007general}.
 
 \subsection{Rank-two specification}
-% TODO: Insert rank-two specification, priors, and identification constraints.
+\label{subsec_rank_two_model}
+The rank-two specification extends the baseline model by introducing a second latent factor, allowing the dependence structure among the observed responses to be represented in a two-dimensional latent space. This extension is motivated by the limitations of the rank-one specification, particularly its restricted ability to reproduce certain patterns of association among network criticality indicators.
+
+For each node \(i\) and month \(t\), the scalar latent factor is replaced by a two-dimensional vector
+
+\[
+\mathbf f_{i,t}
+=
+\begin{pmatrix}
+f_{i,t,1}\\
+f_{i,t,2}
+\end{pmatrix}.
+\]
+
+The conditional distribution of the latent factors is specified as
+
+\begin{equation}
+\mathbf f_{i,t}\mid\mathbf x_{i,t},\mathbf B
+\sim
+\mathcal N_2
+\left(
+\mathbf B^\top\mathbf x_{i,t},
+\mathbf I_2
+\right),
+\end{equation}
+where \(\mathbf B\in\mathbb R^{q\times 2}\) is the matrix of factor-regression coefficients and \(\mathbf I_2\) denotes the two-dimensional identity matrix. Each element of \(\mathbf B\) is assigned the same Gaussian prior used for the regression coefficients in the baseline model,
+$
+B_{kh}\sim\mathcal N(0,0.5^2), h=1,2.
+$
+The two latent dimensions therefore have independent unit-variance Gaussian residuals, conditional on the observed covariates.
+
+The observation models retain the likelihood families introduced in Section~\ref{subsec:simple_factor_specification}. 
+The main modification concerns the linear predictors, in which the scalar product between a response-specific loading 
+and the latent factor is replaced by the inner product between two-dimensional vectors.
+
+For each continuous response \(j\), the conditional mean of the interior Beta component is given by
+
+\[
+\operatorname{logit}(\mu_{i,t,j})
+=
+\alpha_j+
+\boldsymbol\lambda_j^\top\mathbf f_{i,t},
+\]
+where \(\boldsymbol\lambda_j\in\mathbb R^2\) contains the two factor loadings associated with response \(j\).
+Similarly, for each binary response \(k\),
+
+\[
+\operatorname{logit}(p_{i,t,k})
+=
+a_k+
+\boldsymbol\ell_k^\top\mathbf f_{i,t},
+\]
+where \(\boldsymbol\ell_k\in\mathbb R^2\) denotes the corresponding loading vector.
+
+The probabilities associated with the boundary components of the inflated Beta distributions are extended analogously, 
+with a separate two-dimensional loading vector for each boundary response.
+
+The prior distributions of the intercepts and precision parameters remain unchanged, while the loading priors 
+are extended independently to the two latent dimensions. As in the baseline model, the first PageRank loading is 
+constrained to be positive through a half-normal prior, $\lambda_{\mathrm{PR},1}\sim\operatorname{halfNormal}(1)$,
+whereas the second PageRank loading follows an unconstrained Gaussian prior $\lambda_{\mathrm{PR},2}\sim\mathcal N(0,1)$.
+All remaining loadings follow the corresponding Gaussian priors specified for the rank-one model.
+
+The joint distribution of the rank-two model retains the conditional-independence structure of the baseline rank-one specification. 
+Let \(\mathbf F=\{\mathbf f_n\}_{n=1}^{N}\) denote the collection of two-dimensional latent factors, 
+and let \(\boldsymbol\theta\) contain the factor-regression coefficients, response-specific loadings, intercepts, and precision parameters. 
+The joint distribution can be expressed as
+
+\begin{equation}
+p(\mathbf Y,\mathbf F,\boldsymbol\theta\mid\mathbf X)=
+p(\boldsymbol\theta)
+\prod_{n=1}^{N}
+\left[
+\mathcal N_2
+\left(
+\mathbf f_n;
+\mathbf B^\top\mathbf x_n,
+\mathbf I_2
+\right)
+\prod_{j=1}^{J}
+p(Y_{nj}\mid\mathbf f_n,\boldsymbol\theta)
+\right].
+\end{equation}
+Here, \(p(\boldsymbol\theta)\) represents the joint prior distribution of the model parameters, while the response likelihoods retain the distributions defined for the corresponding terminal and chokepoint models in Section~\ref{subsec:simple_factor_specification}.
+
+The rank-two specification is estimated separately for terminals and chokepoints, using the same response variables, covariates, and estimation samples as the corresponding rank-one models. 
+No node-specific random intercepts are included in this extension, allowing the effect of increasing the latent rank to be examined separately from the introduction of persistent node heterogeneity.
 
 \section{Posterior computation}
 \label{sec:posterior_computation}
@@ -2780,13 +2861,8 @@ with increasing lag, with faster decay generally
 indicating more efficient sampling
 \citep{vehtari2021rank}.
 
-% TODO: Confirm sampling settings separately for Models 2 and 3 once estimated.
-% Appendix trace/ACF plots should refer to the longer-chain baseline runs.
-
 \chapter{Results and discussion}
 \label{chap:results}
-
-% TODO: Revise section introduction and transitions after Models 2 and 3 are fitted.
 
 \section{Rank-one model results}
 \label{sec: rank-one model}
@@ -3318,11 +3394,1732 @@ and sampling efficiency.
 
 \section{Node-specific intercept model results}
 \label{sec:node_specific_model}
-% TODO: Insert results and posterior predictive assessment.
+
+This section presents the posterior results of the
+rank-one model extended with node-specific random
+intercepts.
+The analysis focuses on the magnitude of
+between-node heterogeneity, changes in the
+factor-regression coefficients, and the estimated
+node-specific effects. The response loadings are
+also examined to assess whether the interpretation
+of the latent factor changes under the extended
+specification. Finally, posterior predictive checks
+and sampling diagnostics are reported.
+
+Both models were estimated using four MCMC chains,
+each with 20,000 warm-up iterations and 30,000
+retained draws. The results for terminals and
+chokepoints are presented separately, consistently
+with the baseline analysis.
+
+\subsection{Terminal posterior analysis}
+\label{subsec:node_terminal_results}
+
+The posterior distribution of the random-effect
+scale parameter provides evidence of substantial
+persistent heterogeneity across terminals.
+The posterior mean of $\sigma_\mu$ is 1.373,
+with a 94\% highest-density interval (HDI) of
+$[1.193,1.565]$.
+Since the residual variance of the latent factor
+remains fixed at one, this estimate indicates
+that persistent between-terminal differences
+represent an important component of the
+variation in latent factor scores, beyond
+that explained by the observed covariates.
+
+The introduction of node-specific intercepts
+also changes the estimated associations between
+the covariates and the latent factor.
+Table~\ref{tab:node_terminal_beta} reports
+the posterior estimates alongside those
+obtained under the baseline specification.
+
+\begin{table}[htbp]
+\centering
+\caption{Factor-regression coefficients for the
+terminal random-intercept model, compared with
+the baseline rank-one specification.
+Numeric predictors are standardised;
+exporter status is a zero--one indicator.}
+\label{tab:node_terminal_beta}
+\small
+\begin{tabular}{lrrr}
+\hline
+Predictor & Baseline mean & Node mean & Node 94\% HDI \\
+\hline
+Lagged neighbour activity
+& 0.096 & 0.016 & $[-0.039,0.072]$ \\
+$\log(1+\text{lagged voyage distance})$
+& 0.062 & 0.053 & $[-0.022,0.129]$ \\
+Month sine
+& $-0.032$ & $-0.038$ & $[-0.080,0.004]$ \\
+Month cosine
+& $-0.003$ & 0.004 & $[-0.038,0.045]$ \\
+$\log(1+\text{capacity})$
+& 0.409 & 0.725 & $[0.493,0.957]$ \\
+Terminal age
+& $-0.019$ & $-0.326$ & $[-0.558,-0.089]$ \\
+Lagged exporter indicator
+& 1.395 & 1.309 & $[0.823,1.783]$ \\
+\hline
+\end{tabular}
+\end{table}
+Compared with the baseline specification,
+the coefficient associated with lagged
+neighbour activity decreases from 0.096
+to 0.016, and its posterior interval
+now includes zero. The coefficient for
+lagged voyage distance remains positive
+but is less precisely estimated, with
+its interval also including zero.
+These changes suggest that some of the
+associations identified under the baseline
+model may have reflected persistent
+differences between terminals that are
+now represented by the random intercepts.
+In contrast, terminal capacity and lagged exporter
+status remain positively associated with the latent
+factor even after accounting for unobserved
+terminal-specific heterogeneity.
+However, their posterior intervals
+are considerably wider than under
+the baseline specification, indicating
+greater uncertainty in separating
+covariate associations from persistent
+node-specific differences.
+A further change concerns terminal age:
+whereas its posterior interval included
+zero under the baseline specification,
+the random-intercept model yields a
+negative posterior mean of $-0.326$,
+with a 94\% HDI of $[-0.558,-0.089]$,
+indicating a negative conditional
+association between terminal age and
+the latent factor.
+
+The response loadings reported in Table~\ref{tab:node_terminal_loadings} 
+retain the main directional relationships identified
+under the baseline specification, although the magnitudes of several estimates
+are smaller.
+
+\begin{table}[htbp]
+\centering
+\caption{Posterior estimates of response
+loadings for the terminal random-intercept
+model. Bounded interior means and
+probabilities use logit links.
+Intervals are 94\% HDIs.}
+\label{tab:node_terminal_loadings}
+\small
+\begin{tabular}{lrr}
+\hline
+Response component & Posterior mean & 94\% HDI \\
+\hline
+PageRank interior mean
+& 0.197 & $[0.189,0.206]$ \\
+HHI interior mean
+& $-0.283$ & $[-0.301,-0.266]$ \\
+Dependence interior mean
+& 0.232 & $[0.217,0.248]$ \\
+Articulation-point probability
+& 0.394 & $[0.347,0.441]$ \\
+Incident-global-bridge probability
+& $-0.311$ & $[-0.351,-0.271]$ \\
+Connected-to-articulation probability
+& 0.096 & $[0.021,0.172]$ \\
+Probability of HHI equal to one
+& $-1.872$ & $[-2.141,-1.618]$ \\
+Probability of dependence equal to one
+& $-0.318$ & $[-0.378,-0.262]$ \\
+\hline
+\end{tabular}
+\end{table}
+Higher factor values remain associated
+with higher PageRank, lower counterparty
+concentration, and a greater probability
+of being an articulation point.
+The probability of having an incident
+global bridge continues to decrease
+with the factor.
+As in the baseline model, dependence
+exhibits opposing relationships between
+its interior and boundary components:
+the interior mean increases with the
+factor, whereas the probability of
+dependence equal to one decreases.
+One difference concerns connection to an articulation point: 
+its loading remains positive and its
+94\% HDI now excludes zero, whereas
+the corresponding interval included
+zero under the baseline specification.
+
+Overall, the response loadings suggest
+that the introduction of node-specific
+intercepts does not fundamentally alter
+the interpretation of the terminal
+latent dimension.
+
+In order to provide a direct representation of persistent terminal-level heterogeneity, Figure~\ref{fig:node_terminal_effects} 
+illustrates the posterior distributions of the node-specific intercepts for the five terminals with the highest and five with the lowest posterior mean effects, 
+restricting the selection to terminals with at least 20 observations in the estimation sample. 
+Findings are generally consistent with the persistent residual patterns identified under the baseline model: 
+the largest positive posterior mean effect is associated with Rasgas LNG Terminal 3, approximately 7.615,
+with a 95\% equal-tailed credible interval of $[6.942,8.320]$.
+Other terminals exhibiting substantial positive effects include Fos Tonkin LNG Terminal (3.69), Yamal LNG Terminal (3.18), Sabine Pass LNG Terminal (3.11), and 
+Pluto LNG Terminal (3.10), all of which were also identified in the baseline analysis as exhibiting predominantly positive latent-factor residuals.
+Their positive random intercepts therefore suggest that the systematic deviations observed under the baseline specification can, at least partly, 
+be represented by persistent node-level differences.
+At the opposite end, Sakhalin II LNG Terminal and Cameroon FLNG Terminal exhibit the most negative effects among the selected terminals, 
+consistent with the predominantly negative residuals identified in the baseline analysis. 
+Oman Qalhat LNG Terminal, Punta Europa LNG Terminal, and Elba Island LNG Terminal also display negative node-specific intercepts, indicating
+that their latent factor values tend to be lower than those predicted by the observed covariates alone.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/terminal_node_effects_selected.pdf}
+    \caption{Posterior distributions of selected terminal-specific random intercepts under the rank-one model. The five largest and five smallest posterior mean effects are shown among terminals with at least 20 observations in the estimation sample. Points represent posterior means, and horizontal bars indicate 95\% equal-tailed credible intervals. The dashed vertical line denotes zero.}
+    \label{fig:node_terminal_effects}
+\end{figure}
+
+\subsubsection{Posterior predictive assessment}
+
+Posterior predictive checks were conducted to examine whether the
+introduction of node-specific intercepts
+improves the reproduction of marginal
+response distributions and associations
+between responses.
+The same conditional, in-sample
+approach adopted for the baseline model was used:
+observed response statistics were compared
+with those obtained from 200 replicated
+datasets generated conditional on posterior
+latent factor values.
+Table~\ref{tab:node_terminal_marginal_ppc} shows that the random-intercept model closely reproduces the overall means of the observed terminal responses.
+
+\begin{table}[htbp]
+\centering
+\caption{Marginal posterior predictive checks for the terminal random-intercept model. 
+Observed and replicated means are reported on the original response scale, rounded to five decimal places to show differences. 
+For binary responses, means correspond to proportions.}
+\label{tab:node_terminal_marginal_ppc}
+\small
+\begin{tabular}{lrr}
+\hline
+Response & Observed mean & Replicated mean \\
+\hline
+PageRank & 0.01852 & 0.01854 \\
+HHI & 0.58872 & 0.58933 \\
+Dependence & 0.49478 & 0.49618 \\
+Articulation point (AP) & 0.10571 & 0.10637 \\
+Incident global bridge (GB) & 0.58500 & 0.58509 \\
+\hline
+\end{tabular}
+\end{table}
+
+However, as in the baseline model, agreement in overall means does not necessarily imply adequate reproduction of dispersion, 
+tail behaviour, or associations between responses.
+In particular, the joint posterior
+predictive checks reveal that several
+discrepancies identified under the
+baseline specification persist.
+Table~\ref{tab:joint_ppc_node_intercepts} compares selected observed correlations
+with posterior predictive results from
+the baseline and random-intercept models.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Selected joint posterior predictive
+checks for terminals. Entries are Spearman
+correlations. Replicated intervals are 95%
+equal-tailed intervals based on 200
+conditional in-sample replicates.}
+\label{tab:joint_ppc_node_intercepts}
+\begin{tabular}{llrrr}
+\hline
+Response pair & Model & Observed
+& Rep. median & 95\% interval \\
+\hline
+AP--GB & Baseline
+& 0.290 & $-0.124$ & $[-0.162,-0.095]$ \\
+AP--GB & Node intercept
+& 0.290 & $-0.108$ & $[-0.143,-0.070]$ \\
+HHI--GB & Baseline
+& 0.533 & 0.295 & $[0.248,0.335]$ \\
+HHI--GB & Node intercept
+& 0.533 & 0.242 & $[0.204,0.289]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+The most pronounced discrepancy continues to concern the association
+between articulation-point and incident-global-bridge status, which the model still
+fails to reproduce.
+The discrepancy is particularly
+pronounced among exporters.
+Their observed AP--GB correlation
+is 0.546, compared with a replicated
+median of $-0.150$ under the
+random-intercept model.
+The association between HHI and
+incident-global-bridge status also
+remains underestimated.
+For the full terminal sample,
+the observed correlation is 0.533,
+whereas the replicated median
+decreases from 0.295 under the
+baseline specification to 0.242
+under the random-intercept model.
+
+Thus, introducing node-specific
+intercepts does not uniformly
+improve the reproduction of joint
+response associations.
+This finding is consistent with
+the structure of the extension.
+The random intercepts account for
+persistent heterogeneity in the
+common latent factor, but the
+model retains a single latent
+dimension and conditional
+independence of the responses
+given that factor.
+Consequently, the additional
+node-specific variation does not
+necessarily provide the flexibility
+required to reproduce associations
+that are poorly represented by
+the rank-one structure.
+
+Overall, the random-intercept
+specification provides a more
+explicit representation of persistent
+between-terminal heterogeneity,
+while preserving the main directional
+relationships between the latent
+factor and the observed responses.
+Nevertheless, the posterior predictive
+results indicate that important
+limitations of the baseline rank-one
+specification remain, particularly
+in reproducing the joint occurrence
+of articulation-point and
+incident-global-bridge status.
+
+The complete marginal and joint
+posterior predictive results are
+reported in the Appendix~\ref{app:ppc_node_intercept}.
+
+\subsection{Chokepoint posterior analysis}
+\label{subsec:node_chokepoint_results}
+
+The random-intercept extension also
+identifies substantial persistent
+heterogeneity across chokepoints.
+The posterior mean of the random-effect
+scale parameter is 2.377, with a 94\%
+HDI of $[1.806,2.973]$.
+As for terminals, the estimated
+random-effect scale suggests that
+persistent differences between
+chokepoints contribute substantially
+to variation in the latent factor
+beyond that associated with the
+observed covariates.
+The posterior estimates of the
+factor-regression coefficients
+are reported in
+Table~\ref{tab:node_chokepoint_beta}, and suggest that the
+introduction of node-specific effects
+changes the relative contributions
+of the observed covariates.
+
+\begin{table}[htbp]
+\centering
+\caption{Factor-regression coefficients
+for the chokepoint random-intercept
+model, compared with the baseline
+rank-one specification.
+Numeric predictors are standardised.
+Intervals for the random-intercept
+model are 94\% HDIs.}
+\label{tab:node_chokepoint_beta}
+\small
+\begin{tabular}{lrrr}
+\hline
+Predictor & Baseline mean & Node mean & Node 94\% HDI \\
+\hline
+Lagged neighbour activity
+& 0.103 & 0.316 & $[0.229,0.401]$ \\
+$\log(1+\text{lagged voyage distance})$
+& 0.065 & 0.088 & $[-0.067,0.244]$ \\
+Month sine
+& $-0.036$ & $-0.107$ & $[-0.175,-0.040]$ \\
+Month cosine
+& $-0.065$ & $-0.085$ & $[-0.152,-0.018]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+The coefficients associated with
+lagged neighbour activity increases
+from 0.103 under the baseline model
+to 0.316 under the random-intercept
+specification, with a posterior
+interval excluding zero.
+The coefficient for lagged voyage
+distance also remains positive, but
+its posterior interval includes zero,
+indicating greater uncertainty
+about its conditional association
+with the latent factor.
+Both seasonal coefficients are
+negative, with their reported
+HDIs excluding zero. This differs from the baseline
+specification, where only the
+cosine coefficient had an interval excluding zero.
+
+As shown in Table~\ref{tab:node_chokepoint_loadings}, the estimated relationships between the latent factor and the response loadings retain
+the directions observed under the baseline model.
+
+\begin{table}[htbp]
+\centering
+\caption{Posterior estimates of response
+loadings for the chokepoint random-intercept
+model. Bounded interior means and
+probabilities use logit links.
+Intervals are 94\% HDIs.}
+\label{tab:node_chokepoint_loadings}
+\small
+\begin{tabular}{lrr}
+\hline
+Response component & Posterior mean & 94\% HDI \\
+\hline
+PageRank interior mean
+& 0.107 & $[0.097,0.117]$ \\
+Betweenness interior mean
+& 0.303 & $[0.280,0.327]$ \\
+Flow-share interior mean
+& 0.382 & $[0.350,0.414]$ \\
+Articulation-point probability
+& 0.362 & $[0.289,0.435]$ \\
+Connected-to-articulation probability
+& 0.354 & $[0.253,0.457]$ \\
+Probability of betweenness equal to zero
+& $-1.048$ & $[-1.576,-0.532]$ \\
+\hline
+\end{tabular}
+\end{table}
+Higher latent factor values correspond
+to higher interior means for PageRank,
+betweenness, and flow share, as well
+as higher probabilities of being an
+articulation point and being connected
+to an articulation point.
+The negative loading on the
+zero-betweenness component indicates
+that higher factor values are associated
+with a lower probability of observing
+exactly zero betweenness.
+Thus, the estimated factor continues
+to represent a dimension associated
+with chokepoint centrality, flow
+exposure, and structural importance.
+
+Figure~\ref{fig:node_chokepoint_effects} presents the posterior distributions of the node-specific intercepts 
+for all 24 chokepoints, ordered by posterior mean. 
+The estimates reveal considerable heterogeneity across maritime passages, with both positive and negative effects 
+relative to the covariate-dependent component of the latent factor.
+The Strait of Hormuz exhibits the largest positive node-specific effect, with a posterior mean of approximately 4.79. 
+Other substantial positive effects are associated with Malacca Strait (3.51), Gibraltar Strait (3.50), Taiwan Strait (3.13), 
+Dover Strait (2.85), Suez Canal (2.73), and Bab el-Mandeb Strait (2.54). Indeed, several of these passages occupy strategically 
+important positions along major international shipping corridors. 
+Conversely, Torres Strait exhibits the most negative effect (approximately $-4.07$), followed by Windward Passage ($-3.75$), 
+Magellan Strait ($-3.73$), Mona Passage ($-3.17$), and Sunda Strait ($-2.25$). These negative intercepts indicate systematically 
+lower latent factor values relative to the covariate-based predictions, a pattern which is broadly consistent with the lower factor 
+scores observed for several of these passages in the baseline specification.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/chokepoint_node_effects_all.pdf}
+    \caption{Posterior distributions of the node-specific random intercepts for all 24 chokepoints under the rank-one model. Points represent posterior means, and horizontal bars indicate 95\% equal-tailed credible intervals. The dashed vertical line denotes zero. Estimates are preliminary due to unresolved sampling diagnostics.}
+    \label{fig:node_chokepoint_effects}
+\end{figure}
+
+Although the posterior summaries
+indicate substantial heterogeneity
+across chokepoints, the convergence diagnostics discussed
+in Section~\ref{subsec:node_sampling_diagnostics} limit the reliability of
+some estimates. The corresponding
+interpretations should therefore
+be regarded as provisional.
+
+\subsubsection{Posterior predictive assessment}
+
+To assess whether the random-intercept specification adequately captures the observed characteristics of the chokepoint network, 
+posterior predictive checks were conducted using 200 conditional in-sample replicates. As for the preceeding models, 
+the assessment considers both the marginal distributions of individual responses and the associations between them.
+
+At the marginal level, the model closely reproduces the overall response means. 
+The observed PageRank mean is 0.01764, compared with a replicated mean of 0.01765. 
+For betweenness, the corresponding values are 0.01321 and 0.01323, while for flow share they are 0.02341 and 0.02342.
+
+Nevertheless, discrepancies remain in the associations between responses. Table~\ref{tab:node_chokepoint_joint_ppc} 
+reports four illustrative response pairs for which the observed Spearman correlations exceed the upper bounds of 
+the corresponding 95\% posterior predictive intervals, highlighting the model's tendency to underestimate certain positive associations.
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Selected joint posterior
+predictive checks for chokepoints
+under the random-intercept model.
+Entries are Spearman correlations.
+Replicated intervals are based on
+200 conditional in-sample replicates.}
+\label{tab:node_chokepoint_joint_ppc}
+\begin{tabular}{lrrr}
+\hline
+Response pair & Observed
+& Rep. median & 95\% interval \\
+\hline
+PageRank--betweenness
+& 0.685 & 0.473 & $[0.417,0.516]$ \\
+PageRank--flow share
+& 0.672 & 0.609 & $[0.562,0.644]$ \\
+Betweenness--flow share
+& 0.800 & 0.700 & $[0.659,0.739]$ \\
+PageRank--articulation
+& 0.287 & 0.201 & $[0.140,0.271]$ \\
+\hline
+\end{tabular}
+\end{table}
+
+The largest discrepancy among the selected associations concerns PageRank and betweenness, 
+for which the replicated median correlation is 0.473, compared with an observed value of 0.685. 
+This represents a deterioration relative to the baseline specification, which yielded a replicated median of approximately 0.655.
+The model also underestimates the positive associations between PageRank and flow share, 
+betweenness and flow share, and PageRank and articulation-point status. 
+The complete marginal and joint posterior predictive results are reported in Appendix~\ref{app:node_intercept_chokepoints}.
+
+These results indicate that introducing node-specific intercepts does not fully resolve the limitations 
+of the baseline rank-one model in reproducing the observed dependence structure among chokepoint responses.
+
+\subsection{Sampling diagnostics}
+\label{subsec:node_sampling_diagnostics}
+
+Sampling performance was assessed using the same diagnostic procedures as for the baseline specification.
+Table~\ref{tab:node_sampling_diagnostics} summarises the main results.
+
+\begin{table}[htbp]
+\centering
+\caption{Sampling diagnostics for
+the terminal and chokepoint
+random-intercept models.
+Geweke and Heidelberger--Welch
+results refer to parameter-chain
+tests for global parameters.}
+\label{tab:node_sampling_diagnostics}
+\small
+\begin{tabular}{lcc}
+\hline
+Diagnostic & Terminals & Chokepoints \\
+\hline
+\multicolumn{3}{l}{\textit{MCMC convergence and mixing}} \\
+Post-burn-in divergences & 0 & 183 \\
+Maximum $\widehat{R}$ & 1.003 & 1.040 \\
+Minimum bulk ESS & 795 & 112 \\
+Minimum tail ESS & 1,734 & 202 \\
+\hline
+\multicolumn{3}{l}{\textit{Geweke diagnostic}} \\
+Total tests & 120 & 92 \\
+Passed & 115 (95.8\%) & 85 (92.4\%) \\
+Failed & 5 (4.2\%) & 7 (7.6\%) \\
+\hline
+\multicolumn{3}{l}{\textit{Heidelberger--Welch diagnostic}} \\
+Stationarity passed & 120 (100\%) & 92 (100\%) \\
+Half-width passed & 113 (94.2\%) & 92 (100\%) \\
+\hline
+\end{tabular}
+\end{table}
+
+The terminal model exhibits
+satisfactory overall sampling
+behaviour: no post-burn-in divergences
+were recorded, and the maximum
+rank-normalised $\widehat{R}$
+was 1.003.
+The minimum bulk and tail ESS
+were 795 and 1,734, respectively, and although these values are lower
+than those obtained under the
+baseline specification, they
+remain compatible with adequate
+posterior exploration for the
+reported summaries.
+The Geweke diagnostic was
+satisfied by 115 of the 120
+parameter-chain tests, all tests passed the
+Heidelberger--Welch stationarity criterion, and the half-width test was
+passed by 113 of the 120 tests.
+
+Conversely, the chokepoint model exhibited less satisfactory sampling diagnostics. 
+Although 85 of the 92 parameter-chain tests satisfied the Geweke criterion, and all tests passed the 
+Heidelberger--Welch stationarity and half-width criteria, a total of 183 post-warm-up divergences were 
+recorded, with 168 concentrated in one chain and 15 in another. The maximum rank-normalised $\widehat{R}$ 
+was 1.040, while the minimum bulk and tail ESS were 112 and 202, respectively.
+These results suggest incomplete exploration of the posterior distribution, potentially associated 
+with difficult posterior geometry and insufficient mixing. In particular, the presence of divergences, 
+together with the low ESS values, indicates that the available posterior draws 
+may not adequately represent the target distribution.
+Consequently, the chokepoint posterior summaries should be interpreted cautiously, as the reported 
+credible intervals and posterior predictive results may be affected by incomplete posterior exploration.
+
+Additional trace plots, autocorrelation functions, and detailed diagnostic results are provided in Appendix~\ref{app:node_intercept_mcmc_diagnostics}.
 
 \section{Rank-two model results}
 \label{sec:rank_two_model}
-% TODO: Insert results and posterior predictive assessment.
+
+\subsection{Terminal}
+\label{sec:terminal_rank_two_overview}
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+\caption{Terminal rank-two model: factor-regression coefficients.}\label{tab:terminal_rank2_3}\\
+\toprule
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+\midrule\endfirsthead
+\toprule
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+\midrule\endhead
+Regression [Lagged neighbour activity, F1] & -0.063 & [-0.184, 0.159] & 1.577 \\
+
+Regression [Lagged neighbour activity, F2] & -0.108 & [-0.197, -0.033] & 1.231 \\
+
+Regression [Log lagged voyage distance, F1] & -0.068 & [-0.171, 0.109] & 1.522 \\
+
+Regression [Log lagged voyage distance, F2] & -0.069 & [-0.149, 0.006] & 1.199 \\
+
+Regression [Month sine, F1] & -0.026 & [-0.072, 0.020] & 1.067 \\
+
+Regression [Month sine, F2] & 0.023 & [-0.049, 0.076] & 1.360 \\
+
+Regression [Month cosine, F1] & -0.038 & [-0.093, 0.032] & 1.281 \\
+
+Regression [Month cosine, F2] & -0.012 & [-0.070, 0.041] & 1.268 \\
+
+Regression [Log terminal capacity, F1] & 0.028 & [-0.238, 0.415] & 1.554 \\
+
+Regression [Log terminal capacity, F2] & -0.315 & [-0.468, 0.105] & 1.388 \\
+
+Regression [Terminal age, F1] & -0.106 & [-0.193, 0.059] & 1.388 \\
+
+Regression [Terminal age, F2] & -0.024 & [-0.154, 0.078] & 1.457 \\
+
+Regression [Lagged exporter, F1] & 0.645 & [0.008, 1.412] & 1.326 \\
+
+Regression [Lagged exporter, F2] & -0.823 & [-1.497, 1.018] & 1.609 \\
+
+\bottomrule\end{longtable}
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+\caption{Terminal rank-two model: continuous response loadings.}\label{tab:terminal_rank2_26}\\
+\toprule
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+\midrule\endfirsthead
+\toprule
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+\midrule\endhead
+Continuous loading[PageRank, F1] & 0.174 & [0.010, 0.374] & 1.320 \\
+Continuous loading[PageRank, F2] & -0.220 & [-0.385, 0.273] & 1.642 \\
+Continuous loading[HHI, F1] & -0.118 & [-0.551, 0.202] & 1.491 \\
+Continuous loading[HHI, F2] & 0.404 & [-0.236, 0.600] & 1.524 \\
+Continuous loading[Dependence, F1] & 0.193 & [-0.007, 0.436] & 1.340 \\
+Continuous loading[Dependence, F2] & -0.261 & [-0.463, 0.305] & 1.619 \\
+\bottomrule\end{longtable}
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+\caption{Terminal rank-two model: binary response loadings.}\label{tab:terminal_rank2_41}\\
+\toprule
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+\midrule\endfirsthead
+\toprule
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+\midrule\endhead
+Binary loading[Articulation point, F1] & 1.516 & [-0.385, 2.346] & 1.342 \\
+Binary loading[Articulation point, F2] & 0.026 & [-1.249, 1.975] & 1.576 \\
+Binary loading[Incident global bridge, F1] & 3.174 & [-5.439, 7.035] & 1.606 \\
+Binary loading[Incident global bridge, F2] & 3.555 & [1.023, 6.684] & 1.249 \\
+Binary loading[Connected to articulation point, F1] & 0.005 & [-0.176, 0.180] & 1.131 \\
+Binary loading[Connected to articulation point, F2] & -0.074 & [-0.222, 0.086] & 1.097 \\
+\bottomrule\end{longtable}
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+\caption{Terminal rank-two model: boundary-component loadings.}\label{tab:terminal_rank2_56}\\
+\toprule
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+\midrule\endfirsthead
+\toprule
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+\midrule\endhead
+One-inflation loading[HHI, F1] & 0.291 & [-6.419, 4.535] & 1.597 \\
+One-inflation loading[HHI, F2] & 4.931 & [-0.807, 7.582] & 1.326 \\
+One-inflation loading[Dependence, F1] & -0.023 & [-0.495, 0.317] & 1.537 \\
+One-inflation loading[Dependence, F2] & 0.368 & [-0.118, 0.588] & 1.347 \\
+\bottomrule\end{longtable}
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Terminal rank-two model: response intercepts and precisions.}\label{tab:terminal_rank2_69}\\
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endhead
+
+Continuous intercept[PageRank] & -4.265 & [-4.282, -4.248] & 1.001 \\
+
+Continuous intercept[HHI] & 0.009 & [-0.034, 0.052] & 1.001 \\
+
+Continuous intercept[Dependence] & -0.833 & [-0.870, -0.797] & 1.001 \\
+
+Binary intercept[Articulation point] & -4.138 & [-4.579, -3.715] & 1.001 \\
+
+Binary intercept[Incident global bridge] & 2.010 & [1.577, 2.458] & 1.002 \\
+
+Binary intercept[Connected to articulation point] & 2.830 & [2.680, 2.977] & 1.000 \\
+
+One-inflation intercept[HHI] & -1.658 & [-2.056, -1.265] & 1.002 \\
+
+One-inflation intercept[Dependence] & -1.258 & [-1.346, -1.171] & 1.000 \\
+
+Beta precision[PageRank] & 1587.156 & [1332.244, 1859.695] & 1.002 \\
+
+Beta precision[HHI] & 18.174 & [16.747, 19.676] & 1.000 \\
+
+Beta precision[Dependence] & 6.818 & [6.459, 7.181] & 1.002 \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}r@{}}
+
+\caption{Terminal rank-two model: overall MCMC diagnostics.}\label{tab:terminal_rank2_diagnostics}\\
+
+\toprule
+
+Diagnostic & Value \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Diagnostic & Value \\
+
+\midrule\endhead
+
+Divergences & 8096 \\
+
+Maximum $\widehat R$ & 1.642 \\
+
+Minimum bulk ESS & 6.8 \\
+
+Minimum tail ESS & 12.9 \\
+
+Geweke passed & 84/188 \\
+
+Maximum $|Z|$ (Geweke) & 17.63 \\
+
+Heidelberger--Welch stationarity passed & 156/188 \\
+
+Heidelberger--Welch half-width passed & 72/188 \\
+
+Heidelberger--Welch half-width not evaluated & 32 \\
+
+Basic sampling checks passed & False \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Terminal rank-two model: twelve parameters with the lowest bulk ESS (including observation-level parameters).}\label{tab:terminal_rank2_lowess}\\
+
+\toprule
+
+Parameter & $\widehat R$ & Bulk ESS & Tail ESS \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Parameter & $\widehat R$ & Bulk ESS & Tail ESS \\
+
+\midrule\endhead
+
+PageRank\_second\_loading & 1.642 & 6.8 & 16.4 \\
+
+Continuous loading[PageRank, F2] & 1.642 & 6.8 & 16.4 \\
+
+factor[1676, F2] & 1.615 & 6.9 & 14.9 \\
+
+factor[293, F2] & 1.619 & 6.9 & 15.4 \\
+
+factor[125, F2] & 1.618 & 6.9 & 14.9 \\
+
+factor[674, F2] & 1.616 & 6.9 & 14.7 \\
+
+factor[953, F2] & 1.617 & 6.9 & 15.2 \\
+
+factor[209, F2] & 1.620 & 6.9 & 15.4 \\
+
+factor[568, F2] & 1.616 & 6.9 & 15.2 \\
+
+other\_loadings[Dependence, F2] & 1.619 & 6.9 & 15.7 \\
+
+Continuous loading[Dependence, F2] & 1.619 & 6.9 & 15.7 \\
+
+factor[342, F2] & 1.614 & 6.9 & 15.3 \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Terminal rank-two model: divergences by chain.}\label{tab:terminal_rank2_divergences}\\
+
+\toprule
+
+chain & draws & divergences & divergence\_rate \\
+
+\midrule\endfirsthead
+
+\toprule
+
+chain & draws & divergences & divergence\_rate \\
+
+\midrule\endhead
+
+0 & 30000 & 1290 & 0.043 \\
+
+1 & 30000 & 3349 & 0.1116333333333333 \\
+
+2 & 30000 & 98 & 0.0032666666666666 \\
+
+3 & 30000 & 3359 & 0.1119666666666666 \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrrr@{}}
+
+\caption{Terminal rank-two model: univariate posterior predictive checks (95\% replicated intervals).}\label{tab:terminal_rank2_ppc_univariate}\\
+
+\toprule
+
+Group / response & Stat. & Observed & Replicated 95\% & Outside \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Group / response & Stat. & Observed & Replicated 95\% & Outside \\
+
+\midrule\endhead
+
+All / PageRank & mean & 0.0185 & [0.0184, 0.0187] & No \\
+
+All / PageRank & sd & 0.0133 & [0.0124, 0.0130] & Yes \\
+
+All / PageRank & q05 & 0.0089 & [0.0073, 0.0079] & Yes \\
+
+All / PageRank & q50 & 0.0147 & [0.0150, 0.0154] & Yes \\
+
+All / PageRank & q95 & 0.0391 & [0.0384, 0.0405] & No \\
+
+All / HHI & mean & 0.5887 & [0.5838, 0.5958] & No \\
+
+All / HHI & sd & 0.3254 & [0.3188, 0.3267] & No \\
+
+All / HHI & one\_share & 0.3409 & [0.3301, 0.3510] & No \\
+
+All / HHI & q05 & 0.1268 & [0.1238, 0.1430] & No \\
+
+All / HHI & q50 & 0.5045 & [0.4896, 0.5113] & No \\
+
+All / HHI & q95 & 1.0000 & [1.0000, 1.0000] & No \\
+
+All / Dependence & mean & 0.4948 & [0.4821, 0.5098] & No \\
+
+All / Dependence & sd & 0.3219 & [0.3120, 0.3247] & No \\
+
+All / Dependence & one\_share & 0.2076 & [0.1917, 0.2251] & No \\
+
+All / Dependence & q05 & 0.0716 & [0.0723, 0.0892] & Yes \\
+
+All / Dependence & q50 & 0.4283 & [0.3983, 0.4342] & No \\
+
+All / Dependence & q95 & 1.0000 & [1.0000, 1.0000] & No \\
+
+Importer / PageRank & mean & 0.0145 & [0.0141, 0.0144] & Yes \\
+
+Importer / PageRank & sd & 0.0045 & [0.0051, 0.0054] & Yes \\
+
+Importer / PageRank & q05 & 0.0089 & [0.0069, 0.0074] & Yes \\
+
+Importer / PageRank & q50 & 0.0136 & [0.0133, 0.0138] & No \\
+
+Importer / PageRank & q95 & 0.0233 & [0.0234, 0.0246] & Yes \\
+
+Importer / HHI & mean & 0.6745 & [0.6597, 0.6755] & No \\
+
+Importer / HHI & sd & 0.2966 & [0.2949, 0.3027] & No \\
+
+Importer / HHI & one\_share & 0.4189 & [0.4000, 0.4271] & No \\
+
+Importer / HHI & q05 & 0.2446 & [0.2267, 0.2499] & No \\
+
+Importer / HHI & q50 & 0.5701 & [0.5721, 0.6016] & Yes \\
+
+Importer / HHI & q95 & 1.0000 & [1.0000, 1.0000] & No \\
+
+Importer / Dependence & mean & 0.4812 & [0.4530, 0.4880] & No \\
+
+Importer / Dependence & sd & 0.3574 & [0.3234, 0.3379] & Yes \\
+
+Importer / Dependence & one\_share & 0.2645 & [0.2129, 0.2538] & Yes \\
+
+Importer / Dependence & q05 & 0.0614 & [0.0594, 0.0787] & No \\
+
+Importer / Dependence & q50 & 0.3472 & [0.3504, 0.3874] & Yes \\
+
+Importer / Dependence & q95 & 1.0000 & [1.0000, 1.0000] & No \\
+
+Exporter / PageRank & mean & 0.0269 & [0.0270, 0.0276] & Yes \\
+
+Exporter / PageRank & sd & 0.0198 & [0.0174, 0.0187] & Yes \\
+
+Exporter / PageRank & q05 & 0.0088 & [0.0090, 0.0100] & Yes \\
+
+Exporter / PageRank & q50 & 0.0210 & [0.0221, 0.0232] & Yes \\
+
+Exporter / PageRank & q95 & 0.0714 & [0.0624, 0.0683] & Yes \\
+
+Exporter / HHI & mean & 0.4119 & [0.4180, 0.4380] & Yes \\
+
+Exporter / HHI & sd & 0.3103 & [0.3026, 0.3181] & No \\
+
+Exporter / HHI & one\_share & 0.1800 & [0.1746, 0.2013] & No \\
+
+Exporter / HHI & q05 & 0.0877 & [0.0532, 0.0745] & Yes \\
+
+Exporter / HHI & q50 & 0.3333 & [0.3252, 0.3504] & No \\
+
+Exporter / HHI & q95 & 1.0000 & [1.0000, 1.0000] & No \\
+
+Exporter / Dependence & mean & 0.5228 & [0.5258, 0.5666] & Yes \\
+
+Exporter / Dependence & sd & 0.2296 & [0.2756, 0.2933] & Yes \\
+
+Exporter / Dependence & one\_share & 0.0904 & [0.1321, 0.1871] & Yes \\
+
+Exporter / Dependence & q05 & 0.1852 & [0.1083, 0.1446] & Yes \\
+
+Exporter / Dependence & q50 & 0.4972 & [0.4840, 0.5400] & No \\
+
+Exporter / Dependence & q95 & 1.0000 & [1.0000, 1.0000] & No \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrrr@{}}
+
+\caption{Terminal rank-two model: joint posterior predictive Spearman correlations (200 replicates).}\label{tab:terminal_rank2_ppc_joint}\\
+
+\toprule
+
+Group / pair & Observed & Rep. median & Rep. 95\% & Outside \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Group / pair & Observed & Rep. median & Rep. 95\% & Outside \\
+
+\midrule\endhead
+
+All / PageRank--HHI & -0.639 & -0.661 & [-0.681, -0.640] & Yes \\
+
+All / PageRank--Dependence & 0.314 & 0.196 & [0.153, 0.236] & Yes \\
+
+All / PageRank--Articulation point & 0.372 & 0.307 & [0.270, 0.338] & Yes \\
+
+All / PageRank--Incident global bridge & -0.238 & -0.201 & [-0.228, -0.171] & Yes \\
+
+All / PageRank--Connected to articulation point & -0.015 & 0.022 & [-0.023, 0.063] & No \\
+
+All / HHI--Dependence & -0.171 & -0.138 & [-0.184, -0.100] & No \\
+
+All / HHI--Articulation point & -0.290 & -0.159 & [-0.195, -0.117] & Yes \\
+
+All / HHI--Incident global bridge & 0.533 & 0.502 & [0.475, 0.526] & Yes \\
+
+All / HHI--Connected to articulation point & -0.038 & -0.023 & [-0.062, 0.022] & No \\
+
+All / Dependence--Articulation point & 0.157 & 0.121 & [0.087, 0.154] & Yes \\
+
+All / Dependence--Incident global bridge & -0.066 & 0.009 & [-0.031, 0.051] & Yes \\
+
+All / Dependence--Connected to articulation point & -0.082 & 0.005 & [-0.034, 0.033] & Yes \\
+
+All / Articulation point--Incident global bridge & 0.290 & 0.166 & [0.132, 0.192] & Yes \\
+
+All / Articulation point--Connected to articulation point & -0.063 & 0.007 & [-0.033, 0.034] & Yes \\
+
+All / Incident global bridge--Connected to articulation point & 0.060 & -0.017 & [-0.056, 0.026] & Yes \\
+
+Importer / PageRank--HHI & -0.416 & -0.503 & [-0.531, -0.471] & Yes \\
+
+Importer / PageRank--Dependence & 0.209 & 0.103 & [0.060, 0.145] & Yes \\
+
+Importer / PageRank--Articulation point & 0.232 & 0.116 & [0.076, 0.154] & Yes \\
+
+Importer / PageRank--Incident global bridge & -0.258 & -0.193 & [-0.229, -0.155] & Yes \\
+
+Importer / PageRank--Connected to articulation point & -0.043 & 0.013 & [-0.033, 0.050] & Yes \\
+
+Importer / HHI--Dependence & -0.163 & -0.046 & [-0.092, 0.007] & Yes \\
+
+Importer / HHI--Articulation point & -0.137 & 0.053 & [0.012, 0.096] & Yes \\
+
+Importer / HHI--Incident global bridge & 0.644 & 0.577 & [0.546, 0.603] & Yes \\
+
+Importer / HHI--Connected to articulation point & 0.014 & -0.017 & [-0.058, 0.038] & No \\
+
+Importer / Dependence--Articulation point & 0.033 & 0.044 & [0.008, 0.083] & No \\
+
+Importer / Dependence--Incident global bridge & -0.154 & 0.024 & [-0.021, 0.073] & Yes \\
+
+Importer / Dependence--Connected to articulation point & -0.045 & 0.000 & [-0.051, 0.038] & No \\
+
+Importer / Articulation point--Incident global bridge & 0.137 & 0.150 & [0.120, 0.175] & No \\
+
+Importer / Articulation point--Connected to articulation point & 0.019 & 0.002 & [-0.050, 0.039] & No \\
+
+Importer / Incident global bridge--Connected to articulation point & 0.131 & -0.013 & [-0.060, 0.030] & Yes \\
+
+Exporter / PageRank--HHI & -0.818 & -0.763 & [-0.783, -0.740] & Yes \\
+
+Exporter / PageRank--Dependence & 0.516 & 0.300 & [0.238, 0.360] & Yes \\
+
+Exporter / PageRank--Articulation point & 0.276 & 0.389 & [0.337, 0.449] & Yes \\
+
+Exporter / PageRank--Incident global bridge & -0.198 & -0.213 & [-0.249, -0.173] & No \\
+
+Exporter / PageRank--Connected to articulation point & 0.166 & 0.033 & [-0.029, 0.091] & Yes \\
+
+Exporter / HHI--Dependence & -0.102 & -0.232 & [-0.295, -0.182] & Yes \\
+
+Exporter / HHI--Articulation point & -0.159 & -0.214 & [-0.280, -0.145] & No \\
+
+Exporter / HHI--Incident global bridge & 0.398 & 0.417 & [0.368, 0.458] & No \\
+
+Exporter / HHI--Connected to articulation point & -0.230 & -0.031 & [-0.098, 0.038] & Yes \\
+
+Exporter / Dependence--Articulation point & 0.307 & 0.170 & [0.111, 0.223] & Yes \\
+
+Exporter / Dependence--Incident global bridge & 0.195 & -0.015 & [-0.076, 0.050] & Yes \\
+
+Exporter / Dependence--Connected to articulation point & -0.106 & 0.012 & [-0.044, 0.061] & Yes \\
+
+Exporter / Articulation point--Incident global bridge & 0.546 & 0.239 & [0.179, 0.296] & Yes \\
+
+Exporter / Articulation point--Connected to articulation point & -0.049 & 0.011 & [-0.054, 0.065] & No \\
+
+Exporter / Incident global bridge--Connected to articulation point & -0.047 & -0.021 & [-0.084, 0.049] & No \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Terminal rank-two model: descriptive associations with posterior mean latent coordinates (orientation-dependent).}\label{tab:terminal_rank2_associations}\\
+
+\toprule
+
+Group & Factor & Response & Spearman $\rho$ \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Group & Factor & Response & Spearman $\rho$ \\
+
+\midrule\endhead
+
+All & F1 & PageRank & 0.568 \\
+
+All & F1 & HHI & -0.085 \\
+
+All & F1 & Dependence & 0.280 \\
+
+All & F1 & Articulation point & 0.508 \\
+
+All & F1 & Incident global bridge & 0.572 \\
+
+All & F1 & Connected to articulation point & 0.012 \\
+
+All & F2 & PageRank & -0.752 \\
+
+All & F2 & HHI & 0.917 \\
+
+All & F2 & Dependence & -0.202 \\
+
+All & F2 & Articulation point & -0.190 \\
+
+All & F2 & Incident global bridge & 0.688 \\
+
+All & F2 & Connected to articulation point & -0.007 \\
+
+Importer & F1 & PageRank & 0.352 \\
+
+Importer & F1 & HHI & 0.375 \\
+
+Importer & F1 & Dependence & 0.115 \\
+
+Importer & F1 & Articulation point & 0.276 \\
+
+Importer & F1 & Incident global bridge & 0.760 \\
+
+Importer & F1 & Connected to articulation point & 0.094 \\
+
+Importer & F2 & PageRank & -0.623 \\
+
+Importer & F2 & HHI & 0.886 \\
+
+Importer & F2 & Dependence & -0.178 \\
+
+Importer & F2 & Articulation point & -0.076 \\
+
+Importer & F2 & Incident global bridge & 0.797 \\
+
+Importer & F2 & Connected to articulation point & 0.061 \\
+
+Exporter & F1 & PageRank & 0.678 \\
+
+Exporter & F1 & HHI & -0.349 \\
+
+Exporter & F1 & Dependence & 0.653 \\
+
+Exporter & F1 & Articulation point & 0.675 \\
+
+Exporter & F1 & Incident global bridge & 0.533 \\
+
+Exporter & F1 & Connected to articulation point & 0.035 \\
+
+Exporter & F2 & PageRank & -0.868 \\
+
+Exporter & F2 & HHI & 0.913 \\
+
+Exporter & F2 & Dependence & -0.227 \\
+
+Exporter & F2 & Articulation point & 0.031 \\
+
+Exporter & F2 & Incident global bridge & 0.590 \\
+
+Exporter & F2 & Connected to articulation point & -0.216 \\
+
+\bottomrule\end{longtable}
+
+
+% ============================================================
+% RANK-TWO MODEL — TERMINALS
+% ============================================================
+
+% Posterior response curves
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/response_curves_factor_1.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/response_curves_factor_2.png}
+
+
+% Autocorrelation functions
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/acf_01.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/acf_02.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/acf_03.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/acf_04.png}
+
+
+% Trace plots
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_01.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_02.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_03.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_04.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_05.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_06.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_07.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_08.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_09.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_10.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_11.png}
+
+
+% Divergence diagnostics
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_by_chain.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_pair.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_parallel.png}
+
+
+% Geweke diagnostics
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/geweke_zscores_01.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/geweke_zscores_02.png}
+
+
+% Heidelberger-Welch diagnostics
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/heidelberger_welch_results_01.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/heidelberger_welch_results_02.png}
+
+
+
+\subsection{Chokepoint rank-two model}\label{sec:chokepoint_rank_two_overview}
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Chokepoint rank-two model: factor-regression coefficients.}\label{tab:chokepoint_rank2_374}\\
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endhead
+
+Regression [Lagged neighbour activity, F1] & 0.057 & [-0.026, 0.135] & 1.039 \\
+
+Regression [Lagged neighbour activity, F2] & 0.005 & [-0.114, 0.121] & 1.229 \\
+
+Regression [Log lagged voyage distance, F1] & 0.047 & [-0.207, 0.270] & 1.350 \\
+
+Regression [Log lagged voyage distance, F2] & 0.137 & [-0.045, 0.273] & 1.066 \\
+
+Regression [Month sine, F1] & -0.024 & [-0.099, 0.060] & 1.082 \\
+
+Regression [Month sine, F2] & 0.024 & [-0.057, 0.100] & 1.125 \\
+
+Regression [Month cosine, F1] & -0.039 & [-0.144, 0.079] & 1.265 \\
+
+Regression [Month cosine, F2] & -0.049 & [-0.144, 0.062] & 1.116 \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Chokepoint rank-two model: continuous response loadings.}\label{tab:chokepoint_rank2_391}\\
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endhead
+
+Continuous loading[PageRank, F1] & 0.174 & [0.021, 0.277] & 1.067 \\
+
+Continuous loading[PageRank, F2] & -0.011 & [-0.270, 0.258] & 1.359 \\
+
+Continuous loading[Betweenness, F1] & 0.667 & [0.089, 1.073] & 1.159 \\
+
+Continuous loading[Betweenness, F2] & 0.095 & [-0.977, 1.033] & 1.356 \\
+
+Continuous loading[Monthly flow share, F1] & 0.546 & [-0.196, 0.947] & 1.103 \\
+
+Continuous loading[Monthly flow share, F2] & -0.246 & [-0.947, 0.723] & 1.372 \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Chokepoint rank-two model: binary response loadings.}\label{tab:chokepoint_rank2_406}\\
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endhead
+
+Binary loading[Articulation point, F1] & 0.476 & [-0.082, 0.866] & 1.058 \\
+
+Binary loading[Articulation point, F2] & -0.133 & [-0.836, 0.706] & 1.353 \\
+
+Binary loading[Connected to articulation point, F1] & 1.057 & [-1.123, 2.506] & 1.344 \\
+
+Binary loading[Connected to articulation point, F2] & 0.901 & [-1.416, 2.473] & 1.219 \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Chokepoint rank-two model: boundary-component loadings.}\label{tab:chokepoint_rank2_419}\\
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endhead
+
+Zero-inflation loading[Betweenness, F1] & -0.872 & [-2.547, 1.363] & 1.170 \\
+
+Zero-inflation loading[Betweenness, F2] & 0.875 & [-1.309, 2.501] & 1.268 \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Chokepoint rank-two model: response intercepts and precisions.}\label{tab:chokepoint_rank2_430}\\
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Parameter & Mean & 94\% HDI & $\widehat R$ \\
+
+\midrule\endhead
+
+Continuous intercept[PageRank] & -4.053 & [-4.074, -4.032] & 1.000 \\
+
+Continuous intercept[Betweenness] & -4.788 & [-4.853, -4.727] & 1.001 \\
+
+Continuous intercept[Monthly flow share] & -4.096 & [-4.148, -4.045] & 1.000 \\
+
+Binary intercept[Articulation point] & 1.149 & [1.007, 1.296] & 1.000 \\
+
+Binary intercept[Connected to articulation point] & 3.503 & [2.880, 4.167] & 1.000 \\
+
+Zero-inflation intercept[Betweenness] & -7.031 & [-8.480, -5.591] & 1.000 \\
+
+Beta precision[PageRank] & 792.046 & [726.953, 856.703] & 1.000 \\
+
+Beta precision[Betweenness] & 1019.967 & [764.417, 1288.509] & 1.000 \\
+
+Beta precision[Monthly flow share] & 2509.068 & [1449.260, 3709.450] & 1.004 \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}r@{}}
+
+\caption{Chokepoint rank-two model: overall MCMC diagnostics.}\label{tab:chokepoint_rank2_diagnostics}\\
+
+\toprule
+
+Diagnostic & Value \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Diagnostic & Value \\
+
+\midrule\endhead
+
+Divergences & 2630 \\
+
+Maximum $\widehat R$ & 1.372 \\
+
+Minimum bulk ESS & 9.1 \\
+
+Minimum tail ESS & 41.5 \\
+
+Geweke passed & 113/140 \\
+
+Maximum $|Z|$ (Geweke) & 4.52 \\
+
+Heidelberger--Welch stationarity passed & 137/140 \\
+
+Heidelberger--Welch half-width passed & 43/140 \\
+
+Heidelberger--Welch half-width not evaluated & 3 \\
+
+Basic sampling checks passed & False \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Chokepoint rank-two model: twelve parameters with the lowest bulk ESS (including observation-level parameters).}\label{tab:chokepoint_rank2_lowess}\\
+
+\toprule
+
+Parameter & $\widehat R$ & Bulk ESS & Tail ESS \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Parameter & $\widehat R$ & Bulk ESS & Tail ESS \\
+
+\midrule\endhead
+
+factor[1129, F1] & 1.364 & 9.1 & 49.9 \\
+
+factor[1131, F1] & 1.364 & 9.2 & 49.9 \\
+
+other\_loadings[Monthly flow share, F2] & 1.372 & 9.2 & 51.1 \\
+
+Continuous loading[Monthly flow share, F2] & 1.372 & 9.2 & 51.1 \\
+
+factor[979, F1] & 1.360 & 9.2 & 48.0 \\
+
+factor[521, F2] & 1.360 & 9.2 & 48.3 \\
+
+factor[1135, F1] & 1.359 & 9.2 & 52.1 \\
+
+factor[860, F1] & 1.361 & 9.2 & 49.3 \\
+
+factor[998, F1] & 1.361 & 9.2 & 51.9 \\
+
+factor[1000, F1] & 1.360 & 9.2 & 45.7 \\
+
+factor[1004, F1] & 1.355 & 9.2 & 45.4 \\
+
+factor[862, F1] & 1.359 & 9.3 & 49.6 \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Chokepoint rank-two model: divergences by chain.}\label{tab:chokepoint_rank2_divergences}\\
+
+\toprule
+
+chain & draws & divergences & divergence\_rate \\
+
+\midrule\endfirsthead
+
+\toprule
+
+chain & draws & divergences & divergence\_rate \\
+
+\midrule\endhead
+
+0 & 30000 & 0 & 0.0 \\
+
+1 & 30000 & 2157 & 0.0719 \\
+
+2 & 30000 & 0 & 0.0 \\
+
+3 & 30000 & 473 & 0.0157666666666666 \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrrr@{}}
+
+\caption{Chokepoint rank-two model: univariate posterior predictive checks (95\% replicated intervals).}\label{tab:chokepoint_rank2_ppc_univariate}\\
+
+\toprule
+
+Group / response & Stat. & Observed & Replicated 95\% & Outside \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Group / response & Stat. & Observed & Replicated 95\% & Outside \\
+
+\midrule\endhead
+
+All / PageRank & mean & 0.0176 & [0.0172, 0.0180] & No \\
+
+All / PageRank & sd & 0.0069 & [0.0061, 0.0068] & Yes \\
+
+All / PageRank & q05 & 0.0084 & [0.0078, 0.0088] & No \\
+
+All / PageRank & q50 & 0.0166 & [0.0165, 0.0174] & No \\
+
+All / PageRank & q95 & 0.0302 & [0.0281, 0.0302] & No \\
+
+All / Betweenness & mean & 0.0132 & [0.0130, 0.0135] & No \\
+
+All / Betweenness & sd & 0.0135 & [0.0130, 0.0140] & No \\
+
+All / Betweenness & zero\_share & 0.0052 & [0.0017, 0.0121] & No \\
+
+All / Betweenness & q05 & 0.0006 & [0.0006, 0.0010] & Yes \\
+
+All / Betweenness & q50 & 0.0077 & [0.0076, 0.0085] & No \\
+
+All / Betweenness & q95 & 0.0413 & [0.0397, 0.0434] & No \\
+
+All / Monthly flow share & mean & 0.0234 & [0.0231, 0.0236] & No \\
+
+All / Monthly flow share & sd & 0.0201 & [0.0196, 0.0205] & No \\
+
+All / Monthly flow share & q05 & 0.0030 & [0.0029, 0.0035] & No \\
+
+All / Monthly flow share & q50 & 0.0159 & [0.0154, 0.0165] & No \\
+
+All / Monthly flow share & q95 & 0.0643 & [0.0620, 0.0668] & No \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrrr@{}}
+
+\caption{Chokepoint rank-two model: joint posterior predictive Spearman correlations (200 replicates).}\label{tab:chokepoint_rank2_ppc_joint}\\
+
+\toprule
+
+Group / pair & Observed & Rep. median & Rep. 95\% & Outside \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Group / pair & Observed & Rep. median & Rep. 95\% & Outside \\
+
+\midrule\endhead
+
+All / PageRank--Betweenness & 0.685 & 0.646 & [0.606, 0.681] & Yes \\
+
+All / PageRank--Monthly flow share & 0.672 & 0.646 & [0.599, 0.682] & No \\
+
+All / PageRank--Articulation point & 0.287 & 0.210 & [0.144, 0.267] & Yes \\
+
+All / PageRank--Connected to articulation point & 0.216 & 0.204 & [0.136, 0.260] & No \\
+
+All / Betweenness--Monthly flow share & 0.800 & 0.785 & [0.766, 0.802] & No \\
+
+All / Betweenness--Articulation point & 0.252 & 0.259 & [0.195, 0.329] & No \\
+
+All / Betweenness--Connected to articulation point & 0.320 & 0.320 & [0.259, 0.368] & No \\
+
+All / Monthly flow share--Articulation point & 0.291 & 0.292 & [0.213, 0.359] & No \\
+
+All / Monthly flow share--Connected to articulation point & 0.182 & 0.173 & [0.116, 0.238] & No \\
+
+All / Articulation point--Connected to articulation point & 0.166 & 0.079 & [0.017, 0.145] & Yes \\
+
+\bottomrule\end{longtable}
+
+
+\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
+
+\caption{Chokepoint rank-two model: descriptive associations with posterior mean latent coordinates (orientation-dependent).}\label{tab:chokepoint_rank2_associations}\\
+
+\toprule
+
+Group & Factor & Response & Spearman $\rho$ \\
+
+\midrule\endfirsthead
+
+\toprule
+
+Group & Factor & Response & Spearman $\rho$ \\
+
+\midrule\endhead
+
+All & F1 & PageRank & 0.742 \\
+
+All & F1 & Betweenness & 0.961 \\
+
+All & F1 & Monthly flow share & 0.915 \\
+
+All & F1 & Articulation point & 0.298 \\
+
+All & F1 & Connected to articulation point & 0.346 \\
+
+All & F2 & PageRank & -0.050 \\
+
+All & F2 & Betweenness & 0.152 \\
+
+All & F2 & Monthly flow share & -0.412 \\
+
+All & F2 & Articulation point & -0.065 \\
+
+All & F2 & Connected to articulation point & 0.366 \\
+
+\bottomrule\end{longtable}
+
+
+% ============================================================
+% RANK-TWO MODEL — TERMINALS
+% ============================================================
+
+% Posterior response curves
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/response_curves_factor_1.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/response_curves_factor_2.png}
+
+
+% Autocorrelation functions
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/acf_01.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/acf_02.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/acf_03.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/acf_04.png}
+
+
+% Trace plots
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_01.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_02.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_03.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_04.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_05.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_06.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_07.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_08.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_09.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_10.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/terminal_trace_11.png}
+
+
+% Divergence diagnostics
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_by_chain.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_pair.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_parallel.png}
+
+
+% Geweke diagnostics
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/geweke_zscores_01.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/geweke_zscores_02.png}
+
+
+% Heidelberger-Welch diagnostics
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/heidelberger_welch_results_01.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/heidelberger_welch_results_02.png}
+
+
+
+% ============================================================
+% RANK-TWO MODEL — CHOKEPOINTS
+% ============================================================
+
+% Posterior response curves
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/response_curves_factor_1.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/response_curves_factor_2.png}
+
+
+% Autocorrelation functions
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/acf_01.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/acf_02.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/acf_03.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/acf_04.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/acf_05.png}
+
+
+% Trace plots
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/chokepoint_trace_01.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/chokepoint_trace_02.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/chokepoint_trace_03.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/chokepoint_trace_04.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/chokepoint_trace_05.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/chokepoint_trace_06.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/chokepoint_trace_07.png}
+
+\includegraphics[width=0.80\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/chokepoint_trace_08.png}
+
+
+% Divergence diagnostics
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/divergences_by_chain.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/divergences_pair.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/divergences_parallel.png}
+
+
+% Geweke diagnostics
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/geweke_zscores_01.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/geweke_zscores_02.png}
+
+
+% Heidelberger-Welch diagnostics
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/heidelberger_welch_results_01.png}
+
+\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/heidelberger_welch_results_02.png}
 
 \section{Prior sensitivity results}
 \label{sec:prior_sensitivity}
@@ -5431,9 +7228,8 @@ with the independent
 $\mathcal{N}(0,0.5^2)$ coefficient priors gives
 
 \begin{equation*}
-\begin{aligned}
 p(\boldsymbol{\beta}\mid\mathrm{rest})
-\propto {}&
+\propto 
 \prod_{n\in\mathcal{O}}
 \exp\left[
 -\frac12
@@ -5442,104 +7238,75 @@ f_n-\mathbf{x}_n^{\mathsf T}
 \boldsymbol{\beta}-\mu_{i(n)}
 \right)^2
 \right]
-\\
-&\times
 \prod_{r=1}^{q}
 \exp\left(
 -\frac{\beta_r^2}{2(0.5)^2}
 \right).
-\end{aligned}
 \end{equation*}
 
 Let $\boldsymbol{\mu}_{\mathcal{O}}$ denote
 the $N_{\mathrm{obs}}$-dimensional vector
-whose $n$th element is $\mu_{i(n)}$.
+whose $n^{nt}$ element is $\mu_{i(n)}$.
 Combining the exponential terms gives
 
 \begin{equation*}
-\begin{aligned}
 p(\boldsymbol{\beta}\mid\mathrm{rest})
 \propto
 \exp\Bigg\{-\frac12\Big[
-&(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}
 -\mathbf{X}\boldsymbol{\beta})^{\mathsf T}
-\\
-&\times
 (\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}
 -\mathbf{X}\boldsymbol{\beta})
-\\
-&+4\boldsymbol{\beta}^{\mathsf T}
++4\boldsymbol{\beta}^{\mathsf T}
 \boldsymbol{\beta}
 \Big]\Bigg\}.
-\end{aligned}
 \end{equation*}
-
 Expanding the quadratic term,
-
 \begin{equation*}
-\begin{aligned}
-&(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}
+(\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}
 -\mathbf{X}\boldsymbol{\beta})^{\mathsf T}
 (\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}
--\mathbf{X}\boldsymbol{\beta})
-\\
-&=
+-\mathbf{X}\boldsymbol{\beta})=
 (\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})^{\mathsf T}
 (\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})
-\\
-&\quad
 -2\boldsymbol{\beta}^{\mathsf T}
 \mathbf{X}^{\mathsf T}
 (\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})
-\\
-&\quad
 +\boldsymbol{\beta}^{\mathsf T}
 \mathbf{X}^{\mathsf T}
 \mathbf{X}\boldsymbol{\beta}.
-\end{aligned}
 \end{equation*}
-
 The first term does not depend on
 $\boldsymbol{\beta}$ and can be absorbed
 into the normalising constant.
 The resulting kernel is
 
 \begin{equation*}
-\begin{aligned}
 p(\boldsymbol{\beta}\mid\mathrm{rest})
-\propto
 \exp\Bigg\{-\frac12\Big[
-&\boldsymbol{\beta}^{\mathsf T}
+\boldsymbol{\beta}^{\mathsf T}
 (\mathbf{X}^{\mathsf T}\mathbf{X}
 +4\mathbf{I}_q)\boldsymbol{\beta}
-\\
-&-2\boldsymbol{\beta}^{\mathsf T}
+-2\boldsymbol{\beta}^{\mathsf T}
 \mathbf{X}^{\mathsf T}
 (\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})
 \Big]\Bigg\}.
-\end{aligned}
 \end{equation*}
 
 Define
-
 \begin{equation*}
 \mathbf{V}_{\beta}
 =
 (\mathbf{X}^{\mathsf T}\mathbf{X}
 +4\mathbf{I}_q)^{-1},
-\end{equation*}
-and
-
-\begin{equation*}
+\qquad
 \mathbf{m}_{\beta}
 =
 \mathbf{V}_{\beta}
 \mathbf{X}^{\mathsf T}
 (\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}).
 \end{equation*}
-
 Since
-
 \begin{equation*}
 \mathbf{V}_{\beta}^{-1}\mathbf{m}_{\beta}
 =
@@ -5547,27 +7314,20 @@ Since
 (\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}),
 \end{equation*}
 completing the square gives
-
 \begin{equation*}
-\begin{aligned}
-&\boldsymbol{\beta}^{\mathsf T}
+\boldsymbol{\beta}^{\mathsf T}
 \mathbf{V}_{\beta}^{-1}\boldsymbol{\beta}
 -
 2\boldsymbol{\beta}^{\mathsf T}
 \mathbf{X}^{\mathsf T}
 (\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})
-\\
-&=
+=
 (\boldsymbol{\beta}-\mathbf{m}_{\beta})^{\mathsf T}
 \mathbf{V}_{\beta}^{-1}
-(\boldsymbol{\beta}-\mathbf{m}_{\beta})
-\\
-&\quad-
+(\boldsymbol{\beta}-\mathbf{m}_{\beta})-
 \mathbf{m}_{\beta}^{\mathsf T}
 \mathbf{V}_{\beta}^{-1}\mathbf{m}_{\beta}.
-\end{aligned}
 \end{equation*}
-
 The final term is constant with respect to
 $\boldsymbol{\beta}$. Therefore,
 
@@ -5584,20 +7344,15 @@ p(\boldsymbol{\beta}\mid\mathrm{rest})
 which yields
 
 \begin{equation*}
-\boxed{
-\begin{aligned}
 \boldsymbol{\beta}\mid\mathrm{rest}
 \sim\mathcal{N}_q\Big(
-&(\mathbf{X}^{\mathsf T}\mathbf{X}
+(\mathbf{X}^{\mathsf T}\mathbf{X}
 +4\mathbf{I}_q)^{-1}
 \mathbf{X}^{\mathsf T}
 (\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}}),
-\\
-&(\mathbf{X}^{\mathsf T}\mathbf{X}
+(\mathbf{X}^{\mathsf T}\mathbf{X}
 +4\mathbf{I}_q)^{-1}
 \Big).
-\end{aligned}
-}
 \end{equation*}
 
 \subsection{Latent factors}
@@ -5649,16 +7404,9 @@ is not generally conjugate.
 \subsection{Node-specific intercepts}
 \label{app:node_mu_conditional}
 
-For each node $i$, define
-
-\begin{equation*}
-\mathcal{O}_i
-=
-\{n\in\mathcal{O}:i(n)=i\},
-\qquad
-n_i=|\mathcal{O}_i|.
-\end{equation*}
-
+For each node $i$, define $\mathcal{O}_i
+=\{n\in\mathcal{O}:i(n)=i\},
+n_i=|\mathcal{O}_i|$.
 Conditional on the latent factors and
 the remaining parameters, only the
 factor-regression contributions associated
@@ -5677,14 +7425,11 @@ p(f_n\mid
 Writing the relevant densities explicitly,
 
 \begin{equation*}
-\begin{aligned}
 p(\mu_i\mid\mathrm{rest})
-\propto {}&
+\propto
 \exp\left(
 -\frac{\mu_i^2}{2\sigma_\mu^2}
 \right)
-\\
-&\times
 \prod_{n\in\mathcal{O}_i}
 \exp\left[
 -\frac12
@@ -5693,18 +7438,11 @@ f_n-\mathbf{x}_n^{\mathsf T}
 \boldsymbol{\beta}-\mu_i
 \right)^2
 \right].
-\end{aligned}
 \end{equation*}
 
-Define the factor-regression residuals
-
-\begin{equation*}
-r_n
-=
+Define the factor-regression residuals $r_n=
 f_n-\mathbf{x}_n^{\mathsf T}
-\boldsymbol{\beta}.
-\end{equation*}
-
+\boldsymbol{\beta}$.
 The conditional kernel becomes
 
 \begin{equation*}
@@ -5723,34 +7461,26 @@ p(\mu_i\mid\mathrm{rest})
 Expanding the sum of squared residuals,
 
 \begin{equation*}
-\begin{aligned}
 \sum_{n\in\mathcal{O}_i}
-(r_n-\mu_i)^2
-={}&
-\sum_{n\in\mathcal{O}_i}r_n^2
-\\
-&-2\mu_i
+(r_n-\mu_i)^2=
+\sum_{n\in\mathcal{O}_i}r_n^2-2\mu_i
 \sum_{n\in\mathcal{O}_i}r_n
 +n_i\mu_i^2.
-\end{aligned}
 \end{equation*}
 Removing the term
 $\sum_{n\in\mathcal{O}_i}r_n^2$,
 which does not depend on $\mu_i$, gives
 
 \begin{equation*}
-\begin{aligned}
 p(\mu_i\mid\mathrm{rest})
 \propto
 \exp\Bigg\{-\frac12\Bigg[
-&\left(
+\left(
 n_i+\frac{1}{\sigma_\mu^2}
 \right)\mu_i^2
-\\
-&-2\mu_i
+-2\mu_i
 \sum_{n\in\mathcal{O}_i}r_n
 \Bigg]\Bigg\}.
-\end{aligned}
 \end{equation*}
 
 Define
@@ -5761,10 +7491,7 @@ V_{\mu_i}
 \left(
 n_i+\frac{1}{\sigma_\mu^2}
 \right)^{-1},
-\end{equation*}
-and
-
-\begin{equation*}
+\qquad
 m_{\mu_i}
 =
 V_{\mu_i}
@@ -5781,18 +7508,13 @@ V_{\mu_i}^{-1}m_{\mu_i}
 completing the square yields
 
 \begin{equation*}
-\begin{aligned}
-&V_{\mu_i}^{-1}\mu_i^2
--2\mu_i\sum_{n\in\mathcal{O}_i}r_n
-\\
-&=
+V_{\mu_i}^{-1}\mu_i^2
+-2\mu_i\sum_{n\in\mathcal{O}_i}r_n=
 V_{\mu_i}^{-1}
 (\mu_i-m_{\mu_i})^2
 -
 V_{\mu_i}^{-1}m_{\mu_i}^2.
-\end{aligned}
 \end{equation*}
-
 The final term does not depend on $\mu_i$.
 Thus,
 
@@ -5810,7 +7532,6 @@ p(\mu_i\mid\mathrm{rest})
 which gives the conjugate full conditional
 
 \begin{equation*}
-\boxed{
 \mu_i\mid\mathrm{rest}
 \sim
 \mathcal{N}
@@ -5822,17 +7543,11 @@ V_{\mu_i}
 \;
 V_{\mu_i}
 \right),
-}
 \end{equation*}
-where
-
-\begin{equation*}
-V_{\mu_i}
-=
+where $V_{\mu_i}=
 \left(
 n_i+\sigma_\mu^{-2}
-\right)^{-1}.
-\end{equation*}
+\right)^{-1}$.
 
 \subsection{Node-effect scale parameter}
 \label{app:node_sigma_conditional}
@@ -5844,7 +7559,6 @@ distribution of the node-specific intercepts.
 Conditional on $\boldsymbol{\mu}$,
 the factor-regression likelihood does not
 depend directly on $\sigma_\mu$.
-
 Therefore,
 
 \begin{equation*}
@@ -5865,7 +7579,6 @@ p(\boldsymbol{\mu}\mid\sigma_\mu)
 -\frac{\mu_i^2}{2\sigma_\mu^2}
 \right),
 \end{equation*}
-
 for $\sigma_\mu>0$.
 Combining the product gives
 
@@ -5896,13 +7609,9 @@ p(\sigma_\mu)
 Multiplying these contributions yields
 
 \begin{equation*}
-\boxed{
-\begin{aligned}
 p(\sigma_\mu\mid\mathrm{rest})
-\propto {}&
+\propto 
 \sigma_\mu^{-N_{\mathrm{node}}}
-\\
-&\times
 \exp\left[
 -\frac12
 \left(
@@ -5915,28 +7624,21 @@ p(\sigma_\mu\mid\mathrm{rest})
 \right)
 \right]
 \mathbb{I}(\sigma_\mu>0).
-\end{aligned}
-}
 \end{equation*}
-
 Equivalently, the log-kernel is
 
 \begin{equation*}
-\begin{aligned}
 \log p(\sigma_\mu\mid\mathrm{rest})
-={}&
+=
 -N_{\mathrm{node}}\log\sigma_\mu
-\\
-&-\frac{\sigma_\mu^2}{2}
+-\frac{\sigma_\mu^2}{2}
 -\frac{
 \sum_{i=1}^{N_{\mathrm{node}}}\mu_i^2
 }{
 2\sigma_\mu^2
 }
 +C,
-\end{aligned}
 \end{equation*}
-
 where $C$ does not depend on $\sigma_\mu$.
 
 Unlike the conditional distribution of the
@@ -5958,13 +7660,14 @@ the model quantities of interest.
 \chapter{Additional posterior results}
 \label{app:additional_posterior_results}
 
-\section{Terminals}
+\section{Baseline rank-one specification}
+This section provides supplementary results for the baseline rank-one model, 
+complementing the posterior analysis presented in Section~\ref{sec: rank-one model}.
+
+\subsection{Terminals}
 \label{app:terminals_add_posterior_results}
 
-This section provides supplementary results for the terminal baseline rank-one model, 
-complementing the posterior analysis presented in Section~\ref{sec:terminal_results}.
-
-\subsection{Terminals residuals heterogeneity}
+\subsubsection{Terminals residuals heterogeneity}
 \label{app:terminal_residual_heterogeneity}
 
 The following table provides additional descriptive evidence
@@ -6009,7 +7712,7 @@ Wheatstone LNG Terminal & 50 & -0.542 & -0.537 & 14.0 \\
 \end{minipage}
 \end{table}
 
-\subsection{Terminals posterior predictive checks}
+\subsubsection{Terminals posterior predictive checks}
 \label{app:terminal_ppc}
 
 Table~\ref{tab:terminal_marginal_ppc_full} reports marginal posterior predictive checks for the terminal baseline rank-one model, separately for all observations, lagged importers and lagged exporters. The reported intervals describe the distribution of each statistic across 200 conditional in-sample replicated datasets.
@@ -6179,9 +7882,9 @@ GB--toAP & -0.047 & -0.013 & -0.081 & 0.042 \\
 \end{longtable}
 
 
-\section{Chokepoints}
+\subsection{Chokepoints}
 
-\subsection{Chokepoints residuals heterogeneity}
+\subsubsection{Chokepoints residuals heterogeneity}
 \label{app:chokepoint_residuals}
 
 This section provides additional descriptive evidence of persistent
@@ -6232,6 +7935,273 @@ and more than 85\% or less than 15\% positive posterior mean residuals.
 \end{minipage}
 \end{table}
 
+\section{Node-intercept rank-one specification}
+\label{app:ppc_node_intercept}
+
+\subsection{Terminals}
+This subsection reports the complete marginal and joint posterior predictive checks 
+for the terminal random-intercept rank-one specification. The checks use 200 conditional in-sample replicated datasets, 
+as described in Section~\ref{subsec:node_terminal_results}, and the reported intervals are the 2.5th and 97.5th percentiles 
+of the replicated statistics. For the marginal checks, continuous responses are additionally examined separately for importers and exporters, using the lagged exporter indicator.
+
+\begingroup
+\small
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\begin{longtable}{llrrrr}
+\caption{Marginal posterior predictive checks for terminal responses under the node-intercept rank-one model. All statistics are on the original response scale; intervals are based on 200 conditional in-sample replicates.}
+\label{tab:node_terminal_marginal_ppc_full}\\
+\toprule
+Response & Statistic & Observed & Rep. mean & 95\% lower & 95\% upper \\
+\midrule
+\endfirsthead
+\multicolumn{6}{c}{\textit{Table continued from previous page}}\\
+\toprule
+Response & Statistic & Observed & Rep. mean & 95\% lower & 95\% upper \\
+\midrule
+\endhead
+\midrule
+\multicolumn{6}{r}{\textit{Continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{6}{l}{\textit{All terminals}}\\
+\midrule
+PageRank & Mean & 0.0185 & 0.0185 & 0.0184 & 0.0187 \\
+PageRank & SD & 0.0133 & 0.0129 & 0.0126 & 0.0133 \\
+PageRank & 5th percentile & 0.0089 & 0.0078 & 0.0075 & 0.0080 \\
+PageRank & Median & 0.0147 & 0.0153 & 0.0151 & 0.0155 \\
+PageRank & 95th percentile & 0.0391 & 0.0392 & 0.0381 & 0.0404 \\
+\addlinespace[2pt]
+HHI & Mean & 0.5887 & 0.5893 & 0.5804 & 0.5984 \\
+HHI & SD & 0.3254 & 0.3229 & 0.3184 & 0.3268 \\
+HHI & 5th percentile & 0.1268 & 0.1312 & 0.1205 & 0.1430 \\
+HHI & Median & 0.5045 & 0.4974 & 0.4866 & 0.5092 \\
+HHI & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+HHI & Proportion equal to one & 0.3409 & 0.3403 & 0.3243 & 0.3522 \\
+\addlinespace[2pt]
+Dependence & Mean & 0.4948 & 0.4962 & 0.4834 & 0.5099 \\
+Dependence & SD & 0.3219 & 0.3185 & 0.3120 & 0.3247 \\
+Dependence & 5th percentile & 0.0716 & 0.0816 & 0.0733 & 0.0897 \\
+Dependence & Median & 0.4283 & 0.4161 & 0.4012 & 0.4323 \\
+Dependence & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+Dependence & Proportion equal to one & 0.2076 & 0.2086 & 0.1919 & 0.2259 \\
+\addlinespace[2pt]
+AP & Proportion & 0.1057 & 0.1064 & 0.0929 & 0.1196 \\
+GB & Proportion & 0.5850 & 0.5851 & 0.5670 & 0.6085 \\
+toAP & Proportion & 0.9456 & 0.9457 & 0.9354 & 0.9551 \\
+\midrule
+\multicolumn{6}{l}{\textit{Lagged importers}}\\
+\midrule
+PageRank & Mean & 0.0145 & 0.0144 & 0.0143 & 0.0146 \\
+PageRank & SD & 0.0045 & 0.0050 & 0.0048 & 0.0052 \\
+PageRank & 5th percentile & 0.0089 & 0.0074 & 0.0071 & 0.0077 \\
+PageRank & Median & 0.0136 & 0.0138 & 0.0136 & 0.0141 \\
+PageRank & 95th percentile & 0.0233 & 0.0236 & 0.0230 & 0.0241 \\
+\addlinespace[2pt]
+HHI & Mean & 0.6745 & 0.6775 & 0.6667 & 0.6880 \\
+HHI & SD & 0.2966 & 0.2963 & 0.2925 & 0.3005 \\
+HHI & 5th percentile & 0.2446 & 0.2534 & 0.2422 & 0.2648 \\
+HHI & Median & 0.5701 & 0.5953 & 0.5731 & 0.6184 \\
+HHI & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+HHI & Proportion equal to one & 0.4189 & 0.4270 & 0.4090 & 0.4439 \\
+\addlinespace[2pt]
+Dependence & Mean & 0.4812 & 0.4761 & 0.4596 & 0.4943 \\
+Dependence & SD & 0.3574 & 0.3319 & 0.3238 & 0.3399 \\
+Dependence & 5th percentile & 0.0614 & 0.0721 & 0.0628 & 0.0816 \\
+Dependence & Median & 0.3472 & 0.3728 & 0.3567 & 0.3920 \\
+Dependence & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+Dependence & Proportion equal to one & 0.2645 & 0.2390 & 0.2185 & 0.2602 \\
+\addlinespace[2pt]
+\midrule
+\multicolumn{6}{l}{\textit{Lagged exporters}}\\
+\midrule
+PageRank & Mean & 0.0269 & 0.0270 & 0.0266 & 0.0274 \\
+PageRank & SD & 0.0198 & 0.0188 & 0.0182 & 0.0194 \\
+PageRank & 5th percentile & 0.0088 & 0.0092 & 0.0087 & 0.0097 \\
+PageRank & Median & 0.0210 & 0.0220 & 0.0214 & 0.0225 \\
+PageRank & 95th percentile & 0.0714 & 0.0669 & 0.0629 & 0.0719 \\
+\addlinespace[2pt]
+HHI & Mean & 0.4119 & 0.4075 & 0.3956 & 0.4177 \\
+HHI & SD & 0.3103 & 0.2986 & 0.2882 & 0.3079 \\
+HHI & 5th percentile & 0.0877 & 0.0564 & 0.0457 & 0.0688 \\
+HHI & Median & 0.3333 & 0.3268 & 0.3151 & 0.3413 \\
+HHI & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+HHI & Proportion equal to one & 0.1800 & 0.1614 & 0.1445 & 0.1765 \\
+\addlinespace[2pt]
+Dependence & Mean & 0.5228 & 0.5376 & 0.5206 & 0.5533 \\
+Dependence & SD & 0.2296 & 0.2842 & 0.2758 & 0.2915 \\
+Dependence & 5th percentile & 0.1852 & 0.1176 & 0.1010 & 0.1332 \\
+Dependence & Median & 0.4972 & 0.5033 & 0.4799 & 0.5260 \\
+Dependence & 95th percentile & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+Dependence & Proportion equal to one & 0.0904 & 0.1458 & 0.1232 & 0.1658 \\
+\addlinespace[2pt]
+\end{longtable}
+\endgroup
+
+\begingroup
+\small
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\begin{longtable}{llrrrr}
+\caption{Joint posterior predictive checks for terminal responses under the node-intercept rank-one model. Entries are Spearman rank correlations; replicated intervals are 95\% equal-tailed intervals based on 200 conditional in-sample replicates.}
+\label{tab:node_terminal_joint_ppc_full}\\
+\toprule
+Response pair & Subset & Observed & Rep. median & 95\% lower & 95\% upper \\
+\midrule
+\endfirsthead
+\multicolumn{6}{c}{\textit{Table continued from previous page}}\\
+\toprule
+Response pair & Subset & Observed & Rep. median & 95\% lower & 95\% upper \\
+\midrule
+\endhead
+\midrule
+\multicolumn{6}{r}{\textit{Continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{6}{l}{\textit{All terminals}}\\
+\midrule
+PageRank--HHI & All & -0.6394 & -0.6858 & -0.7041 & -0.6641 \\
+PageRank--Dependence & All & 0.3145 & 0.1528 & 0.1115 & 0.1904 \\
+PageRank--AP & All & 0.3724 & 0.2479 & 0.2135 & 0.2873 \\
+PageRank--GB & All & -0.2380 & -0.2512 & -0.2954 & -0.2122 \\
+PageRank--toAP & All & -0.0150 & 0.0385 & 0.0011 & 0.0753 \\
+HHI--Dependence & All & -0.1707 & -0.1490 & -0.1853 & -0.1022 \\
+HHI--AP & All & -0.2904 & -0.2387 & -0.2764 & -0.1977 \\
+HHI--GB & All & 0.5326 & 0.2420 & 0.2040 & 0.2888 \\
+HHI--toAP & All & -0.0376 & -0.0370 & -0.0716 & -0.0017 \\
+Dependence--AP & All & 0.1566 & 0.0796 & 0.0463 & 0.1129 \\
+Dependence--GB & All & -0.0664 & -0.0637 & -0.0974 & -0.0270 \\
+Dependence--toAP & All & -0.0815 & 0.0090 & -0.0241 & 0.0437 \\
+AP--GB & All & 0.2896 & -0.1078 & -0.1426 & -0.0696 \\
+AP--toAP & All & -0.0628 & 0.0178 & -0.0150 & 0.0420 \\
+GB--toAP & All & 0.0595 & -0.0156 & -0.0518 & 0.0233 \\
+\midrule
+\multicolumn{6}{l}{\textit{Lagged importers}}\\
+\midrule
+PageRank--HHI & Importer & -0.4163 & -0.5153 & -0.5496 & -0.4802 \\
+PageRank--Dependence & Importer & 0.2088 & 0.0576 & 0.0111 & 0.0986 \\
+PageRank--AP & Importer & 0.2320 & 0.0896 & 0.0467 & 0.1231 \\
+PageRank--GB & Importer & -0.2576 & -0.1304 & -0.1744 & -0.0850 \\
+PageRank--toAP & Importer & -0.0425 & 0.0196 & -0.0226 & 0.0596 \\
+HHI--Dependence & Importer & -0.1625 & -0.0593 & -0.0996 & -0.0150 \\
+HHI--AP & Importer & -0.1374 & -0.0896 & -0.1247 & -0.0396 \\
+HHI--GB & Importer & 0.6437 & 0.1336 & 0.0864 & 0.1857 \\
+HHI--toAP & Importer & 0.0136 & -0.0198 & -0.0598 & 0.0255 \\
+Dependence--AP & Importer & 0.0331 & 0.0114 & -0.0302 & 0.0512 \\
+Dependence--GB & Importer & -0.1541 & -0.0150 & -0.0554 & 0.0236 \\
+Dependence--toAP & Importer & -0.0447 & 0.0018 & -0.0362 & 0.0475 \\
+AP--GB & Importer & 0.1368 & -0.0217 & -0.0637 & 0.0150 \\
+AP--toAP & Importer & 0.0193 & 0.0077 & -0.0375 & 0.0400 \\
+GB--toAP & Importer & 0.1314 & -0.0068 & -0.0494 & 0.0313 \\
+\midrule
+\multicolumn{6}{l}{\textit{Lagged exporters}}\\
+\midrule
+PageRank--HHI & Exporter & -0.8178 & -0.7917 & -0.8137 & -0.7681 \\
+PageRank--Dependence & Exporter & 0.5164 & 0.2822 & 0.2223 & 0.3538 \\
+PageRank--AP & Exporter & 0.2764 & 0.3608 & 0.2864 & 0.4116 \\
+PageRank--GB & Exporter & -0.1978 & -0.3406 & -0.4056 & -0.2838 \\
+PageRank--toAP & Exporter & 0.1661 & 0.0555 & -0.0097 & 0.1130 \\
+HHI--Dependence & Exporter & -0.1019 & -0.2515 & -0.3193 & -0.1852 \\
+HHI--AP & Exporter & -0.1593 & -0.3272 & -0.3788 & -0.2574 \\
+HHI--GB & Exporter & 0.3984 & 0.3096 & 0.2513 & 0.3783 \\
+HHI--toAP & Exporter & -0.2304 & -0.0539 & -0.1079 & 0.0132 \\
+Dependence--AP & Exporter & 0.3066 & 0.1400 & 0.0856 & 0.1866 \\
+Dependence--GB & Exporter & 0.1946 & -0.1110 & -0.1647 & -0.0594 \\
+Dependence--toAP & Exporter & -0.1061 & 0.0203 & -0.0355 & 0.0849 \\
+AP--GB & Exporter & 0.5461 & -0.1497 & -0.1977 & -0.0832 \\
+AP--toAP & Exporter & -0.0495 & 0.0236 & -0.0322 & 0.0728 \\
+GB--toAP & Exporter & -0.0467 & -0.0203 & -0.0862 & 0.0338 \\
+\end{longtable}
+\endgroup
+\noindent\textit{Notes.} AP denotes articulation-point status; GB denotes incident-global-bridge status; toAP denotes connection to an articulation point. Binary-response means are proportions. 
+
+\subsection{Chokepoints}
+\label{app:node_intercept_chokepoints}
+
+Tables~\ref{tab:node_chokepoint_marginal_ppc_full} and~\ref{tab:node_chokepoint_joint_ppc_full} 
+report the complete marginal and pairwise joint posterior predictive checks for the chokepoint random-intercept rank-one model. Results are based on 200 conditional in-sample posterior predictive replicates.
+
+\begingroup
+\small
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\begin{longtable}{llrrrr}
+\caption{Marginal posterior predictive checks for chokepoint responses under the random-intercept rank-one model. 
+All statistics are on the original response scale; 95\% intervals are based on 200 conditional in-sample replicates.}
+\label{tab:node_chokepoint_marginal_ppc_full}\\
+\toprule
+Response & Statistic & Observed & Rep. mean & 95\% lower & 95\% upper \\
+\midrule
+\endfirsthead
+\multicolumn{6}{c}{\textit{Table continued from previous page}}\\
+\toprule
+Response & Statistic & Observed & Rep. mean & 95\% lower & 95\% upper \\
+\midrule
+\endhead
+\midrule
+\multicolumn{6}{r}{\textit{Continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+PageRank & Mean & 0.0176 & 0.0177 & 0.0173 & 0.0181 \\
+PageRank & SD & 0.0069 & 0.0065 & 0.0061 & 0.0069 \\
+PageRank & 5th percentile & 0.0084 & 0.0083 & 0.0077 & 0.0089 \\
+PageRank & Median & 0.0166 & 0.0169 & 0.0164 & 0.0174 \\
+PageRank & 95th percentile & 0.0302 & 0.0295 & 0.0286 & 0.0306 \\
+\addlinespace[2pt]
+Betweenness & Mean & 0.0132 & 0.0132 & 0.0126 & 0.0140 \\
+Betweenness & SD & 0.0135 & 0.0121 & 0.0113 & 0.0130 \\
+Betweenness & 5th percentile & 0.0006 & 0.0006 & 0.0004 & 0.0008 \\
+Betweenness & Median & 0.0077 & 0.0097 & 0.0090 & 0.0106 \\
+Betweenness & 95th percentile & 0.0413 & 0.0376 & 0.0348 & 0.0402 \\
+Betweenness & Proportion equal to zero & 0.0052 & 0.0058 & 0.0009 & 0.0129 \\
+\addlinespace[2pt]
+Flow share & Mean & 0.0234 & 0.0234 & 0.0230 & 0.0238 \\
+Flow share & SD & 0.0201 & 0.0200 & 0.0195 & 0.0206 \\
+Flow share & 5th percentile & 0.0030 & 0.0035 & 0.0031 & 0.0038 \\
+Flow share & Median & 0.0159 & 0.0157 & 0.0150 & 0.0164 \\
+Flow share & 95th percentile & 0.0643 & 0.0641 & 0.0618 & 0.0662 \\
+\addlinespace[2pt]
+Articulation point (AP) & Proportion & 0.7360 & 0.7356 & 0.7008 & 0.7756 \\
+Connected to AP & Proportion & 0.8960 & 0.8960 & 0.8761 & 0.9157 \\
+\end{longtable}
+\endgroup
+
+\begingroup
+\small
+\setlength{\LTleft}{0pt}
+\setlength{\LTright}{0pt}
+\begin{longtable}{lrrrr}
+\caption{Joint posterior predictive checks for all pairwise Spearman correlations between chokepoint responses under the random-intercept rank-one model. Intervals are 95\% equal-tailed posterior predictive intervals based on 200 conditional in-sample replicates.}
+\label{tab:node_chokepoint_joint_ppc_full}\\
+\toprule
+Response pair & Observed & Rep. median & 95\% lower & 95\% upper \\
+\midrule
+\endfirsthead
+\multicolumn{5}{c}{\textit{Table continued from previous page}}\\
+\toprule
+Response pair & Observed & Rep. median & 95\% lower & 95\% upper \\
+\midrule
+\endhead
+\midrule
+\multicolumn{5}{r}{\textit{Continued on next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+PageRank--Betweenness & 0.6846 & 0.4731 & 0.4168 & 0.5162 \\
+PageRank--Flow share & 0.6718 & 0.6090 & 0.5618 & 0.6444 \\
+PageRank--Articulation point & 0.2867 & 0.2014 & 0.1402 & 0.2707 \\
+PageRank--Connected to AP & 0.2157 & 0.1359 & 0.0777 & 0.1948 \\
+Betweenness--Flow share & 0.8000 & 0.7005 & 0.6622 & 0.7364 \\
+Betweenness--Articulation point & 0.2521 & 0.2306 & 0.1647 & 0.2952 \\
+Betweenness--Connected to AP & 0.3204 & 0.1558 & 0.0937 & 0.2125 \\
+Flow share--Articulation point & 0.2910 & 0.3001 & 0.2257 & 0.3609 \\
+Flow share--Connected to AP & 0.1818 & 0.1999 & 0.1368 & 0.2654 \\
+Articulation point--Connected to AP & 0.1665 & 0.0701 & 0.0103 & 0.1435 \\
+\end{longtable}
+\endgroup
 
 \chapter{Model diagnostics}
 \label{app:model_diagnostics}
@@ -6493,7 +8463,7 @@ Heidelberger--Welch stationarity diagnostic.}
 Node type & Parameter & Chain & Excluded draws \\
 \midrule
 
-\multirow{11}{*}{Terminal}
+\multirow{1}{*}{Terminal}
 & Articulation-point binary loading & 4 & 6,000 \\
 
 \midrule
@@ -6759,6 +8729,90 @@ substantial, effective sample sizes.
     \label{fig:chokepoint_acf_appendix}
 \end{figure}
 
+\section{Random-intercept rank-one MCMC convergence diagnostics}
+\label{app:node_intercept_mcmc_diagnostics}
+
+This subsection presents selected trace plots and autocorrelation functions (ACFs) for the random-intercept rank-one models. The figures complement the numerical sampling diagnostics discussed in Chapter~6, illustrating the mixing behaviour and serial dependence of selected parameters across the four MCMC chains.
+
+\subsubsection{Terminals}
+
+For the terminal specification, the selected trace plots show substantial overlap between chains, with no evident systematic trends or persistent differences in their sampled locations. Nevertheless, the autocorrelation functions reveal varying degrees of serial dependence across parameters, indicating that mixing efficiency is not uniform throughout the model.
+
+In particular, the PageRank continuous-response intercept exhibits relatively persistent autocorrelation, whereas the lagged exporter coefficient provides an additional illustration of serial dependence in the factor-regression component. These graphical findings are consistent with the numerical diagnostics, which indicated satisfactory between-chain convergence and no post-warm-up divergences, despite differences in effective sample sizes across parameters.
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/terminal_node_int_acf_01.png}
+
+    \vspace{0.4cm}
+
+    \includegraphics[width=0.85\textwidth]{images/terminal_node_int_acf_03.png}
+
+    \caption{Selected autocorrelation functions for the terminal
+    random-intercept rank-one model. The upper plot corresponds
+    to the lagged exporter regression coefficient, while the lower
+    plot shows the PageRank continuous-response intercept.
+    The four curves in each plot represent the individual MCMC chains.}
+    \label{fig:terminal_node_acf}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/terminal_node_int_trace_01.png}
+    \caption{Posterior density estimates and trace plots for selected factor-regression coefficients in the terminal random-intercept rank-one model. Different colours represent the four MCMC chains.}
+    \label{fig:terminal_node_trace_01}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/terminal_node_int_trace_04.png}
+    \caption{Posterior density estimates and trace plots for selected response-specific parameters in the terminal random-intercept rank-one model, including the connected-to-articulation-point loading and continuous-response intercepts.}
+    \label{fig:terminal_node_trace_04}
+\end{figure}
+
+\subsubsection{Chokepoints}
+
+The chokepoint specification exhibits a less satisfactory sampling pattern. Although several regression coefficients and response loadings display broadly overlapping chains, the autocorrelation functions reveal substantial persistence for certain response-specific parameters.
+
+In particular, the intercepts associated with monthly flow share and betweenness centrality exhibit very slow autocorrelation decay, with correlations remaining high even at lag 100. The monthly flow-share loading also shows persistent serial dependence, although its autocorrelation decreases more rapidly than that of the intercepts.
+
+The trace plots of the continuous-response intercepts further illustrate the slow movement of the chains across the parameter space. These patterns are consistent with the low effective sample sizes and convergence difficulties identified by the numerical diagnostics. Together with the post-warm-up divergences, they reinforce the need for caution when interpreting the posterior summaries of the chokepoint model.
+
+\begin{figure}[p]
+    \centering
+    \includegraphics[width=0.78\textwidth]{images/chokepoint_node_int_acf_02.png}
+
+    \vspace{0.3cm}
+
+    \includegraphics[width=0.78\textwidth]{images/chokepoint_node_int_acf_03.png}
+
+    \vspace{0.3cm}
+
+    \includegraphics[width=0.78\textwidth]{images/chokepoint_node_int_acf_04.png}
+
+    \caption{Selected autocorrelation functions for the chokepoint
+    random-intercept rank-one model. From top to bottom, the plots
+    correspond to the monthly flow-share loading, the monthly
+    flow-share intercept, and the betweenness centrality intercept.
+    The four curves in each plot represent the individual MCMC chains.
+    The response intercepts exhibit particularly persistent
+    autocorrelation, indicating slow mixing.}
+    \label{fig:chokepoint_node_acf}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/chokepoint_node_int_trace_01.png}
+    \caption{Posterior density estimates and trace plots for the four factor-regression coefficients in the chokepoint random-intercept rank-one model.}
+    \label{fig:chokepoint_node_trace_01}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/chokepoint_node_int_trace_03.png}
+    \caption{Posterior density estimates and trace plots for the PageRank, betweenness centrality, and monthly flow-share intercepts in the chokepoint random-intercept rank-one model. The traces illustrate persistent fluctuations and slow mixing.}
+    \label{fig:chokepoint_node_trace_03}
+\end{figure}
 
 %
 %           BIBLIOGRAPHY

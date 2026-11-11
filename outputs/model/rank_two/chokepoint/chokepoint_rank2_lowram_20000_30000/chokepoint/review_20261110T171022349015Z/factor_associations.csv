@@ -1,0 +1,11 @@
+role_lag1,factor,response,spearman_with_posterior_factor_mean
+all,factor_1,pagerank,0.7416980735649567
+all,factor_1,betweenness,0.9609106125868324
+all,factor_1,share_monthly_network_flow,0.9150983107558048
+all,factor_1,is_articulation_point,0.29835170996712773
+all,factor_1,connected_to_articulation_point,0.34558959435133396
+all,factor_2,pagerank,-0.050418997756761647
+all,factor_2,betweenness,0.15236706484061005
+all,factor_2,share_monthly_network_flow,-0.41199062051801244
+all,factor_2,is_articulation_point,-0.06515767070910981
+all,factor_2,connected_to_articulation_point,0.36604915599565907
