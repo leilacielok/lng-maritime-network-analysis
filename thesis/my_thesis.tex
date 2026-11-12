@@ -3301,8 +3301,7 @@ between the early and late portions of individual
 chains, the tests were conducted separately for
 multiple parameters and chains without adjustment
 for multiple comparisons. Consequently, isolated
-exceedances should not be interpreted as
-conclusive evidence of non-convergence,
+exceedances should not be interpreted as evidence of non-convergence,
 particularly in the presence of satisfactory
 $\widehat{R}$, ESS, and divergence diagnostics.
 
@@ -3353,8 +3352,7 @@ together with the results of the Geweke and Heidelberger--Welch tests for both b
 \caption{Summary of sampling diagnostics for the
 baseline terminal and chokepoint models.
 Geweke and Heidelberger--Welch results refer
-to parameter-chain tests on distinct global
-parameters, excluding duplicate parameter aliases.}
+to parameter-chain tests on distinct global parameters.}
 \label{tab:baseline_sampling_diagnostics}
 \small
 \begin{tabular}{lcc}
@@ -3555,12 +3553,6 @@ its loading remains positive and its
 the corresponding interval included
 zero under the baseline specification.
 
-Overall, the response loadings suggest
-that the introduction of node-specific
-intercepts does not fundamentally alter
-the interpretation of the terminal
-latent dimension.
-
 In order to provide a direct representation of persistent terminal-level heterogeneity, Figure~\ref{fig:node_terminal_effects} 
 illustrates the posterior distributions of the node-specific intercepts for the five terminals with the highest and five with the lowest posterior mean effects, 
 restricting the selection to terminals with at least 20 observations in the estimation sample. 
@@ -3601,7 +3593,7 @@ Table~\ref{tab:node_terminal_marginal_ppc} shows that the random-intercept model
 \begin{table}[htbp]
 \centering
 \caption{Marginal posterior predictive checks for the terminal random-intercept model. 
-Observed and replicated means are reported on the original response scale, rounded to five decimal places to show differences. 
+Observed and replicated means are reported on the original response scale, rounded to five decimal places highlight differences. 
 For binary responses, means correspond to proportions.}
 \label{tab:node_terminal_marginal_ppc}
 \small
@@ -3620,22 +3612,16 @@ Incident global bridge (GB) & 0.58500 & 0.58509 \\
 
 However, as in the baseline model, agreement in overall means does not necessarily imply adequate reproduction of dispersion, 
 tail behaviour, or associations between responses.
-In particular, the joint posterior
-predictive checks reveal that several
-discrepancies identified under the
-baseline specification persist.
-Table~\ref{tab:joint_ppc_node_intercepts} compares selected observed correlations
-with posterior predictive results from
-the baseline and random-intercept models.
+In particular, the joint posterior predictive checks reveal that several discrepancies identified under the baseline specification persist.
+Table~\ref{tab} compares selected response pairs exhibiting these discrepancies under the baseline and random-intercept models, allowing an 
+assessment of whether introducing node-specific intercepts improves the model's ability to reproduce the observed associations.
 
 \begin{table}[htbp]
 \centering
 \small
 \caption{Selected joint posterior predictive
 checks for terminals. Entries are Spearman
-correlations. Replicated intervals are 95%
-equal-tailed intervals based on 200
-conditional in-sample replicates.}
+correlations.}
 \label{tab:joint_ppc_node_intercepts}
 \begin{tabular}{llrrr}
 \hline
@@ -3731,7 +3717,7 @@ observed covariates.
 The posterior estimates of the
 factor-regression coefficients
 are reported in
-Table~\ref{tab:node_chokepoint_beta}, and suggest that the
+Table~\ref{tab:node_chokepoint_beta} and suggest that the
 introduction of node-specific effects
 changes the relative contributions
 of the observed covariates.
@@ -3777,13 +3763,14 @@ about its conditional association
 with the latent factor.
 Both seasonal coefficients are
 negative, with their reported
-HDIs excluding zero. This differs from the baseline
+HDIs excluding zero, which differs from the baseline
 specification, where only the
 cosine coefficient had an interval excluding zero.
+Given the sinusoidal encoding of calendar months, the combination of these negative coefficients implies 
+a cyclical pattern in the expected latent factor, with lower values around February and higher values around August.
 
-As shown in Table~\ref{tab:node_chokepoint_loadings}, the estimated relationships between the latent factor and the response loadings retain
+Turning to the response loadings, Table~\ref{tab:node_chokepoint_loadings} shows that the estimated relationships between the latent factor and the response loadings retain
 the directions observed under the baseline model.
-
 \begin{table}[htbp]
 \centering
 \caption{Posterior estimates of response
@@ -3828,8 +3815,8 @@ to represent a dimension associated
 with chokepoint centrality, flow
 exposure, and structural importance.
 
-Figure~\ref{fig:node_chokepoint_effects} presents the posterior distributions of the node-specific intercepts 
-for all 24 chokepoints, ordered by posterior mean. 
+The node-specific intercepts provide an additional perspective on the heterogeneity captured by the random-intercept specification. 
+Figure~\ref{fig:node_chokepoint_effects} presents their posterior distributions for all 24 chokepoints, ordered by posterior mean.
 The estimates reveal considerable heterogeneity across maritime passages, with both positive and negative effects 
 relative to the covariate-dependent component of the latent factor.
 The Strait of Hormuz exhibits the largest positive node-specific effect, with a posterior mean of approximately 4.79. 
@@ -3851,10 +3838,8 @@ scores observed for several of these passages in the baseline specification.
 Although the posterior summaries
 indicate substantial heterogeneity
 across chokepoints, the convergence diagnostics discussed
-in Section~\ref{subsec:node_sampling_diagnostics} limit the reliability of
-some estimates. The corresponding
-interpretations should therefore
-be regarded as provisional.
+in Section~\ref{subsec:node_sampling_diagnostics} raise concerns about the reliability of some estimates. 
+The corresponding interpretations should therefore be treated with caution.
 
 \subsubsection{Posterior predictive assessment}
 
@@ -3867,8 +3852,9 @@ The observed PageRank mean is 0.01764, compared with a replicated mean of 0.0176
 For betweenness, the corresponding values are 0.01321 and 0.01323, while for flow share they are 0.02341 and 0.02342.
 
 Nevertheless, discrepancies remain in the associations between responses. Table~\ref{tab:node_chokepoint_joint_ppc} 
-reports four illustrative response pairs for which the observed Spearman correlations exceed the upper bounds of 
-the corresponding 95\% posterior predictive intervals, highlighting the model's tendency to underestimate certain positive associations.
+reports four illustrative response pairs involving different combinations of centrality, flow exposure, 
+and structural importance measures, for which the observed Spearman correlations exceed the upper bounds of 
+the 95\% posterior predictive intervals, highlighting the model's tendency to underestimate certain positive associations.
 
 \begin{table}[htbp]
 \centering
@@ -3901,11 +3887,9 @@ The largest discrepancy among the selected associations concerns PageRank and be
 for which the replicated median correlation is 0.473, compared with an observed value of 0.685. 
 This represents a deterioration relative to the baseline specification, which yielded a replicated median of approximately 0.655.
 The model also underestimates the positive associations between PageRank and flow share, 
-betweenness and flow share, and PageRank and articulation-point status. 
-The complete marginal and joint posterior predictive results are reported in Appendix~\ref{app:node_intercept_chokepoints}.
-
-These results indicate that introducing node-specific intercepts does not fully resolve the limitations 
+betweenness and flow share, and PageRank and articulation-point status, indicating that introducing node-specific intercepts does not fully resolve the limitations 
 of the baseline rank-one model in reproducing the observed dependence structure among chokepoint responses.
+The complete marginal and joint posterior predictive results are reported in Appendix~\ref{app:node_intercept_chokepoints}.
 
 \subsection{Sampling diagnostics}
 \label{subsec:node_sampling_diagnostics}
@@ -3915,34 +3899,54 @@ Table~\ref{tab:node_sampling_diagnostics} summarises the main results.
 
 \begin{table}[htbp]
 \centering
-\caption{Sampling diagnostics for
-the terminal and chokepoint
-random-intercept models.
-Geweke and Heidelberger--Welch
-results refer to parameter-chain
-tests for global parameters.}
+\caption{Sampling diagnostics for the terminal and chokepoint
+random-intercept models. Geweke and Heidelberger--Welch
+results refer to parameter-chain tests for global parameters.}
 \label{tab:node_sampling_diagnostics}
 \small
 \begin{tabular}{lcc}
 \hline
 Diagnostic & Terminals & Chokepoints \\
 \hline
-\multicolumn{3}{l}{\textit{MCMC convergence and mixing}} \\
+
 Post-burn-in divergences & 0 & 183 \\
-Maximum $\widehat{R}$ & 1.003 & 1.040 \\
-Minimum bulk ESS & 795 & 112 \\
-Minimum tail ESS & 1,734 & 202 \\
+
+Maximum $\widehat{R}$
+& 1.003$^{a}$ & 1.040 \\
+& & \scriptsize{betweenness intercept} \\
+
+Minimum bulk ESS
+& 795 & 112 \\
+& \scriptsize{PageRank intercept}
+& \scriptsize{flow-share intercept} \\
+
+Minimum tail ESS
+& 1,734 & 202 \\
+& \scriptsize{PageRank intercept}
+& \scriptsize{betweenness intercept} \\
+
 \hline
-\multicolumn{3}{l}{\textit{Geweke diagnostic}} \\
-Total tests & 120 & 92 \\
-Passed & 115 (95.8\%) & 85 (92.4\%) \\
-Failed & 5 (4.2\%) & 7 (7.6\%) \\
+
+Passed Geweke & 115 (95.8\%) & 85 (92.4\%) \\
+Failed Geweke & 5 (4.2\%) & 7 (7.6\%) \\
+
 \hline
-\multicolumn{3}{l}{\textit{Heidelberger--Welch diagnostic}} \\
-Stationarity passed & 120 (100\%) & 92 (100\%) \\
-Half-width passed & 113 (94.2\%) & 92 (100\%) \\
+
+Passed stationarity & 120 (100\%) & 92 (100\%) \\
+Passed half-width & 113 (94.2\%) & 92 (100\%) \\
+
 \hline
 \end{tabular}
+
+\vspace{0.2cm}
+\begin{minipage}{0.95\textwidth}
+\footnotesize
+The maximum reported $\widehat{R}$ for terminals
+is shared by the PageRank interior-mean intercept,
+the HHI interior-mean intercept, and the HHI
+boundary-component intercept.
+\end{minipage}
+
 \end{table}
 
 The terminal model exhibits
@@ -3981,8 +3985,15 @@ Additional trace plots, autocorrelation functions, and detailed diagnostic resul
 \section{Rank-two model results}
 \label{sec:rank_two_model}
 
-\subsection{Terminal}
-\label{sec:terminal_rank_two_overview}
+The rank-two specifications were estimated to investigate whether introducing a second latent dimension could capture patterns of network criticality that were not adequately represented by the baseline rank-one and random-intercept models. The posterior results, however, provide limited evidence of a clearly identifiable additional dimension, particularly in light of the substantial sampling difficulties discussed below.
+
+For terminals, the factor-regression coefficients exhibit considerable uncertainty, with most 94\% highest-density intervals including zero. In contrast to the baseline rank-one specification, the previously strong positive associations with terminal capacity and lagged exporter status are not clearly recovered. The response loadings are similarly uncertain, with many intervals spanning zero, making it difficult to identify distinct interpretations for the two factors. The posterior predictive checks also indicate that several discrepancies identified under the simpler specifications persist. In particular, the positive association between articulation-point and incident-global-bridge indicators remains underestimated, with an observed Spearman correlation of 0.290 compared with a replicated median of 0.166. The association between PageRank and dependence is likewise underestimated (0.314 versus 0.196).
+
+For chokepoints, the factor-regression coefficients are generally small and uncertain, with no clear evidence of systematic associations between the available covariates and either latent dimension. The response loadings suggest a stronger relationship between the first factor and PageRank, betweenness, and monthly flow share, whereas the second-factor loadings are considerably less stable. Descriptive correlations between posterior mean factor coordinates and observed responses are consistent with this distinction, although they should not be interpreted as independent evidence of model adequacy. Compared with the baseline rank-one model, the joint posterior predictive checks show closer agreement for several response pairs. For example, the observed betweenness–flow-share correlation of 0.800 is reproduced with a median of 0.785, while the PageRank–flow-share correlation of 0.672 has a replicated median of 0.646. Nevertheless, some discrepancies remain, including the association between PageRank and articulation-point status.
+
+The sampling diagnostics raise substantial concerns for both specifications. The terminal model exhibits 8,096 post-warm-up divergences, a maximum $\widehat{R}$ of 1.642, and a minimum bulk ESS of 6.8. The corresponding chokepoint model exhibits 2,630 divergences, a maximum $\widehat{R}$ of 1.372, and a minimum bulk ESS of 9.1. In both cases, the poorest mixing is associated with latent-factor coordinates and response loadings, indicating difficulties in adequately exploring the posterior distribution. These findings are also reflected in the Geweke and Heidelberger--Welch diagnostics, particularly for terminals.
+
+Overall, although the rank-two specification appears to improve the reproduction of some joint response relationships, especially for chokepoints, the severe convergence and mixing difficulties prevent a reliable assessment of whether the additional latent dimension provides a meaningful improvement over the baseline and random-intercept specifications.
 
 \begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
 \caption{Terminal rank-two model: factor-regression coefficients.}\label{tab:terminal_rank2_3}\\
@@ -4586,8 +4597,6 @@ Exporter & F2 & Connected to articulation point & -0.216 \\
 % Divergence diagnostics
 \includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_by_chain.png}
 
-\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_pair.png}
-
 \includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_parallel.png}
 
 
@@ -4602,9 +4611,6 @@ Exporter & F2 & Connected to articulation point & -0.216 \\
 
 \includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/heidelberger_welch_results_02.png}
 
-
-
-\subsection{Chokepoint rank-two model}\label{sec:chokepoint_rank_two_overview}
 
 \begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
 
@@ -4797,49 +4803,32 @@ Basic sampling checks passed & False \\
 
 \bottomrule\end{longtable}
 
-
-\begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
-
-\caption{Chokepoint rank-two model: twelve parameters with the lowest bulk ESS (including observation-level parameters).}\label{tab:chokepoint_rank2_lowess}\\
-
-\toprule
-
-Parameter & $\widehat R$ & Bulk ESS & Tail ESS \\
-
-\midrule\endfirsthead
-
-\toprule
-
-Parameter & $\widehat R$ & Bulk ESS & Tail ESS \\
-
-\midrule\endhead
-
+\begin{table}[H]
+\centering
+\caption{Chokepoint rank-two model: twelve parameters
+with the lowest bulk ESS (including observation-level
+parameters).}
+\label{tab:chokepoint_rank2_lowest_ess}
+\small
+\begin{tabular}{lccc}
+\hline
+Parameter & $\widehat{R}$ & Bulk ESS & Tail ESS \\
+\hline
 factor[1129, F1] & 1.364 & 9.1 & 49.9 \\
-
 factor[1131, F1] & 1.364 & 9.2 & 49.9 \\
-
-other\_loadings[Monthly flow share, F2] & 1.372 & 9.2 & 51.1 \\
-
-Continuous loading[Monthly flow share, F2] & 1.372 & 9.2 & 51.1 \\
-
+Continuous loading[Flow share, F2] & 1.372 & 9.2 & 51.1 \\
 factor[979, F1] & 1.360 & 9.2 & 48.0 \\
-
 factor[521, F2] & 1.360 & 9.2 & 48.3 \\
-
 factor[1135, F1] & 1.359 & 9.2 & 52.1 \\
-
 factor[860, F1] & 1.361 & 9.2 & 49.3 \\
-
 factor[998, F1] & 1.361 & 9.2 & 51.9 \\
-
 factor[1000, F1] & 1.360 & 9.2 & 45.7 \\
-
 factor[1004, F1] & 1.355 & 9.2 & 45.4 \\
-
 factor[862, F1] & 1.359 & 9.3 & 49.6 \\
-
-\bottomrule\end{longtable}
-
+factor[962, F1] & 1.357 & 9.3 & 48.0 \\
+\hline
+\end{tabular}
+\end{table}
 
 \begin{longtable}{@{}p{0.30\textwidth}rrr@{}}
 
@@ -5042,10 +5031,6 @@ All & F2 & Connected to articulation point & 0.366 \\
 
 
 % Divergence diagnostics
-\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_by_chain.png}
-
-\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_pair.png}
-
 \includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/terminal/terminal_rank2_20000_30000/terminal/review_20261111T094445201311Z/divergences_parallel.png}
 
 
@@ -5103,10 +5088,6 @@ All & F2 & Connected to articulation point & 0.366 \\
 
 
 % Divergence diagnostics
-\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/divergences_by_chain.png}
-
-\includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/divergences_pair.png}
-
 \includegraphics[width=0.85\textwidth]{../outputs/model/rank_two/chokepoint/chokepoint_rank2_lowram_20000_30000/chokepoint/review_20261110T171022349015Z/divergences_parallel.png}
 
 
@@ -8732,13 +8713,113 @@ substantial, effective sample sizes.
 \section{Random-intercept rank-one MCMC convergence diagnostics}
 \label{app:node_intercept_mcmc_diagnostics}
 
-This subsection presents selected trace plots and autocorrelation functions (ACFs) for the random-intercept rank-one models. The figures complement the numerical sampling diagnostics discussed in Chapter~6, illustrating the mixing behaviour and serial dependence of selected parameters across the four MCMC chains.
+This subsection provides additional convergence and mixing diagnostics for the random-intercept rank-one specifications complementing the discussion in Chapter~\ref{chap:results}.
+The tables report rank-normalised $\widehat{R}$ statistics and bulk and tail effective sample sizes (ESS) for selected global parameters and node-specific intercepts.
+For the terminal model, the reported global parameters include those exhibiting the least favourable mixing diagnostics, together with the standard deviation 
+of the node-specific intercepts. For the chokepoint model, particular attention is given to the response intercepts and node-specific effects, for which convergence difficulties were identified.
 
-\subsubsection{Terminals}
+The additional diagnostics confirm substantial differences in sampling performance between the two specifications. 
+For terminals, the least favourable diagnostics are associated primarily with response intercepts, while the node-specific effects exhibit comparatively satisfactory mixing.
+For chokepoints, the continuous-response and several node-specific intercepts exhibit low effective sample sizes, whereas the node-effect standard deviation exhibits substantially better mixing diagnostics. 
+These results indicate that the posterior summaries of individual chokepoint effects should be interpreted cautiously, as the available samples may not adequately characterise their posterior distributions.
 
-For the terminal specification, the selected trace plots show substantial overlap between chains, with no evident systematic trends or persistent differences in their sampled locations. Nevertheless, the autocorrelation functions reveal varying degrees of serial dependence across parameters, indicating that mixing efficiency is not uniform throughout the model.
+\begin{table}[H]
+\centering
+\caption{Selected global-parameter sampling diagnostics
+for the terminal random-intercept model.}
+\label{tab:terminal_node_global_diagnostics}
+\small
+\begin{tabular}{lccc}
+\hline
+Parameter & $\widehat{R}$ & Bulk ESS & Tail ESS \\
+\hline
+PageRank intercept
+& 1.003 & 795 & 1,734 \\
 
-In particular, the PageRank continuous-response intercept exhibits relatively persistent autocorrelation, whereas the lagged exporter coefficient provides an additional illustration of serial dependence in the factor-regression component. These graphical findings are consistent with the numerical diagnostics, which indicated satisfactory between-chain convergence and no post-warm-up divergences, despite differences in effective sample sizes across parameters.
+HHI interior-mean intercept
+& 1.003 & 883 & 2,031 \\
+
+HHI boundary-component intercept
+& 1.003 & 802 & 1,855 \\
+
+Dependence interior-mean intercept
+& 1.002 & 963 & 2,426 \\
+
+Global-bridge binary intercept
+& 1.002 & 1,378 & 4,098 \\
+
+Dependence boundary-component intercept
+& 1.002 & 1,433 & 4,221 \\
+
+Node-effect standard deviation ($\sigma_\mu$)
+& 1.000 & 14,489 & 32,125 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Selected global-parameter sampling diagnostics
+for the chokepoint random-intercept model.}
+\label{tab:chokepoint_node_global_diagnostics}
+\small
+\begin{tabular}{lccc}
+\hline
+Parameter & $\widehat{R}$ & Bulk ESS & Tail ESS \\
+\hline
+PageRank intercept
+& 1.039 & 114 & 205 \\
+
+Betweenness intercept
+& 1.040 & 113 & 202 \\
+
+Flow-share intercept
+& 1.039 & 112 & 206 \\
+
+Node-effect standard deviation ($\sigma_\mu$)
+& 1.001 & 2,801 & 11,759 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Sampling diagnostics for the 24 node-specific
+intercepts in the chokepoint random-intercept model.}
+\label{tab:chokepoint_node_intercept_diagnostics}
+\small
+\begin{tabular}{lccc}
+\hline
+Node & $\widehat{R}$ & Bulk ESS & Tail ESS \\
+\hline
+CP001 & 1.038 & 118 & 231 \\
+CP002 & 1.036 & 122 & 241 \\
+CP004 & 1.038 & 118 & 225 \\
+CP005 & 1.037 & 118 & 219 \\
+CP006 & 1.037 & 118 & 225 \\
+CP007 & 1.032 & 138 & 304 \\
+CP008 & 1.037 & 119 & 227 \\
+CP009 & 1.037 & 119 & 227 \\
+CP010 & 1.035 & 128 & 274 \\
+CP011 & 1.038 & 118 & 229 \\
+CP012 & 1.036 & 124 & 254 \\
+CP013 & 1.034 & 130 & 282 \\
+CP014 & 1.035 & 127 & 269 \\
+CP015 & 1.033 & 132 & 290 \\
+CP016 & 1.033 & 130 & 287 \\
+CP017 & 1.035 & 128 & 277 \\
+CP018 & 1.017 & 272 & 835 \\
+CP019 & 1.031 & 144 & 331 \\
+CP020 & 1.033 & 133 & 297 \\
+CP021 & 1.006 & 763 & 3,297 \\
+CP022 & 1.035 & 125 & 254 \\
+CP023 & 1.015 & 312 & 1,006 \\
+CP024 & 1.006 & 767 & 3,164 \\
+CP027 & 1.036 & 124 & 253 \\
+\hline
+\end{tabular}
+\end{table}
+
 
 \begin{figure}[p]
     \centering
@@ -8769,14 +8850,6 @@ In particular, the PageRank continuous-response intercept exhibits relatively pe
     \caption{Posterior density estimates and trace plots for selected response-specific parameters in the terminal random-intercept rank-one model, including the connected-to-articulation-point loading and continuous-response intercepts.}
     \label{fig:terminal_node_trace_04}
 \end{figure}
-
-\subsubsection{Chokepoints}
-
-The chokepoint specification exhibits a less satisfactory sampling pattern. Although several regression coefficients and response loadings display broadly overlapping chains, the autocorrelation functions reveal substantial persistence for certain response-specific parameters.
-
-In particular, the intercepts associated with monthly flow share and betweenness centrality exhibit very slow autocorrelation decay, with correlations remaining high even at lag 100. The monthly flow-share loading also shows persistent serial dependence, although its autocorrelation decreases more rapidly than that of the intercepts.
-
-The trace plots of the continuous-response intercepts further illustrate the slow movement of the chains across the parameter space. These patterns are consistent with the low effective sample sizes and convergence difficulties identified by the numerical diagnostics. Together with the post-warm-up divergences, they reinforce the need for caution when interpreting the posterior summaries of the chokepoint model.
 
 \begin{figure}[p]
     \centering
