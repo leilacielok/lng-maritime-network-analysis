@@ -2278,7 +2278,7 @@ f_{i,t}\mid
 \label{eq:node_specific_factor}
 \end{equation}
 where $\mu_i$ represents a persistent node-specific
-deviation from the factor mean predicted by the observed
+deviation from the conditional factor mean implied by the observed
 covariates. Equivalently,
 
 \begin{equation}
@@ -2290,8 +2290,8 @@ f_{i,t}
 z_{i,t}\sim\mathcal{N}(0,1).
 \label{eq:node_specific_decomposition}
 \end{equation}
-The effect $\mu_i$ is shared across all observations
-belonging to node $i$, while $z_{i,t}$ represents
+The effect $\mu_i$ is common to all observations
+associated with node $i$, while $z_{i,t}$ represents
 observation-specific residual variation.
 The residual variance remains fixed at one, as in
 the baseline specification.
@@ -2315,7 +2315,7 @@ with
 The parameter $\sigma_\mu$ controls the magnitude
 of persistent between-node heterogeneity:
 small values imply stronger shrinkage of the
-node-specific effects towards zero, approaching
+node-specific effects towards zero, making the model close to
 the baseline specification, whereas larger values
 allow greater differences across nodes.
 
@@ -2370,13 +2370,13 @@ Equation~(\ref{eq:baseline_response_likelihood}),
 $p(\boldsymbol{\mu}\mid\sigma_\mu)
 =\prod_{i=1}^{N}p(\mu_i\mid\sigma_\mu)$,
 and $p(\sigma_\mu)$ is the Half-Normal prior
-in Equation~(\ref{eq:node_effect_scale_prior}).
+as in Equation~(\ref{eq:node_effect_scale_prior}).
 
 The full conditional posterior kernels follow
 from Equation~(\ref{eq:node_joint_posterior}).
 Since the response likelihood and its parameters
-are unchanged, their full conditional kernels
-retain the expressions derived for the baseline
+remain unchanged, the corresponding full conditional kernels
+retain the forms derived for the baseline
 model, conditional on the latent factors.
 Only the conditional distributions involving
 the factor regression and the newly introduced
@@ -2387,8 +2387,8 @@ hierarchical parameters require modification.
 Define the $|\mathcal{O}|$-dimensional vector
 $\boldsymbol{\mu}_{\mathcal{O}}$ whose $n^{th}$ element
 is $\mu_{i(n)}$.
-The Gaussian factor regression and the independent
-$\mathcal{N}(0,0.5^2)$ coefficient priors give
+Combining the Gaussian factor regression with the independent
+$\mathcal{N}(0,0.5^2)$ coefficient priors gives the following posterior density
 
 \begin{equation}
 p(\boldsymbol{\beta}\mid\mathrm{rest})
@@ -2400,10 +2400,10 @@ p(\boldsymbol{\beta}\mid\mathrm{rest})
 -2\boldsymbol{\beta}^{\mathsf T}
 \mathbf{X}^{\mathsf T}
 (\mathbf{f}-\boldsymbol{\mu}_{\mathcal{O}})
-\Big]\Bigg\}.
+\Big]\Bigg\},
 \label{eq:node_fc_beta_kernel}
 \end{equation}
-Recognising the multivariate Normal kernel gives
+which is the multivariate Normal kernel defined as
 
 \begin{equation}
 \boldsymbol{\beta}\mid\mathrm{rest}
@@ -2435,10 +2435,10 @@ f_n-\boldsymbol{x}_n^{\mathsf T}
 \boldsymbol{\beta}
 -\mu_{i(n)}
 \right)^2
-\right].
+\right],
 \label{eq:node_fc_factor}
 \end{equation}
-Here $L_n(f_n)$ denotes the same observation-specific
+where $L_n(f_n)$ denotes the same observation-specific
 likelihood defined for terminals and chokepoints
 in the baseline specification.
 
@@ -2446,7 +2446,7 @@ in the baseline specification.
 
 For each node $i$, let
 $\mathcal{O}_i=\{n\in\mathcal{O}:i(n)=i\}$
-denote its observations in the estimation sample,
+denote the observations associated with node $i$ in the estimation sample,
 and let $n_i=|\mathcal{O}_i|$.
 Combining the Gaussian prior for $\mu_i$
 with the factor regression gives
@@ -2533,8 +2533,8 @@ This transformation preserves the prior
 $\mu_i\mid\sigma_\mu\sim\mathcal{N}(0,\sigma_\mu^2)$
 and therefore leaves the posterior distribution
 of the model parameters and latent factors unchanged.
-It only changes the coordinates used for sampling,
-with the aim of improving computational efficiency \citep{papaspiliopoulos2007general}.
+It only changes the coordinates used for sampling
+to improve computational efficiency \citep{papaspiliopoulos2007general}.
 
 \subsection{Rank-two specification}
 \label{subsec_rank_two_model}
@@ -2885,10 +2885,10 @@ computed as the mean of the retained MCMC samples,
 are presented in Table~\ref{tab:simple_beta}, together with
 their 95\% highest-density intervals (HDIs).
 
-The most pronounced positive associations concern lagged
+The most pronounced positive associations are observed for lagged
 exporter status and terminal capacity. Conditional on the
-other predictors, having been classified as an exporter
-in the preceding month corresponds to an increase of
+other predictors, being classified as an exporter
+in the preceding month is associated with an increase of
 approximately 1.4 units in the expected factor value.
 This is substantial relative to the residual standard
 deviation of the factor, which is fixed at one.
@@ -2897,8 +2897,8 @@ Neighbour activity and voyage distance in the previous
 month are also positively related to the factor, but
 their estimated associations are considerably weaker.
 By contrast, the posterior intervals for terminal age
-and the seasonal terms include zero, leaving their
-individual contributions uncertain.
+and the seasonal terms include zero, indicating considerable
+uncertainty about their individual contributions.
 
 \begin{table}[htbp]
 \centering
@@ -2923,22 +2923,21 @@ Lagged exporter indicator & 1.395 & $[1.303,1.489]$ \\
 
 The response loadings in Table~\ref{tab:simple_loadings}
 provide further insight into the interpretation of the
-terminal factor, by describing associations with the
+terminal factor by describing associations with the
 interior means of bounded responses, the probabilities
 of binary outcomes, and the boundary probabilities.
 
 The clearest pattern combines increasing PageRank with
 decreasing counterparty concentration. In particular,
 higher factor values correspond to both a lower interior
-mean for HHI and a reduced probability of HHI being
-exactly one.
+mean for HHI and a reduced probability that HHI equals one.
 
 The structural indicators show contrasting relationships:
 the probability of being an articulation point increases
-with the factor, while that of having an incident global
-bridge decreases. For connection to an articulation point,
+with the factor, while the probability of being incident to a global
+bridge decreases. For the indicator of adjency to an articulation point,
 the posterior interval includes zero, providing no clear
-evidence of an association.
+evidence of a directional association.
 
 \begin{table}[htbp]
 \centering
@@ -2962,9 +2961,9 @@ Probability of dependence equal to one & $-0.545$ & $[-0.636,-0.451]$ \\
 \end{table}
 
 The magnitude of the HHI relationship becomes clearer
-when expressed in the original response units. Moving
-from a factor value of 0 to 1, the posterior median
-expected HHI falls from approximately 0.66 to 0.38, with
+when expressed in the original response units. As the factor increases
+from 0 to 1, the posterior median of the
+expected HHI decreases from approximately 0.66 to 0.38, with
 a median difference of $-0.289$ (95\% equal-tailed
 credible interval: $[-0.311,-0.266]$), incorporating
 both the interior Beta component and the point mass at one.
@@ -2977,11 +2976,9 @@ Equation~\eqref{eq:inflated_mean}, yields a mildly
 U-shaped conditional expectation over the displayed
 factor range.
 
-The fitted response functions are displayed in
-Figure~\ref{fig:simple_response_curves} to allow
-the different response components and their
-combined implications to be examined across
-the estimated factor range.
+Figure~\ref{fig:simple_response_curves} displays the fitted response functions,
+allowing the individual response components and their
+combined effects to be examined across the estimated factor range.
 
 \begin{figure}[htbp]
 \centering
@@ -2993,8 +2990,8 @@ The horizontal axis spans the full empirical range of posterior mean latent fact
 \label{fig:simple_response_curves}
 \end{figure}
 
-To relate these posterior patterns to observed network positions, two terminal-month observations with 
-posterior mean latent factor scores closest to the 5th and 95th percentiles of the estimation sample are 
+To relate these posterior patterns to observed network positions, two terminal-month observations whose
+posterior mean latent factor values are closest to the 5th and 95th percentiles of the estimation sample are 
 considered. 
 Mugardos LNG Terminal, located in Galicia, Spain, has an estimated latent factor score of approximately $-1.0$ in October 2022, 
 compared with $2.73$ for Sabine Pass LNG Terminal, located in Cameron Parish, Louisiana, in June 2024. 
@@ -3130,16 +3127,20 @@ latent factor has opposite loadings on articulation-point and incident-global-br
 probabilities, while the assumption of conditional independence does not 
 allow for additional residual associations between these responses. 
 Consequently, the model struggles to reproduce their positive observed co-occurrence.
-These findings provide a complementary motivation for considering a 
-rank-two specification, in which two latent factors allow for a more 
-flexible representation of associations among responses. The results of 
-this extension are presented in Section~\ref{sec:rank_two_model}.
 
 \subsection{Chokepoint posterior analysis}
 \label{sec:chokepoint_findings}
-This section examines how the latent factor relates to network characteristics and measures of centrality, flow exposure, and structural importance for the chokepoint specification. The adequacy of the fitted model is subsequently evaluated through posterior predictive checks.
+This section examines how the latent factor relates to network characteristics and measures of centrality, 
+flow exposure, and structural importance for the chokepoint specification. The adequacy of the 
+fitted model is subsequently evaluated through posterior predictive checks.
 
-For chokepoints, the factor-regression results in Table~\ref{tab:chokepoint_beta} indicate relatively modest associations with the available predictors. Greater neighbour activity and longer average voyage distances in the preceding month are associated with higher factor values; both posterior intervals exclude zero, although the lower endpoint for voyage distance is close to zero. The seasonal coefficients provide limited evidence of seasonal variation in the conditional factor mean: the interval for the negative cosine coefficient excludes zero, whereas the interval for the sine coefficient includes zero.
+For chokepoints, the factor-regression results in Table~\ref{tab:chokepoint_beta} indicate relatively
+weak associations with the available predictors. 
+Greater neighbour activity and longer average voyage distances in the preceding month are associated with higher factor values; 
+both posterior intervals exclude zero, although the lower bound for voyage distance is close to zero, suggesting 
+greater uncertainty about this association. 
+The seasonal coefficients provide limited evidence of seasonal variation in the conditional factor mean: 
+the interval for the negative cosine coefficient excludes zero, whereas the interval for the sine coefficient includes zero.
 
 \begin{table}[htbp]
 \centering
@@ -3159,7 +3160,13 @@ Month cosine & $-0.065$ & $[-0.123,-0.007]$ \\
 
 With respect to the responses, Table~\ref{tab:chokepoint_loadings} shows positive loadings across the interior means and binary structural probabilities, with all reported HDIs excluding zero. These relationships are further illustrated by the fitted response curves in Figure~\ref{fig:chokepoint_response_curves}.
 
-The factor is positively related to PageRank, betweenness, and flow share, indicating that higher scores correspond to chokepoints occupying more central positions and carrying larger proportions of the network's LNG flows. Both articulation-point status and connection to an articulation point become more probable as the factor increases, unlike the terminal specification, where the latter association is not clearly established. The negative loading on the probability of exact zero betweenness implies that higher factor values are associated with a lower probability of zero betweenness, reinforcing the positive relationship between the factor and the overall conditional expectation of this response.
+The factor is positively associated with PageRank, betweenness, and flow share, indicating that 
+higher scores correspond to chokepoints occupying more central positions and carrying larger proportions of the network's LNG flows. 
+Both articulation-point status and connection to an articulation point become more likely as the factor increases, 
+unlike the terminal specification, where the latter association is not clearly established. 
+The negative loading on the probability that betweenness equals zero is consistent with
+this pattern, as higher factor values are associated with a lower probability of zero betweenness, further reinforcing
+the positive relationship between the factor and its overall conditional expectation.
 
 \begin{table}[htbp]
 \centering
@@ -3228,9 +3235,11 @@ suggesting that the baseline covariates may not fully account for systematic dif
 
 Following the same conditional, in-sample approach used for terminals, the chokepoint posterior predictive checks indicate that the model reproduces overall response means and binary proportions reasonably closely.
 
-The observed PageRank mean (0.01764) is close to the replicated mean (0.01767), and its observed 5th, median, and 95th percentiles fall within their respective replicated intervals. The model also reproduces the low frequency of zero betweenness (0.516\% observed versus 0.584\% replicated). Nevertheless, the observed fifth percentile of betweenness (0.000575) lies just below the corresponding replicated interval $[0.000582,0.000988]$; its observed median (0.007677) is also slightly below the replicated interval $[0.007731,0.008545]$.
+The observed PageRank mean (0.01764) is close to the replicated mean (0.01767), and its observed 5th, median, and 95th percentiles fall within their respective replicated intervals. 
+The model also reproduces the low proportion of observations with zero betweenness reasonably well (0.516\% observed versus 0.584\% replicated). Nevertheless, the observed fifth percentile of betweenness (0.000575) lies just below the corresponding replicated interval $[0.000582,0.000988]$; its observed median (0.007677) is also slightly below the replicated interval $[0.007731,0.008545]$.
 
-The largest marginal discrepancies concern flow share. The observed standard deviation (0.02010) exceeds the 95\% replicated interval $[0.01693,0.01933]$, indicating that the model underestimates dispersion. The observed median (0.01589) falls below its replicated interval $[0.01796,0.02040]$, whereas the observed 95th percentile (0.06426) exceeds the corresponding interval $[0.05522,0.06304]$. These discrepancies indicate that, despite reproducing the overall mean (0.02341 observed versus 0.02354 replicated), the model does not fully capture the distribution of flow share.
+The largest marginal discrepancies concern flow share. The observed standard deviation (0.02010) exceeds the 95\% replicated interval $[0.01693,0.01933]$, 
+indicating that the model underestimates the dispersion of this response. The observed median (0.01589) falls below its replicated interval $[0.01796,0.02040]$, whereas the observed 95th percentile (0.06426) exceeds the corresponding interval $[0.05522,0.06304]$. These discrepancies indicate that, despite reproducing the overall mean (0.02341 observed versus 0.02354 replicated), the model does not fully capture the distribution of flow share.
 
 Posterior predictive checks also examine whether the model reproduces the observed associations between responses. Pairwise Spearman correlations are compared with those obtained from 200 replicated datasets selected evenly across the four chains. As shown in Table~\ref{tab:chokepoint_joint_ppc}, the model reproduces the PageRank--betweenness association reasonably closely but underestimates associations involving flow share, as well as the PageRank--articulation association. The observed PageRank--articulation correlation lies slightly above the upper endpoint of the replicated interval.
 
@@ -3308,7 +3317,6 @@ $\widehat{R}$, ESS, and divergence diagnostics.
 The Heidelberger--Welch procedure was used
 to assess stationarity and the Monte Carlo
 precision of posterior mean estimates.
-
 All 104 terminal and 76 chokepoint
 parameter-chain tests satisfied the
 stationarity criterion. For terminals, 93 tests passed without
@@ -3345,7 +3353,8 @@ Monte Carlo uncertainty in absolute
 terms.
 
 Table~\ref{tab:baseline_sampling_diagnostics} summarises the convergence and mixing diagnostics, 
-together with the results of the Geweke and Heidelberger--Welch tests for both baseline models.
+together with the results of the Geweke and Heidelberger--Welch tests for both baseline models,
+while additional results are reported in Appendix~\ref{app:mcmc_diagnostics}.
 
 \begin{table}[htbp]
 \centering
@@ -3379,9 +3388,7 @@ Half-width failed & 8 (7.7\%) & 0 (0\%) \\
 \end{tabular}
 \end{table}
 
-Additional results are reported in Appendix~\ref{app:mcmc_diagnostics}.
-
-Overall, the combined diagnostics indicate
+Overall, the combined diagnostics provide
 satisfactory sampling behaviour for both
 baseline models.
 The absence of divergences, $\widehat{R}$
@@ -3408,8 +3415,7 @@ and sampling diagnostics are reported.
 Both models were estimated using four MCMC chains,
 each with 20,000 warm-up iterations and 30,000
 retained draws. The results for terminals and
-chokepoints are presented separately, consistently
-with the baseline analysis.
+chokepoints are presented separately, as in the baseline analysis.
 
 \subsection{Terminal posterior analysis}
 \label{subsec:node_terminal_results}
@@ -3498,7 +3504,7 @@ association between terminal age and
 the latent factor.
 
 The response loadings reported in Table~\ref{tab:node_terminal_loadings} 
-retain the main directional relationships identified
+preserve the main directional relationships identified
 under the baseline specification, although the magnitudes of several estimates
 are smaller.
 
@@ -3540,7 +3546,7 @@ concentration, and a greater probability
 of being an articulation point.
 The probability of having an incident
 global bridge continues to decrease
-with the factor.
+as the factor increases.
 As in the baseline model, dependence
 exhibits opposing relationships between
 its interior and boundary components:
@@ -3553,14 +3559,14 @@ its loading remains positive and its
 the corresponding interval included
 zero under the baseline specification.
 
-In order to provide a direct representation of persistent terminal-level heterogeneity, Figure~\ref{fig:node_terminal_effects} 
-illustrates the posterior distributions of the node-specific intercepts for the five terminals with the highest and five with the lowest posterior mean effects, 
+To illustrate persistent terminal-level heterogeneity, Figure~\ref{fig:node_terminal_effects} 
+illustrates the posterior distributions of the node-specific intercepts for the five terminals with the highest and the five with the lowest posterior mean effects, 
 restricting the selection to terminals with at least 20 observations in the estimation sample. 
 Findings are generally consistent with the persistent residual patterns identified under the baseline model: 
 the largest positive posterior mean effect is associated with Rasgas LNG Terminal 3, approximately 7.615,
 with a 95\% equal-tailed credible interval of $[6.942,8.320]$.
 Other terminals exhibiting substantial positive effects include Fos Tonkin LNG Terminal (3.69), Yamal LNG Terminal (3.18), Sabine Pass LNG Terminal (3.11), and 
-Pluto LNG Terminal (3.10), all of which were also identified in the baseline analysis as exhibiting predominantly positive latent-factor residuals.
+Pluto LNG Terminal (3.10), all of which also exhibited predominantly positive latent-factor residuals under the baseline specification.
 Their positive random intercepts therefore suggest that the systematic deviations observed under the baseline specification can, at least partly, 
 be represented by persistent node-level differences.
 At the opposite end, Sakhalin II LNG Terminal and Cameroon FLNG Terminal exhibit the most negative effects among the selected terminals, 
@@ -3593,7 +3599,7 @@ Table~\ref{tab:node_terminal_marginal_ppc} shows that the random-intercept model
 \begin{table}[htbp]
 \centering
 \caption{Marginal posterior predictive checks for the terminal random-intercept model. 
-Observed and replicated means are reported on the original response scale, rounded to five decimal places highlight differences. 
+Observed and replicated means are reported on the original response scale and rounded to five decimal places to highlight differences. 
 For binary responses, means correspond to proportions.}
 \label{tab:node_terminal_marginal_ppc}
 \small
@@ -3613,7 +3619,7 @@ Incident global bridge (GB) & 0.58500 & 0.58509 \\
 However, as in the baseline model, agreement in overall means does not necessarily imply adequate reproduction of dispersion, 
 tail behaviour, or associations between responses.
 In particular, the joint posterior predictive checks reveal that several discrepancies identified under the baseline specification persist.
-Table~\ref{tab} compares selected response pairs exhibiting these discrepancies under the baseline and random-intercept models, allowing an 
+Table~\ref{tab:joint_ppc_node_intercepts} compares selected response pairs exhibiting these discrepancies under the baseline and random-intercept models, allowing an 
 assessment of whether introducing node-specific intercepts improves the model's ability to reproduce the observed associations.
 
 \begin{table}[htbp]
@@ -3749,7 +3755,7 @@ Month cosine
 \end{tabular}
 \end{table}
 
-The coefficients associated with
+The coefficient associated with
 lagged neighbour activity increases
 from 0.103 under the baseline model
 to 0.316 under the random-intercept
@@ -3762,9 +3768,7 @@ indicating greater uncertainty
 about its conditional association
 with the latent factor.
 Both seasonal coefficients are
-negative, with their reported
-HDIs excluding zero, which differs from the baseline
-specification, where only the
+negative and their reported HDIs exclude zero, whereas, under the baseline specification, only the
 cosine coefficient had an interval excluding zero.
 Given the sinusoidal encoding of calendar months, the combination of these negative coefficients implies 
 a cyclical pattern in the expected latent factor, with lower values around February and higher values around August.
@@ -3808,14 +3812,13 @@ to an articulation point.
 The negative loading on the
 zero-betweenness component indicates
 that higher factor values are associated
-with a lower probability of observing
-exactly zero betweenness.
+with a lower probability that betweenness equals zero.
 Thus, the estimated factor continues
 to represent a dimension associated
 with chokepoint centrality, flow
 exposure, and structural importance.
 
-The node-specific intercepts provide an additional perspective on the heterogeneity captured by the random-intercept specification. 
+The node-specific intercepts provide further evidence of persistent heterogeneity across chokepoints. 
 Figure~\ref{fig:node_chokepoint_effects} presents their posterior distributions for all 24 chokepoints, ordered by posterior mean.
 The estimates reveal considerable heterogeneity across maritime passages, with both positive and negative effects 
 relative to the covariate-dependent component of the latent factor.
@@ -3912,7 +3915,7 @@ Diagnostic & Terminals & Chokepoints \\
 Post-burn-in divergences & 0 & 183 \\
 
 Maximum $\widehat{R}$
-& 1.003$^{a}$ & 1.040 \\
+& 1.003$^{*}$ & 1.040 \\
 & & \scriptsize{betweenness intercept} \\
 
 Minimum bulk ESS
@@ -3941,7 +3944,7 @@ Passed half-width & 113 (94.2\%) & 92 (100\%) \\
 \vspace{0.2cm}
 \begin{minipage}{0.95\textwidth}
 \footnotesize
-The maximum reported $\widehat{R}$ for terminals
+$^{*}$ The maximum reported $\widehat{R}$ for terminals
 is shared by the PageRank interior-mean intercept,
 the HHI interior-mean intercept, and the HHI
 boundary-component intercept.
@@ -3963,7 +3966,7 @@ remain compatible with adequate
 posterior exploration for the
 reported summaries.
 The Geweke diagnostic was
-satisfied by 115 of the 120
+satisfied in 115 of the 120
 parameter-chain tests, all tests passed the
 Heidelberger--Welch stationarity criterion, and the half-width test was
 passed by 113 of the 120 tests.
@@ -5105,7 +5108,7 @@ All & F2 & Connected to articulation point & 0.366 \\
 \section{Prior sensitivity results}
 \label{sec:prior_sensitivity}
 To assess the implications of the prior assumptions and the sensitivity of posterior
-findings, two alternative prior profiles were investigated on the same estimation samples.
+findings, two alternative prior specifications were investigated using the same estimation samples.
 The analysis considers both the prior predictive distributions and the sensitivity
 of posterior inference to these modifications.
 
@@ -5117,7 +5120,7 @@ The alternative specifications were informed by the observed response distributi
 simulations, rather than independently elicited prior information.
 
 Under the original priors, prior predictive simulations generated relatively broad
-distributions for several network measures, particularly those characterised by small
+distributions for several network measures, particularly those with small
 observed values, such as PageRank, betweenness and flow share.
 In response to these findings, the second specification introduced more concentrated
 prior distributions for selected intercepts and factor loadings. Specifically, the standard
@@ -5166,7 +5169,7 @@ Chokepoint
 \end{tabular}
 \end{table}
 
-For both node types, the original specification (ORG) generated substantially greater PageRank dispersion than observed. 
+For both node types, the original specification (ORG) generated substantially greater PageRank dispersion than those observed. 
 The concentrated specification (CON) reduced this discrepancy, while the response-specific precision specification (RS) produced further improvements. 
 For chokepoints, similar reductions were observed for betweenness and flow share, with RS yielding prior predictive standard deviations closer to their empirical counterparts.
 
@@ -5174,7 +5177,8 @@ For terminals, the prior predictive standard deviations of counterparty HHI and 
 This is consistent with the unchanged response-specific precision priors for HHI and dependence between CON and RS.
 
 However, the prior predictive distributions continued to assign excessive probability to the boundary value of one. Under RS, the mean predicted proportions were approximately 0.492 for HHI and 0.504 for dependence, compared with observed proportions of 0.341 and 0.208, respectively. 
-These discrepancies remained largely unchanged across the three specifications, indicating that the alternative priors did not adequately address the excessive prior predictive boundary mass. The corresponding results are reported in Appendix Table~\ref{tab:prior_predictive_boundary}.
+These discrepancies remained largely unchanged across the three specifications, indicating that the alternative priors did not adequately address the excessive prior predictive boundary mass. 
+The corresponding results are reported in Appendix~\ref{app:prior_sensitivity}.
 
 \subsection{Posterior sensitivity and predictive robustness}
 \label{subsec:posterior_sensitivity}
@@ -5183,12 +5187,11 @@ To assess the sensitivity of posterior inference to the alternative prior assump
 the rank-one models were re-estimated under the response-specific precision specification (RS) 
 and compared with the original specification (ORG).
 
-The alternative terminal fit produced no divergent transitions, a maximum reported $\widehat{R}$ of 1.01, a minimum bulk effective sample size (ESS) of 782, and a minimum tail ESS of 2,037. The corresponding values under ORG were 1.01, 817, and 1,958, respectively.
+The alternative terminal model produced no divergent transitions, a maximum reported $\widehat{R}$ of 1.01, a minimum bulk effective sample size (ESS) of 782, and a minimum tail ESS of 2,037. The corresponding values under ORG were 1.01, 817, and 1,958, respectively.
 
 For chokepoints, neither specification produced divergent transitions, and the maximum reported $\widehat{R}$ was 1.01 in both cases. However, the minimum bulk ESS decreased from 472 under ORG to 359 under RS, while the minimum tail ESS decreased from 905 to 780. 
 The lowest bulk ESS under both specifications was associated with the betweenness precision parameter. Under RS, this value fell below the commonly recommended minimum of 400 effective samples, indicating reduced Monte Carlo precision for this parameter.
-
-The complete diagnostic comparison, including the parameters associated with the reported extrema, is provided in Appendix Table~\ref{tab:prior_sensitivity_diagnostics}.
+The complete diagnostic comparison, including the parameters associated with the reported extrema, is provided in Table~\ref{tab:prior_sensitivity_diagnostics} of Appendix~\ref{app:prior_sensitivity}.
 
 Table~\ref{tab:prior_sensitivity_coefficients}
 compares the posterior means and 95\% highest-density
@@ -5286,8 +5289,7 @@ their magnitudes changed.
 
 In-sample posterior predictive checks were also compared
 to examine whether the alternative specification
-improved the reproduction of selected observed
-statistics.
+improved the posterior estimation of selected observed statistics.
 Table~\ref{tab:prior_sensitivity_ppc}
 reports the corresponding replicated statistics
 under both specifications.
@@ -5329,10 +5331,10 @@ Chokepoint
 \end{tabular}
 \end{table}
 
-Findings show that the alternative specification produced little
+The findings show that the alternative specification produced little
 change in the reported posterior predictive
 statistics, leaving the main discrepancies
-largely unresolved: for terminals, the replicated association between
+largely unresolved. For terminals, the replicated association between
 articulation-point and incident-global-bridge status
 remained negative, despite its positive observed
 correlation, and the boundary frequencies of HHI and
@@ -5344,9 +5346,9 @@ overestimated its median.
 Given the limited changes in posterior inference and predictive performance, together 
 with the minimum bulk ESS falling below the recommended threshold in the 
 alternative chokepoint fit, the original specification (ORG) was retained for the main analysis. 
-The response-specific precision specification (RS) therefore serves as a sensitivity assessment, 
-indicating that the main posterior findings are relatively robust to the considered changes 
-in prior assumptions, while the identified predictive limitations remain largely unresolved.
+The response-specific precision specification (RS) therefore serves as a sensitivity analysis, 
+indicating that the main posterior findings are reasonably robust under the alternative 
+prior specifications considered, while the identified predictive limitations remain largely unresolved.
 
 \section{Comparative discussion and limitations}
 \subsection{Model limitations and implications}
@@ -5357,8 +5359,7 @@ framework for examining common patterns across multiple
 measures of node importance in the LNG maritime network.
 Both models accommodate the bounded nature of the responses
 and their observed boundary values, while the
-posterior estimates satisfy the implemented MCMC diagnostic
-screening criteria.
+posterior estimates satisfy the MCMC diagnostic screening criteria considered.
 
 The terminal latent factor is associated with network
 centrality and counterparty diversification, whereas the
@@ -8194,7 +8195,7 @@ Articulation point--Connected to AP & 0.1665 & 0.0701 & 0.0103 & 0.1435 \\
 \label{app:prior_predictive}
 
 Table~\ref{tab:prior_predictive_boundary} reports
-the observed proportions of values equal to one
+the observed proportions of observations equal to one
 for the two one-inflated terminal responses,
 together with the corresponding mean proportions
 across prior predictive replications under the
@@ -8222,7 +8223,7 @@ Role-specific dependence
 \label{app:prior_sensitivity_diagnostics}
 
 Table~\ref{tab:prior_sensitivity_diagnostics} reports the maximum rank-normalised $\widehat{R}$ and minimum bulk and tail effective sample sizes for the original (ORG) and response-specific precision (RS) prior specifications of the rank-one models. 
-All four fits were obtained using four chains, each with 1,500 warm-up iterations and 2,000 retained draws, ensuring comparable sampling configurations.
+All four fits were obtained using four chains, each with 1,500 burn-in iterations and 2,000 retained draws, providing comparable sampling configurations.
 
 For terminals, the minimum bulk ESS was associated with the lagged exporter coefficient under both specifications, while the minimum tail ESS concerned the HHI boundary loading under ORG and a latent factor mean under RS. 
 For chokepoints, the betweenness precision parameter exhibited the lowest bulk ESS under both specifications, decreasing from 472 under ORG to 359 under RS. 
@@ -8595,11 +8596,11 @@ sample size statistics.
 \subsection{Autocorrelation diagnostics}
 \label{app:acf_diagnostics}
 
-The following figures show within-chain autocorrelation
+The figures presented in this section show within-chain autocorrelation
 functions for selected global parameters from the baseline
 models estimated using four chains, each with 20,000
-warm-up iterations and 30,000 retained draws.
-Parameters were selected using the lowest bulk ESS among
+burn-in iterations and 30,000 retained draws.
+Parameters were selected based on the lowest bulk ESS among
 regression coefficients and response loadings, the lowest
 bulk and tail ESS among all global parameters, and the
 PageRank anchor loading. 
