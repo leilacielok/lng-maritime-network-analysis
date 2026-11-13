@@ -1,7 +1,7 @@
 """Low-memory, resumable sequential PyMC sampling for PyMC 5.20.x.
 
-Requires: dask[array], h5netcdf. No thinning of sampled parameters.
-One chain per file; a combined NetCDF is assembled with dask-backed chunked I/O.
+Requires: dask[array], h5netcdf. 
+One chain per file.
 """
 import gc
 import json
