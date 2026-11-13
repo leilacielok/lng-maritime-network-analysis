@@ -2805,7 +2805,6 @@ Posterior summaries and convergence diagnostics were
 computed using ArviZ 0.21.0, with NumPy 1.26.4,
 pandas 2.3.3, and Matplotlib 3.9.2 used for data
 processing and visualisation.
-
 The assessment covered regression coefficients,
 response parameters, latent factors, factor means,
 and factor residuals. Several complementary diagnostics
@@ -2831,7 +2830,6 @@ regions have not been adequately explored
 The Geweke and Heidelberger--Welch diagnostics provided
 additional checks on individual chains
 \citep{geweke1992evaluating,heidelberger1983simulation}.
-
 The Geweke diagnostic compares the means of an early
 and a late segment of a chain, standardising their
 difference using a standard error that accounts for
@@ -2839,7 +2837,6 @@ autocorrelation. Under suitable stationarity conditions,
 the statistic has an asymptotic standard Normal
 distribution, with large absolute values suggesting
 inconsistency between the two segments.
-
 The Heidelberger--Welch procedure first assesses
 stationarity using a test based on the
 Cramér--von Mises statistic. If necessary, the test
@@ -3287,7 +3284,7 @@ betweenness precision parameter, indicating satisfactory convergence
 and sampling efficiency.
 
 Trace plots and within-chain autocorrelation functions are presented in
-Appendix~\ref{app:mcmc_diagnostics} and
+Appendix~\ref{app:node_intercept_mcmc_diagnostics} and
 provide additional visual evidence of sampling
 behaviour. In particular, the betweenness loading
 and precision parameters exhibit relatively
