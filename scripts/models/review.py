@@ -1,8 +1,5 @@
-"""Export a small review ZIP from an existing bounded-model run; never refit.
-
-Place in scripts/models/. Requires the existing lng-model environment.
-Posterior predictive checks are conditional, in-sample checks, not validation
-on unseen nodes/months. Role groups always refer to terminal_role_lag1.
+"""Export a small review ZIP from an existing bounded-model run.
+Posterior predictive checks are conditional, in-sample checks.
 """
 import argparse
 import hashlib

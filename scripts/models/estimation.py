@@ -1,20 +1,14 @@
 """Static rank-one criticality models conditional on consecutive activity.
 
 Select terminal or chokepoint with --node-type.
-Chokepoints: Beta PageRank/flow share; zero-inflated Beta betweenness.
 Chokepoint bridge indicator omitted (near duplicate of articulation).
 
-PageRank: Beta; HHI and dependence: one-inflated Beta, on original scale.
-Interior means and probabilities of one have distinct factor loadings.
-Structural responses: Bernoulli. Factor variance is one; PageRank loading positive.
-No activity component, country, throughput or AR(1).
 Optional --model node_effects adds hierarchical repeated-node intercepts.
 Default --model-group baseline uses the original priors; CON and RS select
-the alternative sensitivity profiles. Both profiles are provisional: check prior predictions
-and posterior sensitivity before interpreting scores.
+the alternative sensitivity profiles.
 --prior-profile response_precision keeps regularized priors but uses
 response-specific Beta precision medians as a third sensitivity candidate.
-Place this file in scripts/models/ to resolve the existing default panel paths.
+--low-ram for using less memory.
 """
 
 import argparse

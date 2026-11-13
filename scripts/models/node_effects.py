@@ -1,15 +1,14 @@
 """Rank-one model with persistent, hierarchical node intercepts.
 
 Run from the repository root:
-    python scripts/models/node_effects.py --node-type terminal --check-only
-    python scripts/models/node_effects.py --node-type terminal --prior-only
+    python scripts/models/node_effects.py --node-type terminal
+    python scripts/models/node_effects.py --node-type chokepoint
 
-Uses estimation.py and the baseline likelihoods; no additional latent rank.
+Uses estimation.py and the baseline likelihoods.
 mu_raw ~ Normal(0,1); sigma_mu ~ HalfNormal(node_sd_prior);
 mu_node = sigma_mu * mu_raw; factor ~ Normal(X beta + mu_node[node_index], 1).
-The population mean of node effects is fixed to zero; the realised node effects
-are not constrained to sum to zero. This is an independent random-effects
-specification: it does not model dependence between mu_node and covariates.
+Independent random-effects specification: the population mean of node effects 
+is fixed to zero; the realised node effects are not constrained to sum to zero.
 """
 import numpy as np
 import pandas as pd
