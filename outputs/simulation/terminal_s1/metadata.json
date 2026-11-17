@@ -1,0 +1,30 @@
+{
+  "kind": "terminal",
+  "scenario": "nontriangular",
+  "seed": 42,
+  "n": 1000,
+  "predictors": [
+    "neighbor_activity_lag1",
+    "log1p_mean_voyage_distance_lag1",
+    "month_sin",
+    "month_cos",
+    "log1p_capacity_mtpa",
+    "terminal_age",
+    "exporter_lag1"
+  ],
+  "continuous_responses": [
+    "role_specific_pagerank",
+    "counterparty_hhi_terminal",
+    "role_specific_dependence"
+  ],
+  "binary_responses": [
+    "is_articulation_point",
+    "has_incident_global_bridge",
+    "connected_to_articulation_point"
+  ],
+  "prior_profile": "original",
+  "precision_prior_sd": 0.7,
+  "panel": null,
+  "generative_parameters": "fixed independently of empirical estimates",
+  "covariates": "fully synthetic; numeric predictors standardized"
+}

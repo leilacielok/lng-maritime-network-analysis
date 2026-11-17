@@ -35,15 +35,20 @@ def _sample_one_chain(data, kind, args, index, seed, start, path):
     from baseline import build_model
     if args.model == 'node_effects':
         from node_effects import build_factor_mean
-        model = build_model(data, factor_builder=build_factor_mean, rank=args.rank)
+        model = build_model(data, factor_builder=build_factor_mean, rank=args.rank, residual_process=args.residual_process)
     else:
-        model = build_model(data, rank=args.rank)
+        model = build_model(data, rank=args.rank, residual_process=args.residual_process, rank_two_structure=args.rank_two_structure)
     print(f'Sampling chain {index+1}/{args.chains}; saving to {path}', flush=True)
     # IMPORTANT: Never pass a manually created NDArray as `trace=` to pm.sample.
     # That code path produced prior-like draws in the verified synthetic test.
     # Use PyMC's own trace backend and exclude only bulky deterministic outputs.
     original_deterministics = list(model.deterministics)
     model.deterministics = _sampling_deterministics(model)
+    # AR(1) factor is deterministic (unlike the IID stochastic factor).
+    # Retain it for existing review.py and posterior predictive summaries.
+    # This has disk/RAM cost comparable to the IID factor trace.
+    if args.residual_process == 'ar1':
+        model.deterministics += [v for v in original_deterministics if v.name == 'factor']
     try:
         with model:
             idata = pm.sample(
@@ -72,7 +77,9 @@ def _sample_one_chain(data, kind, args, index, seed, start, path):
         'target_accept': args.target_accept,
         'model': args.model,
         'rank': args.rank,
+        "rank_two_structure": args.rank_two_structure,
         'node_type': kind,
+        'residual_process': args.residual_process,
     }, indent=2), encoding='utf-8')
     del idata
     gc.collect()
@@ -86,9 +93,12 @@ def run_chains(model, data, kind, args, destination):
 
     chain_dir = destination / 'chains'
     chain_dir.mkdir(exist_ok=True)
-    starts = (rank_two_initial_values(data, args.chains, args.seed) if args.rank == 2
+    starts = (rank_two_initial_values(data, args.chains, args.seed, structure=args.rank_two_structure) if args.rank == 2
               else initial_values(data, args.chains, args.seed) if kind == 'terminal'
               else chokepoint_initial_values(data, args.chains, args.seed))
+    if args.residual_process == "ar1":
+        from ar1 import ar1_initial_values
+        starts = ar1_initial_values(starts, data)
     seeds = np.random.SeedSequence(args.seed).generate_state(args.chains).tolist()
     pending = []
     for index in range(args.chains):
@@ -107,7 +117,10 @@ def run_chains(model, data, kind, args, destination):
                 'seed': int(seeds[index]),
                 'target_accept': args.target_accept,
                 'model': args.model, 'rank': args.rank, 'node_type': kind,
+                'residual_process': args.residual_process,
+                "rank_two_structure": args.rank_two_structure,
             }
+            metadata.setdefault("rank_two_structure", "unconstrained")
             if metadata != expected:
                 raise RuntimeError(f'Chain metadata mismatch: {path}. Use a new --run-name.')
             with xr.open_dataset(path, group='posterior') as ds:

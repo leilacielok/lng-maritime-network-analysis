@@ -1,0 +1,9 @@
+,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat
+precision_cont [role_specific_pagerank],0.561621,0.338807,1103.790195,2174.835168,1.002204
+"loading_cont [role_specific_pagerank, factor_1]",0.001249,0.00062,1236.244524,2735.574638,1.001011
+intercept_cont [role_specific_pagerank],0.001087,0.000452,2261.102592,5132.631987,1.002502
+precision_cont [counterparty_hhi_terminal],0.027213,0.021671,2795.80906,4399.248136,1.001586
+"loading_cont [counterparty_hhi_terminal, factor_2]",0.000993,0.000473,3022.082663,4937.257075,1.00156
+"beta [exporter_lag1, factor_1]",0.001088,0.000458,4688.559147,11590.830343,1.000682
+intercept_cont [counterparty_hhi_terminal],0.000649,0.000328,5174.121344,10018.345408,1.00069
+"beta [exporter_lag1, factor_2]",0.001144,0.000513,5234.559072,12201.270143,1.000247

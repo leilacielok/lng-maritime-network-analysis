@@ -1,0 +1,116 @@
+{
+  "model": "baseline",
+  "rank": 1,
+  "residual_process": "ar1",
+  "node_sd_prior": 1.0,
+  "terminal_panel": "C:\\Users\\Leila\\thesis_code\\data\\processed\\model_ready\\terminal_criticality_model_panel.csv",
+  "chokepoint_panel": "C:\\Users\\Leila\\thesis_code\\data\\processed\\model_ready\\chokepoint_criticality_model_panel.csv",
+  "output_dir": "C:\\Users\\Leila\\thesis_code\\outputs\\model",
+  "prior_profile": "original",
+  "model_group": "baseline",
+  "precision_prior_sd": 0.7,
+  "run_name": "ar1_chokepoint_5000_10000",
+  "node_type": "chokepoint",
+  "check_only": false,
+  "prior_only": false,
+  "low_ram": true,
+  "draws": 10000,
+  "tune": 5000,
+  "chains": 4,
+  "cores": 2,
+  "prior_draws": 50,
+  "target_accept": 0.8,
+  "seed": 20261008,
+  "likelihood": "Beta PageRank/flow; zero-inflated Beta betweenness",
+  "prior_specification": {
+    "profile": "original",
+    "beta_sd": 0.5,
+    "pagerank_loading_sd": 1.0,
+    "other_loading_sd": [
+      1.0,
+      1.0
+    ],
+    "binary_loading_sd": 1.0,
+    "interior_intercept_mean": [
+      -4.0,
+      -5.0,
+      -4.0
+    ],
+    "interior_intercept_sd": [
+      1.5,
+      1.5,
+      1.5
+    ],
+    "binary_intercept_sd": 2.0,
+    "boundary_intercept_mean": -5.0,
+    "boundary_intercept_sd": 1.5,
+    "boundary_loading_sd": 1.0,
+    "precision_median": [
+      10.0,
+      10.0,
+      10.0
+    ],
+    "precision_response_order": [
+      "pagerank",
+      "betweenness",
+      "share_monthly_network_flow"
+    ]
+  },
+  "precision_prior": {
+    "distribution": "LogNormal",
+    "median_by_response": {
+      "pagerank": 10.0,
+      "betweenness": 10.0,
+      "share_monthly_network_flow": 10.0
+    },
+    "log_sd": 0.7
+  },
+  "node_effect_specification": null,
+  "source_sha256": {
+    "common.py": "f944ced130124254d390b34f0a2a7980eb597a199ad36f42da638172f7be051b",
+    "baseline.py": "dbbe49d4e4ad1c3e64656fd62b4211dc7253c90b24e1a8f7cbcd02b495879b23",
+    "estimation.py": "a6d6dcaac46c46c481dfc6f4ad0d2573ac47fd9ac756b63bffe683dc4bd40db5",
+    "node_effects.py": "a41834e26b334a64e1033ac8a14c938c8c62dabf72a6a5bd6346efaee5003eec",
+    "diagnostics.py": "734dd28d9624822fa46278c5b73928e13827b8fab60007fac32d2d059707564e",
+    "ar1.py": "7d55d1405ec4fe5bfdae3392fa3ac9db14fd7dd180052cf76d1e8c5e3736e554",
+    "low_ram.py": "3bf7cc00eb6f51dc3d8976d472f7debc7bcf3dbf3154655e8c6c2a8b0e05034e",
+    "review.py": "92bf461d39ef5fcc0d9400b6c6effa4348bf262bd65d729db86bded06c90eee6"
+  },
+  "started_utc": "20261114T132905193025Z",
+  "command_argv": [
+    "scripts/models/estimation.py",
+    "--node-type",
+    "chokepoint",
+    "--rank",
+    "1",
+    "--residual-process",
+    "ar1",
+    "--model",
+    "baseline",
+    "--low-ram",
+    "--cores",
+    "2",
+    "--chains",
+    "4",
+    "--tune",
+    "5000",
+    "--draws",
+    "10000",
+    "--prior-draws",
+    "50",
+    "--target-accept",
+    "0.80",
+    "--run-name",
+    "ar1_chokepoint_5000_10000"
+  ],
+  "python": "3.12.15",
+  "packages": {
+    "numpy": "1.26.4",
+    "pandas": "2.3.3",
+    "pymc": "5.20.1",
+    "pytensor": "2.27.1",
+    "arviz": "0.21.0",
+    "matplotlib": "3.9.2"
+  },
+  "script_sha256": "a6d6dcaac46c46c481dfc6f4ad0d2573ac47fd9ac756b63bffe683dc4bd40db5"
+}

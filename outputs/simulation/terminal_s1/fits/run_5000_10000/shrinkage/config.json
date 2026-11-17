@@ -1,0 +1,10 @@
+{
+  "dataset_hash": "c1df362ce10423af60df6a3b799828134cde5204f7b5bc34b9e0644587c9d161",
+  "variant": "shrinkage",
+  "draws": 10000,
+  "tune": 5000,
+  "chains": 4,
+  "seed": 123,
+  "target_accept": 0.8,
+  "shrink_sd": 0.25
+}

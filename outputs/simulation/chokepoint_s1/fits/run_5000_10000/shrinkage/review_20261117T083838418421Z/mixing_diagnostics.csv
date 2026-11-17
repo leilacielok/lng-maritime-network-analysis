@@ -1,0 +1,30 @@
+,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat
+"beta[neighbor_activity_lag1, factor_1]",0.005,0.002,215.456,535.680,1.013
+"beta[neighbor_activity_lag1, factor_2]",0.091,0.052,7.042,25.016,1.533
+"beta[log1p_mean_voyage_distance_lag1, factor_1]",0.001,0.001,1854.625,2045.037,1.002
+"beta[log1p_mean_voyage_distance_lag1, factor_2]",0.011,0.003,52.397,126.153,1.064
+"beta[month_sin, factor_1]",0.000,0.000,33469.059,32995.120,1.000
+"beta[month_sin, factor_2]",0.003,0.000,285.985,1927.338,1.014
+"beta[month_cos, factor_1]",0.003,0.001,306.611,730.236,1.010
+"beta[month_cos, factor_2]",0.059,0.032,7.052,24.941,1.531
+"loading_binary[is_articulation_point, factor_1]",0.006,0.005,719.174,611.403,1.005
+"loading_binary[is_articulation_point, factor_2]",0.064,0.022,26.554,68.379,1.116
+"loading_binary[connected_to_articulation_point, factor_1]",0.004,0.002,743.396,1044.658,1.007
+"loading_binary[connected_to_articulation_point, factor_2]",0.060,0.027,8.480,28.014,1.401
+intercept_cont[pagerank],0.001,0.000,5256.230,14090.910,1.001
+intercept_cont[betweenness],0.001,0.000,6100.296,11287.563,1.000
+intercept_cont[share_monthly_network_flow],0.000,0.000,15383.901,23442.200,1.000
+intercept_binary[is_articulation_point],0.000,0.000,37542.754,29681.013,1.000
+intercept_binary[connected_to_articulation_point],0.000,0.000,67564.569,28206.903,1.000
+intercept_zero[betweenness],0.001,0.001,24730.097,23065.394,1.000
+"loading_zero[betweenness, factor_1]",0.011,0.004,378.606,1041.457,1.008
+"loading_zero[betweenness, factor_2]",0.143,0.073,7.095,24.506,1.522
+precision_cont[pagerank],0.555,0.354,2239.290,3849.814,1.002
+precision_cont[betweenness],0.222,0.162,3162.172,5141.654,1.000
+precision_cont[share_monthly_network_flow],0.146,0.101,5160.711,9167.311,1.000
+"loading_cont[pagerank, factor_1]",0.006,0.006,242.749,384.609,1.013
+"loading_cont[pagerank, factor_2]",0.099,0.044,10.550,43.250,1.306
+"loading_cont[betweenness, factor_1]",0.016,0.010,161.533,321.314,1.021
+"loading_cont[betweenness, factor_2]",0.302,0.173,7.104,27.124,1.548
+"loading_cont[share_monthly_network_flow, factor_1]",0.010,0.005,158.366,327.034,1.022
+"loading_cont[share_monthly_network_flow, factor_2]",0.195,0.112,7.115,28.490,1.532

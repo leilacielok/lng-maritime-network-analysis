@@ -1,0 +1,20 @@
+{
+  "divergences": 43,
+  "nondivergent_draws": 39957,
+  "selected_parameters": [
+    "precision_cont [share_monthly_network_flow]",
+    "intercept_cont [share_monthly_network_flow]",
+    "loading_binary [is_articulation_point, factor_2]",
+    "beta [month_cos, factor_2]",
+    "beta [neighbor_activity_lag1, factor_1]",
+    "beta [month_cos, factor_1]",
+    "loading_cont [share_monthly_network_flow, factor_2]",
+    "beta [log1p_mean_voyage_distance_lag1, factor_2]"
+  ],
+  "selection_method": "Descending two-sample Kolmogorov-Smirnov distance",
+  "candidate_scope": "Global parameters and node effects; observation-level arrays excluded",
+  "note": "Exploratory marginal association, not a cause or attribution of divergences; no hypothesis-test p-values.",
+  "candidate_count": 28,
+  "warning": "Exploratory ranking; uncertainty is greater when divergent draws are few. No count threshold is applied.",
+  "status": "created"
+}

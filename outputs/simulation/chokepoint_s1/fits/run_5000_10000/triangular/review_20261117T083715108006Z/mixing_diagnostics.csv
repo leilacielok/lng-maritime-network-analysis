@@ -1,0 +1,30 @@
+,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat
+"beta[neighbor_activity_lag1, factor_1]",0.000,0.000,18662.547,24126.926,1.000
+"beta[neighbor_activity_lag1, factor_2]",0.000,0.000,20279.361,26794.980,1.000
+"beta[log1p_mean_voyage_distance_lag1, factor_1]",0.000,0.000,20113.721,24772.304,1.000
+"beta[log1p_mean_voyage_distance_lag1, factor_2]",0.000,0.000,17204.931,22717.438,1.000
+"beta[month_sin, factor_1]",0.000,0.000,22384.953,24896.003,1.000
+"beta[month_sin, factor_2]",0.000,0.000,23507.515,26497.670,1.000
+"beta[month_cos, factor_1]",0.000,0.000,23922.415,26811.333,1.000
+"beta[month_cos, factor_2]",0.000,0.000,20297.031,24544.929,1.000
+"loading_binary[is_articulation_point, factor_1]",0.001,0.001,10754.473,17000.001,1.000
+"loading_binary[is_articulation_point, factor_2]",0.001,0.000,18699.668,22847.971,1.000
+"loading_binary[connected_to_articulation_point, factor_1]",0.001,0.000,20845.864,24435.145,1.000
+"loading_binary[connected_to_articulation_point, factor_2]",0.001,0.000,21587.979,26000.329,1.000
+intercept_cont[pagerank],0.001,0.000,3840.607,7542.520,1.001
+intercept_cont[betweenness],0.001,0.000,2952.785,6156.588,1.002
+intercept_cont[share_monthly_network_flow],0.000,0.000,7138.924,14446.947,1.001
+intercept_binary[is_articulation_point],0.001,0.000,18794.943,24587.767,1.000
+intercept_binary[connected_to_articulation_point],0.000,0.000,31704.433,26293.343,1.000
+intercept_zero[betweenness],0.002,0.002,11347.059,12603.141,1.000
+"loading_zero[betweenness, factor_1]",0.001,0.001,23614.032,25622.296,1.000
+"loading_zero[betweenness, factor_2]",0.003,0.002,6634.340,9610.871,1.001
+precision_cont[pagerank],0.645,0.489,1538.005,3124.040,1.001
+precision_cont[betweenness],0.367,0.253,1606.664,3060.969,1.005
+precision_cont[share_monthly_network_flow],0.176,0.108,2817.089,5206.547,1.003
+"loading_cont[pagerank, factor_1]",0.001,0.000,1685.974,4142.589,1.001
+"loading_cont[pagerank, factor_2]",0.000,,40000.000,40000.000,
+"loading_cont[betweenness, factor_1]",0.001,0.000,5787.935,11931.550,1.001
+"loading_cont[betweenness, factor_2]",0.002,0.001,1646.492,3185.976,1.004
+"loading_cont[share_monthly_network_flow, factor_1]",0.000,0.000,7671.712,14423.004,1.001
+"loading_cont[share_monthly_network_flow, factor_2]",0.001,0.000,3249.051,6688.426,1.003

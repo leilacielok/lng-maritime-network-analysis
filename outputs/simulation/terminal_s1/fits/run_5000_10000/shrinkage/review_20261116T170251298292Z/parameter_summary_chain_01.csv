@@ -1,0 +1,42 @@
+,mean,sd,hdi_3%,hdi_97%
+"beta[neighbor_activity_lag1, factor_1]",0.188,0.040,0.117,0.270
+"beta[neighbor_activity_lag1, factor_2]",-0.058,0.040,-0.131,0.018
+"beta[log1p_mean_voyage_distance_lag1, factor_1]",-0.065,0.042,-0.141,0.015
+"beta[log1p_mean_voyage_distance_lag1, factor_2]",-0.194,0.039,-0.268,-0.123
+"beta[month_sin, factor_1]",0.065,0.039,-0.009,0.136
+"beta[month_sin, factor_2]",-0.064,0.037,-0.134,0.003
+"beta[month_cos, factor_1]",-0.120,0.040,-0.198,-0.047
+"beta[month_cos, factor_2]",0.005,0.038,-0.072,0.073
+"beta[log1p_capacity_mtpa, factor_1]",0.009,0.043,-0.074,0.088
+"beta[log1p_capacity_mtpa, factor_2]",-0.210,0.037,-0.280,-0.140
+"beta[terminal_age, factor_1]",0.143,0.040,0.065,0.217
+"beta[terminal_age, factor_2]",-0.071,0.038,-0.144,-0.002
+"beta[exporter_lag1, factor_1]",0.304,0.087,0.139,0.465
+"beta[exporter_lag1, factor_2]",-0.457,0.081,-0.606,-0.301
+"loading_binary[is_articulation_point, factor_1]",0.095,0.110,-0.115,0.289
+"loading_binary[is_articulation_point, factor_2]",-0.911,0.088,-1.071,-0.740
+"loading_binary[has_incident_global_bridge, factor_1]",-1.247,0.140,-1.519,-0.999
+"loading_binary[has_incident_global_bridge, factor_2]",-0.231,0.122,-0.460,-0.002
+"loading_binary[connected_to_articulation_point, factor_1]",0.368,0.085,0.214,0.530
+"loading_binary[connected_to_articulation_point, factor_2]",0.200,0.074,0.061,0.335
+intercept_cont[role_specific_pagerank],-3.446,0.049,-3.536,-3.351
+intercept_cont[counterparty_hhi_terminal],-0.001,0.047,-0.089,0.088
+intercept_cont[role_specific_dependence],-0.014,0.032,-0.071,0.047
+intercept_binary[is_articulation_point],-0.437,0.087,-0.598,-0.269
+intercept_binary[has_incident_global_bridge],-0.449,0.098,-0.634,-0.269
+intercept_binary[connected_to_articulation_point],-0.678,0.073,-0.813,-0.540
+intercept_one[counterparty_hhi_terminal],-1.226,0.082,-1.379,-1.072
+intercept_one[role_specific_dependence],-1.216,0.085,-1.382,-1.062
+"loading_one[counterparty_hhi_terminal, factor_1]",-0.464,0.119,-0.679,-0.238
+"loading_one[counterparty_hhi_terminal, factor_2]",0.215,0.087,0.053,0.382
+"loading_one[role_specific_dependence, factor_1]",0.387,0.100,0.195,0.573
+"loading_one[role_specific_dependence, factor_2]",0.119,0.081,-0.036,0.266
+precision_cont[role_specific_pagerank],98.762,17.126,68.292,131.222
+precision_cont[counterparty_hhi_terminal],9.718,1.372,7.385,12.290
+precision_cont[role_specific_dependence],13.050,1.180,11.019,15.317
+"loading_cont[role_specific_pagerank, factor_1]",0.092,0.065,0.000,0.208
+"loading_cont[role_specific_pagerank, factor_2]",-0.817,0.041,-0.893,-0.741
+"loading_cont[counterparty_hhi_terminal, factor_1]",-0.732,0.057,-0.841,-0.630
+"loading_cont[counterparty_hhi_terminal, factor_2]",-0.211,0.065,-0.337,-0.102
+"loading_cont[role_specific_dependence, factor_1]",0.485,0.034,0.425,0.550
+"loading_cont[role_specific_dependence, factor_2]",-0.079,0.045,-0.153,0.015

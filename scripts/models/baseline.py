@@ -42,7 +42,11 @@ def prior_specification(kind, profile="regularized"):
     }
 
 
-def build_terminal_model(data, factor_builder=None):
+def build_terminal_model(
+    data,
+    factor_builder=None,
+    residual_process="iid"
+):
     import pymc as pm
     import pytensor.tensor as pt
 
@@ -57,8 +61,19 @@ def build_terminal_model(data, factor_builder=None):
         beta = pm.Normal("beta", 0, priors["beta_sd"], dims="predictor")
         factor_mean = (pm.Deterministic("factor_mean", pt.dot(data["x"], beta), dims="obs")
                        if factor_builder is None else factor_builder(data, beta))
-        factor = pm.Normal("factor", mu=factor_mean, sigma=1, dims="obs")
-        pm.Deterministic("factor_residual", factor - factor_mean, dims="obs")
+        if residual_process =="iid":
+            factor = pm.Normal("factor", mu=factor_mean, sigma=1, dims="obs")
+            pm.Deterministic("factor_residual", factor - factor_mean, dims="obs")
+        elif residual_process == "ar1":
+            from ar1 import build_ar1_factor
+            factor = build_ar1_factor(
+                data,
+                factor_mean
+            )
+        else:
+            raise ValueError(
+            f"Unknown residual process: {residual_process}"
+        )
         # PageRank is the first response in both specifications.
         anchor = pm.HalfNormal("pagerank_loading", priors["pagerank_loading_sd"])
         other = pm.Normal("other_loadings", 0, priors["other_loading_sd"], dims="other_continuous")
@@ -84,7 +99,7 @@ def build_terminal_model(data, factor_builder=None):
     return model
 
 
-def build_chokepoint_model(data, factor_builder=None):
+def build_chokepoint_model(data, factor_builder=None, residual_process="iid"):
     import pymc as pm
     import pytensor.tensor as pt
     priors = prior_specification("chokepoint", data.get("prior_profile", "regularized"))
@@ -98,8 +113,17 @@ def build_chokepoint_model(data, factor_builder=None):
         beta = pm.Normal("beta", 0, priors["beta_sd"], dims="predictor")
         mean = (pm.Deterministic("factor_mean", pt.dot(data["x"], beta), dims="obs")
                 if factor_builder is None else factor_builder(data, beta))
-        factor = pm.Normal("factor", mean, 1, dims="obs")
-        pm.Deterministic("factor_residual", factor - mean, dims="obs")
+        if residual_process == "iid":
+            factor = pm.Normal("factor", mean, 1, dims="obs")
+            pm.Deterministic("factor_residual", factor - mean, dims="obs")
+        elif residual_process == "ar1":
+            from ar1 import build_ar1_factor
+            factor = build_ar1_factor(
+                data,
+                mean
+            )
+        else:
+            raise ValueError(f"Unknown residual process: {residual_process}")
         anchor = pm.HalfNormal("pagerank_loading", priors["pagerank_loading_sd"])
         other = pm.Normal("other_loadings", 0, priors["other_loading_sd"], dims="other_continuous")
         lc = pm.Deterministic("loading_cont", pt.concatenate([anchor[None], other]), dims="continuous")
@@ -122,17 +146,32 @@ def build_chokepoint_model(data, factor_builder=None):
     return model
 
 
-def build_model(data, factor_builder=None, rank=1):
+def build_model(
+    data,
+    factor_builder=None,
+    rank=1,
+    residual_process="iid",
+    rank_two_structure="unconstrained"
+):    
     if rank == 2:
+        if residual_process != "iid":
+            raise ValueError(
+                "AR(1) is currently implemented only for rank-one models"
+            )
         if factor_builder is not None:
             raise ValueError("rank=2 with node effects is not implemented")
-        return build_rank_two_model(data)
+        return build_rank_two_model(data, structure=rank_two_structure)
+    if rank_two_structure != "unconstrained":
+        raise ValueError(
+            "rank_two_structure is supported only with rank=2")
     if rank != 1:
         raise ValueError("rank must be 1 or 2")
-    return (build_terminal_model(data, factor_builder)
-            if "exporter_lag1" in data["audit"]["predictors"]
-            else build_chokepoint_model(data, factor_builder))
-
+    
+    if "exporter_lag1" in data["audit"]["predictors"]:
+        return build_terminal_model(data, factor_builder, residual_process)
+    
+    return build_rank_two_model(
+        data, structure=rank_two_structure)
 
 def chokepoint_initial_values(data, chains, seed):
     rng = np.random.default_rng(seed)
@@ -200,12 +239,11 @@ def initial_values(data, chains, seed):
 
 
 
-def build_rank_two_model(data):
-    """Unconstrained second factor except the original positive PageRank first loading.
+def build_rank_two_model(data, structure="unconstrained"):
+    """Rank-two model with optional triangular identification."""
 
-    No triangular constraints or posterior rotation. Other priors and likelihoods
-    are those of the rank-one baseline. Raw factor coordinates are not identified.
-    """
+    if structure not in ("unconstrained", "triangular"):
+        raise ValueError("structure must be 'unconstrained' or 'triangular'")
     import pymc as pm
     import pytensor.tensor as pt
 
@@ -226,14 +264,64 @@ def build_rank_two_model(data):
         factor = pm.Normal("factor", mu=mean, sigma=1, dims=("obs", "factor_dim"))
         pm.Deterministic("factor_residual", factor - mean, dims=("obs", "factor_dim"))
 
-        anchor = pm.HalfNormal("pagerank_loading", priors["pagerank_loading_sd"])
-        pagerank_second = pm.Normal("pagerank_second_loading", 0, priors["pagerank_loading_sd"])
-        other = pm.Normal("other_loadings", 0,
-                          np.asarray(priors["other_loading_sd"])[:, None],
-                          dims=("other_continuous", "factor_dim"))
-        lc = pm.Deterministic("loading_cont",
-                              pt.concatenate([pt.stack([anchor, pagerank_second])[None, :], other], axis=0),
-                              dims=("continuous", "factor_dim"))
+        anchor = pm.HalfNormal(
+            "pagerank_loading",
+            priors["pagerank_loading_sd"])
+
+        if structure == "triangular":
+            # Lower-triangular leading block:
+            # [[positive, 0],
+            #  [free, positive],
+            #  [free, free]]
+
+            pagerank_second = pt.as_tensor_variable(0.0)
+
+            other_first = pm.Normal(
+                "other_first_loadings",
+                mu=0,
+                sigma=np.asarray(priors["other_loading_sd"]),
+                dims="other_continuous"
+            )
+
+            second_diagonal = pm.HalfNormal(
+                "second_diagonal_loading",
+                sigma=float(priors["other_loading_sd"][0])
+            )
+
+            remaining_second = pm.Normal(
+                "remaining_second_loading",
+                mu=0,
+                sigma=float(priors["other_loading_sd"][1])
+            )
+
+            other = pt.stack(
+                [other_first, pt.stack([
+                            second_diagonal,
+                            remaining_second])],
+                axis=1)
+
+            pm.Deterministic(
+                "other_loadings",
+                other,
+                dims=("other_continuous", "factor_dim"))
+        else:
+            pagerank_second = pm.Normal(
+                "pagerank_second_loading",
+                mu=0,
+                sigma=priors["pagerank_loading_sd"])
+
+            other = pm.Normal(
+                "other_loadings",
+                mu=0,
+                sigma=np.asarray(priors["other_loading_sd"])[:, None],
+                dims=("other_continuous", "factor_dim"))
+
+        lc = pm.Deterministic(
+            "loading_cont",
+            pt.concatenate(
+                [pt.stack([anchor, pagerank_second])[None, :], other],
+                axis=0),
+            dims=("continuous", "factor_dim"))
         lb = pm.Normal("loading_binary", 0, priors["binary_loading_sd"],
                        dims=("binary", "factor_dim"))
         ac = pm.Normal("intercept_cont", priors["interior_intercept_mean"],
@@ -266,7 +354,12 @@ def build_rank_two_model(data):
     return model
 
 
-def rank_two_initial_values(data, chains, seed):
+def rank_two_initial_values(
+    data,
+    chains,
+    seed,
+    structure="unconstrained"
+):
     """Initialise both factors with distinct small perturbations, no rotation."""
     rng = np.random.default_rng(seed)
     kind = "terminal" if "exporter_lag1" in data["audit"]["predictors"] else "chokepoint"
@@ -289,8 +382,6 @@ def rank_two_initial_values(data, chains, seed):
         init = {"beta": b + rng.normal(0, .03, (q, 2)),
                 "factor": factors + rng.normal(0, .05, (n, 2)),
                 "pagerank_loading": float(rng.uniform(.6, .8)),
-                "pagerank_second_loading": float(rng.normal(0, .05)),
-                "other_loadings": rng.normal(0, .05, (2, 2)),
                 "loading_binary": rng.normal(0, .05, (k, 2)),
                 "intercept_cont": np.log(interior_means / (1 - interior_means)) + rng.normal(0, .03, 3),
                 "intercept_binary": np.log(binary_probs / (1 - binary_probs)) + rng.normal(0, .03, k),
@@ -299,5 +390,25 @@ def rank_two_initial_values(data, chains, seed):
                     np.log(boundary_probs / (1 - boundary_probs)) + rng.normal(0, .03, len(boundary_probs)),
                 "loading_one" if kind == "terminal" else "loading_zero":
                     rng.normal(0, .05, (len(boundary_probs), 2))}
+        if structure == "triangular":
+            init["other_first_loadings"] = rng.normal(
+                0, 0.05, 2)
+
+            init["second_diagonal_loading"] = float(
+                rng.uniform(0.1, 0.3))
+
+            init["remaining_second_loading"] = float(
+                rng.normal(0, 0.05))
+
+        elif structure == "unconstrained":
+
+            init["pagerank_second_loading"] = float(
+                rng.normal(0, 0.05))
+
+            init["other_loadings"] = rng.normal(
+                0, 0.05, (2, 2))
+        else:
+            raise ValueError(f"Unknown rank-two structure: {structure}")
+        
         starts.append(init)
     return starts

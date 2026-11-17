@@ -1,0 +1,10 @@
+{
+  "chain_files": "C:\\Users\\Leila\\thesis_code\\outputs\\model\\rank_two\\triangular\\terminal\\terminal_triangular_5000_10000\\terminal\\chains",
+  "chains": 4,
+  "tune_per_chain": 5000,
+  "retained_per_chain": 10000,
+  "posterior_predictive_draws_per_chain": 100,
+  "observation_level_deterministics_not_stored": true,
+  "posterior_draws_thinned": false,
+  "note": "PPC is a subset. Global diagnostics are computed separately; run review.py for detailed plots."
+}

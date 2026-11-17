@@ -1,0 +1,18 @@
+{
+  "divergences": 0,
+  "divergence_pct": 0.0,
+  "max_rhat_global": 1.002502,
+  "min_ess_bulk_global": 1103.790195,
+  "min_ess_tail_global": 2174.835168,
+  "bfmi_by_chain": [
+    0.22817756597529598,
+    0.22017808922976334,
+    0.21988673103298886,
+    0.2021263460683999
+  ],
+  "nonfinite_global_diagnostics": 1,
+  "max_rhat_factor": 1.000737,
+  "min_ess_bulk_factor": 6022.54696,
+  "min_ess_tail_factor": 10519.345402,
+  "passes_basic_checks": false
+}

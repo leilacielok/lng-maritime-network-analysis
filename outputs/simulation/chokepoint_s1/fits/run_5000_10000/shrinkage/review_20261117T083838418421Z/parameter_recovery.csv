@@ -1,0 +1,30 @@
+parameter,coordinates,true,posterior_mean,q025,q975,covered_95pct,absolute_error,rotation_sensitive
+beta,"{""predictor"": ""neighbor_activity_lag1"", ""factor_dim"": ""factor_1""}",0.22,0.048986589694060986,-0.08789288063870843,0.18461257178446203,False,0.17101341030593903,True
+beta,"{""predictor"": ""neighbor_activity_lag1"", ""factor_dim"": ""factor_2""}",-0.1,-0.10847273536217063,-0.29158581391209243,0.2657319982415135,True,0.008472735362170622,True
+beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1"", ""factor_dim"": ""factor_1""}",0.12,0.2198314471260801,0.13795821194357347,0.29757086863772686,False,0.09983144712608011,True
+beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1"", ""factor_dim"": ""factor_2""}",0.2,-0.016603377689209744,-0.16441144480988437,0.14234131246005746,False,0.21660337768920976,True
+beta,"{""predictor"": ""month_sin"", ""factor_dim"": ""factor_1""}",0.08,0.05933841731326785,-0.015293060178636887,0.13312066731326494,True,0.020661582686732155,True
+beta,"{""predictor"": ""month_sin"", ""factor_dim"": ""factor_2""}",0.04,-0.004301715370699639,-0.08779090930631901,0.08107075471712577,True,0.04430171537069964,True
+beta,"{""predictor"": ""month_cos"", ""factor_dim"": ""factor_1""}",-0.06,0.057488922044642655,-0.053161692939828614,0.16146962998086017,False,0.11748892204464265,True
+beta,"{""predictor"": ""month_cos"", ""factor_dim"": ""factor_2""}",0.08,0.06865804153636419,-0.18938321667507296,0.21317708957014386,True,0.01134195846363581,True
+loading_cont,"{""continuous"": ""pagerank"", ""factor_dim"": ""factor_1""}",0.7,0.774972927560018,0.5620377524364869,0.9012227479853675,True,0.07497292756001805,True
+loading_cont,"{""continuous"": ""pagerank"", ""factor_dim"": ""factor_2""}",0.5,-0.12488122668494693,-0.5925734973376922,0.5049435683258215,True,0.6248812266849469,True
+loading_cont,"{""continuous"": ""betweenness"", ""factor_dim"": ""factor_1""}",-0.45,0.3283198703857825,-0.14784542308749168,0.686530128659624,False,0.7783198703857825,True
+loading_cont,"{""continuous"": ""betweenness"", ""factor_dim"": ""factor_2""}",0.75,0.35279602535870147,-0.8196294637519806,0.8607842664278951,True,0.39720397464129853,True
+loading_cont,"{""continuous"": ""share_monthly_network_flow"", ""factor_dim"": ""factor_1""}",0.35,-0.029237062129969273,-0.2721770730650142,0.2485354988456055,False,0.37923706212996927,True
+loading_cont,"{""continuous"": ""share_monthly_network_flow"", ""factor_dim"": ""factor_2""}",-0.3,-0.2294251880759643,-0.5259743109055985,0.5001363407833211,True,0.0705748119240357,True
+loading_binary,"{""binary"": ""is_articulation_point"", ""factor_dim"": ""factor_1""}",0.8,1.1094407718468042,0.7971823849738615,1.3971104583641074,True,0.3094407718468042,True
+loading_binary,"{""binary"": ""is_articulation_point"", ""factor_dim"": ""factor_2""}",0.7,-0.08998713416523449,-0.6589344929716597,0.5607340653717071,False,0.7899871341652345,True
+loading_binary,"{""binary"": ""connected_to_articulation_point"", ""factor_dim"": ""factor_1""}",0.15,-0.31638075999300014,-0.500632588509509,-0.11997421109579448,False,0.4663807599930001,True
+loading_binary,"{""binary"": ""connected_to_articulation_point"", ""factor_dim"": ""factor_2""}",-0.35,-0.06524281012920922,-0.3288924729562341,0.29081913812154886,False,0.28475718987079074,True
+loading_zero,"{""boundary"": ""betweenness"", ""factor_dim"": ""factor_1""}",-0.4,0.19589739889791694,-0.23059534265062048,0.6249104510920244,False,0.5958973988979169,True
+loading_zero,"{""boundary"": ""betweenness"", ""factor_dim"": ""factor_2""}",0.5,0.16456874181232933,-0.5331171267303929,0.6260211777411856,True,0.33543125818767067,True
+intercept_cont,"{""continuous"": ""pagerank""}",-4.0,-3.9993725485769103,-4.080304036970141,-3.9179419505001736,True,0.000627451423089731,False
+intercept_cont,"{""continuous"": ""betweenness""}",-4.0,-3.9570180492460145,-4.06152726986262,-3.855046872739587,True,0.042981950753985476,False
+intercept_cont,"{""continuous"": ""share_monthly_network_flow""}",-3.5,-3.4738962338275856,-3.527500591756112,-3.4209287356853593,True,0.02610376617241439,False
+intercept_binary,"{""binary"": ""is_articulation_point""}",-0.5,-0.5466319066939295,-0.7141696945917853,-0.3854910231424387,True,0.04663190669392947,False
+intercept_binary,"{""binary"": ""connected_to_articulation_point""}",-0.7,-0.7512024323502628,-0.8915357917197346,-0.6132076063385741,True,0.051202432350262894,False
+intercept_zero,"{""boundary"": ""betweenness""}",-3.0,-3.013165592155401,-3.3432657576219706,-2.7148535638984197,True,0.013165592155401029,False
+precision_cont,"{""continuous"": ""pagerank""}",150.0,158.72208413698158,115.10886779099737,216.1426734990248,True,8.722084136981579,False
+precision_cont,"{""continuous"": ""betweenness""}",100.0,77.50080660008314,57.6441524728033,104.96355609435861,True,22.499193399916862,False
+precision_cont,"{""continuous"": ""share_monthly_network_flow""}",100.0,101.5821356921455,84.52512428372704,125.18700857841219,True,1.5821356921454992,False

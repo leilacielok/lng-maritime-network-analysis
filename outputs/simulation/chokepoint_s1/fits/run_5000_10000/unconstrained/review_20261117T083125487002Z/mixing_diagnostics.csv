@@ -1,0 +1,30 @@
+,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat
+"beta[neighbor_activity_lag1, factor_1]",0.059,0.039,7.135,27.369,1.544
+"beta[neighbor_activity_lag1, factor_2]",0.075,0.007,5.852,78.176,1.819
+"beta[log1p_mean_voyage_distance_lag1, factor_1]",0.018,0.008,14.238,34.850,1.213
+"beta[log1p_mean_voyage_distance_lag1, factor_2]",0.084,0.034,6.448,34.089,1.651
+"beta[month_sin, factor_1]",0.005,0.002,60.205,106.742,1.052
+"beta[month_sin, factor_2]",0.022,0.008,8.037,44.105,1.435
+"beta[month_cos, factor_1]",0.037,0.026,9.250,29.554,1.383
+"beta[month_cos, factor_2]",0.029,0.014,6.692,26.199,1.603
+"loading_binary[is_articulation_point, factor_1]",0.088,0.060,11.847,28.615,1.280
+"loading_binary[is_articulation_point, factor_2]",0.431,0.169,6.042,36.194,1.769
+"loading_binary[connected_to_articulation_point, factor_1]",0.047,0.028,10.727,30.940,1.296
+"loading_binary[connected_to_articulation_point, factor_2]",0.085,0.039,7.176,34.338,1.549
+intercept_cont[pagerank],0.003,0.002,176.831,283.928,1.030
+intercept_cont[betweenness],0.007,0.005,73.798,42.644,1.045
+intercept_cont[share_monthly_network_flow],0.002,0.001,299.592,388.546,1.016
+intercept_binary[is_articulation_point],0.005,0.003,333.015,310.839,1.008
+intercept_binary[connected_to_articulation_point],0.003,0.002,414.532,1080.132,1.005
+intercept_zero[betweenness],0.010,0.004,402.366,1564.106,1.013
+"loading_zero[betweenness, factor_1]",0.146,0.093,9.491,28.633,1.346
+"loading_zero[betweenness, factor_2]",0.117,0.053,7.557,26.739,1.513
+precision_cont[pagerank],2.227,2.053,216.637,265.200,1.059
+precision_cont[betweenness],2.523,1.362,37.747,77.571,1.075
+precision_cont[share_monthly_network_flow],0.933,0.290,136.765,507.575,1.036
+"loading_cont[pagerank, factor_1]",0.089,0.052,7.375,30.054,1.544
+"loading_cont[pagerank, factor_2]",0.324,0.119,5.304,43.782,2.084
+"loading_cont[betweenness, factor_1]",0.196,0.150,7.574,41.908,1.504
+"loading_cont[betweenness, factor_2]",0.161,0.081,5.088,20.396,2.252
+"loading_cont[share_monthly_network_flow, factor_1]",0.122,0.088,6.544,36.176,1.658
+"loading_cont[share_monthly_network_flow, factor_2]",0.126,0.023,5.184,29.313,2.176

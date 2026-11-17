@@ -1,0 +1,10 @@
+{
+  "dataset_hash": "01fc404b6120606ae65032c07886049cfa0d778176cf18cbbc07086c9f801262",
+  "variant": "triangular",
+  "draws": 10000,
+  "tune": 5000,
+  "chains": 4,
+  "seed": 123,
+  "target_accept": 0.8,
+  "shrink_sd": 0.25
+}

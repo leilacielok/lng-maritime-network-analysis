@@ -1,0 +1,20 @@
+{
+  "divergences": 71,
+  "nondivergent_draws": 39929,
+  "selected_parameters": [
+    "loading_binary [has_incident_global_bridge, factor_2]",
+    "intercept_binary [has_incident_global_bridge]",
+    "loading_binary [has_incident_global_bridge, factor_1]",
+    "precision_cont [counterparty_hhi_terminal]",
+    "intercept_binary [is_articulation_point]",
+    "beta [month_cos, factor_1]",
+    "loading_cont [role_specific_pagerank, factor_1]",
+    "loading_cont [counterparty_hhi_terminal, factor_2]"
+  ],
+  "selection_method": "Descending two-sample Kolmogorov-Smirnov distance",
+  "candidate_scope": "Global parameters and node effects; observation-level arrays excluded",
+  "note": "Exploratory marginal association, not a cause or attribution of divergences; no hypothesis-test p-values.",
+  "candidate_count": 40,
+  "warning": "Exploratory ranking; uncertainty is greater when divergent draws are few. No count threshold is applied.",
+  "status": "created"
+}

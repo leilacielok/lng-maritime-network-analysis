@@ -1,0 +1,9 @@
+,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat
+"beta [neighbor_activity_lag1, factor_2]",0.091485,0.051775,7.041806,25.016452,1.53336
+"beta [month_cos, factor_2]",0.059103,0.032411,7.051592,24.940688,1.53076
+"loading_zero [betweenness, factor_2]",0.142757,0.072697,7.094726,24.505966,1.5216
+"loading_cont [betweenness, factor_2]",0.302369,0.17267,7.103949,27.123838,1.54774
+"loading_cont [share_monthly_network_flow, factor_2]",0.195219,0.112183,7.115382,28.489894,1.531874
+"loading_binary [connected_to_articulation_point, factor_2]",0.059533,0.026614,8.480117,28.014298,1.400895
+"loading_cont [pagerank, factor_2]",0.098792,0.0437,10.550099,43.249605,1.305948
+"loading_binary [is_articulation_point, factor_2]",0.064436,0.02168,26.553898,68.378892,1.116245

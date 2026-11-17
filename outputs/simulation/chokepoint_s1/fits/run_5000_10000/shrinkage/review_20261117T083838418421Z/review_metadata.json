@@ -1,0 +1,50 @@
+{
+  "source_chains": [
+    "outputs\\simulation\\chokepoint_s1\\fits\\run_5000_10000\\shrinkage\\chain_01.nc",
+    "outputs\\simulation\\chokepoint_s1\\fits\\run_5000_10000\\shrinkage\\chain_02.nc",
+    "outputs\\simulation\\chokepoint_s1\\fits\\run_5000_10000\\shrinkage\\chain_03.nc",
+    "outputs\\simulation\\chokepoint_s1\\fits\\run_5000_10000\\shrinkage\\chain_04.nc"
+  ],
+  "run_config": {
+    "dataset_hash": "01fc404b6120606ae65032c07886049cfa0d778176cf18cbbc07086c9f801262",
+    "variant": "shrinkage",
+    "draws": 10000,
+    "tune": 5000,
+    "chains": 4,
+    "seed": 123,
+    "target_accept": 0.8,
+    "shrink_sd": 0.25
+  },
+  "dataset_metadata": {
+    "kind": "chokepoint",
+    "scenario": "nontriangular",
+    "seed": 42,
+    "n": 1000,
+    "predictors": [
+      "neighbor_activity_lag1",
+      "log1p_mean_voyage_distance_lag1",
+      "month_sin",
+      "month_cos"
+    ],
+    "continuous_responses": [
+      "pagerank",
+      "betweenness",
+      "share_monthly_network_flow"
+    ],
+    "binary_responses": [
+      "is_articulation_point",
+      "connected_to_articulation_point"
+    ],
+    "prior_profile": "original",
+    "precision_prior_sd": 0.7,
+    "panel": null,
+    "generative_parameters": "fixed independently of empirical estimates",
+    "covariates": "fully synthetic; numeric predictors standardized"
+  },
+  "review_options": {
+    "ppc_draws": 200,
+    "skip_classical": false,
+    "skip_ppc": false,
+    "skip_local": false
+  }
+}

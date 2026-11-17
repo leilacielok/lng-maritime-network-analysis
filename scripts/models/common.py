@@ -176,3 +176,33 @@ def zero_inflated_beta_random(alpha, beta, boundary_logit, inflated, rng=None, s
     return np.where(rng.uniform(size=np.shape(interior)) < prob, 0.0, interior)
 
 
+def prepare_ar1_index(data, kind):
+    """Index selected observations in node/calendar order, retaining actual gaps.
+
+    No latent states are created for excluded months. The observation order of
+    the original estimation panel is preserved via ar1_restore_index.
+    """
+    frame = data["frame"]
+    id_col = SPECS[kind]["id"]
+    order = frame.assign(_row=np.arange(len(frame))).sort_values(
+        [id_col, "period_month"], kind="stable")["_row"].to_numpy(dtype="int64")
+    ordered = frame.iloc[order]
+    ids = ordered[id_col].astype(str).to_numpy()
+    months = ordered["period_month"].dt.year.to_numpy() * 12 + ordered["period_month"].dt.month.to_numpy()
+    same = np.r_[False, ids[1:] == ids[:-1]]
+    gaps = np.ones(len(order), dtype="int64")
+    gaps[1:] = np.where(same[1:], months[1:] - months[:-1], 1)
+    if np.any(gaps < 1):
+        raise ValueError("AR(1) requires strictly increasing calendar months per node")
+    restore = np.argsort(order)
+    data.update(ar1_order=order, ar1_restore_index=restore,
+                ar1_gaps=gaps, ar1_same_node=same)
+    data["audit"]["ar1_specification"] = {
+        "prior": "rho ~ Uniform(-1, 1)",
+        "parameterization": "non-centred stationary AR(1)",
+        "states": len(order), "nodes": len(set(ids)),
+        "max_calendar_gap": int(gaps.max()),
+        "gapped_transitions": int(np.sum(same & (gaps > 1))),
+        "missing_months": "integrated out; no additional latent states",
+    }
+    return data

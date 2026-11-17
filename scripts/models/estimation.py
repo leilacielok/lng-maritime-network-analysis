@@ -16,7 +16,6 @@ import inspect
 import hashlib
 import json
 from pathlib import Path
-import warnings
 import sys
 import platform
 from datetime import datetime, timezone
@@ -40,9 +39,9 @@ def fit_model(data, kind, args, destination):
     from diagnostics import predictive_checks
     if args.model == "node_effects":
         from node_effects import build_factor_mean
-        model = build_model(data, factor_builder=build_factor_mean, rank=args.rank)
+        model = build_model(data, factor_builder=build_factor_mean, rank=args.rank, residual_process=args.residual_process)
     else:
-        model = build_model(data, rank=args.rank)
+        model = build_model(data, rank=args.rank, residual_process=args.residual_process, rank_two_structure=args.rank_two_structure)
     with model:
         prior_count_key = ("draws" if "draws" in inspect.signature(pm.sample_prior_predictive).parameters
                            else "samples")
@@ -51,27 +50,32 @@ def fit_model(data, kind, args, destination):
         prior.to_netcdf(destination / "prior.nc")
         if args.prior_only:
             return
-        if args.low_ram:
-            from low_ram import run_chains, merge_chains, posterior_predictive_subset
-            chain_dir = run_chains(model, data, kind, args, destination)
-            merge_chains(chain_dir, destination / "posterior.nc", args.chains, args.draws)
-            n_ppc = posterior_predictive_subset(model, destination / "posterior.nc", args)
-            (destination / "low_ram_metadata.json").write_text(json.dumps({
-                "chain_files": str(chain_dir), "chains": args.chains,
-                "tune_per_chain": args.tune, "retained_per_chain": args.draws,
-                "posterior_predictive_draws_per_chain": n_ppc,
-                "observation_level_deterministics_not_stored": True,
-                "posterior_draws_thinned": False,
-                "note": "PPC is a subset. Global diagnostics are computed separately; run review.py for detailed plots."
-            }, indent=2), encoding="utf-8")
-            print("Saved full posterior and sample_stats; PPC uses a subset.", flush=True)
-            return
+    if args.low_ram:
+        from low_ram import run_chains, merge_chains, posterior_predictive_subset
+        chain_dir = run_chains(model, data, kind, args, destination)
+        merge_chains(chain_dir, destination / "posterior.nc", args.chains, args.draws)
+        n_ppc = posterior_predictive_subset(model, destination / "posterior.nc", args)
+        (destination / "low_ram_metadata.json").write_text(json.dumps({
+            "chain_files": str(chain_dir), "chains": args.chains,
+            "tune_per_chain": args.tune, "retained_per_chain": args.draws,
+            "posterior_predictive_draws_per_chain": n_ppc,
+            "observation_level_deterministics_not_stored": True,
+            "posterior_draws_thinned": False,
+            "note": "PPC is a subset. Global diagnostics are computed separately; run review.py for detailed plots."
+        }, indent=2), encoding="utf-8")
+        print("Saved full posterior and sample_stats; PPC uses a subset.", flush=True)
+        return
+    with model:
+        from ar1 import ar1_initial_values
+        starts = (rank_two_initial_values(data, args.chains, args.seed, structure=args.rank_two_structure) if args.rank == 2
+                  else initial_values(data, args.chains, args.seed) if kind == "terminal"
+                  else chokepoint_initial_values(data, args.chains, args.seed))
+        if args.residual_process == "ar1":
+            starts = ar1_initial_values(starts, data)
         idata = pm.sample(draws=args.draws, tune=args.tune, chains=args.chains,
                           cores=args.cores, target_accept=args.target_accept,
                           init="adapt_diag",
-                          initvals=(rank_two_initial_values(data, args.chains, args.seed) if args.rank == 2
-                                     else initial_values(data, args.chains, args.seed) if kind == "terminal"
-                                     else chokepoint_initial_values(data, args.chains, args.seed)),
+                           initvals=starts,
                           random_seed=args.seed, return_inferencedata=True)
         if (idata.posterior.sizes["chain"] != args.chains
                 or idata.posterior.sizes["draw"] != args.draws):
@@ -91,6 +95,8 @@ def fit_model(data, kind, args, destination):
                   else ["intercept_zero", "loading_zero"])
     if args.model == "node_effects":
         parameters += ["sigma_mu"]
+    if args.residual_process == "ar1":
+        parameters.append("rho")
     diagnostic = run_diagnostics(idata, data, kind, destination, parameters)
     if args.rank == 1:
         export_findings(idata, data, kind, destination, parameters, diagnostic, SPECS)
@@ -103,6 +109,10 @@ def main(default_model="baseline"):
     parser.add_argument("--model", choices=["baseline", "node_effects"], default=default_model)
     parser.add_argument("--rank", type=int, choices=[1, 2], default=1,
                         help="Latent rank (rank 1 preserves original baseline)")
+    parser.add_argument("--rank-two-structure", choices=["unconstrained", "triangular"], default="unconstrained",
+                        help="Loading structure for the rank-two model")
+    parser.add_argument("--residual-process", choices=["iid","ar1"], default="iid", 
+                        help="Latent residual process")
     parser.add_argument("--node-sd-prior", type=float, default=1.0,
                         help="HalfNormal scale for sigma_mu in node_effects model")
     parser.add_argument("--terminal-panel", type=Path, default=PANEL_DIR / "terminal_criticality_model_panel.csv")
@@ -126,6 +136,10 @@ def main(default_model="baseline"):
     parser.add_argument("--target-accept", type=float, default=.80)
     parser.add_argument("--seed", type=int, default=20261008)
     args = parser.parse_args()
+    if args.rank == 1 and args.rank_two_structure != "unconstrained":
+        parser.error("--rank-two-structure triangular requires --rank 2")
+    if args.rank == 2 and args.residual_process != "iid":
+        parser.error("--residual-process ar1 is supported only with --rank 1")
     if args.rank == 2 and args.model != "baseline":
         parser.error("--rank 2 currently supports --model baseline only")
     profiles = {"baseline": "original", "CON": "regularized", "RS": "response_precision"}
@@ -147,6 +161,10 @@ def main(default_model="baseline"):
     kinds = [args.node_type]
     # Validate all selected inputs before starting any potentially expensive fit.
     data = {kind: prepare_panel(getattr(args, f"{kind}_panel"), kind) for kind in kinds}
+    if args.residual_process == "ar1":
+        from common import prepare_ar1_index
+        for kind, item in data.items():
+            prepare_ar1_index(item, kind)
     for kind, item in data.items():
         if args.model == "node_effects":
             from node_effects import prepare_node_effects
@@ -154,6 +172,11 @@ def main(default_model="baseline"):
         item["precision_prior_sd"] = args.precision_prior_sd
         item["prior_profile"] = args.prior_profile
         item["audit"]["rank"] = args.rank
+        item["audit"]["rank_two_structure"] = args.rank_two_structure
+        item["audit"]["residual_process"] = args.residual_process
+        if args.model == "node_effects" and args.residual_process == "ar1":
+            item["audit"]["node_effect_specification"]["factor"] = (
+                "X beta + mu_node[node_index] + stationary AR(1) residual")
         item["audit"]["prior_specification"] = {**prior_specification(kind, args.prior_profile),
                                                   "precision_log_sd": args.precision_prior_sd}
         item["audit"]["response_likelihood_scale"] = "original (0,1]"
@@ -184,17 +207,24 @@ def main(default_model="baseline"):
     if args.rank == 2:
         group_dir = (args.output_dir / "rank_two" if args.model_group == "baseline"
                      else args.output_dir / "rank_two" / "sensitivity_analysis" / args.model_group)
+    
+    if args.rank == 2 and args.rank_two_structure == "triangular":
+        group_dir = group_dir / "triangular"
+    
     if args.model == "node_effects":
         group_dir = (args.output_dir / "node_effects" if args.model_group == "baseline"
                      else args.output_dir / "node_effects" / "sensitivity_analysis" / args.model_group)
+    if args.residual_process == "ar1":
+        group_dir = group_dir / "ar1"
     run = group_dir / args.node_type / (args.run_name or f"{stamp}_{args.node_type}_bounded_{args.prior_profile}")
     if args.low_ram and run.exists():
         config_file = run / "run_config.json"
         if not config_file.exists():
             raise RuntimeError("Existing run directory lacks run_config.json; refusing to resume")
         previous = json.loads(config_file.read_text())
-        for key in ("draws", "tune", "chains", "seed", "rank", "model", "node_type", "target_accept"):
-            if str(previous[key]) != str(getattr(args, key)):
+        for key in ("draws", "tune", "chains", "seed", "rank", "rank_two_structure", "model", "node_type", "target_accept", "residual_process", "prior_profile", "precision_prior_sd", "node_sd_prior"):
+            old_value = previous.get(key, "unconstrained" if key == "rank_two_structure" else None)
+            if str(old_value) != str(getattr(args, key)):
                 raise RuntimeError(f"Cannot resume: {key} differs from original run")
         print(f"Resuming run: {run.resolve()}", flush=True)
     else:
@@ -217,7 +247,7 @@ def main(default_model="baseline"):
               "node_effect_specification": data[args.node_type]["audit"].get("node_effect_specification"),
               "source_sha256": {name: hashlib.sha256((script_path.parent / name).read_bytes()).hexdigest()
                                 for name in ["common.py", "baseline.py", "estimation.py", "node_effects.py",
-                                             "diagnostics.py", "findings.py"]
+                                             "diagnostics.py", "findings.py", "ar1.py", "low_ram.py", "review.py"]
                                 if (script_path.parent / name).is_file()},
               "started_utc": stamp, "command_argv": sys.argv,
               "python": platform.python_version(), "packages": packages,

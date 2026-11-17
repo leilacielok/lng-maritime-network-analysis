@@ -1,0 +1,30 @@
+,mean,sd,hdi_3%,hdi_97%
+"beta[neighbor_activity_lag1, factor_1]",0.052,0.078,-0.082,0.207
+"beta[neighbor_activity_lag1, factor_2]",0.208,0.048,0.118,0.299
+"beta[log1p_mean_voyage_distance_lag1, factor_1]",0.217,0.042,0.138,0.296
+"beta[log1p_mean_voyage_distance_lag1, factor_2]",0.023,0.085,-0.142,0.174
+"beta[month_sin, factor_1]",0.059,0.038,-0.016,0.128
+"beta[month_sin, factor_2]",0.006,0.044,-0.079,0.087
+"beta[month_cos, factor_1]",0.054,0.059,-0.055,0.168
+"beta[month_cos, factor_2]",-0.135,0.043,-0.217,-0.053
+"loading_binary[is_articulation_point, factor_1]",1.096,0.161,0.805,1.402
+"loading_binary[is_articulation_point, factor_2]",0.133,0.336,-0.559,0.700
+"loading_binary[connected_to_articulation_point, factor_1]",-0.307,0.104,-0.497,-0.102
+"loading_binary[connected_to_articulation_point, factor_2]",0.137,0.120,-0.096,0.355
+intercept_cont[pagerank],-3.999,0.041,-4.076,-3.924
+intercept_cont[betweenness],-3.956,0.052,-4.050,-3.854
+intercept_cont[share_monthly_network_flow],-3.474,0.027,-3.525,-3.424
+intercept_binary[is_articulation_point],-0.546,0.083,-0.699,-0.389
+intercept_binary[connected_to_articulation_point],-0.752,0.071,-0.885,-0.619
+intercept_zero[betweenness],-3.014,0.163,-3.314,-2.710
+"loading_zero[betweenness, factor_1]",0.183,0.234,-0.258,0.618
+"loading_zero[betweenness, factor_2]",-0.323,0.163,-0.629,-0.023
+precision_cont[pagerank],158.025,26.037,112.481,207.676
+precision_cont[betweenness],77.257,12.162,55.773,100.091
+precision_cont[share_monthly_network_flow],101.784,10.284,83.929,121.455
+"loading_cont[pagerank, factor_1]",0.766,0.096,0.604,0.915
+"loading_cont[pagerank, factor_2]",0.210,0.259,-0.362,0.601
+"loading_cont[betweenness, factor_1]",0.309,0.247,-0.230,0.677
+"loading_cont[betweenness, factor_2]",-0.694,0.116,-0.887,-0.488
+"loading_cont[share_monthly_network_flow, factor_1]",-0.019,0.154,-0.268,0.307
+"loading_cont[share_monthly_network_flow, factor_2]",0.447,0.048,0.359,0.532

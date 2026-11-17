@@ -1,0 +1,42 @@
+,mean,sd,hdi_3%,hdi_97%,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat
+"beta[neighbor_activity_lag1, factor_1]",0.012,0.182,-0.229,0.250,0.089,0.001,6.055,87.186,1.736
+"beta[neighbor_activity_lag1, factor_2]",-0.021,0.091,-0.147,0.166,0.041,0.019,5.938,26.927,1.777
+"beta[log1p_mean_voyage_distance_lag1, factor_1]",0.026,0.096,-0.129,0.175,0.043,0.003,5.987,73.413,1.754
+"beta[log1p_mean_voyage_distance_lag1, factor_2]",-0.098,0.158,-0.262,0.207,0.077,0.043,6.762,25.577,1.585
+"beta[month_sin, factor_1]",0.009,0.068,-0.109,0.126,0.028,0.001,6.460,85.980,1.638
+"beta[month_sin, factor_2]",-0.031,0.074,-0.136,0.120,0.033,0.017,6.964,26.439,1.547
+"beta[month_cos, factor_1]",-0.005,0.124,-0.182,0.175,0.059,0.001,6.038,86.476,1.737
+"beta[month_cos, factor_2]",0.000,0.046,-0.090,0.085,0.014,0.004,11.135,41.711,1.260
+"beta[log1p_capacity_mtpa, factor_1]",0.028,0.047,-0.058,0.121,0.008,0.001,31.734,121.474,1.083
+"beta[log1p_capacity_mtpa, factor_2]",-0.106,0.183,-0.280,0.246,0.090,0.051,7.069,25.252,1.531
+"beta[terminal_age, factor_1]",0.014,0.139,-0.179,0.215,0.067,0.002,5.981,93.905,1.760
+"beta[terminal_age, factor_2]",-0.031,0.092,-0.156,0.156,0.042,0.021,6.251,26.233,1.683
+"beta[exporter_lag1, factor_1]",0.067,0.269,-0.325,0.469,0.127,0.006,5.972,77.066,1.767
+"beta[exporter_lag1, factor_2]",-0.217,0.443,-0.630,0.619,0.218,0.123,6.176,28.797,1.709
+"loading_binary[is_articulation_point, factor_1]",0.148,0.129,-0.096,0.381,0.020,0.004,41.669,145.939,1.069
+"loading_binary[is_articulation_point, factor_2]",-0.454,0.787,-1.079,0.992,0.391,0.224,6.930,25.545,1.556
+"loading_binary[has_incident_global_bridge, factor_1]",0.012,1.265,-1.468,1.493,0.629,0.005,6.066,90.591,1.733
+"loading_binary[has_incident_global_bridge, factor_2]",-0.147,0.180,-0.500,0.159,0.064,0.015,8.173,45.863,1.426
+"loading_binary[connected_to_articulation_point, factor_1]",-0.023,0.399,-0.542,0.504,0.195,0.002,6.032,75.824,1.737
+"loading_binary[connected_to_articulation_point, factor_2]",0.112,0.145,-0.179,0.328,0.063,0.029,6.291,26.336,1.679
+intercept_cont[role_specific_pagerank],-3.446,0.051,-3.536,-3.350,0.002,0.001,476.308,3722.486,1.012
+intercept_cont[counterparty_hhi_terminal],0.005,0.049,-0.084,0.098,0.004,0.002,184.544,264.096,1.025
+intercept_cont[role_specific_dependence],-0.016,0.032,-0.077,0.044,0.001,0.001,1443.872,1854.931,1.005
+intercept_binary[is_articulation_point],-0.433,0.086,-0.598,-0.276,0.003,0.001,619.488,993.836,1.008
+intercept_binary[has_incident_global_bridge],-0.448,0.097,-0.631,-0.265,0.003,0.001,972.806,2919.977,1.004
+intercept_binary[connected_to_articulation_point],-0.681,0.074,-0.819,-0.546,0.002,0.001,909.344,4560.922,1.004
+intercept_one[counterparty_hhi_terminal],-1.224,0.084,-1.379,-1.063,0.002,0.001,1239.088,1540.518,1.003
+intercept_one[role_specific_dependence],-1.216,0.089,-1.394,-1.055,0.004,0.003,439.132,298.761,1.007
+"loading_one[counterparty_hhi_terminal, factor_1]",-0.052,0.450,-0.688,0.556,0.218,0.014,5.870,47.098,1.803
+"loading_one[counterparty_hhi_terminal, factor_2]",0.098,0.261,-0.426,0.412,0.124,0.067,6.090,26.639,1.724
+"loading_one[role_specific_dependence, factor_1]",-0.020,0.405,-0.575,0.538,0.196,0.004,6.018,73.372,1.744
+"loading_one[role_specific_dependence, factor_2]",0.070,0.104,-0.125,0.259,0.033,0.005,10.355,57.892,1.290
+precision_cont[role_specific_pagerank],100.402,20.510,65.007,140.866,2.641,2.214,96.896,54.503,1.052
+precision_cont[counterparty_hhi_terminal],9.851,1.420,7.423,12.523,0.091,0.036,264.569,1073.451,1.021
+precision_cont[role_specific_dependence],12.949,1.170,10.937,15.190,0.096,0.017,117.313,806.888,1.031
+"loading_cont[role_specific_pagerank, factor_1]",0.125,0.083,0.000,0.266,0.014,0.006,35.623,99.177,1.092
+"loading_cont[role_specific_pagerank, factor_2]",-0.412,0.702,-0.900,0.844,0.350,0.202,7.061,31.143,1.567
+"loading_cont[counterparty_hhi_terminal, factor_1]",0.016,0.750,-0.819,0.847,0.374,0.002,6.090,104.924,1.735
+"loading_cont[counterparty_hhi_terminal, factor_2]",-0.123,0.129,-0.348,0.095,0.053,0.009,6.236,63.643,1.703
+"loading_cont[role_specific_dependence, factor_1]",0.017,0.464,-0.506,0.534,0.231,0.003,5.948,88.745,1.770
+"loading_cont[role_specific_dependence, factor_2]",-0.028,0.155,-0.244,0.272,0.074,0.038,5.026,24.220,2.267

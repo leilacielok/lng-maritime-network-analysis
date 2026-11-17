@@ -1,0 +1,26 @@
+{
+  "kind": "chokepoint",
+  "scenario": "nontriangular",
+  "seed": 42,
+  "n": 1000,
+  "predictors": [
+    "neighbor_activity_lag1",
+    "log1p_mean_voyage_distance_lag1",
+    "month_sin",
+    "month_cos"
+  ],
+  "continuous_responses": [
+    "pagerank",
+    "betweenness",
+    "share_monthly_network_flow"
+  ],
+  "binary_responses": [
+    "is_articulation_point",
+    "connected_to_articulation_point"
+  ],
+  "prior_profile": "original",
+  "precision_prior_sd": 0.7,
+  "panel": null,
+  "generative_parameters": "fixed independently of empirical estimates",
+  "covariates": "fully synthetic; numeric predictors standardized"
+}

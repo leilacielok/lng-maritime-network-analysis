@@ -1,0 +1,42 @@
+parameter,coordinates,true,posterior_mean,q025,q975,covered_95pct,absolute_error,rotation_sensitive
+beta,"{""predictor"": ""neighbor_activity_lag1"", ""factor_dim"": ""factor_1""}",0.22,0.07732688371012411,0.0058071609102843345,0.1491138290471281,False,0.1426731162898759,True
+beta,"{""predictor"": ""neighbor_activity_lag1"", ""factor_dim"": ""factor_2""}",-0.1,-0.1819750645930634,-0.2618611920548067,-0.10313836305435088,False,0.08197506459306339,True
+beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1"", ""factor_dim"": ""factor_1""}",0.12,0.18190793479937845,0.11035873865250728,0.25409633208999816,True,0.06190793479937845,True
+beta,"{""predictor"": ""log1p_mean_voyage_distance_lag1"", ""factor_dim"": ""factor_2""}",0.2,0.08540744673944616,0.006805125189772025,0.164013987676327,False,0.11459255326055386,True
+beta,"{""predictor"": ""month_sin"", ""factor_dim"": ""factor_1""}",0.08,0.06940583173392513,-0.0028873956828317296,0.14140093220452615,True,0.010594168266074871,True
+beta,"{""predictor"": ""month_sin"", ""factor_dim"": ""factor_2""}",0.04,-0.05832840444853847,-0.13576744817279682,0.01914409927028616,False,0.09832840444853846,True
+beta,"{""predictor"": ""month_cos"", ""factor_dim"": ""factor_1""}",-0.06,-0.0188574535472354,-0.09074802716203062,0.05252387977626776,True,0.0411425464527646,True
+beta,"{""predictor"": ""month_cos"", ""factor_dim"": ""factor_2""}",0.08,0.11840767829523445,0.039278581468678374,0.1975743034475755,True,0.03840767829523445,True
+beta,"{""predictor"": ""log1p_capacity_mtpa"", ""factor_dim"": ""factor_1""}",0.18,0.20640429413687703,0.1320373496990665,0.2811713294359009,True,0.026404294136877032,True
+beta,"{""predictor"": ""log1p_capacity_mtpa"", ""factor_dim"": ""factor_2""}",0.12,0.011066121303151231,-0.06881941119218782,0.09125372502475569,False,0.10893387869684876,True
+beta,"{""predictor"": ""terminal_age"", ""factor_dim"": ""factor_1""}",0.05,0.08460415564374447,0.012694597105629975,0.15796955417698985,True,0.03460415564374447,True
+beta,"{""predictor"": ""terminal_age"", ""factor_dim"": ""factor_2""}",-0.08,-0.1352064217506261,-0.21359195596407457,-0.057529425198873475,True,0.05520642175062611,True
+beta,"{""predictor"": ""exporter_lag1"", ""factor_dim"": ""factor_1""}",0.55,0.4845576547828853,0.3393153761751405,0.6320991299020614,True,0.06544234521711473,True
+beta,"{""predictor"": ""exporter_lag1"", ""factor_dim"": ""factor_2""}",0.2,-0.25844502604658554,-0.42203110143407896,-0.09771255088996308,False,0.45844502604658555,True
+loading_cont,"{""continuous"": ""role_specific_pagerank"", ""factor_dim"": ""factor_1""}",0.7,0.8366957831218981,0.7470279652465641,0.9208010256249757,False,0.13669578312189812,True
+loading_cont,"{""continuous"": ""role_specific_pagerank"", ""factor_dim"": ""factor_2""}",0.5,0.0,0.0,0.0,False,0.5,True
+loading_cont,"{""continuous"": ""counterparty_hhi_terminal"", ""factor_dim"": ""factor_1""}",-0.45,0.14008013282835813,0.06083919569874461,0.21935520415500206,False,0.5900801328283581,True
+loading_cont,"{""continuous"": ""counterparty_hhi_terminal"", ""factor_dim"": ""factor_2""}",0.75,0.7529061233706525,0.648676433896193,0.8609355384941061,True,0.002906123370652547,True
+loading_cont,"{""continuous"": ""role_specific_dependence"", ""factor_dim"": ""factor_1""}",0.35,0.13000794094037246,0.07318481362579127,0.18686599736691056,False,0.21999205905962751,True
+loading_cont,"{""continuous"": ""role_specific_dependence"", ""factor_dim"": ""factor_2""}",-0.3,-0.47442302528471175,-0.5415125030947554,-0.40948459746854576,False,0.17442302528471176,True
+loading_binary,"{""binary"": ""is_articulation_point"", ""factor_dim"": ""factor_1""}",0.8,1.0561359785908286,0.8563376514886559,1.2792637184382571,False,0.2561359785908286,True
+loading_binary,"{""binary"": ""is_articulation_point"", ""factor_dim"": ""factor_2""}",0.7,0.01712571138740168,-0.15247504062932252,0.18772351068429535,False,0.6828742886125982,True
+loading_binary,"{""binary"": ""has_incident_global_bridge"", ""factor_dim"": ""factor_1""}",-0.6,0.13005602962869262,-0.05211755137450845,0.31764897135842046,False,0.7300560296286926,True
+loading_binary,"{""binary"": ""has_incident_global_bridge"", ""factor_dim"": ""factor_2""}",0.9,1.2837141436517958,1.0221662605198973,1.5800630541445873,False,0.3837141436517958,True
+loading_binary,"{""binary"": ""connected_to_articulation_point"", ""factor_dim"": ""factor_1""}",0.15,-0.18023000549067242,-0.32875861371465936,-0.0340619163181903,False,0.3302300054906724,True
+loading_binary,"{""binary"": ""connected_to_articulation_point"", ""factor_dim"": ""factor_2""}",-0.35,-0.39421017499319794,-0.5651271668852228,-0.22902480403997222,True,0.04421017499319796,True
+loading_one,"{""boundary"": ""counterparty_hhi_terminal"", ""factor_dim"": ""factor_1""}",-0.5,-0.2872126482473515,-0.4620767973088439,-0.11812743288857919,False,0.2127873517526485,True
+loading_one,"{""boundary"": ""counterparty_hhi_terminal"", ""factor_dim"": ""factor_2""}",0.35,0.43564422274081355,0.21952214741171544,0.6654540457200602,True,0.08564422274081357,True
+loading_one,"{""boundary"": ""role_specific_dependence"", ""factor_dim"": ""factor_1""}",0.3,-0.08752528967621113,-0.24718961294760983,0.07252611135744318,False,0.38752528967621114,True
+loading_one,"{""boundary"": ""role_specific_dependence"", ""factor_dim"": ""factor_2""}",-0.4,-0.4022000865829707,-0.5996727011642233,-0.21010647561963952,True,0.0022000865829706617,True
+intercept_cont,"{""continuous"": ""role_specific_pagerank""}",-3.5,-3.44837798929084,-3.5497007608201496,-3.346580967860643,True,0.05162201070915984,False
+intercept_cont,"{""continuous"": ""counterparty_hhi_terminal""}",0.0,-0.001014613710083827,-0.0915657363385714,0.09163261971617111,True,0.001014613710083827,False
+intercept_cont,"{""continuous"": ""role_specific_dependence""}",0.0,-0.015053736408117302,-0.07742266076024756,0.04756804093434652,True,0.015053736408117302,False
+intercept_binary,"{""binary"": ""is_articulation_point""}",-0.5,-0.4750339410594938,-0.6618421056940562,-0.29594440786112736,True,0.024966058940506186,False
+intercept_binary,"{""binary"": ""has_incident_global_bridge""}",-0.5,-0.4529474183419721,-0.6500225318702568,-0.26032158086640705,True,0.04705258165802789,False
+intercept_binary,"{""binary"": ""connected_to_articulation_point""}",-0.7,-0.6786092620271563,-0.8279541537339989,-0.5333743957755507,True,0.021390737972843632,False
+intercept_one,"{""boundary"": ""counterparty_hhi_terminal""}",-1.3,-1.2215736467560327,-1.3869457421484925,-1.060454232244221,True,0.0784263532439673,False
+intercept_one,"{""boundary"": ""role_specific_dependence""}",-1.2,-1.2169721961023898,-1.3883171534141514,-1.0545491605579609,True,0.01697219610238987,False
+precision_cont,"{""continuous"": ""role_specific_pagerank""}",120.0,98.40602319217226,67.38686059676402,139.53467925266352,True,21.593976807827744,False
+precision_cont,"{""continuous"": ""counterparty_hhi_terminal""}",12.0,9.727086800403367,7.558329674124407,12.984103382962221,True,2.2729131995966334,False
+precision_cont,"{""continuous"": ""role_specific_dependence""}",12.0,13.036796687733172,11.011116379988051,15.585300554022336,True,1.0367966877331725,False

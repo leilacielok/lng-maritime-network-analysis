@@ -196,7 +196,7 @@ def save_classical_diagnostics(posterior, destination, parameters=None, alpha=.0
         parameters = [name for name, da in posterior.data_vars.items()
                       if 'chain' in da.dims and 'draw' in da.dims
                       and not any(d in da.dims for d in ('obs', 'node'))
-                      and name not in ('factor', 'factor_mean', 'factor_residual', 'mu_node')]
+                      and name not in ('factor', 'factor_mean', 'factor_residual', 'mu_node', 'ar1_innovation')]
     parameters = list(dict.fromkeys(parameters))
     if not parameters:
         raise ValueError("No parameters selected")
@@ -242,12 +242,13 @@ def export_sampling_diagnostics(post, nc, out):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    mixing = az.summary(post, kind='diagnostics', round_to=6)
+    summary_post = post.drop_vars('ar1_innovation', errors='ignore')
+    mixing = az.summary(summary_post, kind='diagnostics', round_to=6)
     mixing.to_csv(out / 'mixing_diagnostics.csv', float_format='%.3f')
-    az.summary(post, round_to=6).to_csv(out / 'parameter_summary.csv', float_format='%.3f')
+    az.summary(summary_post, round_to=6).to_csv(out / 'parameter_summary.csv', float_format='%.3f')
     for chain in post.chain.values:
         az.summary(
-            post.sel(chain=[chain]),
+            summary_post.sel(chain=[chain]),
             kind='stats',
             round_to=6
         ).to_csv(
@@ -317,7 +318,7 @@ def export_sampling_diagnostics(post, nc, out):
                 continue
             dims = [d for d in da.dims if d not in ('chain','draw')]
             if any(d in ('obs','observation','obs_id') for d in dims) or family in (
-                    'factor','factor_mean','factor_residual'):
+                    'factor','factor_mean','factor_residual','ar1_innovation'):
                 continue
             for idx in np.ndindex(tuple(da.sizes[d] for d in dims)):
                 values = np.asarray(da.isel(dict(zip(dims,idx))).transpose('chain','draw').values, dtype=float)

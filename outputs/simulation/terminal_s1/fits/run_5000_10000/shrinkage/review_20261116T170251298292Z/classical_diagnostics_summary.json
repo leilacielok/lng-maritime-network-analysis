@@ -1,0 +1,6 @@
+{
+  "geweke_tests": 164,
+  "geweke_passes": 123,
+  "stationarity_passed_count": 158,
+  "half_width_passed_count": 131
+}

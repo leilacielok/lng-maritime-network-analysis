@@ -1,0 +1,9 @@
+,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat
+precision_cont [pagerank],0.645057,0.488891,1538.005374,3124.03996,1.000872
+precision_cont [betweenness],0.366688,0.252951,1606.664228,3060.968864,1.004613
+"loading_cont [betweenness, factor_2]",0.001519,0.000736,1646.491853,3185.976177,1.004402
+"loading_cont [pagerank, factor_1]",0.001017,0.000476,1685.974115,4142.589337,1.000783
+precision_cont [share_monthly_network_flow],0.175655,0.107642,2817.089296,5206.547215,1.003359
+intercept_cont [betweenness],0.000989,0.000414,2952.784801,6156.588124,1.002465
+"loading_cont [share_monthly_network_flow, factor_2]",0.00057,0.000268,3249.050586,6688.425638,1.002786
+intercept_cont [pagerank],0.000665,0.00029,3840.607002,7542.519844,1.000577

@@ -40,7 +40,7 @@ DISPLAY_NAMES = {
     'counterparty_hhi_terminal': 'Counterparty HHI',
 }
 PARAMETER_FAMILIES = {
-    'sigma_mu': 'Between-node standard deviation', 'mu_node': 'Node effect',
+    'rho': 'AR(1) persistence', 'sigma_mu': 'Between-node standard deviation', 'mu_node': 'Node effect',
     'beta': 'Regression coefficient', 'loading_cont': 'Continuous-response loading',
     'loading_binary': 'Binary-response loading', 'loading_one': 'One-mass loading',
     'loading_zero': 'Zero-mass loading', 'intercept_cont': 'Continuous-response intercept',
@@ -173,7 +173,7 @@ def export_trace_pages(post, out, node_type):
         'beta', 'loading_cont', 'loading_binary',
         'intercept_cont', 'intercept_binary', 'precision_cont',
         'intercept_one', 'loading_one',
-        'intercept_zero', 'loading_zero', 'sigma_mu',
+        'intercept_zero', 'loading_zero', 'sigma_mu', 'rho',
     ]
 
     # Una variabile scalare per ciascun parametro.
@@ -245,7 +245,7 @@ def export_selected_acf(post, out):
         'beta', 'loading_cont', 'loading_binary',
         'intercept_cont', 'intercept_binary', 'precision_cont',
         'intercept_one', 'loading_one',
-        'intercept_zero', 'loading_zero', 'sigma_mu',
+        'intercept_zero', 'loading_zero', 'sigma_mu', 'rho',
     ]
 
     variables = {}
@@ -505,6 +505,9 @@ def main():
     if hashlib.sha256(args.panel.read_bytes()).hexdigest() != audit['input_sha256']:
         raise ValueError('Panel differs from the original run; use the exact original panel.')
     data = model.prepare_panel(args.panel, args.node_type)
+    if audit.get('residual_process') == 'ar1':
+        from common import prepare_ar1_index
+        prepare_ar1_index(data, args.node_type)
     frame = data['frame']
     masks = [('all', np.ones(len(frame), bool))]
     if args.node_type == 'terminal':
@@ -515,6 +518,8 @@ def main():
     if data['audit']['continuous_responses'] != audit['continuous_responses'] or data['audit']['binary_responses'] != audit['binary_responses']:
         raise ValueError('Response specification differs from the archived run.')
     with xr.open_dataset(nc, group='posterior') as post:
+        if audit.get('residual_process') == 'ar1' and 'rho' not in post:
+            raise ValueError('AR(1) run is missing rho in the saved posterior')
         if len(frame) != post.sizes['obs'] or not np.array_equal(post.obs.values, np.arange(len(frame))):
             raise ValueError('Observation coordinates do not match the estimation sample.')
         if 'mu_node' in post and post.node.values.astype(str).tolist() != data.get('node_ids'):
@@ -606,6 +611,11 @@ def main():
                     )
 
                 keys['factor_mean_mean'] = x @ beta_mean
+                if 'mu_node' in post:
+                    from node_effects import prepare_node_effects
+                    if 'node_index' not in data:
+                        prepare_node_effects(data, args.node_type)
+                    keys['factor_mean_mean'] += post['mu_node'].mean(dim=('chain', 'draw')).values[data['node_index']]
 
             # Reconstruct posterior mean residuals.
             # E[f - X beta | y] = E[f | y] - X E[beta | y]
