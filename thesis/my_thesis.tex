@@ -138,32 +138,21 @@ ABSTRACT.
 %			CHAPTER 1: Introduction
 \chapter{Introduction}
 \label{chap:introduction}
-Liquefied natural gas (LNG) has become an increasingly important component of the global energy landscape, due to its relatively lower combustion-related emissions compared to coal and oil, its competitiveness in certain energy markets, and the flexibility offered by maritime transportation and storage (Litvinenko, 2020; Botão et al., 2023).
-Moreover, technological advancements in liquefaction, transportation, and regasification have since the 1970s progressively improved the economic viability and accessibility of LNG. 
-These developments, together with the expansion of international trade and the increasing participation of exporting and importing countries, have contributed to the growth and geographical diversification of the global LNG market. 
+Liquefied natural gas (LNG) has become an increasingly important component of the global energy landscape, offering flexibility in international energy transportation and contributing to the geographical diversification of natural gas supplies. Technological advancements in liquefaction, transportation, and regasification, together with the expansion of international trade, have progressively facilitated the development of a global LNG market connecting geographically dispersed production and consumption regions.
 
-Nevertheless, despite its expansion, the LNG market remains exposed to several structural, economic, and geopolitical challenges, since its functioning depends on an extensive system of physical infrastructure, international contracts, commercial agreements, and regulatory frameworks. 
-Consequently, the security and stability of LNG supplies are closely linked to international relations, infrastructure availability and capacity, and the ability of market participants to respond to disruptions in trade routes and supply chains. 
+Nevertheless, the functioning of this market depends on an extensive system of physical infrastructure, international trade relationships, and maritime transportation routes. Consequently, the organisation and stability of LNG trade are closely linked to infrastructure availability, geopolitical developments, and the ability of market participants to respond to changing economic and logistical conditions.
 
-Recent developments have further highlighted these vulnerabilities. 
-The COVID-19 pandemic disrupted global energy markets, initially contributing to a decline in energy demand, followed by a recovery accompanied by substantial price increases (IAE, 2022 Gas Market Report). 
-Russia's invasion of Ukraine in 2022 further reshaped international energy trade, particularly as European countries increased their reliance on LNG imports in response to reduced Russian pipeline gas supplies (Presley, 2023).
-Subsequent geopolitical developments, such as the disruptions to commercial shipping in the Red Sea in late 2023, further exposed the sensitivity of global LNG trade to international tensions and changes in energy supply patterns.
+The period from 2020 to 2024 provides a particularly interesting context for examining these interdependencies. During these years, global energy markets experienced substantial disruptions and adjustments associated with the COVID-19 pandemic, Russia's invasion of Ukraine, and changes in international energy supply patterns. Maritime transportation was also affected by events such as the blockage of the Suez Canal in 2021, restrictions on Panama Canal transits during the 2023–2024 drought, and disruptions to commercial shipping in the Red Sea beginning in late 2023.
 
-Beyond geopolitical instability, maritime transportation has also been affected by operational disruptions and adverse environmental conditions. 
-The six-day blockage of the Suez Canal following the grounding of the Ever Given in March 2021, together with the transit restrictions imposed on the Panama Canal during the 2023–2024 drought, illustrates the potential vulnerability of strategically important maritime corridors.
+Taken together, these developments highlight the interconnected nature of international energy trade and motivate a broader examination of the structural organisation of the global LNG transportation system. Rather than considering individual market participants or maritime routes in isolation, a network-based perspective allows the relationships among different components of the trading system to be examined within a common framework.
 
-Taken together, these events highlight the interconnected nature of global energy trade and demonstrate how disruptions affecting individual regions, infrastructures, or maritime routes may have implications extending beyond their immediate geographical locations.
-Understanding such interconnected vulnerabilities requires moving beyond the analysis of individual market participants and considering the LNG trade framework as a whole. 
-Although existing studies have examined several dimensions of LNG trade, including supply security, infrastructure dependence, and the strategic relevance of maritime chokepoints, a broader network perspective may provide additional insights into how structural importance and potential vulnerabilities are distributed across the global trading system. 
-In particular, examining LNG terminals and maritime chokepoints within a common structural framework can help identify patterns that may be difficult to capture when these components are studied separately.
-While many of the characteristics which jointly shape trade patterns have been extensively investigated individually, their combined relationship with the structural importance of different network components remains an important area for further investigation.
+In particular, the importance of LNG terminals and maritime chokepoints cannot necessarily be described by a single characteristic. While trade volumes provide information about the quantity of LNG transported through individual infrastructures, other network properties capture different aspects of their structural roles, including their connectivity, position within the trading system, and dependence on specific trading relationships. Understanding how these characteristics relate to one another is therefore essential for developing a multidimensional representation of structural importance.
 
-Against this background, this thesis develops a dynamic representation of the global maritime LNG trade network, incorporating both LNG terminals and strategically relevant maritime chokepoints. 
-Using monthly observations introduced by Zho et al. (2026) from January 2020 to December 2024, the analysis examines multiple dimensions of network importance, including centrality, connectivity, and the distribution of trade flows. 
-A Bayesian latent-factor modelling framework is employed to investigate whether the relationships among these characteristics can be represented through a smaller number of underlying dimensions.
-The main objective is to identify and characterise the structural importance of individual nodes within the global LNG maritime network, while accounting for the multidimensional nature of their roles and the evolution of trade patterns over time. 
-By combining network analysis with Bayesian statistical modelling, the study aims to contribute to a more comprehensive understanding of the organisation of global LNG trade and the factors associated with the relative importance of its terminals and maritime chokepoints.
+Moreover, the relationships among different measures of network importance may reflect a smaller number of underlying dimensions. Investigating this possibility provides the motivation for adopting a latent-factor modelling approach, through which multiple network characteristics can be examined jointly rather than interpreted as entirely separate indicators.
+
+Against this background, this thesis develops a dynamic representation of the global maritime LNG trade network, incorporating both LNG terminals and strategically relevant maritime chokepoints. The analysis covers the period from January 2020 to December 2024, using monthly observations to examine the evolution of network structure and the relative importance of individual nodes. A Bayesian latent-factor modelling framework is employed to investigate the relationships among multiple indicators of centrality, connectivity, and trade concentration, while accounting for uncertainty in the estimated latent structure.
+
+The main objective is to identify and characterise the structural importance of individual nodes within the global maritime LNG network, considering both the multidimensional nature of their roles and the evolution of trade patterns over time. By combining network analysis with Bayesian statistical modelling, this thesis aims to provide a unified framework for examining the structural roles of LNG terminals and maritime chokepoints, contributing to a more comprehensive understanding of the organisation and dynamics of global maritime LNG trade.
 
 % 
 %			CHAPTER 2: State of the Art
@@ -171,48 +160,54 @@ By combining network analysis with Bayesian statistical modelling, the study aim
 \chapter{Literature review}
 \label{chap:soa}
 
-\section{Maritime LNG Trade: Economic Drivers and Strategic Vulnerabilities}
+\section{International LNG trade}
 \label{sec:literature_lng_trade}
 
-The expansion of international liquefied natural gas (LNG) trade has increased the importance of maritime transportation in connecting geographically dispersed production and consumption markets. 
-Unlike pipeline transportation, LNG shipping allows natural gas to be transported across oceans, facilitating trade between regions that are not connected by fixed infrastructure. 
-As discussed by Wang and Wang (2021), global LNG trade patterns underwent substantial transformations between 2000 and 2018, reflecting changes in supply and demand, technological developments, and the evolving geographical distribution of market participants.
-Nevertheless, this flexibility depends on a complex system of export and import terminals, maritime routes, and strategically located passages, whose geographical distribution influences the organisation of international energy flows.
+The expansion of international liquefied natural gas (LNG) trade has increased the importance of maritime transportation in connecting geographically dispersed production and consumption markets. Unlike pipeline transportation, which is constrained by the geographical distribution of fixed infrastructure, LNG shipping enables natural gas to be traded over long distances, thereby contributing to the international integration of natural gas markets (Zhang et al., 2018). As discussed by Wang and Wang (2021), global LNG trade patterns underwent substantial transformations between 2000 and 2018, reflecting changes in supply and demand, technological developments, and the evolving geographical distribution of market participants.
 
-The economic relevance of maritime LNG transportation extends beyond the volumes traded. 
-Shipping costs, geopolitical uncertainty, and the availability of alternative routes can affect the accessibility and reliability of energy supplies. 
-Michail and Melas (2022), for instance, investigate the relationship between geopolitical risk and LNG and LPG (Liquefied Petroleum Gas) shipping markets, finding that geopolitical shocks can significantly increase spot charter rates. 
-Their results highlight the exposure of maritime energy transportation to geopolitical uncertainty and its potential economic consequences.
+The expansion of LNG transportation has also contributed to discussions about the increasing integration of international natural gas markets. As discussed by Geng et al. (2014), geographical constraints and differences in resource endowments have historically contributed to the regional segmentation of natural gas trade. However, the development of LNG spot markets, the increasing number of producing and consuming countries, and the growing relevance of short-term contracts have been identified as factors potentially supporting greater international market integration. Nevertheless, the flexibility of LNG trade depends on a complex system of export and import terminals, maritime routes, and strategically located passages, whose geographical distribution influences the organisation of international energy flows.
 
-Particular attention must also be given to maritime chokepoints, which connect major shipping corridors and concentrate trade flows within geographically restricted passages. 
-Their strategic importance is illustrated by Yin and Lam (2022), who investigate China's dependence on LNG imports transported through the Straits of Malacca and Singapore. 
-Using a vector error correction model, the authors find that increasing domestic natural gas production contributes to reducing maritime LNG imports through these passages, whereas expanding pipeline imports does not necessarily provide an effective substitute. 
-Moreover, their results suggest that long-term contractual arrangements can limit the flexibility of LNG import volumes in response to increasing prices and transportation costs. 
-These findings illustrate how dependence on specific maritime passages can reflect not only geographical constraints but also the economic and contractual characteristics of international LNG trade.
+The economic relevance of maritime LNG transportation extends beyond the volumes traded. Shipping costs, geopolitical uncertainty, and the availability of alternative routes can affect the accessibility and reliability of energy supplies. Michail and Melas (2022), for instance, investigate the relationship between geopolitical risk and LNG and LPG (liquefied petroleum gas) shipping markets, finding that geopolitical shocks can significantly increase spot charter rates. Their results highlight the exposure of maritime energy transportation to geopolitical uncertainty and its potential economic consequences.
 
-While these studies provide valuable insights into the economic and geopolitical determinants of maritime LNG transportation, they primarily focus on trade volumes, transportation costs, and dependence on specific shipping routes. 
-However, the organisation of global LNG trade also involves structural relationships among export terminals, import terminals, and maritime chokepoints, which may not be fully captured by analysing individual trade flows or shipping corridors in isolation.
+Particular attention must also be given to maritime chokepoints, which represent strategically important passages along major shipping routes. The U.S. Energy Information Administration (EIA) defines maritime chokepoints as narrow channels along heavily used global shipping routes, where physical constraints may restrict vessel size and navigation (as cited in Kosai and Unesaki, 2016). Their geographical characteristics can limit transit capacity and concentrate maritime traffic within restricted corridors. Moreover, alternative routes may be unavailable or considerably longer, potentially resulting in additional transportation costs and delays (Rodrigue, 2004).
 
-A network-based perspective offers a complementary approach by examining how these infrastructures are interconnected and how their relative importance depends on their position within the broader trading system. 
-In particular, network measures can provide information about connectivity, the concentration of trading relationships, and the role of individual nodes in facilitating flows between different regions. 
+The economic significance of these passages is illustrated by Yin and Lam (2022), who investigate China's dependence on LNG imports transported through the Straits of Malacca and Singapore. Using a vector error correction model, the authors find that increasing domestic natural gas production contributes to reducing maritime LNG imports through these passages, whereas expanding pipeline imports does not necessarily provide an effective substitute. Moreover, their results suggest that long-term contractual arrangements can limit the flexibility of LNG import volumes in response to increasing prices and transportation costs. These findings illustrate how dependence on specific maritime passages can reflect not only geographical constraints but also the economic and contractual characteristics of international LNG trade.
 
+While these studies provide valuable insights into the economic and geopolitical determinants of maritime LNG transportation, they primarily focus on trade volumes, transportation costs, and dependence on specific shipping routes. However, the organisation of global LNG trade also involves structural relationships among exporting and importing infrastructures, maritime transportation routes, and strategically important passages. These relationships may not be fully captured by examining individual trade flows or shipping corridors in isolation.
 
-\section{Section 2}
-\label{sec:sec_2}
-Potential subsections:
+A network-based perspective offers a complementary approach by examining how different components of the LNG trading system are interconnected and how their relative importance depends on their position within the broader network. This motivates the application of network analysis to international LNG trade, an approach that has increasingly been adopted to investigate the organisation, evolution, and structural characteristics of global energy transportation systems.
 
-Criticality and Vulnerability in network analysis: comparison of importance, centrality, criticality, vulnerability, network science measures' roles.
+\section{Network analysis of global LNG trade}
+\label{sec:literature_network_analysis}
 
-Dynamic and temporal networks: temporal dependence, nodes inactivity and persistence.
+Network analysis has been increasingly employed to investigate the structural organisation and evolution of international natural gas and LNG trade. By representing trading entities as nodes and commercial relationships as edges, this approach provides a framework for examining connectivity, the distribution of trading relationships, and the relative importance of individual participants within the broader trading system.
 
-Statistical models for sparse network processes: hurdle models
+Early applications primarily relied on country-level trade data. Geng et al. (2014), for instance, investigate the evolution of the global natural gas trade network between 2000 and 2011 using complex network analysis. Their study highlights differences between LNG and pipeline natural gas trade, identifying stronger connectivity among countries participating in LNG exchanges than among those involved in pipeline gas trade. However, country-level representations may conceal substantial differences in the maritime connectivity of individual ports, including those located within the same country (Peng et al., 2021). Port-level networks therefore offer a more disaggregated perspective on the geographical organisation of maritime LNG trade.
 
-Bayesian reduced-rank models: multivariate bayesian models, shrinkage\dots
+The increasing availability of vessel trajectory data has facilitated the development of such representations. In particular, Automatic Identification System (AIS) records provide information on vessel movements and geographical positions, allowing researchers to investigate shipping patterns at finer spatial and temporal resolutions (Peng et al., 2021). However, these records do not necessarily identify the type or quantity of cargo transported, making the reconstruction of commodity-specific shipping flows a methodological challenge.
 
-Research gap: combine dynamicity, multidimensional criticality, terminals and chokepoints analysis together
+Shibasaki et al. (2020) address this limitation by developing a port-based approach to reconstruct global LNG shipping patterns using vessel movement records and information on export and import terminals. Their methodology distinguishes laden from ballast voyages, producing estimates consistent with observed annual LNG trade at both country and port levels. The reconstructed flows are subsequently used to examine different components of the LNG supply chain, including liquefaction, maritime transportation, regasification, and re-export. The authors also identify competition between alternative maritime routes, particularly those passing through the Suez and Panama Canals. 
+Peng et al. (2021) also examine the global LNG maritime trade network at the port-level, investigating its connectivity and community structure and illustrating how geographical patterns may remain hidden in aggregate trade statistics. Yan et al. (2023) subsequently propose a ship–port–country framework for analysing China's LNG trade using AIS records from 2017. At the port level, they construct a directed and weighted network comprising 79 ports and assess node importance through degree, strength, betweenness centrality, and eigenvector centrality. These measures are combined into a composite importance index, identifying Nantong as the most important port within the network considered.
+Extending the analysis to the global scale, Chen et al. (2024) investigate the evolution of the LNG seaborne trade network between 2011 and 2022. Their directed port-level representation is examined through measures of connectivity, clustering, average path length, and k-core structure. The authors document an expansion in the number of ports participating in LNG trade alongside relatively stable aggregate network characteristics. They also identify an increase in the number of cohesive subgroups and highlight the growing importance of ports involved in both LNG imports and exports, particularly in Europe and Asia.
 
-\subsection{Subsection 2.1}
-\label{sec:subsec_1}
+A more recent contribution is represented by the introduction of the LNG-T3 by Zhou et al. (2026), a global dataset combining LNG tanker trajectories and trade information at the voyage, terminal and tank levels. This dataset provides the empirical foundation for the maritime LNG network reconstructed in this thesis.
+
+Beyond describing network organisation, these studies illustrate the relevance of identifying nodes that occupy significant structural positions. However, node importance is inherently multidimensional, as different indicators capture distinct characteristics of network structure. Degree-based measures describe direct connectivity, while PageRank accounts for a node's position within the broader pattern of network relationships. Betweenness centrality captures its role along shortest paths connecting other nodes, whereas articulation points and bridges provide information about network connectivity. Measures of trade concentration and dependence offer an additional perspective on the distribution of commercial relationships. Since these characteristics do not necessarily identify the same nodes as important, combining multiple indicators can provide a more comprehensive assessment of their structural roles.
+
+Recent studies have developed different approaches to this multidimensional assessment. Building on the use of composite measures illustrated by Yan et al. (2023), Xu et al. (2025) investigate the structure and robustness of the global LNG transportation network between 2013 and 2023, employing the Technique for Order Preference by Similarity to Ideal Solution (TOPSIS) to evaluate node importance and examining the effects of disruptions through robustness analysis. Similarly, Gu and Ge (2026) investigate the topology and resilience of the global LNG maritime network, proposing a node importance index based on principal component analysis (PCA). These contributions demonstrate that combining structural indicators is an established approach to evaluating the importance of maritime infrastructures. Nevertheless, composite indices and dimension-reduction techniques differ in how they integrate the available information: while the former provide criteria for ranking nodes, PCA identifies combinations of variables that explain variation in the observed indicators. Neither approach, in its conventional form, explicitly models the joint distribution of heterogeneous structural measures or provides posterior uncertainty estimates for latent dimensions of node importance.
+
+The identification of important nodes is also closely related to the study of maritime network vulnerability, particularly regarding maritime chokepoints. Their strategic significance depends not only on the traffic they accommodate but also on the availability of alternative routes and the consequences of potential disruptions. Pratson (2023) examines the effects of maritime chokepoint closures on shipping routes and travel distances, while Liang et al. (2025) investigate the impact of the Taiwan Strait on maritime transportation networks at different spatial scales. Focusing specifically on LNG transportation, Meza et al. (2026) examine the implications of interrupting traffic through the Strait of Hormuz. Together, these studies highlight the relevance of geographical constraints and the potential consequences of disruptions for maritime transportation systems.
+
+Importantly, structural importance and network vulnerability are related but distinct concepts. A highly central node does not necessarily produce the greatest disruption when removed, while a less central node may connect otherwise weakly connected parts of a network. Moreover, the consequences of closing a maritime passage depend on the possibility of rerouting traffic and the characteristics of alternative routes. Structural indicators can therefore help identify potentially important nodes, but they should not automatically be interpreted as direct measures of the economic consequences of disruptions.
+
+An additional consideration concerns the temporal evolution of maritime networks, whose structure may change in response to shifts in production and consumption patterns, infrastructure developments, and geopolitical conditions. Liu et al. (2025), for instance, investigate changes in the global LNG shipping network associated with the Russia–Ukraine conflict and disruptions in the Red Sea region, examining their implications for network topology, trading relationships, and structural robustness. Their contribution highlights the relevance of analysing maritime LNG networks over time rather than relying exclusively on aggregate representations.
+
+Overall, the literature has progressively developed more detailed representations of maritime LNG trade and increasingly sophisticated approaches to evaluating the structural importance of individual nodes. While centrality measures, composite indices, and robustness assessments provide valuable insights into the organisation and vulnerability of maritime transportation networks, the joint analysis of heterogeneous structural indicators raises further methodological considerations. In particular, modelling their relationships while accounting for their distinct statistical properties and the uncertainty associated with underlying dimensions of node importance motivates the consideration of latent-variable and Bayesian approaches.
+
+\section{Bayesian approaches to network analysis}
+
+\section{Research gap and thesis contribution}
+
 % 
 %
 %			CHAPTER 3: Data and network construction
@@ -416,15 +411,12 @@ The retained attributes include country, region, geographic coordinates, infrast
 No missing values were found for these attributes among the terminals retained in the final network.
 
 Additionally, terminal age was constructed as a time-varying characteristic by subtracting the terminal's reported start year from the year of each monthly observation:
-
-\begin{equation}
-\operatorname{Age}_{i,t}
+$ \operatorname{Age}_{i,t}
 =
 \operatorname{Year}_{t}
 -
 \operatorname{StartYear}_{i}.
-\label{eq:terminal_age}
-\end{equation}
+\label{eq:terminal_age}$
 
 \subsection{Temporal aggregation}
 \label{subsec:temporal_aggregation}
@@ -438,10 +430,10 @@ Flow and voyage measures for node--month observations with no activity were assi
 \label{sec:dynamic_network_construction} 
 The global LNG maritime network was represented as a sequence of monthly directed and weighted graphs, 
 
-\begin{equation} 
+\begin{equation*} 
     G_t = (V,E_t,W_t), \qquad t=1,\ldots,60, 
     \label{eq:dynamic_network} 
-\end{equation}
+\end{equation*}
 where \(V\) is the time-invariant set of terminal and chokepoint nodes, \(E_t\) is the set of directed connections observed in month \(t\), and \(W_t=[w_{ij,t}]\) is the corresponding weighted adjacency matrix. 
 An element \(w_{ij,t}>0\) represents the total LNG volume transported from node \(i\) to node \(j\) during month \(t\), while \(w_{ij,t}=0\) indicates that no such connection was observed.
 
@@ -449,9 +441,9 @@ An element \(w_{ij,t}>0\) represents the total LNG volume transported from node 
 \label{subsec:nodes_edges} 
 The final node set contains 183 nodes and can be written as 
 
-\begin{equation} 
+\begin{equation*} 
     V = V^{T} \cup V^{C}, \qquad |V^{T}|=159, \qquad |V^{C}|=24, 
-\end{equation}
+\end{equation*}
 where \(V^{T}\) denotes the set of LNG terminals and \(V^{C}\) the set of maritime chokepoints. 
 
 The 159 terminal nodes are the facilities that appear as an origin or destination of at least one retained laden voyage. 
@@ -460,15 +452,15 @@ Of the 28 candidate chokepoints included in the geographic registry, 24 were tra
 Each commercial voyage defines an underlying directed movement from an export terminal to an import terminal. 
 To incorporate the maritime infrastructure traversed during transportation, the reconstructed route of voyage \(r\) was represented as an ordered path 
 
-\begin{equation} 
+\begin{equation*} 
     P_r = \left( v_{r,0},v_{r,1},\ldots,v_{r,K_r} \right), 
-\end{equation}
+\end{equation*}
 where \(v_{r,0}\) is the departure terminal, \(v_{r,K_r}\) is the arrival terminal, and any intermediate nodes are the chokepoints crossed by the route. 
 The voyage was then expanded into the consecutive directed connections
 
-\begin{equation} 
+\begin{equation*} 
     E(P_r)=\left\{(v_{r,0},v_{r,1}), (v_{r,1},v_{r,2}), \ldots, (v_{r,K_r-1},v_{r,K_r})\right\}. 
-\end{equation} 
+\end{equation*} 
 
 A route that crossed no retained chokepoint generated a direct terminal-to-terminal edge. 
 Routes crossing one or more chokepoints generated terminal-to-chokepoint, chokepoint-to-chokepoint, and chokepoint-to-terminal edges according to the order in which those nodes were encountered.
